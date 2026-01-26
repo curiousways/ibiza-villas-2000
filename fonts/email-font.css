@@ -1,0 +1,31 @@
+@font-face {
+	  	font-family: 'Kessel105-Light';
+	  	src: url('myfont/2FCA09_0_0.eot');
+	  	src: url('myfont/2FCA09_0_0.eot?#iefix') format('embedded-opentype'),
+	  	url('myfont/2FCA09_0_0.woff2') format('woff2'),
+	  	url('myfont/2FCA09_0_0.woff') format('woff'),
+	  	url('myfont/2FCA09_0_0.ttf') format('truetype'),
+	  	url('myfont/2FCA09_0_0.svg#wf') format('svg');
+}
+@font-face {
+	  	font-family: 'Kessel105';
+	  	font-weight: normal;
+	  	font-style: normal;
+	  	src: url('myfont/2FCA09_1_0.eot');
+	  	src: url('myfont/2FCA09_1_0.eot?#iefix') format('embedded-opentype'),
+	  	url('myfont/2FCA09_1_0.woff2') format('woff2'),
+	  	url('myfont/2FCA09_1_0.woff') format('woff'),
+	  	url('myfont/2FCA09_1_0.ttf') format('truetype'),
+	  	url('myfont/2FCA09_1_0.svg#wf') format('svg');
+}
+@font-face {
+	  	font-family: 'Kessel105';
+	  	font-weight: bold;
+	  	font-style: normal;
+	  	src: url('myfont/2FCA09_2_0.eot');
+	  	src: url('myfont/2FCA09_2_0.eot?#iefix') format('embedded-opentype'),
+	  	url('myfont/2FCA09_2_0.woff2') format('woff2'),
+	  	url('myfont/2FCA09_2_0.woff') format('woff'),
+	  	url('myfont/2FCA09_2_0.ttf') format('truetype'),
+	  	url('myfont/2FCA09_2_0.svg#wf') format('svg');
+}

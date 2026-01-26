@@ -1,0 +1,17 @@
+#transfer-iframe{
+  height: 290px;
+}
+
+@media only screen and (min-width: 1080px) and (max-width: 1275px){
+  .top-bar .top-bar-section>ul li:not(.has-form) a:not(.button) {
+    padding: 0 10px;
+    font-size: 68%;
+  }
+}
+
+@media only screen and (min-width: 1080px){
+.top-bar-section .right li .dropdown {
+    left: auto !important;
+    right: auto !important;
+}
+}
