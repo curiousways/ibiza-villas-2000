@@ -112,14 +112,6 @@ remove_action('wp_print_styles', 'print_emoji_styles');
 
 
 
-// a more forceful way to remove stuff before its printed
-function remove_assets()
-{
-	wp_dequeue_style('searchwp-live-search');
-}
-add_action('wp_print_styles', 'remove_assets', 99999);
-
-
 /* Thumbnails */
 
 // Custom Thumbnail Sizes - you will need to regen the thumbnails with a plugin if you add new sizes
@@ -421,27 +413,6 @@ function content($limit)
 {
 	return wp_trim_words(get_the_content(), $limit);
 }
-
-
-// SearchWP Fuzzy Search Sensitivity
-function my_fuzzy_word_length()
-{
-	return 3;
-}
-add_filter('searchwp_fuzzy_min_length', 'my_fuzzy_word_length');
-
-function my_fuzzy_threshold()
-{
-	return 20;
-}
-add_filter('searchwp_fuzzy_threshold', 'my_fuzzy_threshold');
-
-function myChangeDigitThreshold()
-{
-	return 15; // 15% maximum threshold
-}
-
-add_filter('searchwp_fuzzy_digit_threshold', 'myChangeDigitThreshold');
 
 
 // ENABLE SHORTCODE PROCESSING FOR WIDGETS
