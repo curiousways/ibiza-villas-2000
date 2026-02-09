@@ -9,6 +9,7 @@
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, width=device-width" />
 	<link rel="shortcut icon" type="image/png" href="<?php bloginfo('stylesheet_directory'); ?>/images/favicon.png" />
 	<?php wp_head(); ?>
+	<?php get_template_part( 'templates/head', 'tracking' ); ?>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
