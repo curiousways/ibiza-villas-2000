@@ -211,6 +211,11 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<p>Babalia BV acts solely as booking agent. Accommodation services are supplied and managed by MRLP Rentals SL. Your rental contract is with MRLP Rentals SL.</p>
+		<p>CENTRAL DE RESERVAS RGE CR-0120-E - COMERCIALIZADOR DE</p>
+		<p>ESTANCIAS TURÍSTICAS 12752 VAT B57974438</p>
+	</div>
 
 	<div class="row">
 
