@@ -225,11 +225,11 @@
 		</div>
 	</div>
 
-	<div style="margin-top: 20px" class="row">
+	<div style="padding: 20px 0; max-width: 800px" class="row">
 		<div class="medium-12 columns">
-			<p style="font-size: 12px; margin-bottom: 0; letter-spacing: 1px;">Babalia BV acts solely as booking agent. Accommodation services are supplied and managed by MRLP Rentals SL. Your rental contract is with MRLP Rentals SL.</p>
-			<p style="font-size: 12px; margin-bottom: 0; letter-spacing: 1px;">CENTRAL DE RESERVAS RGE CR-0120-E - COMERCIALIZADOR DE</p>
-			<p style="font-size: 12px; margin-bottom: 0; letter-spacing: 1px;">ESTANCIAS TURÍSTICAS 12752 VAT B57974438</p>
+			<p style="font-size: 10px; text-transform:none; margin-bottom: 0; letter-spacing: 1px;">Babalia BV acts solely as booking agent. Accommodation services are supplied and managed by MRLP Rentals SL. Your rental contract is with MRLP Rentals SL.</p>
+			<p style="font-size: 10px; text-transform:none; margin-bottom: 0; letter-spacing: 1px;">CENTRAL DE RESERVAS RGE CR-0120-E - COMERCIALIZADOR DE</p>
+			<p style="font-size: 10px; text-transform:none; margin-bottom: 0; letter-spacing: 1px;">ESTANCIAS TURÍSTICAS 12752 VAT B57974438</p>
 		</div>
 	</div>		
 
