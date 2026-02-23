@@ -90,7 +90,7 @@ h3 {
 			<div class="small-12 medium-12 large-4 columns">
 				<?php if ( has_post_thumbnail() ) { ?>
 
-				<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('property-featured-image'); ?></a>
+				<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('iv2000_420x280'); ?></a>
 
 				<?php } else { ?>
 					<a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>">
@@ -204,7 +204,7 @@ h3 {
 
 			<?php if ( has_post_thumbnail() ) { ?>
 
-				<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('property-featured-image'); ?></a>
+				<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('iv2000_420x280'); ?></a>
 
 			<?php } else { ?>
 				<a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>">

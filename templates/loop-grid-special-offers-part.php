@@ -58,7 +58,7 @@ global $spanish_law;
 
 						<?php if ( has_post_thumbnail() ) { ?>
 
-							<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('property-featured-image'); ?></a>
+							<a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('iv2000_420x280'); ?></a>
 
 						<?php } else { ?>
 							<a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>">

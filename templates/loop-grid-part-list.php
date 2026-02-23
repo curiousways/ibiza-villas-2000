@@ -54,7 +54,7 @@
 									<div style="padding-left: 0rem!important; padding-right: 0rem!important" class="small-12 medium-12 large-12 "columns>
 											<?php if ( has_post_thumbnail() ) { ?>
 
-											<a href="<?php the_permalink(); ?>" title="Ibiza Villas 2000 - See this Ibiza Villa to Rent" 	alt="Ibiza Villas 2000 - See this Ibiza Villa for Rent"><?php the_post_thumbnail('property-featured-image'); ?></a>
+											<a href="<?php the_permalink(); ?>" title="Ibiza Villas 2000 - See this Ibiza Villa to Rent" 	alt="Ibiza Villas 2000 - See this Ibiza Villa for Rent"><?php the_post_thumbnail('iv2000_420x280'); ?></a>
 
 											<?php } else { ?>
 												<a href="<?php echo get_permalink(); ?>" title="Ibiza Villas 2000 - See this Ibiza Villa" alt="Ibiza Villas 2000 - See this Ibiza Villa to Rent">

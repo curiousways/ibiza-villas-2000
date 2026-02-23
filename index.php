@@ -16,7 +16,7 @@ i.fas.fa-star{color:#FDBF3D!important}#ccc[light] #ccc-icon{fill:#3CA09A!importa
             <div class="page-slider">
                 <?php foreach($images as $image): ?>
                     <div>
-                        <?php echo wp_get_attachment_image($image['id'], 'property-gallery-image', false, array('class'=>'slick-loading')); ?>
+                        <?php echo wp_get_attachment_image($image['id'], 'iv2000_1024x685', false, array('class'=>'slick-loading')); ?>
                     </div>
                 <?php endforeach; ?>
             </div>

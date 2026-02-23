@@ -17,7 +17,7 @@
                     <li>
                         <div class="property">
                             <div class="thumb">
-                                <a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('property-featured-image'); ?></a>
+                                <a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('iv2000_420x280'); ?></a>
                             </div>
                             <div class="info">
                                 <?php 

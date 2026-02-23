@@ -118,9 +118,9 @@ remove_action('wp_print_styles', 'print_emoji_styles');
 // Custom Thumbnail Sizes - you will need to regen the thumbnails with a plugin if you add new sizes
 add_theme_support('post-thumbnails');
 // add_image_size( 'home-banner', 1200, 800, true );
-add_image_size('property-gallery-image', 1024, 685, true);
-add_image_size('property-featured-image', 420, 280, true);
-add_image_size('property-featured-image-ret', 840, 560, true);
+add_image_size('iv2000_1024x685', 1024, 685, true);
+add_image_size('iv2000_420x280', 420, 280, true);
+add_image_size('iv2000_840x560', 840, 560, true);
 // add_image_size( 'popup-image', 1200, 1000 );
 // add_image_size( 'similar-slider-thumb', 250, 170, true );
 
