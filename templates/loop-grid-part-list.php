@@ -21,11 +21,9 @@
 
 	$sleeps 		= (!empty($sleeps) ? 'Sleeps ' . $sleeps : ''); // returns true
 
-	$location 		= get_the_terms($post->ID,'property_location');
-	$location 		= (!empty($location) ? $location[0]->name : ''); // returns true
-
-	$location2 		= get_the_terms($post->ID,'property_location');
-	$location2 		= (!empty($location2) ? $location2[1]->name : ''); // returns true
+	$location_terms = get_the_terms($post->ID, 'property_location');
+	$location       = (is_array($location_terms) && isset($location_terms[0]) && is_object($location_terms[0])) ? $location_terms[0]->name : '';
+	$location2      = (is_array($location_terms) && isset($location_terms[1]) && is_object($location_terms[1])) ? $location_terms[1]->name : '';
 
 	$postTypeObj 	= get_post_type_object( get_post_type() );
 	$type 			= $postTypeObj->labels->singular_name;
