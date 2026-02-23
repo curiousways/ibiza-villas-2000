@@ -16,7 +16,7 @@ $current_property_type = get_post_type();
 
 
 /* Override to display morzine villas if the current property is an apartment in avoriaz as it's one of a kind */
-
+$avo_flag = false;
 if ( $current_slug == "avoriaz" && $current_property_type == 'apartments' ) {
 	$avo_flag = true;
     $current_slug = 'morzine';
