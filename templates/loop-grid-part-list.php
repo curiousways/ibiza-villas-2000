@@ -58,7 +58,7 @@
 
 											<?php } else { ?>
 												<a href="<?php echo get_permalink(); ?>" title="Ibiza Villas 2000 - See this Ibiza Villa" alt="Ibiza Villas 2000 - See this Ibiza Villa to Rent">
-													<img src="<?php bloginfo('template_directory'); ?>/images/coming-soon.jpg" alt="Image Coming Soon" />
+													<img src="<?php bloginfo('template_directory'); ?>/images/coming-soon.jpg" alt="Image Coming Soon" width="420" height="280" />
 												</a>
 											<?php } ?>
 									</div>

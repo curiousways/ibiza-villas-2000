@@ -38,6 +38,7 @@ function core_theme_setup()
 	require_once(get_template_directory() . '/functions/custom-admin-columns.php');
 	require_once(get_template_directory() . '/functions/testimonials-widget.php');
 	require_once(get_template_directory() . '/functions/explore-widget.php');
+	require_once(get_template_directory() . '/inc/image-dimensions.php');
 }
 
 // Enqueue Script for Admin Edit Pages
@@ -122,7 +123,6 @@ add_image_size('property-featured-image', 420, 280, true);
 add_image_size('property-featured-image-ret', 840, 560, true);
 // add_image_size( 'popup-image', 1200, 1000 );
 // add_image_size( 'similar-slider-thumb', 250, 170, true );
-
 
 /* Automatically set the image Title, Alt-Text, Caption & Description upon upload
 -----------------------------------------------------------------------*/
