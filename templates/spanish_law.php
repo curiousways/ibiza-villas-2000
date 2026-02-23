@@ -30,11 +30,11 @@
 	}
 
 
-	if ($_GET['country'] == 'ES') {
+	if (isset($_GET['country']) && $_GET['country'] === 'ES') {
 		$spanish_law = 'yes';
 	}
 
-	if ($_GET['country'] == 'EN') {
+	if (isset($_GET['country']) && $_GET['country'] === 'EN') {
 		$spanish_law = 'no';
 	}
 
