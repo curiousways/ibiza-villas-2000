@@ -57,7 +57,7 @@ if (!is_front_page()) : ?>
                 </form>
             </div>
             
-            <script src='/wp-content/themes/rudeibiza/js/mailchimp.js'></script>
+            <script src='<?php echo esc_url( get_template_directory_uri() ); ?>/js/mailchimp.js'></script>
             <script>
                 (function($) {
                     window.fnames = new Array(); 
@@ -68,7 +68,7 @@ if (!is_front_page()) : ?>
                     fnames[3]='BIRTHDAY';ftypes[3]='birthday';
                     fnames[4]='MMERGE4';ftypes[4]='date';
                 }(jQuery));
-                var $mcj = jQuery.noConflict(true);
+                var $mcj = jQuery;
             </script>
             
             <a href="#" class="button revealBrands">Other Brands in the Rude Leisure Group</a>
