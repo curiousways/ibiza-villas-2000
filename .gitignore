@@ -1,35 +1,55 @@
-# macOS
+# WordPress core — never tracked
+/wp-admin/
+/wp-includes/
+/wp-*.php
+!/wp-content/
+/index.php
+/license.txt
+/readme.html
+/xmlrpc.php
+
+# WordPress config — env-specific
+/wp-config.php
+/wp-config-sample.php
+
+# wp-content: track only what we own
+/wp-content/*
+!/wp-content/mu-plugins/
+!/wp-content/themes/
+/wp-content/plugins/
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/upgrade-temp-backup/
+/wp-content/cache/
+/wp-content/languages/
+/wp-content/wp-rocket-config/
+/wp-content/advanced-cache.php
+/wp-content/object-cache.php
+/wp-content/db.php
+/wp-content/debug.log
+/wp-content/*.log
+
+# mu-plugins: track only ibv-core
+/wp-content/mu-plugins/*
+!/wp-content/mu-plugins/ibv-core/
+!/wp-content/mu-plugins/ibv-core.php
+
+# themes: track only our themes
+/wp-content/themes/*
+!/wp-content/themes/ibiza-villas-2000/
+!/wp-content/themes/ibv/
+
+# Site-specific / optional dirs at install root
+/wp-ibiza/
+
+# Local backup of former nested repo (git bundle)
+/.git-backup-*.bundle
+
+# Fresh-init .git backup (directory — never track)
+/.git-fresh-init-backup/
+
+# OS / editor
 .DS_Store
-
-#
-# This repository root is `wp-content/` (not full WordPress root).
-# Paths below are relative to that root.
-#
-
-# Generated / environment-specific
-uploads/
-languages/
-upgrade/
-cache/
-backup-db/
-plugins/
-
-# Drop-in / caching files sometimes present under wp-content/
-advanced-cache.php
-wp-cache-config.php
-object-cache.php
-
-# Logs
-*.log
-debug.log
-
-# OS / editor noise
 Thumbs.db
-*.swp
-
-# Local tooling
-/node_modules/
-/vendor/
-
-# Extracted boilerplate previews (do not commit)
-.tmp-ibv-bp/
+.idea/
+.vscode/
