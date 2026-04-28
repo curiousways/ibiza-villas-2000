@@ -1,77 +1,63 @@
 <?php get_header(); ?>
 
-<?php global $spanish_law; ?>
+<?php
+// TODO pass 3: editorial exclusion via ACF
+$post__not_in = array();
+$base_args = array(
+	'post_type' => 'villas',
+	'posts_per_page' => -1,
+	'post__not_in' => $post__not_in,
+	'meta_key' => 'property_for_sale',
+	'meta_value' => 0,
+);
 
-<?php		
-if ($spanish_law == 'yes') {
-    $args = array(
-        'post_type' => 'villas',
-        'posts_per_page' => -1,
-        'post__not_in' => array('5610','2928'),
-        'meta_key' => 'property_for_sale',
-        'meta_value' => 0
-    );
-} else {
-    $args = array(
-        'post_type' => 'villas',
-        'posts_per_page' => -1,
-        'meta_key' => 'property_for_sale',
-        'meta_value' => 0
-    );
-}
-
-$property_query = new WP_Query($args);
+$property_query = new WP_Query($base_args);
 
 if ($property_query->have_posts()) : ?>
     <div class="row map-container">
         <div class="acf-map">
-            <?php while ($property_query->have_posts()): $property_query->the_post(); global $post; ?>
-                <?php 
-                $location = get_field('property_map');
+            <?php while ($property_query->have_posts()) : $property_query->the_post(); global $post; ?>
+                <?php
+				$location = get_field('property_map');
                 if (!empty($location)) : ?>
-                    <div class="marker" data-lat="<?php echo $location['lat']; ?>" data-lng="<?php echo $location['lng']; ?>">
+                    <div class="marker" data-lat="<?php echo esc_attr($location['lat']); ?>" data-lng="<?php echo esc_attr($location['lng']); ?>">
                         <div class="marker-info">
                             <div class="info">
                                 <div class="thumb">
-                                    <a href="<?php echo get_permalink(); ?>" title="<?php the_title(); ?>"><?php the_post_thumbnail('thumbnail'); ?></a>
+                                    <a href="<?php echo esc_url(get_permalink()); ?>" title="<?php the_title_attribute(); ?>"><?php the_post_thumbnail('thumbnail'); ?></a>
                                 </div>
-                                <?php 
-                                $villa_pretty_name = get_field('villa_pretty_name'); 
-                                if ($villa_pretty_name) {
-                                    echo '<h3><a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a></h3>';
-                                    echo '<h4>' . $villa_pretty_name . '</h4>';
-                                } else {
-                                    echo '<h3><a href="' . get_permalink() . '" title="' . get_the_title() . '">' . get_the_title() . '</a></h3>';
-                                }
-                                ?>
-                                <?php $location = wp_get_post_terms($post->ID, 'property_location'); ?>
-                                <h4><?php echo $location[0]->name; ?></h4>
+                                <?php
+								$villa_pretty_name = get_field('villa_pretty_name');
+								if ($villa_pretty_name) {
+									echo '<h3><a href="' . esc_url(get_permalink()) . '" title="' . esc_attr(get_the_title()) . '">' . esc_html(get_the_title()) . '</a></h3>';
+									echo '<h4>' . esc_html($villa_pretty_name) . '</h4>';
+								} else {
+									echo '<h3><a href="' . esc_url(get_permalink()) . '" title="' . esc_attr(get_the_title()) . '">' . esc_html(get_the_title()) . '</a></h3>';
+								}
+								?>
+                                <?php $loc_terms = wp_get_post_terms($post->ID, 'property_location'); ?>
+								<h4><?php echo ! empty($loc_terms[0]) ? esc_html($loc_terms[0]->name) : ''; ?></h4>
                                 <p>
-                                    <?php 
-                                    if ($spanish_law == 'yes') {
-                                        echo wp_trim_words($property_description, 50);
+                                    <?php
+                                    if (has_excerpt()) {
+											echo esc_html(excerpt(50));
                                     } else {
-                                        if (has_excerpt()) {
-                                            $excerpt = excerpt(50);
-                                            echo $excerpt;					
-                                        } else {
-                                            $trimmed = content(50);
-                                            echo wp_strip_all_tags($trimmed);
-                                        }
-                                    }
-                                    ?>
+											$trimmed = content(50);
+											echo esc_html(wp_strip_all_tags($trimmed));
+										}
+									?>
                                 </p>
                                 <br><a href="<?php the_permalink(); ?>" class="button">Find out more</a>
                             </div>
                         </div>
                     </div>
-                <?php endif; ?>
-            <?php endwhile; ?>
+				<?php endif; ?>
+			<?php endwhile; ?>
         </div>
     </div>
 <?php endif; ?>
 
-<?php wp_reset_query(); ?>
+<?php wp_reset_postdata(); ?>
 
 <div class="site-content">
     <div class="row">
@@ -79,45 +65,24 @@ if ($property_query->have_posts()) : ?>
             <h1><?php the_title(); ?></h1>
         </div>
 
-        <div style="display:none;" class="small-12 medium-12 large-12 columns">
-            <?php echo do_shortcode('[vc_row gap="35"][vc_column][vc_tta_accordion style="outline" active_section="1" no_fill="true" collapsible_all="true"][vc_tta_section title="LOOKING FOR A LARGE VILLA (14+) HERE IN IBIZA?" tab_id="1652684979034-5c35c36b-3b33"][vc_column_text]<strong>Please Note!</strong> For legal reasons the maximum occupancy of a villa in Ibiza is 12 people, <strong>if you are searching for a villa for more than 12 people, please <a href="https://ibizavillas2000.com/contact/">contact us</a>. </strong>We have many villas next door to each other plus our apartment hotel which can sleep up to 66 guests.[/vc_column_text][/vc_tta_section][/vc_tta_accordion][/vc_column][/vc_row]'); ?>
-        </div>
-
         <div class="small-12 medium-12 large-12 columns">
-            <p>Below, we've curated our full collection of Ibiza villas for rent in all locations. All with pools & all with fantastic value prices. If you're still unsure about the size of your group or preferred location and are exploring all options, then this is the right page for you to have a good browse and check out what's on offer.</p>
+            <p>Below, we've curated our full collection of Ibiza villas for rent in all locations. All with pools &amp; all with fantastic value prices. If you're still unsure about the size of your group or preferred location and are exploring all options, then this is the right page for you to have a good browse and check out what's on offer.</p>
         </div>
         
         <?php
-        if ($spanish_law == 'yes') {
-            $args = array(
-                'post_type' => 'villas',
-                'posts_per_page' => -1,
-                'post__not_in' => array('5610','2928'),
-                'meta_key' => 'property_for_sale',
-                'meta_value' => 0
-            );
-        } else {
-            $args = array(
-                'post_type' => 'villas',
-                'posts_per_page' => -1,
-                'meta_key' => 'property_for_sale',
-                'meta_value' => 0
-            );
-        }
+		$property_query = new WP_Query($base_args);
 
-        $property_query = new WP_Query($args);
-
-        if ($property_query->have_posts()) : ?>
+		if ($property_query->have_posts()) : ?>
             <ul class="property-grid">
-                <?php while ($property_query->have_posts()): $property_query->the_post(); global $post; ?>
-                    <li id="property-<?php echo $post->ID; ?>">
+                <?php while ($property_query->have_posts()) : $property_query->the_post(); ?>
+                    <li id="property-<?php echo (int) get_the_ID(); ?>">
                         <?php get_template_part('templates/loop-grid-part'); ?>
                     </li>
-                <?php endwhile; ?>
+				<?php endwhile; ?>
             </ul>
-        <?php endif; ?>
+		<?php endif; ?>
 
-        <?php wp_reset_query(); ?>
+        <?php wp_reset_postdata(); ?>
         <?php the_content(); ?>
     </div>
 </div>

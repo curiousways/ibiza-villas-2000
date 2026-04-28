@@ -25,15 +25,6 @@ function register_widgets(){
 			'after_title' => '</h3>',
 		));
 		register_sidebar( array(
-			'name' => __( 'Apartment Sidebar 1'),
-			'id' => 'apartment-sidebar-1',
-			'description' => __( 'Apartment Sidebar 1'),
-			'before_widget' => '<div id="%1$s" class="widget %2$s">',
-			'after_widget' => '</div>',
-			'before_title' => '<h3 class="widget-title">',
-			'after_title' => '</h3>',
-		) );
-		register_sidebar( array(
 			'name' => __( 'Villa Sidebar 1'),
 			'id' => 'villa-sidebar-1',
 			'description' => __( 'Villa Sidebar 1'),

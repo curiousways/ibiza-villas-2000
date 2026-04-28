@@ -1,49 +1,30 @@
-<?php global $spanish_law; ?>
-
-
 <?php
+$post_types = array( 'villas' );
+$post__not_in = array();
 
-	/* Loop through posts with same location but exclude current post */
+$args = array(
+	'post_type' => $post_types,
+	'orderby' => 'title',
+	'posts_per_page'=> 100,
+	'meta_key'		=> 'property_featured',
+	'meta_value'	=> 1,
+	'post__not_in'  => $post__not_in,
+);
 
-	$post_types = array('villas', 'apartments');
-
-
-    if ($spanish_law == 'yes') {
-		$args = array(
-			'post_type' => $post_types,
-			'orderby' => 'title',
-			'showposts'=> '100',
-			'meta_key'		=> 'property_featured',
-			'meta_value'	=> 1,
-	        'post__not_in'  => array('5610','2928'),
-		);
-    } else {
-		$args = array(
-			'post_type' => $post_types,
-			'orderby' => 'title',
-			'showposts'=> '100',
-			'meta_key'		=> 'property_featured',
-			'meta_value'	=> 1,
-		);
-    } 
-
-
-	$featured_property = new WP_Query($args);
+$featured_property = new WP_Query($args);
 
 ?>
 
 <?php if ( $featured_property->have_posts() ) : ?>
 
-	<h3 class="text-center"><?php _e('BROWSE OUR FEATURED ACCOMMODATION'); ?></h3>
+	<h3 class="text-center"><?php esc_html_e( 'BROWSE OUR FEATURED ACCOMMODATION', 'ibiza-villas-2000' ); ?></h3>
 
-
-	<div class="slider featured-properties">
+	<div class="featured-properties">
 
 		<?php while ( $featured_property->have_posts() ): $featured_property->the_post(); global $post; ?>
 
-      		<?php 
-      			// get the inside of the grid loop to make life easier 
-      			get_template_part( 'templates/loop-grid-part' ); 
+      		<?php
+      			get_template_part( 'templates/loop-grid-part' );
       		?>
 
 		<?php endwhile; ?>
@@ -53,5 +34,3 @@
 <?php endif; ?>
 
 <?php wp_reset_postdata(); ?>
-
-

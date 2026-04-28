@@ -256,64 +256,6 @@ if (!class_exists('CPT_columns')){
  
 
 
-// APARTMENTS
-$post_columns = new CPT_columns('apartments'); // if you want to replace and reorder columns then pass a second parameter as true
-//add native column
-// $post_columns->add_column('title',
-//   array(
-//         'label'    => __('Title'),
-//         'type'     => 'native',
-//         'sortable' => true
-//     )
-// );
-//add thumbnail column
-$post_columns->add_column('post_thumb',
-  array(
-        'label' => __('Thumb'),
-        'type'  => 'thumb',
-        'size'  => array('80,80') //size accepted  by the_post_thumbnail as array or string
-    )
-);
-//add taxonomy
-$post_columns->add_column('property_location',
-  array(
-        'label'    => __('Property Location'),
-        'type'     => 'custom_tax',
-        'taxonomy' => 'property_location', //taxonomy name
-        'sortable' => true,
-        'orderby' => 'meta_value_num'
-    )
-);
-//custom field column
-$post_columns->add_column('property_sleeps',
-  array(
-        'label'    => __('Property Sleeps'),
-        'type'     => 'post_meta',
-        'meta_key' => 'property_sleeps', //meta_key
-        'orderby' => 'meta_value', //meta_value,meta_value_num
-        'sortable' => true,
-        'prefix' => "",
-        'suffix' => ""
-    )
-);
-//custom field column - property ID
-$post_columns->add_column('property_id',
-  array(
-        'label'    => __('Property ID'),
-        'type'     => 'post_meta',
-        'meta_key' => 'property_id', //meta_key
-        'orderby' => 'meta_value', //meta_value,meta_value_num
-        'sortable' => true,
-        'prefix' => "",
-        'suffix' => ""
-    )
-);
-//remove date column
-//$post_columns->remove_column('date');
-
-
-
-
 // VILLAS
 $post_columns = new CPT_columns('villas'); // if you want to replace and reorder columns then pass a second parameter as true
 //add native column

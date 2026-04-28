@@ -1,31 +1,13 @@
 <?php
-/* Get location and property type of current post */ ?>
+/** @var WP_Post $post */
 
-<?php
-
-// get the current location from the terms
 $current_location = get_the_terms( $post->ID, 'property_location');
-// grab the slug
+if ( empty( $current_location ) || is_wp_error( $current_location ) ) {
+	return;
+}
 $current_slug = $current_location[0]->slug;
 $current_location_title = $current_location[0]->name;
-// is it a villa or an apartment?! WHO KNOWS?!
-// This guy does \/
-$current_property_type = get_post_type();
-
-
-
-
-/* Override to display morzine villas if the current property is an apartment in avoriaz as it's one of a kind */
-$avo_flag = false;
-if ( $current_slug == "avoriaz" && $current_property_type == 'apartments' ) {
-	$avo_flag = true;
-    $current_slug = 'morzine';
-    $current_property_type = 'villas';
-}
-
-
-
-/* Loop through posts with same location but exclude current post */
+$current_property_type = 'villas';
 
 $similar_args = array(
 	'post_type' => $current_property_type,
@@ -37,9 +19,9 @@ $similar_args = array(
 		),
 	),
 	'orderby' => 'asc',
-	'showposts'=> '10',
-	'post__not_in' => array($post->ID),
-	'meta_key'		=> 'property_for_sale', //filter out for sale properties, true is for sale, 0 not for sale (rental).
+	'posts_per_page'=> 10,
+	'post__not_in' => array( $post->ID ),
+	'meta_key'		=> 'property_for_sale',
 	'meta_value'	=> 0
 );
 
@@ -47,16 +29,13 @@ $similar = new WP_Query($similar_args);
 
 if ( $similar->have_posts() ) : ?>
 
+	<h4 class="text-center"><?php esc_html_e('Similar Properties in ', 'ibiza-villas-2000'); ?><?php echo esc_html( $current_location_title ); ?></h4>
 
-	<h4 class="text-center"><?php if ( $avo_flag == true ) { _e('Similar Properties around '); } else { _e('Similar Properties in '); } echo $current_location_title; ?></h4>
+	<div class="similar-properties">
 
-
-	<div class="slider similar-properties">
-
-		<?php while ( $similar->have_posts() ): $similar->the_post(); global $post; ?>
+		<?php while ( $similar->have_posts() ): $similar->the_post(); ?>
 
 		<?php
-  			// get the inside of the grid loop to make life easier
   			get_template_part( 'templates/loop-grid-part' );
   		?>
 
@@ -67,5 +46,3 @@ if ( $similar->have_posts() ) : ?>
 <?php endif; ?>
 
 <?php wp_reset_postdata(); ?>
-
-

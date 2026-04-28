@@ -84,13 +84,13 @@
 					<ul>
 				
 					
-					<li><a href="https://ibizavillas2000.com/property-results/?location=all&min=12&max=99" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 12+ People" alt="Villas in Ibiza that Sleep 12+ People">Villas in Ibiza that Sleep 12+ People</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/all-villas/' ) ); ?>" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 12+ People" alt="Villas in Ibiza that Sleep 12+ People">Villas in Ibiza that Sleep 12+ People</a></li>
 					
-					<li><a href="https://ibizavillas2000.com/property-results/?location=all&min=10&max=11" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 10 People" alt="Villas in Ibiza that Sleep 10 People">Villas in Ibiza that Sleep 10 People</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/all-villas/' ) ); ?>" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 10 People" alt="Villas in Ibiza that Sleep 10 People">Villas in Ibiza that Sleep 10 People</a></li>
 					
-					<li><a href="https://ibizavillas2000.com/property-results/?location=all&min=8&max=9" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 8 People" alt="Villas in Ibiza that Sleep 8 People">Villas in Ibiza that Sleep 8 People</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/all-villas/' ) ); ?>" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 8 People" alt="Villas in Ibiza that Sleep 8 People">Villas in Ibiza that Sleep 8 People</a></li>
 					
-					<li><a href="https://ibizavillas2000.com/property-results/?location=all&min=6&max=7" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 6 People" alt="Villas in Ibiza that Sleep 6 People">Villas in Ibiza that Sleep 6 People</a></li>
+					<li><a href="<?php echo esc_url( home_url( '/all-villas/' ) ); ?>" title="Ibiza Villas 2000 - Villas in Ibiza that Sleep 6 People" alt="Villas in Ibiza that Sleep 6 People">Villas in Ibiza that Sleep 6 People</a></li>
 
 					<li><a href="https://ibizavillas2000.com/villas/rental/cala-martina/airstream-trailer-cala-martina/" title="Ibiza Villas 2000 - Iconic Trailers on the beach" alt="Ibiza Villas 2000 - Iconic Trailers on the beach">Iconic Trailers on the beach</a></li>
 
@@ -256,7 +256,7 @@
 
 	</div>
 
-	<div class="brands revealJs"> <?php the_widget( 'rude_brands_footer_widget' ); ?> </div> <?php wp_footer(); ?> <div id="myBooking" class="reveal-modal footer-form-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+	<div class="brands revealJs"></div> <?php wp_footer(); ?> <div id="myBooking" class="reveal-modal footer-form-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
 	 
 	  <h3 id="modalTitle">My Booking</h3>
 	  <p class="lead">Please enter your booking reference number..</p>
@@ -266,24 +266,6 @@
 	    <button type="submit">Go</button>
 	  </form>
 	</div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    console.log("JQuery Ready?", typeof jQuery !== 'undefined');
-  });
-</script>
-<script>
-jQuery(document).ready(function($) {
-  $('#property-slider').slick({
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    dots: false,
-    arrows: true,
-    lazyLoad: 'ondemand'
-  });
-});
-</script>
 
 <script>
 jQuery(document).ready(function($) {
@@ -309,104 +291,16 @@ jQuery(document).ready(function($) {
 
 <script>
 jQuery(document).ready(function($) {
-  if ($('.slider.similar-properties').length) {
-    $('.slider.similar-properties').slick({
-      infinite: true,
-      slidesToShow: 3,
-      slidesToScroll: 1,
-      dots: false,
-      arrows: true,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 2,
-          }
-        },
-        {
-          breakpoint: 640,
-          settings: {
-            slidesToShow: 1,
-          }
-        }
-      ]
-    });
-  }
-});
-</script>
-
-<script>
-jQuery(document).ready(function($) {
-  // Affiche le panneau de recherche
   $('.searchToggle a').on('click', function(e) {
     e.preventDefault();
     $('.search-top').slideToggle(300);
   });
 
-  // Ferme le panneau
   $('.closeSearch').on('click', function(e) {
     e.preventDefault();
     $('.search-top').slideUp(300);
   });
 });
-</script>
-
-<script>
-jQuery(document).ready(function($) {
-  // Featured Sidebar Carousel
-  $('.featuredSidebar').slick({
-   infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    dots: false,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    lazyLoad: 'ondemand',
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1
-        }
-      }
-    ]
-  });
-});
-</script>
-
-<script>
-jQuery(document).ready(function($) {
-  $('.explore-slider').slick({
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-    dots: false,
-    autoplay: true,
-    autoplaySpeed: 10000,
-    lazyLoad: 'ondemand',
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1
-        }
-      }
-    ]
-  });
-});
-
-function initCarouselFix() {
-  if (typeof jQuery !== 'undefined' && typeof jQuery.fn.slick !== 'undefined') {
-    jQuery('.page-slider').slick();
-    console.log("✅ Carousel initialized");
-  } else {
-    console.log("⏳ Waiting for jQuery / Slick...");
-    setTimeout(initCarouselFix, 500);
-  }
-}
-initCarouselFix();
 </script>
 
 </body>
