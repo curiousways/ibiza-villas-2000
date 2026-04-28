@@ -17,8 +17,6 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-	<?php require_once(TEMPLATEPATH . '/templates/spanish_law.php'); ?>
-
 	<script>
 		(function(i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r;
@@ -86,22 +84,7 @@
 			margin-top: 5px
 		}
 
-		.wpb-js-composer .vc_tta-color-grey.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-heading {
-			border-color: #e3e3e3 !important;
-			background-color: #EBEBEB !important
-		}
 
-		.wpb-js-composer .vc_tta-color-grey.vc_tta-style-outline .vc_tta-panel .vc_tta-panel-title>a {
-			color: #666 !important
-		}
-
-		.wpb-js-composer .vc_tta .vc_tta-controls-icon.vc_tta-controls-icon-plus::before {
-			border-color: #666 !important
-		}
-
-		.wpb-js-composer .vc_tta .vc_tta-controls-icon.vc_tta-controls-icon-plus::after {
-			border-color: #666 !important
-		}
 
 		i.fas.fa-star {
 			color: #FDBF3D !important
@@ -148,7 +131,7 @@
 	<header class="site-header">
 		<div class="row full-width collapse">
 			<div class="small-12 columns">
-				<?php get_template_part('templates/nav', 'topbar'); ?>
+				<?php get_template_part( 'templates/nav', 'topbarnew' ); ?>
 			</div>
 		</div>
 
@@ -164,13 +147,5 @@
 	</header>
 
 	<div class="row collapse full-width">
-		<?php
-		if (
-			!is_page_template('templates/property-results.php') &&
-			!is_page_template('templates/villas-small.php') &&
-			!is_page_template('templates/villas-big.php')
-		) {
-			get_template_part('templates/search-home-new');
-		}
-		?>
+		<?php get_template_part( 'templates/search-home-new' ); ?>
 	</div>

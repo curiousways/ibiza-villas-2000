@@ -1,12 +1,6 @@
 <?php get_header(); ?>
 
 <style>
-	.explore-slider.slick-initialized.slick-slider {
-    display: none!important;
-}
-.slider.featuredSidebar.slick-initialized.slick-slider {
-    display: none!important;
-}
 .contact-form-section{padding-bottom:40px}.contact-heading{letter-spacing:1px!important}.contact-info-section{padding-top:20px!important}.contact-testimonials{margin-bottom:30px}.contact-testimonials img{padding-bottom:30px;max-width:190px}.contact-testimonials .button{padding:10px;width:100%!important}.partners-section{background-size:contain;background-position:bottom;background-image:url(https://ibizavillas2000.com/wp-ibiza/wp-content/themes/rudeibiza/images/IbizaVillas2000-Partners.jpg);background-repeat:no-repeat}
 </style>
 

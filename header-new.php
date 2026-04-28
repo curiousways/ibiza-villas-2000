@@ -17,8 +17,6 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
-	<?php require_once(TEMPLATEPATH . '/templates/spanish_law.php'); ?>
-
 	<script>
 		(function(i, s, o, g, r, a, m) {
 			i['GoogleAnalyticsObject'] = r;
@@ -595,7 +593,6 @@
 
 				<div style="display:none;margin-top:20px;padding-bottom:50px;padding-top:20px;" class="small-12 medium-12 large-5 hero-title text-center columns">
 					<div class="villa-home">
-						<?php get_template_part('templates/home-header-offer-como'); ?>
 
 						<div style="display:;" class="row" style="padding:40px;display:;">
 							<div class="small-0 medium-6 large-6 columns">
@@ -618,13 +615,5 @@
 	</header>
 
 	<div class="row collapse full-width">
-		<?php
-		if (
-			!is_page_template('templates/property-results.php') &&
-			!is_page_template('templates/villas-small.php') &&
-			!is_page_template('templates/villas-big.php')
-		) {
-			get_template_part('templates/search-home-new');
-		}
-		?>
+		<?php get_template_part( 'templates/search-home-new' ); ?>
 	</div>

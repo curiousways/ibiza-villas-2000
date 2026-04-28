@@ -167,10 +167,9 @@
 				        'after' => '',                                  // after each link </a>
 				        'link_before' => '',                            // before each link text
 				        'link_after' => '',                             // after each link text
-				        'depth' => 3,                                   // limit the depth of the nav
-				    	'fallback_cb' => false,                         // fallback function (see below)
-				        'walker' => new top_bar_walker()
-						)
+				        'depth' => 3,
+				    	'fallback_cb' => false,
+						);
 					?>
 					<?php wp_nav_menu( $args ); ?>
 					

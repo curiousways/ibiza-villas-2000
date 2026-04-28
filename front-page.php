@@ -1,7 +1,7 @@
 <?php get_header('new'); ?>
 
 <style>
-body{background-color:#F8F8F8}.featured-section{background-color:#f7f7f7;padding-bottom:60px;padding-top:30px}.property-list{padding-top:40px}.property-item{background-color:#fff}.contact-details h2{letter-spacing:1px!important}.contact-details strong{font-weight:bold}.safety-section{padding-top:20px}.safety-img{height:auto}.safety-title{margin-top:0;font-size:0.8rem}.safety-text{font-size:12px}.why-book-section{background-image:url(https://ibizavillas2000.com/wp-ibiza/wp-content/themes/rudeibiza/images/IbizaVillas2000-WhyBookWIthUs.jpg);background-position:bottom;background-repeat:no-repeat;background-size:cover}.why-book-content{padding-top:100px;color:white}.why-book-title{color:white;font-size:200%;margin-bottom:40px}.why-book-subtitle{color:#FFC029;text-align:left;text-transform:uppercase;letter-spacing:1px;font-size:18px}.why-book-text{text-align:justify}.why-book-text span{font-weight:400}.why-book-bottom{padding-bottom:60px;padding-top:20px;color:white;margin-bottom:30px}.services-section{background-color:#f7f7f7;padding-top:80px}.testimonials-section{padding-top:40px;padding-bottom:40px;background:linear-gradient(#F7F7F7,#FFFFFF)}.partners-section{background-size:contain;background-position:bottom;background-image:url(https://ibizavillas2000.com/wp-ibiza/wp-content/themes/rudeibiza/images/IbizaVillas2000-Partners.jpg);background-repeat:no-repeat}
+body{background-color:#F8F8F8}.featured-section{background-color:#f7f7f7;padding-bottom:60px;padding-top:30px}.property-list{padding-top:40px}.property-item{background-color:#fff}.contact-details h2{letter-spacing:1px!important}.contact-details strong{font-weight:bold}.safety-section{padding-top:10px}.safety-img{height:auto}.safety-title{margin-top:0;font-size:0.8rem}.safety-text{font-size:12px}.why-book-section{background-image:url(https://ibizavillas2000.com/wp-ibiza/wp-content/themes/rudeibiza/images/IbizaVillas2000-WhyBookWIthUs.jpg);background-position:bottom;background-repeat:no-repeat;background-size:cover}.why-book-content{padding-top:100px;color:white}.why-book-title{color:white;font-size:200%;margin-bottom:40px}.why-book-subtitle{color:#FFC029;text-align:left;text-transform:uppercase;letter-spacing:1px;font-size:18px}.why-book-text{text-align:justify}.why-book-text span{font-weight:400}.why-book-bottom{padding-bottom:60px;padding-top:20px;color:white;margin-bottom:30px}.services-section{background-color:#f7f7f7;padding-top:80px}.partners-section{background-size:contain;background-position:bottom;background-image:url(https://ibizavillas2000.com/wp-ibiza/wp-content/themes/rudeibiza/images/IbizaVillas2000-Partners.jpg);background-repeat:no-repeat}
 </style>
 
 <div class="future small-12 medium-12 large-12 columns featured-section">
@@ -10,22 +10,15 @@ body{background-color:#F8F8F8}.featured-section{background-color:#f7f7f7;padding
 
 <div class="row property-list">
     <?php
-    if ($spanish_law == 'yes') {
-        $args = array(
-            'post_type' => 'villas',
-            'posts_per_page' => -1,
-            'post__not_in' => array('5610','2928'),
-            'meta_key' => 'property_for_sale',
-            'meta_value' => 0
-        );
-    } else {
-        $args = array(
-            'post_type' => 'villas',
-            'posts_per_page' => -1,
-            'meta_key' => 'property_for_sale',
-            'meta_value' => 0
-        );
-    }
+    // TODO pass 3: editorial exclusion via ACF
+    $post__not_in = array();
+    $args = array(
+        'post_type' => 'villas',
+        'posts_per_page' => -1,
+        'post__not_in' => $post__not_in,
+        'meta_key' => 'property_for_sale',
+        'meta_value' => 0
+    );
 
     $property_query = new WP_Query($args);
 
@@ -42,7 +35,10 @@ body{background-color:#F8F8F8}.featured-section{background-color:#f7f7f7;padding
 <div class="page-intro">
     <div class="nomads-page-info row">
         <div class="small-12 medium-12 large-7 columns">
-            <?php the_field('front_page_intro', 2); ?>
+            <?php
+            // TODO pass 3: move to ACF Site Options (replaces hard-coded options page ID).
+            the_field('front_page_intro', 2);
+            ?>
         </div>
         
         <div class="nomads-page-border column medium-12 large-5">
@@ -107,12 +103,6 @@ body{background-color:#F8F8F8}.featured-section{background-color:#f7f7f7;padding
 <div class="future small-12 medium-12 large-12 columns services-section">
     <?php get_template_part('templates/featured-services'); ?>
 </div>
-
-<div class="future small-12 medium-12 large-12 columns testimonials-section">
-    <?php get_template_part('templates/featured-testimonials'); ?>
-</div>
-
-<?php // get_template_part('templates/testimonials'); ?>
 
 <div class="rude-sponsors-container partners-section">
     <div class="row collapse rude-sponsors">
