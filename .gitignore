@@ -1,1 +1,22 @@
 .DS_Store
+
+#
+# wp-content repository root — do not track generated / third-party dirs
+# (buddy deploys scoped trees; these stay on the server)
+#
+uploads/
+upgrade/
+cache/
+plugins/
+
+# Logs
+*.log
+debug.log
+
+# OS / editor noise
+Thumbs.db
+*.swp
+
+# Future tooling (if added at repo root)
+/node_modules/
+/vendor/

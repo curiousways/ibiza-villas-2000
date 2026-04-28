@@ -1,0 +1,11 @@
+---
+description: IBV conventions — BEM, tokens, Classic + ACF in mu-plugin (ibv-core)
+globs: themes/ibv/**/*.php, mu-plugins/**/*.php
+---
+
+## Ibiza Villas 2000 (`ibv` prefix)
+
+- Prefer **BEM-like** class names with block prefix **`ibv-`** (e.g. `ibv-site-header`, `ibv-site-header__brand`).
+- **CSS custom properties** (design tokens) live in theme CSS; reuse via `var(--ibv-token-name)`.
+- **Business logic, CPT registration, ACF field groups registered in PHP** target `mu-plugins/ibv-core/` after pass 3b — keep this scaffold theme thin.
+- Editors: **Classic** + ACF aligned with CW standards unless the project explicitly moves to blocks.
