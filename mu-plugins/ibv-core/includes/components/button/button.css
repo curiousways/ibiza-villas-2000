@@ -1,0 +1,70 @@
+/* Button — variant/size tuning lives in tokens.css; refine values per project. */
+
+.ibv-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-xs);
+	border-radius: var(--ibv-radius-pill);
+	font-family: var(--ibv-font-body);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: 1;
+	letter-spacing: var(--ibv-tracking-normal);
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		background-color var(--ibv-duration-normal) var(--ibv-ease-standard),
+		color var(--ibv-duration-normal) var(--ibv-ease-standard),
+		border-color var(--ibv-duration-normal) var(--ibv-ease-standard),
+		transform var(--ibv-duration-fast) var(--ibv-ease-standard);
+	border: 1px solid transparent;
+	white-space: nowrap;
+}
+
+.ibv-button--small {
+	padding: var(--ibv-space-xs) var(--ibv-space-md);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-button--medium {
+	padding: var(--ibv-space-sm) var(--ibv-space-lg);
+	font-size: var(--ibv-fs-body);
+}
+
+.ibv-button--large {
+	padding: var(--ibv-space-md) var(--ibv-space-xl);
+	font-size: var(--ibv-fs-h4);
+}
+
+.ibv-button--primary {
+	background-color: var(--ibv-color-accent);
+	color: var(--ibv-color-accent-contrast);
+}
+
+.ibv-button--primary:hover,
+.ibv-button--primary:focus-visible {
+	background-color: var(--ibv-color-text);
+}
+
+.ibv-button--secondary {
+	background-color: transparent;
+	color: var(--ibv-color-text);
+	border-color: var(--ibv-color-text);
+}
+
+.ibv-button--secondary:hover,
+.ibv-button--secondary:focus-visible {
+	background-color: var(--ibv-color-text);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-button--ghost {
+	background-color: transparent;
+	color: var(--ibv-color-text);
+	padding-inline: 0;
+}
+
+.ibv-button--ghost:hover,
+.ibv-button--ghost:focus-visible {
+	color: var(--ibv-color-link-hover);
+}

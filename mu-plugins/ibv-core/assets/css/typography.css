@@ -1,0 +1,88 @@
+/* Heading and body type — tune per project. Headings default to semibold for
+   a quiet hierarchy; bump to bold per template if a louder treatment is needed. */
+
+h1,
+.ibv-h1 {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: var(--ibv-tracking-tight);
+}
+
+h2,
+.ibv-h2 {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: var(--ibv-tracking-tight);
+}
+
+h3,
+.ibv-h3 {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: var(--ibv-lh-snug);
+}
+
+h4,
+.ibv-h4 {
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: var(--ibv-lh-snug);
+}
+
+p,
+ul,
+ol {
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+}
+
+p + p,
+p + ul,
+p + ol,
+ul + p,
+ol + p {
+	margin-top: var(--ibv-space-md);
+}
+
+small,
+.ibv-text-small {
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-text-eyebrow {
+	font-size: var(--ibv-fs-eyebrow);
+	font-weight: var(--ibv-font-weight-medium);
+	letter-spacing: var(--ibv-tracking-eyebrow);
+	text-transform: uppercase;
+	color: var(--ibv-color-text-muted);
+}
+
+/* Editor / WYSIWYG flow — applied to wrappers around editor output. */
+.ibv-prose > * + * {
+	margin-top: var(--ibv-space-md);
+}
+
+.ibv-prose h2 {
+	margin-top: var(--ibv-space-2xl);
+}
+
+.ibv-prose h3 {
+	margin-top: var(--ibv-space-xl);
+}
+
+.ibv-prose ul,
+.ibv-prose ol {
+	padding-left: var(--ibv-space-lg);
+}
+
+.ibv-prose blockquote {
+	padding-left: var(--ibv-space-lg);
+	border-left: 2px solid var(--ibv-color-border-strong);
+	font-style: italic;
+	color: var(--ibv-color-text-muted);
+}

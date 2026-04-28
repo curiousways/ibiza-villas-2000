@@ -1,0 +1,50 @@
+/* Global layout primitives — container, grid, section rhythm, utilities. */
+
+.ibv-container {
+	width: 100%;
+	max-width: var(--ibv-container-max);
+	margin-inline: auto;
+	padding-inline: var(--ibv-container-pad-x);
+}
+
+.ibv-container--narrow {
+	max-width: var(--ibv-container-narrow);
+}
+
+.ibv-section {
+	padding-block: var(--ibv-section-pad-y);
+}
+
+.ibv-stack > * + * {
+	margin-top: var(--ibv-space-lg);
+}
+
+.ibv-grid {
+	display: grid;
+	gap: var(--ibv-grid-gutter);
+}
+
+/* Auto-fit grids — min column widths are project defaults; tune per template if needed. */
+.ibv-grid--2 {
+	grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+}
+
+.ibv-grid--3 {
+	grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+}
+
+.ibv-grid--4 {
+	grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+}
+
+.ibv-u-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

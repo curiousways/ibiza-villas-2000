@@ -1,11 +1,62 @@
 ---
-description: IBV conventions — BEM, tokens, Classic + ACF in mu-plugin (ibv-core)
-globs: themes/ibv/**/*.php, mu-plugins/**/*.php
+description: Ibiza Villas 2000 project conventions — always apply.
+alwaysApply: true
 ---
 
-## Ibiza Villas 2000 (`ibv` prefix)
+# Ibiza Villas 2000 — agent conventions
 
-- Prefer **BEM-like** class names with block prefix **`ibv-`** (e.g. `ibv-site-header`, `ibv-site-header__brand`).
-- **CSS custom properties** (design tokens) live in theme CSS; reuse via `var(--ibv-token-name)`.
-- **Business logic, CPT registration, ACF field groups registered in PHP** target `mu-plugins/ibv-core/` after pass 3b — keep this scaffold theme thin.
-- Editors: **Classic** + ACF aligned with CW standards unless the project explicitly moves to blocks.
+This build follows a strict mu-plugin + thin theme architecture. These
+rules apply to every change unless a brief explicitly overrides them.
+
+## Architecture
+
+- All custom logic lives in `wp-content/mu-plugins/ibv-core/`.
+- The theme `wp-content/themes/ibv/` is presentation only — no business
+  logic, no ACF registration, no post type registration.
+- Each new feature is a folder under `mu-plugins/ibv-core/includes/`,
+  required from `bootstrap.php` in load order.
+- ACF groups are registered in PHP, hooked to `acf/init`. Never use
+  `acf-json/` sync. One file per group under `includes/acf/`.
+
+## Naming
+
+- PHP functions / classes prefixed `ibv_` (or `ibv_core_` for helpers
+  callable from templates).
+- CSS uses BEM with `ibv-` prefix; utilities `ibv-u-*`.
+- Text domain `'ibv'`.
+- File names kebab-case.
+- ACF: group keys `group_ibv_{scope}`; field keys `field_ibv_{scope}_{name}`.
+
+## CSS
+
+- Plain CSS, no build step.
+- All values reference custom-property tokens defined in
+  `mu-plugins/ibv-core/assets/css/tokens.css`. No hardcoded colours, font
+  sizes, spacing, radius, motion.
+- Component CSS is co-located with the component PHP. Each component
+  registers its own handle in `shared-assets.php` and enqueues itself
+  conditionally inside its helper function.
+
+## Output
+
+- Escape every output: `esc_html()`, `esc_url()`, `esc_attr()`,
+  `wp_kses_post()`.
+- Translate user-facing strings: `__( 'text', 'ibv' )`.
+- Images: always `ibv_core_image()` or `wp_get_attachment_image()`.
+  Never raw `<img>`.
+- Buttons: always `ibv_core_button()`. Never raw `<a class="button">`.
+- Section headings: `ibv_core_section_heading()` for eyebrow + title combos.
+
+## Editor
+
+- Classic editor only. Block editor is disabled site-wide via
+  `includes/editor.php`. CPTs registered by this mu-plugin opt out via
+  `show_in_rest => false`.
+- If a future brief needs the block editor for a specific post type,
+  narrow the filter in `editor.php` rather than dropping it altogether.
+
+## Dependencies
+
+- ACF Pro is the only required plugin.
+- No new npm or composer dependencies without explicit approval in the
+  brief. No build step.

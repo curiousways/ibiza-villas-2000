@@ -1,13 +1,23 @@
+# macOS
 .DS_Store
 
 #
-# wp-content repository root — do not track generated / third-party dirs
-# (buddy deploys scoped trees; these stay on the server)
+# This repository root is `wp-content/` (not full WordPress root).
+# Paths below are relative to that root.
 #
+
+# Generated / environment-specific
 uploads/
+languages/
 upgrade/
 cache/
+backup-db/
 plugins/
+
+# Drop-in / caching files sometimes present under wp-content/
+advanced-cache.php
+wp-cache-config.php
+object-cache.php
 
 # Logs
 *.log
@@ -17,6 +27,9 @@ debug.log
 Thumbs.db
 *.swp
 
-# Future tooling (if added at repo root)
+# Local tooling
 /node_modules/
 /vendor/
+
+# Extracted boilerplate previews (do not commit)
+.tmp-ibv-bp/

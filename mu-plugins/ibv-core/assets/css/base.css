@@ -1,0 +1,34 @@
+/* Element-level defaults — keep small; typography and components own specifics. */
+
+html {
+	background-color: var(--ibv-color-bg);
+	color: var(--ibv-color-text);
+	font-family: var(--ibv-font-body);
+	font-size: 100%;
+}
+
+body {
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-normal);
+}
+
+a {
+	color: var(--ibv-color-link);
+	transition: color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+a:hover,
+a:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
+hr {
+	border: 0;
+	border-top: 1px solid var(--ibv-color-border);
+	margin: var(--ibv-space-xl) 0;
+}
+
+::selection {
+	background: var(--ibv-color-accent);
+	color: var(--ibv-color-accent-contrast);
+}

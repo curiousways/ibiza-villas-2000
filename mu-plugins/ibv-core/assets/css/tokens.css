@@ -1,0 +1,122 @@
+/* tokens.css — design system source of truth.
+ *
+ * Reference these custom properties everywhere; never hardcode a colour,
+ * font size, spacing, radius, or motion value.
+ *
+ * Structure:
+ *   - Greyscale ramp + (optional) brand ramp = the raw palette.
+ *   - Semantic tokens map ramp values to roles (text, bg, accent, border).
+ *   - Components ONLY reference semantic tokens, never the ramp directly.
+ *
+ * Starter values are intentionally neutral. Tune to match the brand by:
+ *   1. Editing the ramp values in the "Palette" section, OR
+ *   2. Adding a brand ramp and re-mapping the semantic tokens to it.
+ *   3. Tuning typography to match the loaded font (see shared-assets.php
+ *      for the Google Fonts URL — change the family there and the
+ *      `--ibv-font-*` tokens here together).
+ */
+
+:root {
+	/* ---------- Palette: greyscale ramp ---------- */
+	--ibv-color-white:    #ffffff;
+	--ibv-color-grey-50:  #fafafa;
+	--ibv-color-grey-100: #f5f5f5;
+	--ibv-color-grey-200: #e5e5e5;
+	--ibv-color-grey-300: #d4d4d4;
+	--ibv-color-grey-400: #a3a3a3;
+	--ibv-color-grey-500: #737373;
+	--ibv-color-grey-600: #525252;
+	--ibv-color-grey-700: #404040;
+	--ibv-color-grey-800: #262626;
+	--ibv-color-grey-900: #171717;
+	--ibv-color-black:    #000000;
+
+	/* ---------- Semantic colour ---------- */
+	/* Components reference these. To rebrand, change the right-hand side. */
+	--ibv-color-bg:              var(--ibv-color-white);
+	--ibv-color-bg-alt:          var(--ibv-color-grey-50);
+	--ibv-color-surface:         var(--ibv-color-white);
+	--ibv-color-text:            var(--ibv-color-grey-900);
+	--ibv-color-text-muted:      var(--ibv-color-grey-500);
+	--ibv-color-text-subtle:     var(--ibv-color-grey-400);
+	--ibv-color-text-inverse:    var(--ibv-color-white);
+	--ibv-color-accent:          var(--ibv-color-grey-900);
+	--ibv-color-accent-contrast: var(--ibv-color-white);
+	--ibv-color-border:          var(--ibv-color-grey-200);
+	--ibv-color-border-strong:   var(--ibv-color-grey-300);
+	--ibv-color-link:            var(--ibv-color-text);
+	--ibv-color-link-hover:      var(--ibv-color-black);
+	--ibv-color-focus-ring:      var(--ibv-color-grey-900);
+
+	/* ---------- Typography ---------- */
+	/* Inter is loaded by `shared-assets.php` (ibv-fonts handle). System
+	   fallbacks cover the brief loading window before the webfont is ready.
+	   Replace the family name in BOTH places to swap typeface. */
+	--ibv-font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--ibv-font-body:    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+	--ibv-font-weight-regular:  400;
+	--ibv-font-weight-medium:   500;
+	--ibv-font-weight-semibold: 600;
+	--ibv-font-weight-bold:     700;
+
+	/* Type scale — fluid via clamp(). Tune per project. */
+	--ibv-fs-display: clamp(2.5rem, 5vw, 4.5rem);
+	--ibv-fs-h1:      clamp(2rem, 4vw, 3.25rem);
+	--ibv-fs-h2:      clamp(1.5rem, 3vw, 2.25rem);
+	--ibv-fs-h3:      clamp(1.25rem, 2vw, 1.5rem);
+	--ibv-fs-h4:      1.125rem;
+	--ibv-fs-body:    1rem;
+	--ibv-fs-small:   0.875rem;
+	--ibv-fs-eyebrow: 0.8125rem;
+
+	--ibv-lh-tight:   1.1;
+	--ibv-lh-snug:    1.25;
+	--ibv-lh-normal:  1.5;
+	--ibv-lh-relaxed: 1.7;
+
+	/* Slightly negative tracking suits Inter at display sizes; tune for other fonts. */
+	--ibv-tracking-tight:   -0.02em;
+	--ibv-tracking-normal:  0;
+	--ibv-tracking-eyebrow: 0.08em;
+
+	/* ---------- Spacing scale ---------- */
+	/* 4px base. Add or remove steps as the design demands. */
+	--ibv-space-2xs: 0.25rem; /*  4px */
+	--ibv-space-xs:  0.5rem;  /*  8px */
+	--ibv-space-sm:  0.75rem; /* 12px */
+	--ibv-space-md:  1rem;    /* 16px */
+	--ibv-space-lg:  1.5rem;  /* 24px */
+	--ibv-space-xl:  2rem;    /* 32px */
+	--ibv-space-2xl: 3rem;    /* 48px */
+	--ibv-space-3xl: 4.5rem;  /* 72px */
+	--ibv-space-4xl: 6rem;    /* 96px */
+	--ibv-space-5xl: 8rem;    /*128px */
+
+	/* ---------- Layout ---------- */
+	--ibv-container-max:    72rem;  /* 1152px */
+	--ibv-container-narrow: 44rem;  /*  704px */
+	--ibv-container-pad-x:  var(--ibv-space-lg);
+	--ibv-section-pad-y:    var(--ibv-space-3xl);
+	--ibv-grid-gutter:      var(--ibv-space-lg);
+
+	/* ---------- Radius ---------- */
+	--ibv-radius-sm:    0.125rem;
+	--ibv-radius-md:    0.25rem;
+	--ibv-radius-lg:    0.5rem;
+	--ibv-radius-pill:  999px;
+	--ibv-radius-image: 0;
+
+	/* ---------- Motion ---------- */
+	--ibv-duration-fast:   120ms;
+	--ibv-duration-normal: 220ms;
+	--ibv-duration-slow:   400ms;
+	--ibv-ease-standard:   cubic-bezier(0.2, 0, 0, 1);
+	--ibv-ease-out:        cubic-bezier(0.16, 1, 0.3, 1);
+
+	/* ---------- Elevation ---------- */
+	/* Shadows stay subtle by default — prefer borders to shadows for separating surfaces. */
+	--ibv-shadow-color: 0 0 0;
+	--ibv-shadow-sm: 0 1px 2px rgb(var(--ibv-shadow-color) / 0.06);
+	--ibv-shadow-md: 0 4px 12px rgb(var(--ibv-shadow-color) / 0.08);
+}

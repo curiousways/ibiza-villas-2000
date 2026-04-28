@@ -1,14 +1,18 @@
 <?php
 /**
- * Ibiza Villas 2000 Core — bootstrap.
- *
- * Pass 3a: Site Options placeholder only. Pass 3b registers CPT / ACF here.
+ * Plugin Name: Ibiza Villas 2000 Core
+ * Description: Project-specific functionality for Ibiza Villas 2000 — post types, taxonomies, ACF registrations, components, shared assets.
+ * Version:     0.1.0
+ * Author:      Curious Ways
+ * Text Domain: ibv
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once __DIR__ . '/includes/class-site-options.php';
+define( 'IBV_CORE_VERSION', '0.1.0' );
+define( 'IBV_CORE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'IBV_CORE_URL', plugin_dir_url( __FILE__ ) );
 
-Ibv_Core_Site_Options::init();
+require_once IBV_CORE_PATH . 'bootstrap.php';

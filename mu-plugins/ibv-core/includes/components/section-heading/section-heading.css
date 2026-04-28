@@ -1,0 +1,26 @@
+.ibv-section-heading {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+	margin-bottom: var(--ibv-space-2xl);
+}
+
+.ibv-section-heading--center {
+	align-items: center;
+	text-align: center;
+	margin-inline: auto;
+	max-width: min(48rem, 100%);
+}
+
+.ibv-section-heading__eyebrow {
+	/* Eyebrow colour comes from `.ibv-text-eyebrow` (typography.css). */
+}
+
+.ibv-section-heading__title {
+	/* Inherits scale + weight from typography.css. Override per template if needed. */
+}
+
+.ibv-section-heading__lead {
+	max-width: min(var(--ibv-container-narrow), 100%);
+	color: var(--ibv-color-text-muted);
+}

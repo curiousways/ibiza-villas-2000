@@ -1,15 +1,9 @@
 /*
-Theme Name: Ibiza Villas 2000 (new)
-Theme URI: https://ibizavillas2000.com/
-Author: Curious Ways
-Author URI: https://curiousways.dev/
-Description: Thin theme scaffold — inactive until Pass 3b activates it.
-Version: 0.1.0
-Requires at least: 6.0
-Requires PHP: 8.2
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: ibv
-
-Pass 3a scaffold only — do not activate on production until migration (pass 3b).
+Theme Name:   Ibiza Villas 2000
+Author:       Curious Ways
+Description:  The Ibiza Villas 2000 WordPress theme. Thin presentation layer — all post types, taxonomies, ACF, and components live in the ibv-core mu-plugin.
+Version:      0.1.0
+Requires at least: 6.4
+Requires PHP: 8.1
+Text Domain:  ibv
 */
