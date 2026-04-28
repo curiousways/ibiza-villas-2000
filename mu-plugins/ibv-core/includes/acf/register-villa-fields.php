@@ -2,18 +2,10 @@
 /**
  * Villa ACF field groups — PHP registration (`acf_add_local_field_group`).
  *
- * HALT — source JSON was not present in this repository workspace
- * (`themes/ibiza-villas-2000/acf-json/`). The audit notes field groups live in
- * the WP database / admin sync workflow; no `group_*.json` exports are versioned
- * here yet.
- *
- * Until JSON exports exist in git, this callback intentionally registers **no**
- * groups. Villa field data continues to resolve via definitions already stored in
- * the database (`acf-post` entities). Passing 3b pre-flight requires:
- * WP Admin → ACF → Field Groups → Sync (or Export) → commit JSON under
- * `themes/ibiza-villas-2000/acf-json/` (or paste here), then convert each blob to
- * `acf_add_local_field_group()` **without renaming any keys** (`field_*`,
- * `group_*`).
+ * HALT — synced JSON exports were not in this repo snapshot (see Pass 3b brief).
+ * Field definitions currently live only in the WordPress database until exports are
+ * added and mechanically converted below. Every `acf_add_local_field_group()` call
+ * must preserve JSON keys (`field_*`, `group_*`) exactly.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registers villa-related ACF local field groups once JSON conversion is merged.
+ * Registers villa-related ACF local field groups after JSON conversions land.
  *
  * Hooks at priority 15 so mu-plugin baseline Site Options (register-options.php)
  * can run first when both use `acf/init`.

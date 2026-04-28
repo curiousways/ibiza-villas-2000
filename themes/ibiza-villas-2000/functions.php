@@ -7,7 +7,6 @@ function core_theme_setup()
 {
 	require_once(get_template_directory() . '/functions/widgets.php');
 	require_once(get_template_directory() . '/functions/acf-options.php');
-	require_once(get_template_directory() . '/functions/properties-cpt.php');
 	require_once(get_template_directory() . '/functions/related-properties-widget.php');
 	require_once(get_template_directory() . '/functions/featured-properties-widget.php');
 	require_once(get_template_directory() . '/functions/custom-admin-columns.php');
@@ -288,33 +287,3 @@ function numeric_posts_nav()
 // get the the role object
 $role_object = get_role('editor');
 $role_object->add_cap('edit_theme_options');
-
-
-/**
- * Add custom taxonomies
- */
-function add_custom_villa_taxonomies()
-{
-	register_taxonomy('villa_type', 'villas', array(
-		'hierarchical' => true,
-		'labels' => array(
-			'name' => _x('Villa Types', 'taxonomy general name'),
-			'singular_name' => _x('Villa Type', 'taxonomy singular name'),
-			'search_items' =>  __('Search Villa Types'),
-			'all_items' => __('All Villa Types'),
-			'parent_item' => __('Parent Villa Type'),
-			'parent_item_colon' => __('Parent Villa Type:'),
-			'edit_item' => __('Edit Villa Type'),
-			'update_item' => __('Update Villa Type'),
-			'add_new_item' => __('Add New Villa Type'),
-			'new_item_name' => __('New Villa Type Name'),
-			'menu_name' => __('Villa Types'),
-		),
-		'rewrite' => array(
-			'slug' => 'villatype',
-			'with_front' => false,
-			'hierarchical' => true
-		),
-	));
-}
-add_action('init', 'add_custom_villa_taxonomies', 0);

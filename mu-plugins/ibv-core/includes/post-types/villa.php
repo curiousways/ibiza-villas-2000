@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'ibv_register_villa_post_type' ) ) {
 	/**
-	 * Register the Villas CPT. Mirrors legacy `themes/ibiza-villas-2000/functions/properties-cpt.php`.
+	 * Register the Villas CPT. Mirrors legacy theme registration before Pass 3b.
 	 */
 	function ibv_register_villa_post_type() {
 
