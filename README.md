@@ -13,7 +13,7 @@ This README is aimed at **API integration** (availability search, pricing, reque
 | Core logic, components, ACF PHP, CPT/taxonomies | `wp-content/mu-plugins/ibv-core/` | All behaviour; loaded from `bootstrap.php` |
 | Templates, global layout | `wp-content/themes/ibv/` | PHP templates only — call `ibv_core_*` helpers |
 
-**Conventions:** `ibv_` / `ibv_core_*` functions, `ibv-` BEM CSS, text domain `ibv`. ACF is registered in PHP only (`includes/acf/`). No `acf-json` sync in this workflow. Classic editor; `ibv-core` registers data with `show_in_rest => false` where relevant.
+**Conventions:** `ibv_` / `ibv_core_*` functions, `ibv-` BEM CSS, text domain `ibv`. ACF is registered in PHP only (`includes/acf/`). No `acf-json` sync in this workflow. Classic editor is enforced site-wide via `includes/editor.php`. Local ACF field groups and the `villa_amenity` / `villa_poi` taxonomies set `show_in_rest => false`. The `villas` CPT does not pass `show_in_rest`, so WordPress defaults it to `false` (no core REST routes for that post type unless enabled in registration).
 
 **Dependency:** **ACF Pro** (required).
 
@@ -72,13 +72,14 @@ On the **Villa Listing** page template, the same param names can be read server-
 
 ## Villa cards: “from” price
 
-Default cards expose a stable placeholder and a **post ID** for hydration:
+Default cards expose a stable placeholder and a hook for live pricing:
 
-- Selector: `[data-bob-from-price]` — value is the **WordPress post ID** of the villa (string).
+- Element: `span.ibv-villa-card__price-amount` with `[data-bob-from-price]` — the attribute **value is the WordPress post ID** of the villa (string), for correlating the card with API data. The span’s **text content** is the displayed “from” EUR amount; replace that text with the live amount from the API (do not replace the `data-bob-from-price` attribute value with a price — it must stay the post ID).
+- The **“/ wk”** suffix is a **sibling** `span` (`.ibv-villa-card__price-suffix`); leave it unless product copy changes.
 
 **File:** `ibv-core/includes/components/villa-card/villa-card.php`
 
-Indicative ACF fallback may show before your script runs; API replaces the displayed amount.
+The indicative ACF field `villa_indicative_from_price` renders inside the span before your script runs (or a static `€420` fallback), so cards stay readable for SEO and no-JS users.
 
 ---
 
@@ -122,6 +123,20 @@ Indicative ACF fallback may show before your script runs; API replaces the displ
 | `ibv_get_booking_confirmation_url( $slug )` | Confirmation page + optional `?villa=` |
 | `ibv_get_contact_page_url()` | Contact link |
 | `ibv_get_villa_listing_search_params()` | Current GET search params on listing template |
+
+---
+
+## Where to put your JS
+
+Your scripts live in the **theme**, not the mu-plugin. The mu-plugin owns markup shells; the theme owns presentation and Bob-side runtime behaviour.
+
+Suggested starting path: `wp-content/themes/ibv/assets/js/bob-api.js` (create `assets/js/` if it does not exist yet).
+
+Enqueue from `wp-content/themes/ibv/functions.php` with page-conditional logic so each script only loads where it is needed (listing template, single villa, booking confirmation).
+
+If multiple files emerge (for example `bob-listing.js`, `bob-detail.js`, `bob-rtb.js`), keep them flat in `assets/js/` and enqueue per template. **No build step** — plain JS only. ES module syntax is acceptable if you rely on native browser module support.
+
+For shared helpers used across more than one script, a small `bob-shared.js` registered as a dependency of the others is preferred over a build-time bundle.
 
 ---
 
