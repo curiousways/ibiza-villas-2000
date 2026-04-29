@@ -1,0 +1,39 @@
+.ibv-listing-empty-state {
+	padding-block: var(--ibv-space-xl);
+	background: var(--ibv-color-accent-gold);
+	color: var(--ibv-color-brand-teal);
+}
+
+.ibv-listing-empty-state .ibv-button--secondary:hover,
+.ibv-listing-empty-state .ibv-button--secondary:focus-visible {
+	background-color: var(--ibv-color-brand-teal);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-listing-empty-state .ibv-button--primary {
+	background-color: var(--ibv-color-brand-teal);
+	color: var(--ibv-color-text-inverse);
+	border-color: var(--ibv-color-brand-teal);
+}
+
+.ibv-listing-empty-state .ibv-button--primary:hover,
+.ibv-listing-empty-state .ibv-button--primary:focus-visible {
+	background-color: var(--ibv-color-brand-teal-mid);
+}
+
+.ibv-listing-empty-state__title {
+	margin: 0 0 var(--ibv-space-sm);
+	font-size: var(--ibv-fs-h2);
+}
+
+.ibv-listing-empty-state__subtitle {
+	margin: 0 0 var(--ibv-space-lg);
+	font-size: var(--ibv-fs-body);
+	max-width: 36rem;
+}
+
+.ibv-listing-empty-state__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-md);
+}

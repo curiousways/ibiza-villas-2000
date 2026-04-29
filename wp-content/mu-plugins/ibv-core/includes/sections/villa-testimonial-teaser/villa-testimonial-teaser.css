@@ -1,0 +1,26 @@
+.ibv-villa-testimonial-teaser {
+	padding-block: var(--ibv-space-xl);
+	background: var(--ibv-color-brand-teal);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-villa-testimonial-teaser__quote {
+	margin: 0;
+	max-width: 40rem;
+}
+
+.ibv-villa-testimonial-teaser__stars {
+	margin: 0 0 var(--ibv-space-sm);
+	color: var(--ibv-color-accent-gold);
+}
+
+.ibv-villa-testimonial-teaser__text {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-h4);
+	line-height: var(--ibv-lh-relaxed);
+}
+
+.ibv-villa-testimonial-teaser__attr {
+	font-size: var(--ibv-fs-small);
+	opacity: 0.9;
+}

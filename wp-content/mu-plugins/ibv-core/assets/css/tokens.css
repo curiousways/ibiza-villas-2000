@@ -129,5 +129,6 @@
 	--ibv-color-brand-teal-mid: #153838;
 	--ibv-color-brand-panel-green: #1e4d3a;
 	--ibv-color-accent-gold: #e8c547;
+	--ibv-sticky-offset: var(--ibv-space-md);
 	--ibv-color-surface-inverse: var(--ibv-color-brand-teal);
 }

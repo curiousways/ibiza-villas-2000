@@ -1,0 +1,28 @@
+.ibv-concierge-cross-sell {
+	background: var(--ibv-color-bg-alt);
+}
+
+.ibv-concierge-cross-sell__grid {
+	align-items: center;
+}
+
+.ibv-concierge-cross-sell__media {
+	border-radius: var(--ibv-radius-lg);
+	overflow: hidden;
+	border: 1px solid var(--ibv-color-border);
+}
+
+.ibv-concierge-cross-sell__image {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+.ibv-concierge-cross-sell__title {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-h2);
+}
+
+.ibv-concierge-cross-sell__body {
+	margin-bottom: var(--ibv-space-lg);
+}

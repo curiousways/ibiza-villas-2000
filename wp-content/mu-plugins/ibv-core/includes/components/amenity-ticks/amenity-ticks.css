@@ -1,0 +1,20 @@
+.ibv-amenity-ticks {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-xs) var(--ibv-space-lg);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: var(--ibv-fs-body);
+}
+
+.ibv-amenity-ticks__item {
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-xs);
+}
+
+.ibv-amenity-ticks__tick {
+	color: var(--ibv-color-brand-panel-green);
+	font-weight: var(--ibv-font-weight-semibold);
+}

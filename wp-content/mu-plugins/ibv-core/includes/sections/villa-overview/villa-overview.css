@@ -1,0 +1,89 @@
+.ibv-villa-overview__title {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-h1);
+	line-height: var(--ibv-lh-tight);
+}
+
+.ibv-villa-overview__rating {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--ibv-space-sm);
+	margin-bottom: var(--ibv-space-md);
+}
+
+.ibv-villa-overview__score {
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-bold);
+}
+
+.ibv-villa-overview__reviews-link,
+.ibv-villa-overview__reviews-count {
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-villa-overview__location-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-sm);
+	margin: 0 0 var(--ibv-space-lg);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-villa-overview__location-pill {
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	background: var(--ibv-color-bg-alt);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-pill);
+}
+
+.ibv-villa-overview__distance-note {
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-villa-overview .ibv-facts-strip {
+	margin-bottom: var(--ibv-space-lg);
+}
+
+.ibv-villa-overview__summary-block {
+	margin-bottom: var(--ibv-space-lg);
+}
+
+.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open) {
+	max-height: 10rem;
+	overflow: hidden;
+	position: relative;
+}
+
+.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open)::after {
+	content: "";
+	position: absolute;
+	inset-inline: 0;
+	inset-block-end: 0;
+	height: 3rem;
+	background: linear-gradient(to bottom, transparent, var(--ibv-color-bg));
+	pointer-events: none;
+}
+
+.ibv-villa-overview__read-more {
+	margin-top: var(--ibv-space-sm);
+	font: inherit;
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-semibold);
+	background: none;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+	color: var(--ibv-color-link);
+	text-decoration: underline;
+}
+
+.ibv-villa-overview .ibv-amenity-ticks {
+	margin-bottom: var(--ibv-space-lg);
+}
+
+.ibv-villa-overview__from-price {
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-semibold);
+}

@@ -1,0 +1,15 @@
+.ibv-villa-map {
+	width: 100%;
+	min-height: min(24rem, 60vw);
+	border-radius: var(--ibv-radius-lg);
+	overflow: hidden;
+	border: 1px solid var(--ibv-color-border);
+	background: var(--ibv-color-bg-alt);
+}
+
+.ibv-villa-map__fallback {
+	margin: 0;
+	padding: var(--ibv-space-md);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}

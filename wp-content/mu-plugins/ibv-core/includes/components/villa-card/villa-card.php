@@ -253,9 +253,18 @@ function ibv_core_villa_card( $args = [] ) {
 				</div>
 			<?php else : ?>
 				<div class="ibv-villa-card__price">
-					<?php /* Bob shell: replace static "From €420" with API "from" price keyed by data-bob-from-price */ ?>
+					<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback. */ ?>
 					<span class="ibv-villa-card__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
-					<span class="ibv-villa-card__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">€420</span>
+					<span class="ibv-villa-card__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+						<?php
+						$indicative = get_field( 'villa_indicative_from_price', $villa_id );
+						if ( $indicative ) {
+							printf( '€%s', esc_html( number_format_i18n( (float) $indicative ) ) );
+						} else {
+							echo '€420';
+						}
+						?>
+					</span>
 					<span class="ibv-villa-card__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
 				</div>
 			<?php endif; ?>

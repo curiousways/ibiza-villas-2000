@@ -1,0 +1,25 @@
+.ibv-facts-strip {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-sm) var(--ibv-space-md);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: var(--ibv-fs-body);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-facts-strip--compact {
+	gap: var(--ibv-space-xs) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-facts-strip__item {
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-xs);
+}
+
+.ibv-facts-strip__icon {
+	line-height: 1;
+}

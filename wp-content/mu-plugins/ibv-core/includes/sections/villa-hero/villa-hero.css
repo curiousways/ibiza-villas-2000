@@ -1,0 +1,12 @@
+.ibv-villa-hero {
+	width: 100%;
+	background: var(--ibv-color-brand-teal);
+}
+
+.ibv-villa-hero__image {
+	width: 100%;
+	height: auto;
+	display: block;
+	max-height: min(70vh, 40rem);
+	object-fit: cover;
+}

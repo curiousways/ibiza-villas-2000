@@ -1,0 +1,25 @@
+.ibv-booking-confirmation__hero {
+	padding-block: var(--ibv-space-3xl);
+	background: var(--ibv-color-bg-alt);
+	text-align: center;
+	border-bottom: 1px solid var(--ibv-color-border);
+}
+
+.ibv-booking-confirmation__check {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3rem;
+	height: 3rem;
+	margin-bottom: var(--ibv-space-md);
+	border-radius: var(--ibv-radius-pill);
+	background: var(--ibv-color-brand-panel-green);
+	color: var(--ibv-color-text-inverse);
+	font-size: var(--ibv-fs-h3);
+	line-height: 1;
+}
+
+.ibv-booking-confirmation__title {
+	margin: 0;
+	font-size: var(--ibv-fs-h1);
+}

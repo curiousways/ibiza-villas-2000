@@ -783,6 +783,81 @@ function ibv_register_villa_acf_fields() {
 				'readonly'               => 0,
 				'disabled'               => 0,
 			),
+			// Pass 3c-detail — villa detail / listing support (native taxonomy `villa_amenity` for ticks).
+			array(
+				'key'               => 'field_ibv_villa_rating_score',
+				'label'             => __( 'Rating score', 'ibv' ),
+				'name'              => 'villa_rating_score',
+				'type'              => 'number',
+				'min'               => 0,
+				'max'               => 5,
+				'step'              => 0.1,
+				'instructions'      => __( 'Optional. e.g. 4.9', 'ibv' ),
+			),
+			array(
+				'key'   => 'field_ibv_villa_review_count',
+				'label' => __( 'Review count', 'ibv' ),
+				'name'  => 'villa_review_count',
+				'type'  => 'number',
+				'min'   => 0,
+				'step'  => 1,
+			),
+			array(
+				'key'   => 'field_ibv_villa_review_source_url',
+				'label' => __( 'Review source URL', 'ibv' ),
+				'name'  => 'villa_review_source_url',
+				'type'  => 'url',
+			),
+			array(
+				'key'           => 'field_ibv_villa_indicative_from_price',
+				'label'         => __( 'Indicative from price (EUR / wk)', 'ibv' ),
+				'name'          => 'villa_indicative_from_price',
+				'type'          => 'number',
+				'min'           => 0,
+				'step'          => 1,
+				'instructions'  => __( 'Static fallback before live API prices.', 'ibv' ),
+			),
+			array(
+				'key'          => 'field_ibv_villa_distances',
+				'label'        => __( 'Distance ticks', 'ibv' ),
+				'name'         => 'villa_distances',
+				'type'         => 'repeater',
+				'layout'       => 'block',
+				'button_label' => __( 'Add distance', 'ibv' ),
+				'sub_fields'   => array(
+					array(
+						'key'           => 'field_ibv_villa_distance_poi',
+						'label'         => __( 'Place of interest (taxonomy)', 'ibv' ),
+						'name'          => 'poi',
+						'type'          => 'taxonomy',
+						'taxonomy'      => 'villa_poi',
+						'field_type'    => 'select',
+						'allow_null'    => 0,
+						'return_format' => 'object',
+						'multiple'      => 0,
+						'parent_repeater' => 'field_ibv_villa_distances',
+					),
+					array(
+						'key'             => 'field_ibv_villa_distance_text',
+						'label'           => __( 'Distance text', 'ibv' ),
+						'name'            => 'distance_text',
+						'type'            => 'text',
+						'parent_repeater' => 'field_ibv_villa_distances',
+					),
+				),
+			),
+			array(
+				'key'             => 'field_ibv_villa_similar',
+				'label'           => __( 'Similar villas', 'ibv' ),
+				'name'            => 'villa_similar',
+				'type'            => 'post_object',
+				'post_type'       => array( 'villas' ),
+				'multiple'        => 1,
+				'min'             => 0,
+				'max'             => 3,
+				'return_format'   => 'id',
+				'instructions'    => __( 'Manual picks. Empty falls back to latest villas.', 'ibv' ),
+			),
 		),
 		'location'                  => array(
 			array(
@@ -1179,6 +1254,44 @@ function ibv_register_villa_acf_fields() {
 		'allow_ai_access'           => false,
 		'ai_description'            => '',
 	) );
+
+	acf_add_local_field_group(
+		array(
+			'key'                   => 'group_ibv_villa_listing_page',
+			'title'                 => __( 'Villa listing page', 'ibv' ),
+			'fields'                => array(
+				array(
+					'key'           => 'field_ibv_listing_hero_image',
+					'label'         => __( 'Hero image', 'ibv' ),
+					'name'          => 'listing_hero_image',
+					'type'          => 'image',
+					'return_format' => 'array',
+				),
+				array(
+					'key'   => 'field_ibv_listing_contact_page',
+					'label' => __( 'Contact page (large groups CTA)', 'ibv' ),
+					'name'  => 'listing_contact_page',
+					'type'  => 'page_link',
+				),
+			),
+			'location'              => array(
+				array(
+					array(
+						'param'    => 'page_template',
+						'operator' => '==',
+						'value'    => 'page-villa-listing.php',
+					),
+				),
+			),
+			'menu_order'            => 0,
+			'position'              => 'normal',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'active'                => true,
+			'show_in_rest'          => false,
+		)
+	);
 }
 
 add_action( 'acf/init', 'ibv_register_villa_acf_fields', 15 );

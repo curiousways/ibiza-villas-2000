@@ -1,0 +1,27 @@
+/* Layout shell for single villa template (main + sidebar). */
+
+.ibv-villa-detail__container {
+	padding-block: var(--ibv-space-xl);
+}
+
+.ibv-villa-detail__grid {
+	display: grid;
+	gap: var(--ibv-space-xl);
+}
+
+@media (min-width: 64rem) {
+	.ibv-villa-detail__grid {
+		grid-template-columns: minmax(0, 1fr) min(22rem, 34%);
+		align-items: start;
+	}
+}
+
+.ibv-villa-detail__main {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-3xl);
+}
+
+.ibv-villa-detail__sidebar {
+	min-width: 0;
+}

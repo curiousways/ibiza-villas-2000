@@ -1,0 +1,135 @@
+.ibv-enquiry-panel {
+	padding: var(--ibv-space-lg);
+	background: var(--ibv-color-surface);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-lg);
+	box-shadow: var(--ibv-shadow-sm);
+}
+
+@media (min-width: 64rem) {
+	.ibv-enquiry-panel {
+		position: sticky;
+		top: var(--ibv-sticky-offset);
+	}
+}
+
+.ibv-enquiry-panel__title {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-h3);
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-enquiry-panel__form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-enquiry-panel__field label {
+	display: block;
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	margin-bottom: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
+}
+
+.ibv-enquiry-panel__field input,
+.ibv-enquiry-panel__field textarea {
+	width: 100%;
+	font: inherit;
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-sm);
+	background: var(--ibv-color-bg);
+	color: var(--ibv-color-text);
+}
+
+.ibv-enquiry-panel__price-block {
+	padding: var(--ibv-space-md);
+	background: var(--ibv-color-bg-alt);
+	border-radius: var(--ibv-radius-sm);
+	border: 1px solid var(--ibv-color-border);
+}
+
+.ibv-enquiry-panel__price-label {
+	margin: 0 0 var(--ibv-space-xs);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-semibold);
+}
+
+.ibv-enquiry-panel__price-eur {
+	margin: 0;
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-bold);
+}
+
+.ibv-enquiry-panel__price-gbp {
+	margin: var(--ibv-space-2xs) 0 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__breakdown {
+	list-style: none;
+	margin: var(--ibv-space-sm) 0 0;
+	padding: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__breakdown li + li {
+	margin-top: var(--ibv-space-2xs);
+}
+
+.ibv-enquiry-panel__eco-note {
+	margin: var(--ibv-space-sm) 0 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__error {
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-grey-700);
+	padding: var(--ibv-space-sm);
+	border-radius: var(--ibv-radius-sm);
+	background: var(--ibv-color-grey-100);
+}
+
+.ibv-enquiry-panel__response-note {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__divider {
+	border: 0;
+	border-top: 1px solid var(--ibv-color-border);
+	margin: var(--ibv-space-lg) 0;
+}
+
+.ibv-enquiry-panel__chat-label {
+	margin: 0 0 var(--ibv-space-sm);
+	font-weight: var(--ibv-font-weight-semibold);
+}
+
+.ibv-enquiry-panel__chat-link {
+	display: block;
+	font-size: var(--ibv-fs-small);
+	margin-top: var(--ibv-space-sm);
+	color: var(--ibv-color-link);
+	text-decoration: underline;
+}
+
+.ibv-enquiry-panel__chat-number {
+	display: block;
+	font-weight: var(--ibv-font-weight-medium);
+}
+
+.ibv-enquiry-panel .ibv-enquiry-panel__submit {
+	width: 100%;
+}
+
+.ibv-enquiry-panel .ibv-enquiry-panel__submit[disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}

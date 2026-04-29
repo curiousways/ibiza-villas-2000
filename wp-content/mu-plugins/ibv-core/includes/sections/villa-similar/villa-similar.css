@@ -1,0 +1,7 @@
+.ibv-villa-similar {
+	padding-block: var(--ibv-section-pad-y);
+}
+
+.ibv-villa-similar__grid {
+	margin-top: var(--ibv-space-xl);
+}

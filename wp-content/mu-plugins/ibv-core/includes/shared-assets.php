@@ -126,6 +126,55 @@ function ibv_register_styles() {
 			IBV_CORE_VERSION
 		);
 	}
+
+	$detail_handles = [
+		'ibv-facts-strip'                   => 'includes/components/facts-strip/facts-strip.css',
+		'ibv-amenity-ticks'                 => 'includes/components/amenity-ticks/amenity-ticks.css',
+		'ibv-distance-ticks'                => 'includes/components/distance-ticks/distance-ticks.css',
+		'ibv-villa-map'                    => 'includes/components/villa-map/villa-map.css',
+		'ibv-gallery'                      => 'includes/components/gallery/gallery.css',
+		'ibv-enquiry-panel'                => 'includes/components/enquiry-panel/enquiry-panel.css',
+		'ibv-alternative-accommodation'    => 'includes/components/alternative-accommodation/alternative-accommodation.css',
+		'ibv-villa-detail'                 => 'includes/sections/villa-detail-shell/villa-detail-shell.css',
+		'ibv-section-villa-hero'           => 'includes/sections/villa-hero/villa-hero.css',
+		'ibv-section-villa-overview'       => 'includes/sections/villa-overview/villa-overview.css',
+		'ibv-section-villa-similar'        => 'includes/sections/villa-similar/villa-similar.css',
+		'ibv-section-villa-listing-grid'   => 'includes/sections/villa-listing-grid/villa-listing-grid.css',
+		'ibv-section-listing-empty-state'  => 'includes/sections/listing-empty-state/listing-empty-state.css',
+		'ibv-section-what-happens-next'    => 'includes/sections/what-happens-next/what-happens-next.css',
+		'ibv-section-concierge-cross-sell' => 'includes/sections/concierge-cross-sell/concierge-cross-sell.css',
+		'ibv-section-villa-testimonial-teaser' => 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.css',
+		'ibv-villa-listing'                 => 'includes/sections/villa-listing-page/villa-listing-page.css',
+		'ibv-booking-confirmation'         => 'includes/sections/booking-confirmation-page/booking-confirmation-page.css',
+	];
+
+	foreach ( $detail_handles as $handle => $rel ) {
+		wp_register_style(
+			$handle,
+			IBV_CORE_URL . $rel,
+			[ 'ibv-base' ],
+			IBV_CORE_VERSION
+		);
+	}
+
+	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
+	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );
+	wp_register_script( 'ibv-gallery-script', '', [], IBV_CORE_VERSION, true );
+}
+
+add_action( 'wp_enqueue_scripts', 'ibv_enqueue_template_styles', 20 );
+function ibv_enqueue_template_styles() {
+	if ( is_singular( 'villas' ) && wp_style_is( 'ibv-villa-detail', 'registered' ) ) {
+		wp_enqueue_style( 'ibv-villa-detail' );
+	}
+
+	if ( is_page_template( 'page-villa-listing.php' ) && wp_style_is( 'ibv-villa-listing', 'registered' ) ) {
+		wp_enqueue_style( 'ibv-villa-listing' );
+	}
+
+	if ( is_page_template( 'page-booking-confirmation.php' ) && wp_style_is( 'ibv-booking-confirmation', 'registered' ) ) {
+		wp_enqueue_style( 'ibv-booking-confirmation' );
+	}
 }
 
 /**

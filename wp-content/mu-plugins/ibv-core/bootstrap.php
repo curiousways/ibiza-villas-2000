@@ -24,6 +24,8 @@ require_once IBV_CORE_PATH . 'includes/shared-assets.php';
 require_once IBV_CORE_PATH . 'includes/post-types/villa.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/property-location.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/villa-type.php';
+require_once IBV_CORE_PATH . 'includes/taxonomies/villa-amenity.php';
+require_once IBV_CORE_PATH . 'includes/taxonomies/villa-poi.php';
 
 // 3. Site chrome.
 require_once IBV_CORE_PATH . 'includes/nav-menus.php';
@@ -37,6 +39,13 @@ require_once IBV_CORE_PATH . 'includes/components/image/image.php';
 require_once IBV_CORE_PATH . 'includes/components/villa-card/villa-card.php';
 require_once IBV_CORE_PATH . 'includes/components/header-search/header-search.php';
 require_once IBV_CORE_PATH . 'includes/components/hero-search/hero-search.php';
+require_once IBV_CORE_PATH . 'includes/components/facts-strip/facts-strip.php';
+require_once IBV_CORE_PATH . 'includes/components/amenity-ticks/amenity-ticks.php';
+require_once IBV_CORE_PATH . 'includes/components/distance-ticks/distance-ticks.php';
+require_once IBV_CORE_PATH . 'includes/components/villa-map/villa-map.php';
+require_once IBV_CORE_PATH . 'includes/components/gallery/gallery.php';
+require_once IBV_CORE_PATH . 'includes/components/enquiry-panel/enquiry-panel.php';
+require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alternative-accommodation.php';
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';
@@ -51,8 +60,17 @@ require_once IBV_CORE_PATH . 'includes/sections/ibiza-guide-preview/ibiza-guide-
 require_once IBV_CORE_PATH . 'includes/sections/meet-team-teaser/meet-team-teaser.php';
 require_once IBV_CORE_PATH . 'includes/sections/testimonials/testimonials.php';
 require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-hero/villa-hero.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-overview/villa-overview.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-similar/villa-similar.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-listing-grid/villa-listing-grid.php';
+require_once IBV_CORE_PATH . 'includes/sections/listing-empty-state/listing-empty-state.php';
+require_once IBV_CORE_PATH . 'includes/sections/what-happens-next/what-happens-next.php';
+require_once IBV_CORE_PATH . 'includes/sections/concierge-cross-sell/concierge-cross-sell.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

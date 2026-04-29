@@ -1,0 +1,7 @@
+.ibv-listing-grid-section {
+	padding-block: var(--ibv-space-xl);
+}
+
+.ibv-listing-grid {
+	gap: var(--ibv-space-lg);
+}
