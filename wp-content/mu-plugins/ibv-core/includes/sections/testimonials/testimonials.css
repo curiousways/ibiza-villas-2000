@@ -1,0 +1,38 @@
+.ibv-section-testimonials {
+	background: var(--ibv-color-brand-teal-mid);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-section-testimonials .ibv-section-heading__title {
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-section-testimonials__grid {
+	margin-block-start: var(--ibv-space-xl);
+}
+
+.ibv-quote-card {
+	margin: 0;
+	padding: var(--ibv-space-lg);
+	background: rgb(255 255 255 / 0.08);
+	border-radius: var(--ibv-radius-lg);
+	border: 1px solid rgb(255 255 255 / 0.15);
+}
+
+.ibv-quote-card__stars {
+	margin: 0 0 var(--ibv-space-sm);
+	color: var(--ibv-color-accent-gold);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-quote-card__quote {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+}
+
+.ibv-quote-card__attr {
+	font-size: var(--ibv-fs-small);
+	opacity: 0.9;
+	font-style: normal;
+}

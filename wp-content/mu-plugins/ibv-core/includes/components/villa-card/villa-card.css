@@ -1,0 +1,170 @@
+/* Villa card */
+.ibv-villa-card {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: var(--ibv-color-surface);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--ibv-shadow-sm);
+	position: relative;
+}
+
+.ibv-villa-card__badge {
+	position: absolute;
+	inset-block-start: var(--ibv-space-sm);
+	inset-inline-start: var(--ibv-space-sm);
+	z-index: 1;
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-semibold);
+	background: var(--ibv-color-accent-gold);
+	color: var(--ibv-color-brand-teal);
+	border-radius: var(--ibv-radius-sm);
+}
+
+.ibv-villa-card__media {
+	position: relative;
+	display: block;
+	aspect-ratio: 3 / 2;
+	overflow: hidden;
+}
+
+.ibv-villa-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.ibv-villa-card__location {
+	position: absolute;
+	inset-block-end: var(--ibv-space-sm);
+	inset-inline-start: var(--ibv-space-sm);
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-small);
+	background: rgb(0 0 0 / 0.65);
+	color: var(--ibv-color-text-inverse);
+	border-radius: var(--ibv-radius-sm);
+}
+
+.ibv-villa-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+	padding: var(--ibv-space-md);
+	flex-grow: 1;
+}
+
+.ibv-villa-card__title {
+	font-size: var(--ibv-fs-h3);
+	line-height: var(--ibv-lh-snug);
+	margin: 0;
+}
+
+.ibv-villa-card__title a {
+	color: var(--ibv-color-text);
+	text-decoration: none;
+}
+
+.ibv-villa-card__title a:hover,
+.ibv-villa-card__title a:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
+.ibv-villa-card__facts {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-sm);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-villa-card__excerpt {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	line-height: var(--ibv-lh-normal);
+}
+
+.ibv-villa-card__price {
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-semibold);
+	margin-block-start: auto;
+}
+
+.ibv-villa-card__price-prefix,
+.ibv-villa-card__price-suffix {
+	font-weight: var(--ibv-font-weight-regular);
+	color: var(--ibv-color-text-muted);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-villa-card__price-amount {
+	margin-inline: var(--ibv-space-2xs);
+}
+
+.ibv-villa-card--offer {
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+@media (min-width: 48rem) {
+	.ibv-villa-card--offer {
+		flex-wrap: nowrap;
+	}
+
+	.ibv-villa-card--offer .ibv-villa-card__media {
+		flex: 0 0 42%;
+		aspect-ratio: auto;
+		min-height: 12rem;
+	}
+
+	.ibv-villa-card--offer .ibv-villa-card__body {
+		flex: 1 1 auto;
+	}
+}
+
+.ibv-villa-card__offer-pricing {
+	margin-block-start: var(--ibv-space-sm);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-villa-card__was,
+.ibv-villa-card__now {
+	margin: 0 0 var(--ibv-space-xs);
+}
+
+.ibv-villa-card__was-amount {
+	text-decoration: line-through;
+	color: var(--ibv-color-text-muted);
+	margin-inline-start: var(--ibv-space-xs);
+}
+
+.ibv-villa-card__now-amount {
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
+	margin-inline-start: var(--ibv-space-xs);
+}
+
+.ibv-villa-card__offer-line {
+	font-weight: var(--ibv-font-weight-semibold);
+	margin: 0 0 var(--ibv-space-xs);
+}
+
+.ibv-villa-card__valid {
+	margin: 0;
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-villa-card__body .ibv-button {
+	align-self: flex-start;
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-villa-card--similar .ibv-villa-card__media {
+	aspect-ratio: 4 / 3;
+}

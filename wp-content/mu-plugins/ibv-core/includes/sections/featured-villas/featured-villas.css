@@ -1,0 +1,24 @@
+.ibv-section-featured-villas__grid {
+	margin-block-start: var(--ibv-space-xl);
+}
+
+.ibv-section-featured-villas .ibv-section-heading {
+	margin-block-end: 0;
+}
+
+.ibv-section-featured-villas__grid .ibv-villa-card {
+	min-width: 0;
+}
+
+.ibv-section-featured-villas__cta {
+	margin-block-start: var(--ibv-space-xl);
+	margin-block-end: 0;
+}
+
+.ibv-section--alt {
+	background: var(--ibv-color-bg-alt);
+}
+
+.ibv-section {
+	padding-block: var(--ibv-section-pad-y);
+}

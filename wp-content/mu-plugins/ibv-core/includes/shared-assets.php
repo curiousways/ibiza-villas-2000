@@ -72,6 +72,60 @@ function ibv_register_styles() {
 		[ 'ibv-base' ],
 		IBV_CORE_VERSION
 	);
+
+	wp_register_style(
+		'ibv-site-chrome',
+		IBV_CORE_URL . 'includes/layout/site-chrome.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-header-search',
+		IBV_CORE_URL . 'includes/components/header-search/header-search.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-hero-search',
+		IBV_CORE_URL . 'includes/components/hero-search/hero-search.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-villa-card',
+		IBV_CORE_URL . 'includes/components/villa-card/villa-card.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	$section_handles = [
+		'ibv-section-hero'                 => 'includes/sections/hero/hero.css',
+		'ibv-section-featured-villas'       => 'includes/sections/featured-villas/featured-villas.css',
+		'ibv-section-trust-strip'          => 'includes/sections/trust-strip/trust-strip.css',
+		'ibv-section-weekly-offer'         => 'includes/sections/weekly-offer/weekly-offer.css',
+		'ibv-section-short-breaks'       => 'includes/sections/short-breaks/short-breaks.css',
+		'ibv-section-why-iv2000'           => 'includes/sections/why-iv2000/why-iv2000.css',
+		'ibv-section-fancy-different'     => 'includes/sections/fancy-different/fancy-different.css',
+		'ibv-section-ips-panel'           => 'includes/sections/ips-panel/ips-panel.css',
+		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
+		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
+		'ibv-section-meet-team-teaser'    => 'includes/sections/meet-team-teaser/meet-team-teaser.css',
+		'ibv-section-testimonials'        => 'includes/sections/testimonials/testimonials.css',
+		'ibv-section-newsletter-cta'      => 'includes/sections/newsletter-cta/newsletter-cta.css',
+		'ibv-section-special-offers-page' => 'includes/sections/special-offers-page/special-offers-page.css',
+	];
+
+	foreach ( $section_handles as $handle => $rel ) {
+		wp_register_style(
+			$handle,
+			IBV_CORE_URL . $rel,
+			[ 'ibv-base' ],
+			IBV_CORE_VERSION
+		);
+	}
 }
 
 /**

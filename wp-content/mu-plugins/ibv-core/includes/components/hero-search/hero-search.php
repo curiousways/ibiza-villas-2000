@@ -1,0 +1,60 @@
+<?php
+/**
+ * Component: Hero search (Bob API shell).
+ *
+ * @package Ibiza_Villas_2000
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Render hero overlay search form.
+ */
+function ibv_core_hero_search() {
+	wp_enqueue_style( 'ibv-hero-search' );
+	wp_enqueue_style( 'ibv-button' );
+	?>
+	<?php /* ─────────────────────────────────────────────────────────────
+	       BOB API INTEGRATION SHELL — homepage hero search
+	       ─────────────────────────────────────────────────────────────
+	       Form fields:
+	         - date_from   (required, YYYY-MM-DD)
+	         - date_to     (required, YYYY-MM-DD)
+	         - pax         (required, integer)
+	       Submit destination: /villas/ (the listing page — wired in pass 3c-detail)
+	       Endpoint reference: https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl
+	       Spec: Notion → IBZ002 → API Integration Spec
+	       ──────────────────────────────────────────────────────────── */ ?>
+	<form class="ibv-hero-search" method="get" action=""><?php /* TODO Bob: confirm action URL */ ?>
+		<div class="ibv-hero-search__inner">
+			<div class="ibv-hero-search__field">
+				<label class="ibv-hero-search__label" for="ibv-hero-from"><?php esc_html_e( 'Arrive', 'ibv' ); ?></label>
+				<input class="ibv-hero-search__input" type="date" id="ibv-hero-from" name="date_from" required>
+			</div>
+			<div class="ibv-hero-search__field">
+				<label class="ibv-hero-search__label" for="ibv-hero-to"><?php esc_html_e( 'Depart', 'ibv' ); ?></label>
+				<input class="ibv-hero-search__input" type="date" id="ibv-hero-to" name="date_to" required>
+			</div>
+			<div class="ibv-hero-search__field">
+				<label class="ibv-hero-search__label" for="ibv-hero-pax"><?php esc_html_e( 'Group Size', 'ibv' ); ?></label>
+				<input class="ibv-hero-search__input" type="number" id="ibv-hero-pax" name="pax" min="1" max="30" required>
+			</div>
+			<?php
+			ibv_core_button(
+				[
+					'tag'     => 'button',
+					'type'    => 'submit',
+					'label'   => __( 'Search Villas', 'ibv' ),
+					'variant' => 'primary',
+					'size'    => 'medium',
+					'class'   => 'ibv-hero-search__submit',
+				]
+			);
+			?>
+		</div>
+	</form>
+	<?php /* ─────────── END BOB SHELL ─────────── */ ?>
+	<?php
+}

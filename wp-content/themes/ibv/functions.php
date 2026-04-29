@@ -40,6 +40,9 @@ function ibv_theme_enqueue() {
 	if ( wp_style_is( 'ibv-base', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-base' );
 	}
+	if ( wp_style_is( 'ibv-site-chrome', 'registered' ) ) {
+		wp_enqueue_style( 'ibv-site-chrome' );
+	}
 }
 
 /**

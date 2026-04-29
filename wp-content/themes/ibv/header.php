@@ -1,10 +1,18 @@
 <?php
 /**
  * Site header.
+ *
+ * @package Ibiza_Villas_2000
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+$bookings_url = get_field( 'my_bookings_url', 'option' );
+$villas_url   = get_field( 'search_villas_url', 'option' );
+if ( ! $villas_url ) {
+	$villas_url = home_url( '/villas/' );
 }
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
@@ -20,32 +28,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 <a class="ibv-u-visually-hidden" href="#ibv-main"><?php esc_html_e( 'Skip to content', 'ibv' ); ?></a>
 
 <header class="ibv-site-header">
-	<div class="ibv-container ibv-site-header__inner">
-		<a class="ibv-site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-			<?php
-			if ( has_custom_logo() ) {
-				the_custom_logo();
-			} else {
-				echo esc_html( get_bloginfo( 'name', 'display' ) );
-			}
-			?>
-		</a>
-
-		<?php if ( has_nav_menu( 'primary' ) ) : ?>
-			<nav class="ibv-site-header__nav" aria-label="<?php esc_attr_e( 'Primary', 'ibv' ); ?>">
+	<div class="ibv-container">
+		<div class="ibv-site-header__inner">
+			<a class="ibv-site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 				<?php
-				wp_nav_menu(
+				if ( has_custom_logo() ) {
+					the_custom_logo();
+				} else {
+					echo esc_html( get_bloginfo( 'name', 'display' ) );
+				}
+				?>
+			</a>
+
+			<?php if ( has_nav_menu( 'primary' ) ) : ?>
+				<nav class="ibv-site-header__nav" aria-label="<?php esc_attr_e( 'Primary', 'ibv' ); ?>">
+					<?php
+					wp_nav_menu(
+						[
+							'theme_location' => 'primary',
+							'container'      => false,
+							'menu_class'     => 'ibv-nav-list',
+							'depth'          => 1,
+							'fallback_cb'    => false,
+						]
+					);
+					?>
+				</nav>
+			<?php endif; ?>
+
+			<div class="ibv-site-header__actions">
+				<?php if ( $bookings_url ) : ?>
+					<?php
+					ibv_core_button(
+						[
+							'url'     => esc_url( $bookings_url ),
+							'label'   => __( 'My Bookings', 'ibv' ),
+							'variant' => 'ghost',
+							'size'    => 'small',
+							'target'  => '_blank',
+						]
+					);
+					?>
+				<?php endif; ?>
+				<?php
+				ibv_core_button(
 					[
-						'theme_location' => 'primary',
-						'container'      => false,
-						'menu_class'     => 'ibv-nav-list',
-						'depth'          => 1,
-						'fallback_cb'    => false,
+						'url'     => esc_url( $villas_url ),
+						'label'   => __( 'Search Villas', 'ibv' ),
+						'variant' => 'primary',
+						'size'    => 'small',
 					]
 				);
 				?>
-			</nav>
-		<?php endif; ?>
+			</div>
+
+			<div class="ibv-site-header__bar">
+				<?php ibv_core_header_search(); ?>
+			</div>
+		</div>
 	</div>
 </header>
 
