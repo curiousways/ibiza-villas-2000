@@ -89,10 +89,10 @@
 
 .ibv-enquiry-panel__error {
 	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-grey-700);
+	color: var(--ibv-color-text);
 	padding: var(--ibv-space-sm);
 	border-radius: var(--ibv-radius-sm);
-	background: var(--ibv-color-grey-100);
+	background: var(--ibv-color-bg-alt);
 }
 
 .ibv-enquiry-panel__response-note {

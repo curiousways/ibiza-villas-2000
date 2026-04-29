@@ -3,7 +3,6 @@
 
 h1,
 .ibv-h1 {
-	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h1);
 	font-weight: var(--ibv-font-weight-semibold);
 	line-height: var(--ibv-lh-tight);
@@ -12,7 +11,6 @@ h1,
 
 h2,
 .ibv-h2 {
-	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h2);
 	font-weight: var(--ibv-font-weight-semibold);
 	line-height: var(--ibv-lh-snug);
@@ -21,7 +19,6 @@ h2,
 
 h3,
 .ibv-h3 {
-	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h3);
 	font-weight: var(--ibv-font-weight-medium);
 	line-height: var(--ibv-lh-snug);
@@ -85,4 +82,15 @@ small,
 	border-left: 2px solid var(--ibv-color-border-strong);
 	font-style: italic;
 	color: var(--ibv-color-text-muted);
+}
+
+/* ---------- Utilities ---------- */
+
+/* Opt in to the display typeface. Apply explicitly to elements that should
+   render in Newsreader (e.g. section headings, villa card titles, prices)
+   per the Figma source of truth. Do not set a global cascade — the design
+   uses Newsreader selectively, not for all headings. */
+.ibv-font-display {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
 }

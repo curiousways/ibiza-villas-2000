@@ -18,15 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'wp_enqueue_scripts', 'ibv_register_styles', 5 );
 function ibv_register_styles() {
-	// Inter — neutral default. Loaded from Google Fonts; no build step.
-	// Replace with the project typeface(s) by editing this URL and the
-	// `--ibv-font-*` tokens in tokens.css. Version arg is null so the
-	// request URL stays clean and Google's caching applies.
 	wp_register_style(
 		'ibv-fonts',
-		'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+		IBV_CORE_URL . 'assets/css/fonts.css',
 		[],
-		null
+		IBV_CORE_VERSION
 	);
 
 	// File-bundled handles. `base.css` registers as `ibv-elements` so that
@@ -175,27 +171,4 @@ function ibv_enqueue_template_styles() {
 	if ( is_page_template( 'page-booking-confirmation.php' ) && wp_style_is( 'ibv-booking-confirmation', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-booking-confirmation' );
 	}
-}
-
-/**
- * Add preconnect hints for Google Fonts so the typeface loads as quickly
- * as possible once `ibv-fonts` is in the queue. Hints are only added on
- * pages that actually enqueue the font handle.
- */
-add_filter( 'wp_resource_hints', 'ibv_resource_hints', 10, 2 );
-function ibv_resource_hints( $hints, $relation ) {
-	if ( 'preconnect' !== $relation ) {
-		return $hints;
-	}
-	if ( ! wp_style_is( 'ibv-fonts', 'enqueued' ) ) {
-		return $hints;
-	}
-
-	$hints[] = [ 'href' => 'https://fonts.googleapis.com' ];
-	$hints[] = [
-		'href'        => 'https://fonts.gstatic.com',
-		'crossorigin' => 'anonymous',
-	];
-
-	return $hints;
 }

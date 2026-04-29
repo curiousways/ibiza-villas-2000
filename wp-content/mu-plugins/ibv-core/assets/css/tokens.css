@@ -4,56 +4,117 @@
  * font size, spacing, radius, or motion value.
  *
  * Structure:
- *   - Greyscale ramp + (optional) brand ramp = the raw palette.
- *   - Semantic tokens map ramp values to roles (text, bg, accent, border).
- *   - Components ONLY reference semantic tokens, never the ramp directly.
+ *   - IV2000 foundation ramps + neutrals + feedback = the raw palette.
+ *   - Semantic tokens map foundation values to roles (text, bg, accent, border).
+ *   - Components should reference semantic tokens; a few legacy marketing
+ *     aliases remain for older section CSS until migrated.
  *
- * Starter values are intentionally neutral. Tune to match the brand by:
- *   1. Editing the ramp values in the "Palette" section, OR
- *   2. Adding a brand ramp and re-mapping the semantic tokens to it.
- *   3. Tuning typography to match the loaded font (see shared-assets.php
- *      for the Google Fonts URL — change the family there and the
- *      `--ibv-font-*` tokens here together).
+ * To rebrand or tune:
+ *   1. Edit foundation ramp values in the "Palette" section, OR
+ *   2. Re-map the semantic tokens' right-hand sides.
+ *   3. Typography: change `--ibv-font-*` here; `@font-face` rules live in
+ *      assets/css/fonts.css.
  */
 
 :root {
-	/* ---------- Palette: greyscale ramp ---------- */
-	--ibv-color-white:    #ffffff;
-	--ibv-color-grey-50:  #fafafa;
-	--ibv-color-grey-100: #f5f5f5;
-	--ibv-color-grey-200: #e5e5e5;
-	--ibv-color-grey-300: #d4d4d4;
-	--ibv-color-grey-400: #a3a3a3;
-	--ibv-color-grey-500: #737373;
-	--ibv-color-grey-600: #525252;
-	--ibv-color-grey-700: #404040;
-	--ibv-color-grey-800: #262626;
-	--ibv-color-grey-900: #171717;
-	--ibv-color-black:    #000000;
+	/* ---------- Palette: IV2000 brand ramps ---------- */
+	/* Source: signed-off IV2000 colour palette (Foundations doc).
+	   Ramps run light→dark (100→500). Prefer semantic tokens in components. */
+
+	/* Blue */
+	--ibv-color-blue-100: #a0bbc4;
+	--ibv-color-blue-200: #7198a7;
+	--ibv-color-blue-300: #598798;
+	--ibv-color-blue-400: #1e647a;
+	--ibv-color-blue-500: #00526a;
+
+	/* Gold */
+	--ibv-color-gold-100: #ffe4ac;
+	--ibv-color-gold-200: #ffd87e;
+	--ibv-color-gold-300: #ffd164;
+	--ibv-color-gold-400: #ffc319;
+	--ibv-color-gold-500: #ffbd00;
+
+	/* Mint */
+	--ibv-color-mint-100: #a5e6d7;
+	--ibv-color-mint-200: #6ed9c1;
+	--ibv-color-mint-300: #4fd2b7;
+	--ibv-color-mint-400: #00c5a3;
+	--ibv-color-mint-500: #00be97;
+
+	/* Sage */
+	--ibv-color-sage-100: #8ed1cc;
+	--ibv-color-sage-200: #4bb9b2;
+	--ibv-color-sage-300: #01aea6;
+	--ibv-color-sage-400: #00968b;
+	--ibv-color-sage-500: #00897e;
+
+	/* Forest Green — three siblings.
+	   `forest-green-deep` is not in the original style guide; added because
+	   #055353 is the heaviest functional brand colour in the design file
+	   (buttons, prices, headings, badges) and no documented value covers
+	   that role. Sits as a deeper sibling to the documented pair. */
+	--ibv-color-forest-green:       #283a2c;
+	--ibv-color-forest-green-light: #2a6b6b;
+	--ibv-color-forest-green-deep:  #055353;
+
+	/* Neutrals */
+	--ibv-color-white:     #ffffff;
+	--ibv-color-off-white: #f9f8f4;
+	--ibv-color-black:     #343434;
+
+	/* Web Grey.
+	   Style-guide lists 200 and 300 both as #b6b6b6 — typo. 300 corrected to
+	   #939292, which gives a sensible ramp step and matches the placeholder
+	   text colour used throughout the design file. */
+	--ibv-color-web-grey-100: #e9e9e9;
+	--ibv-color-web-grey-200: #b6b6b6;
+	--ibv-color-web-grey-300: #939292;
+
+	/* Feedback (per style guide) */
+	--ibv-color-info-100:      #e3efff;
+	--ibv-color-info-200:      #2c7eec;
+	--ibv-color-info-300:      #1452c2;
+	--ibv-color-positive-100:  #e5fdef;
+	--ibv-color-positive-200:  #28ad60;
+	--ibv-color-positive-300:  #1a8b4b;
+	--ibv-color-warning-100:   #fff5eb;
+	--ibv-color-warning-200:   #f19544;
+	--ibv-color-warning-300:   #d97f25;
+	--ibv-color-error-100:     #ffe8e8;
+	--ibv-color-error-200:     #de3434;
+	--ibv-color-error-300:     #b91c1c;
 
 	/* ---------- Semantic colour ---------- */
 	/* Components reference these. To rebrand, change the right-hand side. */
-	--ibv-color-bg:              var(--ibv-color-white);
-	--ibv-color-bg-alt:          var(--ibv-color-grey-50);
+	--ibv-color-bg:              var(--ibv-color-off-white);
+	--ibv-color-bg-alt:          var(--ibv-color-white);
 	--ibv-color-surface:         var(--ibv-color-white);
-	--ibv-color-text:            var(--ibv-color-grey-900);
-	--ibv-color-text-muted:      var(--ibv-color-grey-500);
-	--ibv-color-text-subtle:     var(--ibv-color-grey-400);
+	--ibv-color-surface-inverse: var(--ibv-color-forest-green-deep);
+	--ibv-color-text:            var(--ibv-color-black);
+	--ibv-color-text-muted:      var(--ibv-color-web-grey-300);
+	--ibv-color-text-subtle:     var(--ibv-color-web-grey-200);
 	--ibv-color-text-inverse:    var(--ibv-color-white);
-	--ibv-color-accent:          var(--ibv-color-grey-900);
+	--ibv-color-accent:          var(--ibv-color-forest-green-deep);
 	--ibv-color-accent-contrast: var(--ibv-color-white);
-	--ibv-color-border:          var(--ibv-color-grey-200);
-	--ibv-color-border-strong:   var(--ibv-color-grey-300);
-	--ibv-color-link:            var(--ibv-color-text);
-	--ibv-color-link-hover:      var(--ibv-color-black);
-	--ibv-color-focus-ring:      var(--ibv-color-grey-900);
+	/* Faint teal-tinted divider / input border — design-specific; not on any ramp. */
+	--ibv-color-border:          #bfc8c8;
+	--ibv-color-border-strong:   var(--ibv-color-web-grey-200);
+	--ibv-color-link:            var(--ibv-color-forest-green-deep);
+	--ibv-color-link-hover:      var(--ibv-color-forest-green-light);
+	--ibv-color-focus-ring:      var(--ibv-color-forest-green-deep);
+
+	/* Legacy marketing names — section CSS still references these; map to IV2000 foundation (migrate to semantic tokens in a later pass). */
+	--ibv-color-brand-teal:            var(--ibv-color-forest-green-deep);
+	--ibv-color-brand-teal-mid:        var(--ibv-color-forest-green-light);
+	--ibv-color-brand-panel-green:     var(--ibv-color-forest-green);
+	--ibv-color-accent-gold:           var(--ibv-color-gold-500);
 
 	/* ---------- Typography ---------- */
-	/* Inter is loaded by `shared-assets.php` (ibv-fonts handle). System
-	   fallbacks cover the brief loading window before the webfont is ready.
-	   Replace the family name in BOTH places to swap typeface. */
-	--ibv-font-display: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-	--ibv-font-body:    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	/* Fonts are self-hosted and declared in assets/css/fonts.css (enqueued as
+	   ibv-fonts). Stack fallbacks cover until files load or if a face fails. */
+	--ibv-font-display: "Newsreader", Georgia, "Times New Roman", serif;
+	--ibv-font-body:    "Uncut Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
 	--ibv-font-weight-regular:  400;
 	--ibv-font-weight-medium:   500;
@@ -99,6 +160,7 @@
 	--ibv-container-pad-x:  var(--ibv-space-lg);
 	--ibv-section-pad-y:    var(--ibv-space-3xl);
 	--ibv-grid-gutter:      var(--ibv-space-lg);
+	--ibv-sticky-offset:    var(--ibv-space-md);
 
 	/* ---------- Radius ---------- */
 	--ibv-radius-sm:    0.125rem;
@@ -123,12 +185,4 @@
 	/* ---------- Breakpoints (reference in @media only) ---------- */
 	--ibv-bp-tablet: 48rem;
 	--ibv-bp-desktop: 64rem;
-
-	/* ---------- Brand / marketing surfaces (homepage) ---------- */
-	--ibv-color-brand-teal: #0f2f2f;
-	--ibv-color-brand-teal-mid: #153838;
-	--ibv-color-brand-panel-green: #1e4d3a;
-	--ibv-color-accent-gold: #e8c547;
-	--ibv-sticky-offset: var(--ibv-space-md);
-	--ibv-color-surface-inverse: var(--ibv-color-brand-teal);
 }

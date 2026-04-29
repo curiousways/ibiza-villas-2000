@@ -1,0 +1,20 @@
+/* Single declaration point for IV2000 webfonts — @font-face rules only.
+ * Additions or changes go here, not inline in other stylesheets. */
+
+@font-face {
+	font-family: 'Newsreader';
+	src: url('../fonts/newsreader-variable.woff2') format('woff2-variations'),
+		url('../fonts/newsreader-variable.woff2') format('woff2');
+	font-weight: 200 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Uncut Sans';
+	src: url('../fonts/UncutSans-Variable.woff2') format('woff2-variations'),
+		url('../fonts/UncutSans-Variable.woff2') format('woff2');
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+}
