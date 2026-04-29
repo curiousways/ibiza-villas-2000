@@ -119,4 +119,15 @@
 	--ibv-shadow-color: 0 0 0;
 	--ibv-shadow-sm: 0 1px 2px rgb(var(--ibv-shadow-color) / 0.06);
 	--ibv-shadow-md: 0 4px 12px rgb(var(--ibv-shadow-color) / 0.08);
+
+	/* ---------- Breakpoints (reference in @media only) ---------- */
+	--ibv-bp-tablet: 48rem;
+	--ibv-bp-desktop: 64rem;
+
+	/* ---------- Brand / marketing surfaces (homepage) ---------- */
+	--ibv-color-brand-teal: #0f2f2f;
+	--ibv-color-brand-teal-mid: #153838;
+	--ibv-color-brand-panel-green: #1e4d3a;
+	--ibv-color-accent-gold: #e8c547;
+	--ibv-color-surface-inverse: var(--ibv-color-brand-teal);
 }

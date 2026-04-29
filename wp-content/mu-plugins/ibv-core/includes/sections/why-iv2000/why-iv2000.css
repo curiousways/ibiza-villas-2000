@@ -1,0 +1,49 @@
+.ibv-section-why-iv2000 {
+	background: var(--ibv-color-brand-teal);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-section-why-iv2000 .ibv-section-heading__eyebrow,
+.ibv-section-why-iv2000 .ibv-section-heading__title,
+.ibv-section-why-iv2000 .ibv-section-heading__lead {
+	color: var(--ibv-color-text-inverse);
+	opacity: 0.95;
+}
+
+.ibv-section-why-iv2000__heading {
+	margin-block-end: var(--ibv-space-xl);
+}
+
+.ibv-section-why-iv2000__grid {
+	margin-block-start: var(--ibv-space-lg);
+}
+
+.ibv-pillar-card {
+	text-align: center;
+}
+
+.ibv-pillar-card__icon-img {
+	max-height: 3rem;
+	width: auto;
+	margin-inline: auto;
+}
+
+.ibv-pillar-card__title {
+	font-size: var(--ibv-fs-h3);
+	margin: var(--ibv-space-md) 0 var(--ibv-space-sm);
+	color: inherit;
+}
+
+.ibv-pillar-card__text {
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	opacity: 0.92;
+}
+
+.ibv-pillar-card__text p:first-child {
+	margin-top: 0;
+}
+
+.ibv-pillar-card__text p:last-child {
+	margin-bottom: 0;
+}

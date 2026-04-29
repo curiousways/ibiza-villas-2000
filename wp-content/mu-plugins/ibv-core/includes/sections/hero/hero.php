@@ -1,0 +1,51 @@
+<?php
+/**
+ * Section: Homepage hero.
+ *
+ * @package Ibiza_Villas_2000
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Render homepage hero.
+ */
+function ibv_core_section_hero() {
+	wp_enqueue_style( 'ibv-section-hero' );
+
+	$image    = get_field( 'hero_image', 'option' );
+	$title    = get_field( 'hero_title', 'option' );
+	$subtitle = get_field( 'hero_subtitle', 'option' );
+
+	$bg = '';
+	if ( is_array( $image ) && ! empty( $image['ID'] ) ) {
+		$bg = wp_get_attachment_image_url( (int) $image['ID'], 'ibv-hero' );
+	}
+
+	$style_attr = '';
+	if ( $bg ) {
+		$style_attr = sprintf(
+			'background-image: linear-gradient(rgba(15, 47, 47, 0.55), rgba(15, 47, 47, 0.55)), url(%s)',
+			esc_url_raw( $bg )
+		);
+	}
+	?>
+	<section class="ibv-section-hero ibv-section"<?php echo $style_attr ? ' style="' . esc_attr( $style_attr ) . '"' : ''; ?>>
+		<div class="ibv-container ibv-section-hero__inner">
+			<div class="ibv-section-hero__copy">
+				<?php if ( $title ) : ?>
+					<h1 class="ibv-section-hero__title"><?php echo esc_html( $title ); ?></h1>
+				<?php endif; ?>
+				<?php if ( $subtitle ) : ?>
+					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
+				<?php endif; ?>
+			</div>
+			<div class="ibv-section-hero__search">
+				<?php ibv_core_hero_search(); ?>
+			</div>
+		</div>
+	</section>
+	<?php
+}

@@ -39,9 +39,6 @@
 !/wp-content/themes/ibiza-villas-2000/
 !/wp-content/themes/ibv/
 
-# Site-specific / optional dirs at install root
-/wp-ibiza/
-
 # Local backup of former nested repo (git bundle)
 /.git-backup-*.bundle
 

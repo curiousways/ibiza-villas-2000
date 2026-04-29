@@ -1,0 +1,52 @@
+.ibv-section-three-step__grid {
+	margin-block-start: var(--ibv-space-xl);
+}
+
+.ibv-step-card {
+	position: relative;
+	padding: var(--ibv-space-xl);
+	background: var(--ibv-color-surface);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-lg);
+	text-align: center;
+}
+
+.ibv-step-card__num {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin-inline: auto;
+	margin-block-end: var(--ibv-space-md);
+	border-radius: 50%;
+	background: var(--ibv-color-accent-gold);
+	color: var(--ibv-color-brand-teal);
+	font-weight: var(--ibv-font-weight-bold);
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-step-card__title {
+	margin: 0 0 var(--ibv-space-sm);
+	font-size: var(--ibv-fs-h4);
+}
+
+.ibv-step-card__text {
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	text-align: left;
+}
+
+.ibv-step-card__text p:first-child {
+	margin-top: 0;
+}
+
+.ibv-step-card__text p:last-child {
+	margin-bottom: 0;
+}
+
+.ibv-section-three-step__cta {
+	text-align: center;
+	margin-block-start: var(--ibv-space-2xl);
+	margin-block-end: 0;
+}

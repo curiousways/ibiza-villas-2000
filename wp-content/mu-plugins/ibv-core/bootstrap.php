@@ -34,7 +34,25 @@ require_once IBV_CORE_PATH . 'includes/editor.php';
 require_once IBV_CORE_PATH . 'includes/components/button/button.php';
 require_once IBV_CORE_PATH . 'includes/components/section-heading/section-heading.php';
 require_once IBV_CORE_PATH . 'includes/components/image/image.php';
+require_once IBV_CORE_PATH . 'includes/components/villa-card/villa-card.php';
+require_once IBV_CORE_PATH . 'includes/components/header-search/header-search.php';
+require_once IBV_CORE_PATH . 'includes/components/hero-search/hero-search.php';
+
+require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
+require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';
+require_once IBV_CORE_PATH . 'includes/sections/trust-strip/trust-strip.php';
+require_once IBV_CORE_PATH . 'includes/sections/weekly-offer/weekly-offer.php';
+require_once IBV_CORE_PATH . 'includes/sections/short-breaks/short-breaks.php';
+require_once IBV_CORE_PATH . 'includes/sections/why-iv2000/why-iv2000.php';
+require_once IBV_CORE_PATH . 'includes/sections/fancy-different/fancy-different.php';
+require_once IBV_CORE_PATH . 'includes/sections/ips-panel/ips-panel.php';
+require_once IBV_CORE_PATH . 'includes/sections/three-step/three-step.php';
+require_once IBV_CORE_PATH . 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.php';
+require_once IBV_CORE_PATH . 'includes/sections/meet-team-teaser/meet-team-teaser.php';
+require_once IBV_CORE_PATH . 'includes/sections/testimonials/testimonials.php';
+require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

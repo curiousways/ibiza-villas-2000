@@ -1,0 +1,12 @@
+.ibv-newsletter-cta__title {
+	font-size: var(--ibv-fs-h4);
+	margin: 0 0 var(--ibv-space-md);
+}
+
+.ibv-newsletter-cta__form {
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-site-footer .ibv-newsletter-cta__title {
+	color: inherit;
+}

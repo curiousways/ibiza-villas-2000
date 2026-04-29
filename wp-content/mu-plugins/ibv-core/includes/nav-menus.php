@@ -14,8 +14,10 @@ add_action( 'after_setup_theme', 'ibv_register_nav_menus' );
 function ibv_register_nav_menus() {
 	register_nav_menus(
 		[
-			'primary' => __( 'Primary navigation', 'ibv' ),
-			'footer'  => __( 'Footer navigation', 'ibv' ),
+			'primary'            => __( 'Primary navigation', 'ibv' ),
+			'footer'             => __( 'Footer navigation (legacy)', 'ibv' ),
+			'footer_quick_links' => __( 'Footer — quick links', 'ibv' ),
+			'footer_support'     => __( 'Footer — support', 'ibv' ),
 		]
 	);
 }

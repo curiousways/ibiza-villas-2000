@@ -1,0 +1,36 @@
+.ibv-section-ips-panel__layout {
+	display: grid;
+	gap: var(--ibv-space-xl);
+	align-items: center;
+}
+
+@media (min-width: 48rem) {
+	.ibv-section-ips-panel__layout {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.ibv-section-ips-panel__image {
+	width: 100%;
+	border-radius: var(--ibv-radius-lg);
+}
+
+.ibv-section-ips-panel__title {
+	margin: 0 0 var(--ibv-space-md);
+	font-size: var(--ibv-fs-h2);
+}
+
+.ibv-section-ips-panel__text {
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted);
+	margin-block-end: var(--ibv-space-md);
+}
+
+.ibv-section-ips-panel__text p:first-child {
+	margin-top: 0;
+}
+
+.ibv-section-ips-panel__text p:last-child {
+	margin-bottom: 0;
+}
