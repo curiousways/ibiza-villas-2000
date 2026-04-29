@@ -90,7 +90,7 @@ function ibv_register_villa_acf_fields() {
 				'show_column_filter'     => false,
 				'allow_bulkedit'         => 0,
 				'allow_quickedit'        => 0,
-				'show_column'            => 1,
+				'show_column'            => 0,
 				'show_column_weight'     => 0,
 				'show_column_sortable'   => false,
 				'key'                    => 'field_5849d0c9962f6',

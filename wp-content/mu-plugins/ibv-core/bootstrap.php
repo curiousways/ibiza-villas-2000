@@ -32,6 +32,10 @@ require_once IBV_CORE_PATH . 'includes/nav-menus.php';
 require_once IBV_CORE_PATH . 'includes/image-sizes.php';
 require_once IBV_CORE_PATH . 'includes/editor.php';
 
+// 3b. Admin UX (list columns, comments off).
+require_once IBV_CORE_PATH . 'includes/admin/admin-columns-villa.php';
+require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
+
 // 4. Components — each registers its own CSS handle and exposes a `ibv_core_*` helper.
 require_once IBV_CORE_PATH . 'includes/components/button/button.php';
 require_once IBV_CORE_PATH . 'includes/components/section-heading/section-heading.php';

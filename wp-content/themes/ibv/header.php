@@ -10,10 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $bookings_url = get_field( 'my_bookings_url', 'option' );
-$villas_url   = get_field( 'search_villas_url', 'option' );
-if ( ! $villas_url ) {
-	$villas_url = home_url( '/villas/' );
-}
+$villas_url   = ibv_get_search_villas_url();
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>

@@ -22,15 +22,20 @@ function ibv_url( $path = '' ) {
 }
 
 /**
- * Villas listing URL (Site Options override).
+ * URL of the villa listing / search page.
+ *
+ * Editor selects the page in Site Options → Global → Search / villas listing page.
+ * Falls back to /villas/ if not set.
  *
  * @return string Escaped URL.
  */
 function ibv_get_search_villas_url() {
-	$url = get_field( 'search_villas_url', 'option' );
-	if ( $url ) {
-		return esc_url( $url );
+	$page = get_field( 'search_villas_page', 'option' );
+
+	if ( $page instanceof WP_Post ) {
+		return esc_url( get_permalink( $page ) );
 	}
+
 	return esc_url( home_url( '/villas/' ) );
 }
 

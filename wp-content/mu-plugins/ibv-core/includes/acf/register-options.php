@@ -24,7 +24,7 @@ function ibv_register_site_options_page() {
 			'menu_slug'  => 'ibv-site-options',
 			'capability' => 'manage_options',
 			'redirect'   => false,
-			'icon_url'   => 'dashicons-admin-settings',
+			'icon_url'   => 'dashicons-admin-customizer',
 			'position'   => 80,
 		]
 	);
