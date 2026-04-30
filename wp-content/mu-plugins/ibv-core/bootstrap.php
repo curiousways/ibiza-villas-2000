@@ -76,5 +76,6 @@ require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-t
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

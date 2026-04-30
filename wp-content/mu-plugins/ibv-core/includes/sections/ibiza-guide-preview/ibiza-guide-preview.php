@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_ibiza_guide_preview() {
 	wp_enqueue_style( 'ibv-section-ibiza-guide-preview' );
 
-	$intro   = get_field( 'guide_intro', 'option' );
-	$ids     = get_field( 'guide_articles', 'option' );
-	$viewall = get_field( 'guide_view_all_url', 'option' );
+	$intro   = get_field( 'guide_intro' );
+	$ids     = get_field( 'guide_articles' );
+	$viewall = get_field( 'guide_view_all_url' );
 
 	if ( ! is_array( $ids ) ) {
 		$ids = $ids ? [ $ids ] : [];

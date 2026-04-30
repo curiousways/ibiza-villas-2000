@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_fancy_different() {
 	wp_enqueue_style( 'ibv-section-fancy-different' );
 
-	$intro = get_field( 'fancy_different_intro', 'option' );
+	$intro = get_field( 'fancy_different_intro' );
 	if ( ! $intro ) {
 		$intro = __( 'Fancy something a bit different?', 'ibv' );
 	}

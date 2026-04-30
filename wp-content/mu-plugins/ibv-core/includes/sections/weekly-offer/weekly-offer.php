@@ -15,15 +15,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_weekly_offer() {
 	wp_enqueue_style( 'ibv-section-weekly-offer' );
 
-	$vid = (int) get_field( 'weekly_offer_villa', 'option' );
+	$vid = (int) get_field( 'weekly_offer_villa' );
 	if ( ! $vid ) {
 		return;
 	}
 
-	$was   = get_field( 'weekly_offer_was_price', 'option' );
-	$now   = get_field( 'weekly_offer_now_price', 'option' );
-	$vfrom = get_field( 'weekly_offer_valid_from', 'option' );
-	$vto   = get_field( 'weekly_offer_valid_to', 'option' );
+	$was   = get_field( 'weekly_offer_was_price' );
+	$now   = get_field( 'weekly_offer_now_price' );
+	$vfrom = get_field( 'weekly_offer_valid_from' );
+	$vto   = get_field( 'weekly_offer_valid_to' );
 	?>
 	<section class="ibv-section-weekly-offer ibv-section ibv-section--alt">
 		<div class="ibv-container">

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_trust_strip() {
 	wp_enqueue_style( 'ibv-section-trust-strip' );
 
-	$rows = get_field( 'trust_strip', 'option' );
+	$rows = get_field( 'trust_strip' );
 	if ( ! is_array( $rows ) || ! count( $rows ) ) {
 		return;
 	}

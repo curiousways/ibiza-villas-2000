@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_why_iv2000() {
 	wp_enqueue_style( 'ibv-section-why-iv2000' );
 
-	$pillars = get_field( 'why_pillars', 'option' );
+	$pillars = get_field( 'why_pillars' );
 	if ( ! is_array( $pillars ) || ! count( $pillars ) ) {
 		return;
 	}

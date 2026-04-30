@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_meet_team_teaser() {
 	wp_enqueue_style( 'ibv-section-meet-team-teaser' );
 
-	$img   = get_field( 'meet_team_image', 'option' );
-	$title = get_field( 'meet_team_title', 'option' );
-	$text  = get_field( 'meet_team_text', 'option' );
-	$clab  = get_field( 'meet_team_cta_label', 'option' );
-	$curl  = get_field( 'meet_team_cta_url', 'option' );
+	$img   = get_field( 'meet_team_image' );
+	$title = get_field( 'meet_team_title' );
+	$text  = get_field( 'meet_team_text' );
+	$clab  = get_field( 'meet_team_cta_label' );
+	$curl  = get_field( 'meet_team_cta_url' );
 
 	if ( ! $title && ! $text && empty( $img['ID'] ) ) {
 		return;

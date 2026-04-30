@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_ips_panel() {
 	wp_enqueue_style( 'ibv-section-ips-panel' );
 
-	$img   = get_field( 'ips_image', 'option' );
-	$title = get_field( 'ips_title', 'option' );
-	$text  = get_field( 'ips_text', 'option' );
-	$clab  = get_field( 'ips_cta_label', 'option' );
-	$curl  = get_field( 'ips_cta_url', 'option' );
+	$img   = get_field( 'ips_image' );
+	$title = get_field( 'ips_title' );
+	$text  = get_field( 'ips_text' );
+	$clab  = get_field( 'ips_cta_label' );
+	$curl  = get_field( 'ips_cta_url' );
 
 	if ( ! $title && ! $text && empty( $img['ID'] ) ) {
 		return;

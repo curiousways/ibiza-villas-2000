@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Newsletter CTA (footer + reuse).
+ * Section: Newsletter CTA (footer; fields stored on Front Page).
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,13 +10,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gravity Forms newsletter embed.
+ * Gravity Forms newsletter embed. Reads ACF from the site Front Page so the
+ * block can render in the global footer while content is edited on Home.
  */
 function ibv_core_section_newsletter_cta() {
 	wp_enqueue_style( 'ibv-section-newsletter-cta' );
 
-	$intro = get_field( 'newsletter_intro', 'option' );
-	$fid   = (int) get_field( 'newsletter_form_id', 'option' );
+	$front_id = (int) get_option( 'page_on_front' );
+	$intro    = $front_id ? (string) get_field( 'newsletter_intro', $front_id ) : '';
+	$fid      = $front_id ? (int) get_field( 'newsletter_form_id', $front_id ) : 0;
 
 	if ( ! $intro && ! $fid ) {
 		return;

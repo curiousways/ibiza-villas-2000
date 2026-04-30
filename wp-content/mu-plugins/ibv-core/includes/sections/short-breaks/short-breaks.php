@@ -15,10 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_short_breaks() {
 	wp_enqueue_style( 'ibv-section-short-breaks' );
 
-	$img   = get_field( 'short_breaks_image', 'option' );
-	$title = get_field( 'short_breaks_title', 'option' );
-	$text  = get_field( 'short_breaks_text', 'option' );
-	$cta   = get_field( 'short_breaks_cta_url', 'option' );
+	$img   = get_field( 'short_breaks_image' );
+	$title = get_field( 'short_breaks_title' );
+	$text  = get_field( 'short_breaks_text' );
+	$cta   = get_field( 'short_breaks_cta_url' );
 
 	if ( ! $title && ! $text && ! $img ) {
 		return;

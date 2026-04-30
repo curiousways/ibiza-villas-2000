@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_featured_villas() {
 	wp_enqueue_style( 'ibv-section-featured-villas' );
 
-	$ids = get_field( 'featured_villas', 'option' );
+	$ids = get_field( 'featured_villas' );
 	if ( ! is_array( $ids ) ) {
 		$ids = $ids ? [ $ids ] : [];
 	}

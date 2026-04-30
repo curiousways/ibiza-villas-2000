@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_hero() {
 	wp_enqueue_style( 'ibv-section-hero' );
 
-	$image    = get_field( 'hero_image', 'option' );
-	$title    = get_field( 'hero_title', 'option' );
-	$subtitle = get_field( 'hero_subtitle', 'option' );
+	$image    = get_field( 'hero_image' );
+	$title    = get_field( 'hero_title' );
+	$subtitle = get_field( 'hero_subtitle' );
 
 	$bg = '';
 	if ( is_array( $image ) && ! empty( $image['ID'] ) ) {
