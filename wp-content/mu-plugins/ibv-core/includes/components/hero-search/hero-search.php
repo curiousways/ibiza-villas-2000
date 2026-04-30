@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ibv_core_hero_search() {
 	wp_enqueue_style( 'ibv-hero-search' );
-	wp_enqueue_style( 'ibv-button' );
 
 	$qs = ibv_get_villa_listing_search_params();
 	?>
@@ -43,18 +42,12 @@ function ibv_core_hero_search() {
 				<label class="ibv-hero-search__label" for="ibv-hero-pax"><?php esc_html_e( 'Group Size', 'ibv' ); ?></label>
 				<input class="ibv-hero-search__input" type="number" id="ibv-hero-pax" name="pax" min="1" max="30" required value="<?php echo esc_attr( $qs['pax'] ); ?>">
 			</div>
-			<?php
-			ibv_core_button(
-				[
-					'tag'     => 'button',
-					'type'    => 'submit',
-					'label'   => __( 'Search Villas', 'ibv' ),
-					'variant' => 'primary',
-					'size'    => 'medium',
-					'class'   => 'ibv-hero-search__submit',
-				]
-			);
-			?>
+			<button class="ibv-hero-search__submit" type="submit" aria-label="<?php esc_attr_e( 'Search villas', 'ibv' ); ?>">
+				<svg class="ibv-hero-search__submit-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+					<circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
+					<path d="M10.5 10.5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+				</svg>
+			</button>
 		</div>
 	</form>
 	<?php /* ─────────── END BOB SHELL ─────────── */ ?>

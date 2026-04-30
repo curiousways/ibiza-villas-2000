@@ -26,18 +26,16 @@ function ibv_core_section_hero() {
 
 	$style_attr = '';
 	if ( $bg ) {
-		$style_attr = sprintf(
-			'background-image: linear-gradient(rgba(15, 47, 47, 0.55), rgba(15, 47, 47, 0.55)), url(%s)',
-			esc_url_raw( $bg )
-		);
+		$style_attr = sprintf( '--ibv-hero-image: url(%s)', esc_url_raw( $bg ) );
 	}
 	?>
 	<section class="ibv-section-hero ibv-section"<?php echo $style_attr ? ' style="' . esc_attr( $style_attr ) . '"' : ''; ?>>
 		<div class="ibv-container ibv-section-hero__inner">
 			<div class="ibv-section-hero__copy">
 				<?php if ( $title ) : ?>
-					<h1 class="ibv-section-hero__title"><?php echo esc_html( $title ); ?></h1>
+					<h1 class="ibv-section-hero__title ibv-font-display"><?php echo esc_html( $title ); ?></h1>
 				<?php endif; ?>
+				<span class="ibv-section-hero__rule" aria-hidden="true"></span>
 				<?php if ( $subtitle ) : ?>
 					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
 				<?php endif; ?>

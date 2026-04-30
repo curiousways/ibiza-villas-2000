@@ -1,52 +1,75 @@
 .ibv-section-hero {
-	background-color: var(--ibv-color-brand-teal-mid);
+	position: relative;
+	isolation: isolate;
+	background-color: var(--ibv-color-forest-green-deep);
+	background-image: var(--ibv-hero-image, none);
 	background-size: cover;
 	background-position: center;
 	color: var(--ibv-color-text-inverse);
+	min-height: 45rem; /* 720px — Figma desktop hero */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	padding-block: var(--ibv-space-4xl);
+	overflow: hidden;
+}
+
+.ibv-section-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: var(--ibv-color-forest-green-deep);
+	opacity: 0.55;
+	z-index: 0;
+	pointer-events: none;
 }
 
 .ibv-section-hero__inner {
+	position: relative;
+	z-index: 1;
 	display: flex;
 	flex-direction: column;
-	gap: var(--ibv-space-xl);
+	align-items: center;
+	gap: var(--ibv-space-2xl);
+}
+
+.ibv-section-hero__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+	max-width: 56rem;
 }
 
 .ibv-section-hero__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
 	font-size: var(--ibv-fs-display);
+	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-tight);
-	letter-spacing: var(--ibv-tracking-tight);
+	letter-spacing: 0;
 	margin: 0;
-	max-width: 20ch;
-	color: var(--ibv-color-text-inverse);
+	color: var(--ibv-color-off-white);
+	max-width: 22ch;
+}
+
+.ibv-section-hero__rule {
+	display: block;
+	width: 6.25rem; /* 100px — Figma; no width token */
+	height: 1px;
+	background: var(--ibv-color-gold-500);
 }
 
 .ibv-section-hero__subtitle {
-	font-size: var(--ibv-fs-body);
+	font-size: var(--ibv-fs-h4);
 	line-height: var(--ibv-lh-relaxed);
-	max-width: 36rem;
-	margin: var(--ibv-space-md) 0 0;
-	opacity: 0.95;
+	margin: 0;
+	color: var(--ibv-color-off-white);
+	max-width: 38rem;
 }
 
 .ibv-section-hero__search {
-	margin-block-start: var(--ibv-space-md);
-}
-
-@media (min-width: 64rem) {
-	.ibv-section-hero__inner {
-		flex-direction: row;
-		align-items: flex-end;
-		justify-content: space-between;
-		gap: var(--ibv-space-2xl);
-	}
-
-	.ibv-section-hero__copy {
-		flex: 1 1 0;
-	}
-
-	.ibv-section-hero__search {
-		flex: 0 1 28rem;
-		margin-block-start: 0;
-	}
+	width: 100%;
+	max-width: 44rem;
 }
