@@ -95,13 +95,13 @@
 	--ibv-color-text-muted:      var(--ibv-color-web-grey-300);
 	--ibv-color-text-subtle:     var(--ibv-color-web-grey-200);
 	--ibv-color-text-inverse:    var(--ibv-color-white);
-	--ibv-color-accent:          var(--ibv-color-forest-green-deep);
+	--ibv-color-accent:          var(--ibv-color-sage-500);
 	--ibv-color-accent-contrast: var(--ibv-color-white);
 	/* Faint teal-tinted divider / input border — design-specific; not on any ramp. */
 	--ibv-color-border:          #bfc8c8;
 	--ibv-color-border-strong:   var(--ibv-color-web-grey-200);
 	--ibv-color-link:            var(--ibv-color-forest-green-deep);
-	--ibv-color-link-hover:      var(--ibv-color-forest-green-light);
+	--ibv-color-link-hover:      var(--ibv-color-sage-500);
 	--ibv-color-focus-ring:      var(--ibv-color-forest-green-deep);
 
 	/* Legacy marketing names — section CSS still references these; map to IV2000 foundation (migrate to semantic tokens in a later pass). */

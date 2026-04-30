@@ -5,7 +5,7 @@
 	align-items: center;
 	justify-content: center;
 	gap: var(--ibv-space-xs);
-	border-radius: var(--ibv-radius-pill);
+	border-radius: var(--ibv-radius-md);
 	font-family: var(--ibv-font-body);
 	font-weight: var(--ibv-font-weight-medium);
 	line-height: 1;
@@ -43,19 +43,21 @@
 
 .ibv-button--primary:hover,
 .ibv-button--primary:focus-visible {
-	background-color: var(--ibv-color-text);
+	background-color: var(--ibv-color-link);
+	color: var(--ibv-color-accent-contrast);
 }
 
 .ibv-button--secondary {
 	background-color: transparent;
-	color: var(--ibv-color-text);
-	border-color: var(--ibv-color-text);
+	color: var(--ibv-color-link);
+	border-color: var(--ibv-color-link);
 }
 
 .ibv-button--secondary:hover,
 .ibv-button--secondary:focus-visible {
-	background-color: var(--ibv-color-text);
-	color: var(--ibv-color-text-inverse);
+	background-color: var(--ibv-color-accent);
+	color: var(--ibv-color-accent-contrast);
+	border-color: var(--ibv-color-accent);
 }
 
 .ibv-button--ghost {
@@ -67,4 +69,41 @@
 .ibv-button--ghost:hover,
 .ibv-button--ghost:focus-visible {
 	color: var(--ibv-color-link-hover);
+}
+
+/* Filled / White — for use on dark backgrounds (hero, footer) */
+.ibv-button--primary-inverse {
+	background-color: var(--ibv-color-white);
+	color: var(--ibv-color-link);
+}
+
+.ibv-button--primary-inverse:hover,
+.ibv-button--primary-inverse:focus-visible {
+	background-color: var(--ibv-color-link);
+	color: var(--ibv-color-white);
+}
+
+/* Outlined / White — for use on dark backgrounds */
+.ibv-button--secondary-inverse {
+	background-color: transparent;
+	color: var(--ibv-color-white);
+	border-color: var(--ibv-color-white);
+}
+
+.ibv-button--secondary-inverse:hover,
+.ibv-button--secondary-inverse:focus-visible {
+	background-color: var(--ibv-color-white);
+	color: var(--ibv-color-link);
+	border-color: var(--ibv-color-white);
+}
+
+/* Arrow icon — currentColor inherits from button variant */
+.ibv-button__arrow {
+	flex-shrink: 0;
+	transition: transform var(--ibv-duration-normal) var(--ibv-ease-standard);
+}
+
+.ibv-button:hover .ibv-button__arrow,
+.ibv-button:focus-visible .ibv-button__arrow {
+	transform: translateX(2px);
 }

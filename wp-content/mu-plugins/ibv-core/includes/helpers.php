@@ -24,8 +24,12 @@ function ibv_url( $path = '' ) {
 /**
  * URL of the villa listing / search page.
  *
- * Editor selects the page in Site Options → Global → Search / villas listing page.
- * Falls back to /villas/ if not set.
+ * Resolution order:
+ * 1. Site Options → Search / villas listing page (ACF), when set — override.
+ * 2. First published page using the Villa Listing template (`page-villa-listing.php`).
+ * 3. Path fallback `/villas/`.
+ *
+ * All villa listing links should use this helper (forms, CTAs, buttons).
  *
  * @return string Escaped URL.
  */
@@ -34,6 +38,23 @@ function ibv_get_search_villas_url() {
 
 	if ( $page instanceof WP_Post ) {
 		return esc_url( get_permalink( $page ) );
+	}
+
+	$pages = get_posts(
+		[
+			'post_type'      => 'page',
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_key'       => '_wp_page_template',
+			'meta_value'     => 'page-villa-listing.php',
+			'orderby'        => [ 'menu_order' => 'ASC', 'post_title' => 'ASC' ],
+		]
+	);
+
+	if ( ! empty( $pages ) ) {
+		return esc_url( get_permalink( $pages[0] ) );
 	}
 
 	return esc_url( home_url( '/villas/' ) );

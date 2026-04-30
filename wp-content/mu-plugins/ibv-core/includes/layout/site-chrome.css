@@ -1,9 +1,18 @@
 /* Site header / footer — chrome only */
 
 .ibv-site-header {
-	background: var(--ibv-color-surface);
-	border-block-end: 1px solid var(--ibv-color-border);
-	padding-block: var(--ibv-space-md);
+	position: relative;
+	background: var(--ibv-color-bg-alt);
+	padding-block: var(--ibv-space-lg);
+}
+
+.ibv-site-header::before {
+	content: "";
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline: 0;
+	height: 3px;
+	background: var(--ibv-color-gold-500);
 }
 
 .ibv-site-header__inner {
@@ -23,7 +32,7 @@
 	}
 }
 
-.ibv-site-header__brand {
+.ibv-site-header__brand.custom-logo-link {
 	display: inline-flex;
 	align-items: center;
 	font-weight: var(--ibv-font-weight-bold);
@@ -31,12 +40,8 @@
 	text-decoration: none;
 }
 
-.ibv-site-header__brand .custom-logo-link {
-	display: block;
-}
-
 .ibv-site-header__brand .custom-logo {
-	max-height: 3rem;
+	max-height: 2.1875rem; /* 35px — Figma logo lockup; no spacing token matches */
 	width: auto;
 }
 
@@ -55,14 +60,14 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: var(--ibv-space-lg);
+		gap: var(--ibv-space-xl);
 	}
 }
 
 .ibv-site-header__nav a {
 	text-decoration: none;
 	color: var(--ibv-color-text);
-	font-weight: var(--ibv-font-weight-medium);
+	font-weight: var(--ibv-font-weight-regular);
 	font-size: var(--ibv-fs-small);
 }
 
@@ -76,17 +81,6 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: var(--ibv-space-sm);
-}
-
-.ibv-site-header__bar {
-	width: 100%;
-	flex-basis: 100%;
-}
-
-@media (min-width: 64rem) {
-	.ibv-site-header__bar {
-		order: 3;
-	}
 }
 
 /* Footer */

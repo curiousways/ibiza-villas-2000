@@ -16,8 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param array $args {
  *     @type string $url        Required for link buttons. The destination URL.
  *     @type string $label      Required. The button label.
- *     @type string $variant    Optional. 'primary' | 'secondary' | 'ghost'. Default 'primary'.
+ *     @type string $variant    Optional. 'primary' | 'secondary' | 'ghost' | 'primary-inverse' | 'secondary-inverse'. Default 'primary'.
  *     @type string $size       Optional. 'small' | 'medium' | 'large'. Default 'medium'.
+ *     @type bool|null $arrow   Optional. null = variant default (on for primary/secondary and inverse pair, off for ghost). Bool overrides.
  *     @type string $target     Optional. e.g. '_blank'.
  *     @type string $rel        Optional. e.g. 'noopener noreferrer'.
  *     @type string $tag        Optional. 'a' (default) or 'button'.
@@ -32,6 +33,7 @@ function ibv_core_button( $args = [] ) {
 		'label'      => '',
 		'variant'    => 'primary',
 		'size'       => 'medium',
+		'arrow'      => null,
 		'target'     => '',
 		'rel'        => '',
 		'tag'        => 'a',
@@ -50,11 +52,21 @@ function ibv_core_button( $args = [] ) {
 
 	wp_enqueue_style( 'ibv-button' );
 
-	$allowed_variants = [ 'primary', 'secondary', 'ghost' ];
+	$allowed_variants = [ 'primary', 'secondary', 'ghost', 'primary-inverse', 'secondary-inverse' ];
 	$allowed_sizes    = [ 'small', 'medium', 'large' ];
 
 	$variant = in_array( $args['variant'], $allowed_variants, true ) ? $args['variant'] : 'primary';
 	$size    = in_array( $args['size'], $allowed_sizes, true ) ? $args['size'] : 'medium';
+
+	$variants_with_arrow = [ 'primary', 'secondary', 'primary-inverse', 'secondary-inverse' ];
+	$show_arrow          = is_bool( $args['arrow'] )
+		? $args['arrow']
+		: in_array( $variant, $variants_with_arrow, true );
+
+	$arrow_svg = '';
+	if ( $show_arrow ) {
+		$arrow_svg = '<svg class="ibv-button__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false"><path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+	}
 
 	$classes = [
 		'ibv-button',
@@ -72,11 +84,12 @@ function ibv_core_button( $args = [] ) {
 
 	if ( 'button' === $args['tag'] ) {
 		printf(
-			'<button class="%1$s" type="%2$s"%3$s>%4$s</button>',
+			'<button class="%1$s" type="%2$s"%3$s>%4$s%5$s</button>',
 			esc_attr( implode( ' ', $classes ) ),
 			esc_attr( $args['type'] ),
 			$extra_attrs, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_attr per attribute.
-			esc_html( $args['label'] )
+			esc_html( $args['label'] ),
+			$arrow_svg // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG built above.
 		);
 		return;
 	}
@@ -90,12 +103,13 @@ function ibv_core_button( $args = [] ) {
 	$rel_attr = $args['rel'] ? sprintf( ' rel="%s"', esc_attr( $args['rel'] ) ) : '';
 
 	printf(
-		'<a class="%1$s" href="%2$s"%3$s%4$s%5$s>%6$s</a>',
+		'<a class="%1$s" href="%2$s"%3$s%4$s%5$s>%6$s%7$s</a>',
 		esc_attr( implode( ' ', $classes ) ),
 		esc_url( $args['url'] ),
 		$target_attr, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$rel_attr,    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$extra_attrs, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		esc_html( $args['label'] )
+		esc_html( $args['label'] ),
+		$arrow_svg    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG built above.
 	);
 }

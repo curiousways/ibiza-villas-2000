@@ -27,15 +27,7 @@ $villas_url   = ibv_get_search_villas_url();
 <header class="ibv-site-header">
 	<div class="ibv-container">
 		<div class="ibv-site-header__inner">
-			<a class="ibv-site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
-				<?php
-				if ( has_custom_logo() ) {
-					the_custom_logo();
-				} else {
-					echo esc_html( get_bloginfo( 'name', 'display' ) );
-				}
-				?>
-			</a>
+			<?php ibv_the_theme_logo( [ 'link_class' => 'ibv-site-header__brand custom-logo-link' ] ); ?>
 
 			<?php if ( has_nav_menu( 'primary' ) ) : ?>
 				<nav class="ibv-site-header__nav" aria-label="<?php esc_attr_e( 'Primary', 'ibv' ); ?>">
@@ -60,7 +52,7 @@ $villas_url   = ibv_get_search_villas_url();
 						[
 							'url'     => esc_url( $bookings_url ),
 							'label'   => __( 'My Bookings', 'ibv' ),
-							'variant' => 'ghost',
+							'variant' => 'secondary',
 							'size'    => 'small',
 							'target'  => '_blank',
 						]
@@ -77,10 +69,6 @@ $villas_url   = ibv_get_search_villas_url();
 					]
 				);
 				?>
-			</div>
-
-			<div class="ibv-site-header__bar">
-				<?php ibv_core_header_search(); ?>
 			</div>
 		</div>
 	</div>

@@ -23,15 +23,38 @@ function ibv_theme_setup() {
 			'script',
 		]
 	);
-	add_theme_support(
-		'custom-logo',
+	load_theme_textdomain( 'ibv', get_template_directory() . '/languages' );
+}
+
+/**
+ * Output the bundled IV2000 logo (SVG). Not configurable in admin.
+ *
+ * @param array $args {
+ *     Optional. Arguments.
+ *
+ *     @type string $link_class Classes for the home link (include layout classes).
+ *     @type string $img_class  Classes for the img element.
+ * }
+ */
+function ibv_the_theme_logo( array $args = [] ) {
+	$args = wp_parse_args(
+		$args,
 		[
-			'flex-height' => true,
-			'flex-width'  => true,
+			'link_class' => 'custom-logo-link',
+			'img_class'  => 'custom-logo',
 		]
 	);
-
-	load_theme_textdomain( 'ibv', get_template_directory() . '/languages' );
+	$home = home_url( '/' );
+	$src  = get_template_directory_uri() . '/assets/brand/ibv-logo.svg';
+	$name = get_bloginfo( 'name', 'display' );
+	printf(
+		'<a href="%1$s" class="%2$s" rel="home"><img class="%3$s" src="%4$s" width="842" height="229" alt="%5$s" decoding="async" /></a>',
+		esc_url( $home ),
+		esc_attr( $args['link_class'] ),
+		esc_attr( $args['img_class'] ),
+		esc_url( $src ),
+		esc_attr( $name )
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'ibv_theme_enqueue' );

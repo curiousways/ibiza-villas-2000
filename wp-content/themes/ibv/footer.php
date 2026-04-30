@@ -22,11 +22,7 @@ $phone_ib = get_field( 'phone_ibiza', 'option' );
 		<div class="ibv-site-footer__grid">
 			<div class="ibv-site-footer__brand-col">
 				<div class="ibv-site-footer__brand">
-					<?php if ( has_custom_logo() ) : ?>
-						<?php the_custom_logo(); ?>
-					<?php else : ?>
-						<strong><?php echo esc_html( get_bloginfo( 'name', 'display' ) ); ?></strong>
-					<?php endif; ?>
+					<?php ibv_the_theme_logo(); ?>
 				</div>
 				<?php if ( $tagline ) : ?>
 					<p class="ibv-site-footer__tagline"><?php echo esc_html( $tagline ); ?></p>
