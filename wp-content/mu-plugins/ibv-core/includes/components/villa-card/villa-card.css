@@ -11,6 +11,14 @@
 	position: relative;
 }
 
+.ibv-villa-card--default {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	overflow: visible;
+}
+
 .ibv-villa-card__badge {
 	position: absolute;
 	inset-block-start: var(--ibv-space-sm);
@@ -31,6 +39,13 @@
 	overflow: hidden;
 }
 
+.ibv-villa-card--default .ibv-villa-card__media {
+	aspect-ratio: 9 / 10; /* ~272×300 — Figma */
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+	margin-block-end: var(--ibv-space-lg);
+}
+
 .ibv-villa-card__image {
 	width: 100%;
 	height: 100%;
@@ -48,12 +63,30 @@
 	border-radius: var(--ibv-radius-sm);
 }
 
+.ibv-villa-card--default .ibv-villa-card__location {
+	inset-block-start: var(--ibv-space-sm);
+	inset-block-end: auto;
+	inset-inline-start: var(--ibv-space-sm);
+	/* Off-white @ 90% opacity — Figma; when color-mix is baseline: color-mix(in srgb, var(--ibv-color-off-white) 90%, transparent) */
+	background: rgb(249 248 244 / 0.9);
+	color: var(--ibv-color-link);
+	border-radius: var(--ibv-radius-pill);
+	padding: var(--ibv-space-3xs, var(--ibv-space-2xs)) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-xs, var(--ibv-fs-small));
+	font-weight: var(--ibv-font-weight-regular);
+}
+
 .ibv-villa-card__body {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-sm);
 	padding: var(--ibv-space-md);
 	flex-grow: 1;
+}
+
+.ibv-villa-card--default .ibv-villa-card__body {
+	padding: 0;
+	gap: var(--ibv-space-md);
 }
 
 .ibv-villa-card__title {
@@ -72,15 +105,58 @@
 	color: var(--ibv-color-link-hover);
 }
 
+.ibv-villa-card--default .ibv-villa-card__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+	margin: 0;
+}
+
+.ibv-villa-card--default .ibv-villa-card__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.ibv-villa-card--default .ibv-villa-card__title a:hover,
+.ibv-villa-card--default .ibv-villa-card__title a:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
 .ibv-villa-card__facts {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--ibv-space-sm);
+	gap: var(--ibv-space-md);
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-card__fact {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
 	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: 1;
+}
+
+.ibv-villa-card__fact-icon {
+	flex-shrink: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-card__rule {
+	width: 3.125rem; /* 50px — Figma gold rule */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+	align-self: flex-start;
 }
 
 .ibv-villa-card__excerpt {
@@ -88,6 +164,13 @@
 	font-size: var(--ibv-fs-small);
 	color: var(--ibv-color-text-muted);
 	line-height: var(--ibv-lh-normal);
+}
+
+.ibv-villa-card--default .ibv-villa-card__excerpt {
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+	margin: 0;
 }
 
 .ibv-villa-card__price {
@@ -105,6 +188,33 @@
 
 .ibv-villa-card__price-amount {
 	margin-inline: var(--ibv-space-2xs);
+}
+
+.ibv-villa-card--default .ibv-villa-card__price {
+	display: flex;
+	align-items: baseline;
+	gap: var(--ibv-space-xs);
+	margin: 0;
+	font-weight: var(--ibv-font-weight-regular);
+}
+
+.ibv-villa-card--default .ibv-villa-card__price-prefix,
+.ibv-villa-card--default .ibv-villa-card__price-suffix {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text);
+	font-weight: var(--ibv-font-weight-regular);
+}
+
+.ibv-villa-card--default .ibv-villa-card__price-amount {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: 2.75rem; /* 44px — Figma; no matching type token */
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.1;
+	letter-spacing: 0;
+	color: var(--ibv-color-link);
+	margin: 0;
 }
 
 .ibv-villa-card--offer {
@@ -163,6 +273,10 @@
 .ibv-villa-card__body .ibv-button {
 	align-self: flex-start;
 	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-villa-card--default .ibv-villa-card__body .ibv-button {
+	margin-block-start: var(--ibv-space-xs);
 }
 
 .ibv-villa-card--similar .ibv-villa-card__media {

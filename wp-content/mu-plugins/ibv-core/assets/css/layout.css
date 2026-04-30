@@ -15,6 +15,10 @@
 	padding-block: var(--ibv-section-pad-y);
 }
 
+.ibv-section--alt {
+	background: var(--ibv-color-bg-alt);
+}
+
 .ibv-stack > * + * {
 	margin-top: var(--ibv-space-lg);
 }

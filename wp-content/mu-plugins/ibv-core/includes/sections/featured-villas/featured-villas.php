@@ -43,14 +43,19 @@ function ibv_core_section_featured_villas() {
 	?>
 	<section class="ibv-section-featured-villas ibv-section ibv-section--alt">
 		<div class="ibv-container">
-			<?php
-			ibv_core_section_heading(
-				[
-					'title' => __( 'Our Villas', 'ibv' ),
-					'level' => 'h2',
-				]
-			);
-			?>
+			<header class="ibv-section-featured-villas__header">
+				<h2 class="ibv-section-featured-villas__title ibv-font-display"><?php esc_html_e( 'Our Villas', 'ibv' ); ?></h2>
+				<?php
+				ibv_core_button(
+					[
+						'url'     => ibv_get_search_villas_url(),
+						'label'   => __( 'Search Villas', 'ibv' ),
+						'variant' => 'primary',
+						'size'    => 'small',
+					]
+				);
+				?>
+			</header>
 			<div class="ibv-section-featured-villas__grid ibv-grid ibv-grid--4">
 				<?php
 				foreach ( $ids as $vid ) {
@@ -58,17 +63,6 @@ function ibv_core_section_featured_villas() {
 				}
 				?>
 			</div>
-			<p class="ibv-section-featured-villas__cta">
-				<?php
-				ibv_core_button(
-					[
-						'url'     => ibv_get_search_villas_url(),
-						'label'   => __( 'Search all villas', 'ibv' ),
-						'variant' => 'primary',
-					]
-				);
-				?>
-			</p>
 		</div>
 	</section>
 	<?php
