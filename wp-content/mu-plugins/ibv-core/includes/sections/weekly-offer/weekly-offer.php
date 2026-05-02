@@ -2,6 +2,9 @@
 /**
  * Section: Weekly special offer.
  *
+ * Homepage section that wraps the offer panel with the section header
+ * ("This Week's Special Offer" + "Search all Special Offers" CTA).
+ *
  * @package Ibiza_Villas_2000
  */
 
@@ -25,35 +28,25 @@ function ibv_core_section_weekly_offer() {
 	$vfrom = get_field( 'weekly_offer_valid_from' );
 	$vto   = get_field( 'weekly_offer_valid_to' );
 	?>
-	<section class="ibv-section-weekly-offer ibv-section ibv-section--alt">
+	<section class="ibv-section-weekly-offer ibv-section">
 		<div class="ibv-container">
 			<?php
-			ibv_core_section_heading(
+			ibv_core_offer_panel(
 				[
-					'title' => __( "This week's special offer", 'ibv' ),
-					'level' => 'h2',
+					'villa'         => $vid,
+					'was_price'     => $was ? (float) $was : null,
+					'now_price'     => $now ? (float) $now : null,
+					'valid_from'    => $vfrom ? (string) $vfrom : null,
+					'valid_to'      => $vto ? (string) $vto : null,
+					'cta_label'     => __( 'View Villa', 'ibv' ),
+					'section_title' => __( "This Week's Special Offer", 'ibv' ),
+					'section_cta'   => [
+						'url'   => ibv_get_special_offers_url(),
+						'label' => __( 'Search all Special Offers', 'ibv' ),
+					],
 				]
 			);
 			?>
-			<p class="ibv-section-weekly-offer__subcta">
-				<a class="ibv-u-text-link" href="<?php echo esc_url( ibv_get_special_offers_url() ); ?>"><?php esc_html_e( 'Search all special offers', 'ibv' ); ?></a>
-			</p>
-			<div class="ibv-section-weekly-offer__card">
-				<span class="ibv-section-weekly-offer__ribbon"><?php esc_html_e( "This week's deal", 'ibv' ); ?></span>
-				<?php
-				ibv_core_villa_card(
-					[
-						'villa'      => $vid,
-						'variant'    => 'offer',
-						'was_price'  => $was ? (float) $was : null,
-						'now_price'  => $now ? (float) $now : null,
-						'valid_from' => $vfrom ? (string) $vfrom : null,
-						'valid_to'   => $vto ? (string) $vto : null,
-						'cta_label'  => __( 'Enquire', 'ibv' ),
-					]
-				);
-				?>
-			</div>
 		</div>
 	</section>
 	<?php

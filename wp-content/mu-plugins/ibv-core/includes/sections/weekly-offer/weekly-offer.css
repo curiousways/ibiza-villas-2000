@@ -1,33 +1,4 @@
-.ibv-section-weekly-offer__subcta {
-	margin: var(--ibv-space-sm) 0 var(--ibv-space-xl);
-}
-
-.ibv-u-text-link {
-	font-weight: var(--ibv-font-weight-medium);
-	color: var(--ibv-color-link);
-	text-decoration: underline;
-	text-underline-offset: 0.12em;
-}
-
-.ibv-section-weekly-offer__card {
-	position: relative;
-	margin-block-start: var(--ibv-space-md);
-}
-
-.ibv-section-weekly-offer__ribbon {
-	position: absolute;
-	inset-block-start: var(--ibv-space-md);
-	inset-inline-start: var(--ibv-space-md);
-	z-index: 2;
-	background: var(--ibv-color-accent-gold);
-	color: var(--ibv-color-brand-teal);
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-bold);
-	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
-	border-radius: var(--ibv-radius-sm);
-}
-
-.ibv-section-weekly-offer__card .ibv-villa-card {
-	position: relative;
-	z-index: 1;
+/* Homepage Weekly Offer — section chrome only */
+.ibv-section-weekly-offer {
+	padding-block: 4.375rem; /* 70px — Figma section padding; same rhythm as featured villas */
 }

@@ -97,6 +97,13 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	wp_register_style(
+		'ibv-offer-panel',
+		IBV_CORE_URL . 'includes/components/offer-panel/offer-panel.css',
+		[ 'ibv-base', 'ibv-villa-card', 'ibv-button' ],
+		IBV_CORE_VERSION
+	);
+
 	$section_handles = [
 		'ibv-section-hero'                 => 'includes/sections/hero/hero.css',
 		'ibv-section-featured-villas'       => 'includes/sections/featured-villas/featured-villas.css',

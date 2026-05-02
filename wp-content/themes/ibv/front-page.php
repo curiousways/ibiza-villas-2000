@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 ibv_core_section_hero();
-ibv_core_section_featured_villas();
 ibv_core_section_trust_strip();
+ibv_core_section_featured_villas();
 ibv_core_section_weekly_offer();
 ibv_core_section_short_breaks();
 ibv_core_section_why_iv2000();

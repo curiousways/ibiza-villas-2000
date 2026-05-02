@@ -20,33 +20,44 @@ function ibv_core_section_trust_strip() {
 		return;
 	}
 	?>
-	<section class="ibv-section-trust-strip ibv-section">
+	<section class="ibv-section-trust-strip ibv-section ibv-section--alt">
 		<div class="ibv-container">
 			<div class="ibv-section-trust-strip__row">
 				<?php foreach ( $rows as $row ) : ?>
-					<div class="ibv-trust-item">
-						<?php
-						$logo = $row['logo'] ?? null;
-						$url  = ! empty( $row['url'] ) ? esc_url( $row['url'] ) : '';
-						if ( ! empty( $logo ) ) {
-							if ( $url ) {
-								echo '<a class="ibv-trust-item__link" href="' . esc_url( $url ) . '">';
-							}
-							echo '<span class="ibv-trust-item__logo">';
-							ibv_core_image( $logo, 'thumbnail', [ 'class' => 'ibv-trust-item__logo-img' ] );
-							echo '</span>';
-							if ( $url ) {
-								echo '</a>';
-							}
-						}
-						?>
-						<?php if ( ! empty( $row['label'] ) ) : ?>
-							<p class="ibv-trust-item__label"><?php echo esc_html( $row['label'] ); ?></p>
+					<?php
+					$logo = $row['logo'] ?? null;
+					$url  = ! empty( $row['url'] ) ? esc_url( $row['url'] ) : '';
+					if ( empty( $logo ) ) {
+						continue;
+					}
+					?>
+					<?php if ( $url ) : ?>
+						<a class="ibv-trust-item ibv-trust-item--link" href="<?php echo esc_url( $url ); ?>">
+					<?php else : ?>
+						<div class="ibv-trust-item">
+					<?php endif; ?>
+						<span class="ibv-trust-item__logo">
+							<?php
+							ibv_core_image(
+								$logo,
+								'thumbnail',
+								[
+									'class'    => 'ibv-trust-item__logo-img',
+									'loading'  => 'lazy',
+								]
+							);
+							?>
+						</span>
+						<?php if ( $url ) : ?>
+							<svg class="ibv-trust-item__arrow" width="11" height="10" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
+								<path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+							</svg>
 						<?php endif; ?>
-						<?php if ( ! empty( $row['subtext'] ) ) : ?>
-							<p class="ibv-trust-item__sub"><?php echo esc_html( $row['subtext'] ); ?></p>
-						<?php endif; ?>
-					</div>
+					<?php if ( $url ) : ?>
+						</a>
+					<?php else : ?>
+						</div>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 		</div>

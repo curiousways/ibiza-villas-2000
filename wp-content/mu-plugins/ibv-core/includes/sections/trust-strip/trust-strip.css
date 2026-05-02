@@ -1,36 +1,46 @@
+.ibv-section-trust-strip {
+	padding-block: var(--ibv-space-2xl);
+}
+
 .ibv-section-trust-strip__row {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
-	gap: var(--ibv-space-xl);
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-2xl); /* ~50px in Figma; token is 48px */
 }
 
 .ibv-trust-item {
-	flex: 1 1 8rem;
-	min-width: 0;
-	text-align: center;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ibv-space-xs);
+	color: var(--ibv-color-link);
+	text-decoration: none;
+}
+
+.ibv-trust-item__logo {
+	display: inline-flex;
+	align-items: center;
 }
 
 .ibv-trust-item__logo-img {
-	max-height: 2.5rem;
+	max-height: 4rem; /* 64px — Figma tallest logo */
 	width: auto;
-	margin-inline: auto;
-}
-
-.ibv-trust-item__label {
-	font-weight: var(--ibv-font-weight-semibold);
-	margin: var(--ibv-space-sm) 0 var(--ibv-space-2xs);
-	font-size: var(--ibv-fs-small);
-}
-
-.ibv-trust-item__sub {
-	margin: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
-}
-
-.ibv-trust-item__link {
-	text-decoration: none;
-	color: inherit;
+	object-fit: contain;
 	display: block;
+}
+
+.ibv-trust-item__arrow {
+	flex-shrink: 0;
+	transition: transform var(--ibv-duration-normal) var(--ibv-ease-standard);
+}
+
+.ibv-trust-item--link:hover .ibv-trust-item__arrow,
+.ibv-trust-item--link:focus-visible .ibv-trust-item__arrow {
+	transform: translateX(2px);
+}
+
+.ibv-trust-item--link:hover,
+.ibv-trust-item--link:focus-visible {
+	color: var(--ibv-color-link-hover);
 }

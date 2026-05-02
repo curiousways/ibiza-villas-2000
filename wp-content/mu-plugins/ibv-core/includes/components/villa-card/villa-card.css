@@ -67,7 +67,6 @@
 	inset-block-start: var(--ibv-space-sm);
 	inset-block-end: auto;
 	inset-inline-start: var(--ibv-space-sm);
-	/* Off-white @ 90% opacity — Figma; when color-mix is baseline: color-mix(in srgb, var(--ibv-color-off-white) 90%, transparent) */
 	background: rgb(249 248 244 / 0.9);
 	color: var(--ibv-color-link);
 	border-radius: var(--ibv-radius-pill);

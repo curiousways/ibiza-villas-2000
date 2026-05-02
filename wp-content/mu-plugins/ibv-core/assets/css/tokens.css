@@ -71,6 +71,18 @@
 	--ibv-color-web-grey-200: #b6b6b6;
 	--ibv-color-web-grey-300: #939292;
 
+	/* Tints — pale opaque variants in the brand families.
+	   Stored as discrete opaque values rather than alpha calculations so
+	   the colour is stable across contexts and can be eyedropped,
+	   swatched, and reused predictably.
+
+	   Several brand families converge to the same perceived colour at
+	   low intensities (e.g. Forest Green, Sage, and Blue all collapse to
+	   the same teal tint near 10% over a near-white surface). One token
+	   per visually-distinct tint, not one per source family. */
+	--ibv-color-tint-teal: #e1e8e4;
+	--ibv-color-tint-gold: #faf2dc;
+
 	/* Feedback (per style guide) */
 	--ibv-color-info-100:      #e3efff;
 	--ibv-color-info-200:      #2c7eec;
