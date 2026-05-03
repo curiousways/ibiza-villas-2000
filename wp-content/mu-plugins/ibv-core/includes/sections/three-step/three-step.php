@@ -30,7 +30,7 @@ function ibv_core_section_three_step() {
 		$title = __( 'Our 3-Step Process', 'ibv' );
 	}
 	?>
-	<section class="ibv-section-three-step ibv-section">
+	<section class="ibv-section-three-step ibv-section ibv-section--surface-tint-gold">
 		<div class="ibv-container">
 
 			<header class="ibv-section-three-step__header">

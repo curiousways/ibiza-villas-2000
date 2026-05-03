@@ -1,8 +1,4 @@
-/* Fancy something different — section chrome. Tiles: accommodation-tile.css */
-
-.ibv-section-fancy-different {
-	padding-block: 4.375rem; /* 70px — Figma */
-}
+/* Fancy something different — section rhythm/surface from foundation; tiles: accommodation-tile.css */
 
 .ibv-section-fancy-different__header {
 	display: flex;

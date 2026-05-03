@@ -20,7 +20,7 @@ function ibv_core_section_why_iv2000() {
 		return;
 	}
 	?>
-	<section class="ibv-section-why-iv2000 ibv-section">
+	<section class="ibv-section-why-iv2000 ibv-section ibv-section--surface-forest-green">
 		<div class="ibv-container">
 
 			<header class="ibv-section-why-iv2000__header">

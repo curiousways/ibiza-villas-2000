@@ -29,7 +29,7 @@ function ibv_core_section_fancy_different() {
 
 	wp_enqueue_style( 'ibv-section-fancy-different' );
 	?>
-	<section class="ibv-section-fancy-different ibv-section ibv-section--alt">
+	<section class="ibv-section-fancy-different ibv-section ibv-section--surface-bg">
 		<div class="ibv-container">
 			<header class="ibv-section-fancy-different__header">
 				<h2 class="ibv-section-fancy-different__title ibv-font-display">

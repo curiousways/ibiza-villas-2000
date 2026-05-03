@@ -33,7 +33,7 @@ function ibv_core_section_meet_team_teaser() {
 			'cta_label'   => $clab,
 			'image'       => $img,
 			'image_side'  => 'left',
-			// No background — sits on the page off-white directly
+			'surface'     => 'bg',
 		]
 	);
 }

@@ -33,6 +33,7 @@ function ibv_register_styles() {
 		'ibv-elements'   => 'assets/css/base.css',
 		'ibv-typography' => 'assets/css/typography.css',
 		'ibv-layout'     => 'assets/css/layout.css',
+		'ibv-sections'   => 'assets/css/sections.css',
 	];
 
 	foreach ( $foundation_files as $handle => $rel ) {
@@ -50,7 +51,7 @@ function ibv_register_styles() {
 	wp_register_style(
 		'ibv-base',
 		false,
-		[ 'ibv-fonts', 'ibv-tokens', 'ibv-reset', 'ibv-elements', 'ibv-typography', 'ibv-layout' ],
+		[ 'ibv-fonts', 'ibv-tokens', 'ibv-reset', 'ibv-elements', 'ibv-typography', 'ibv-layout', 'ibv-sections' ],
 		IBV_CORE_VERSION
 	);
 

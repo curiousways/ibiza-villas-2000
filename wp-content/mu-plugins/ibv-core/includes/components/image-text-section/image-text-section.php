@@ -4,8 +4,8 @@
  *
  * Reusable horizontal layout pairing a heading + body + CTA with an image.
  * Used on the homepage for Short Breaks, IPS / responsible tourism, and
- * Meet the Team. Variants: image side (left | right), and an optional
- * background tint applied via inline custom properties.
+ * Meet the Team. Variants: image side (left | right), optional surface
+ * modifier, and optional accent rule colour.
  *
  * @package Ibiza_Villas_2000
  */
@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render an image-and-text section.
  *
  * @param array $args {
- *     @type string      $title       Required with other content. Title text (rendered as h2).
- *     @type string      $description Body copy (plain text; wrapped with wpautop + wp_kses_post).
- *     @type string      $cta_url     CTA destination.
- *     @type string      $cta_label   CTA label.
- *     @type int|array   $image       Image ID or ACF image array.
- *     @type string      $image_side  'left' | 'right'. Default 'right'.
- *     @type string|null $background  Optional CSS colour (e.g. var(--ibv-color-tint-teal)) for section background. Default null → transparent.
- *     @type string      $rule_color  Optional accent for the rule under the title; empty uses sage-500 from CSS.
+ *     @type string $title       Required with other content. Title text (rendered as h2).
+ *     @type string $description Body copy (plain text; wrapped with wpautop + wp_kses_post).
+ *     @type string $cta_url     CTA destination.
+ *     @type string $cta_label   CTA label.
+ *     @type int|array $image    Image ID or ACF image array.
+ *     @type string $image_side 'left' | 'right'. Default 'right'.
+ *     @type string $surface    Surface modifier slug ('bg' | 'white' | 'tint-teal' | 'tint-gold' | 'tint-blue' | 'forest-green'). Empty string applies no surface (transparent).
+ *     @type string $rule_color Optional accent for the rule under the title; empty uses sage-500 from CSS.
  * }
  */
 function ibv_core_image_text_section( $args = [] ) {
@@ -36,7 +36,7 @@ function ibv_core_image_text_section( $args = [] ) {
 		'cta_label'   => '',
 		'image'       => null,
 		'image_side'  => 'right',
-		'background'  => null,
+		'surface'     => '',
 		'rule_color'  => '',
 	];
 	$args = wp_parse_args( $args, $defaults );
@@ -55,10 +55,12 @@ function ibv_core_image_text_section( $args = [] ) {
 		'ibv-image-text-section--image-' . $image_side,
 	];
 
-	$inline_styles = [];
-	if ( ! empty( $args['background'] ) ) {
-		$inline_styles[] = '--ibv-image-text-section-bg: ' . $args['background'];
+	$valid_surfaces = [ 'bg', 'white', 'tint-teal', 'tint-gold', 'tint-blue', 'forest-green' ];
+	if ( in_array( $args['surface'], $valid_surfaces, true ) ) {
+		$root_classes[] = 'ibv-section--surface-' . $args['surface'];
 	}
+
+	$inline_styles = [];
 	if ( ! empty( $args['rule_color'] ) ) {
 		$inline_styles[] = '--ibv-image-text-section-rule: ' . $args['rule_color'];
 	}

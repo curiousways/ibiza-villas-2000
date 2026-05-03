@@ -1,9 +1,4 @@
-/* Testimonials — three quote cards on a blue tint panel. */
-
-.ibv-section-testimonials {
-	background: var(--ibv-color-tint-blue);
-	padding-block: 4.375rem; /* 70px — system rhythm, matches Figma */
-}
+/* Testimonials — three quote cards; blue tint surface from foundation. */
 
 /* Centered header — title + 100px sage rule */
 .ibv-section-testimonials__header {

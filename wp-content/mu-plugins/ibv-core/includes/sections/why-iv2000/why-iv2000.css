@@ -1,10 +1,4 @@
-/* Why IV2000 — three pillars on a dark forest-green-deep panel. */
-
-.ibv-section-why-iv2000 {
-	background: var(--ibv-color-forest-green-deep);
-	color: var(--ibv-color-text-on-dark);
-	padding-block: 4.375rem 5.625rem; /* 70px top / 90px bottom — Figma */
-}
+/* Why IV2000 — three pillars on a dark forest-green-deep panel (surface from .ibv-section--surface-forest-green). */
 
 /* Centered heading — title, gold rule, sage-100 lead */
 .ibv-section-why-iv2000__header {
@@ -24,7 +18,6 @@
 	line-height: var(--ibv-lh-tight);
 	letter-spacing: 0;
 	margin: 0;
-	color: var(--ibv-color-text-on-dark);
 }
 
 .ibv-section-why-iv2000__rule {

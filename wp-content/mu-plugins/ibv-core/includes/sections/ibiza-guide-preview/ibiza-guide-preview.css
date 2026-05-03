@@ -1,8 +1,4 @@
-/* Ibiza Guide preview — three article cards on the page. */
-
-.ibv-section-ibiza-guide-preview {
-	padding-block: 4.375rem; /* 70px — system block-section rhythm */
-}
+/* Ibiza Guide preview — three article cards; surface/bg from foundation. */
 
 /* Header: title left, CTA right at desktop; hairline divider below */
 .ibv-section-ibiza-guide-preview__header {

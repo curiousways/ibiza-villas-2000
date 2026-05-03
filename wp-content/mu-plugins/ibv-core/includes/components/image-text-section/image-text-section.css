@@ -1,10 +1,6 @@
 /* Image-and-text section — title + body + CTA beside an image
-   (Short Breaks, IPS, Meet the Team). Rule uses sage-500 by default. */
-
-.ibv-image-text-section {
-	background: var(--ibv-image-text-section-bg, transparent);
-	padding-block: 4.375rem; /* 70px — Figma section padding */
-}
+   (Short Breaks, IPS, Meet the Team). Rhythm/surface from .ibv-section + modifiers.
+   Rule uses sage-500 by default; optional --ibv-image-text-section-rule override. */
 
 .ibv-image-text-section__inner {
 	display: flex;

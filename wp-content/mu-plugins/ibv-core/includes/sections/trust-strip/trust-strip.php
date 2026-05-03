@@ -20,7 +20,7 @@ function ibv_core_section_trust_strip() {
 		return;
 	}
 	?>
-	<section class="ibv-section-trust-strip ibv-section ibv-section--alt">
+	<section class="ibv-section-trust-strip ibv-section ibv-section--surface-white ibv-section--rhythm-sm">
 		<div class="ibv-container">
 			<div class="ibv-section-trust-strip__row">
 				<?php foreach ( $rows as $row ) : ?>

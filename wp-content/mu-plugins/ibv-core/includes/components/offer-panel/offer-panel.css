@@ -1,9 +1,8 @@
-/* Offer panel — tinted sage container with image + content split */
+/* Offer panel — structural composition: header, divider, image + body layout.
+ * Surface chrome (background, radius, padding) lives on the consumer
+ * (e.g. homepage weekly-offer section provides a full-width tint band). */
 
 .ibv-offer-panel {
-	background: var(--ibv-color-tint-teal);
-	border-radius: var(--ibv-radius-lg);
-	padding: var(--ibv-space-2xl) var(--ibv-space-2xl) var(--ibv-space-xl);
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-xl);
@@ -181,8 +180,8 @@
 .ibv-offer-panel__valid {
 	margin: 0;
 	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-medium);
-	color: var(--ibv-color-link);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
 }
 
 .ibv-offer-panel__body .ibv-button {

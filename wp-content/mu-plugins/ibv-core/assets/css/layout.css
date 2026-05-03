@@ -1,4 +1,4 @@
-/* Global layout primitives — container, grid, section rhythm, utilities. */
+/* Global layout primitives — container, grid, utilities. Section rhythm lives in sections.css. */
 
 .ibv-container {
 	width: 100%;
@@ -9,14 +9,6 @@
 
 .ibv-container--narrow {
 	max-width: var(--ibv-container-narrow);
-}
-
-.ibv-section {
-	padding-block: var(--ibv-section-pad-y);
-}
-
-.ibv-section--alt {
-	background: var(--ibv-color-bg-alt);
 }
 
 .ibv-stack > * + * {

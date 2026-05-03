@@ -41,7 +41,7 @@ function ibv_core_section_featured_villas() {
 		return;
 	}
 	?>
-	<section class="ibv-section-featured-villas ibv-section ibv-section--alt">
+	<section class="ibv-section-featured-villas ibv-section ibv-section--surface-bg">
 		<div class="ibv-container">
 			<header class="ibv-section-featured-villas__header">
 				<h2 class="ibv-section-featured-villas__title ibv-font-display"><?php esc_html_e( 'Our Villas', 'ibv' ); ?></h2>

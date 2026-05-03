@@ -32,6 +32,7 @@ function ibv_core_section_short_breaks() {
 			'cta_label'   => __( 'Search Short Breaks', 'ibv' ),
 			'image'       => $img,
 			'image_side'  => 'right',
+			'surface'     => 'bg',
 		]
 	);
 }

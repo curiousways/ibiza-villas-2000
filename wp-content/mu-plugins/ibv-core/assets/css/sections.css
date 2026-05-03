@@ -1,0 +1,70 @@
+/*
+ * Section rhythm + surface system.
+ *
+ * Every body section gets:
+ *   <section class="ibv-section ibv-section--surface-{X}">
+ *
+ * `.ibv-section` provides standard vertical rhythm via padding-block.
+ * `.ibv-section--rhythm-sm` overrides to a tighter rhythm tier.
+ * Six `--surface-{X}` modifiers provide the bg colour. The
+ * `--surface-forest-green` modifier also sets a bright text colour
+ * default to prevent dark-on-dark; consumers still override
+ * specific child colours (sage, muted, etc.) explicitly.
+ *
+ * Same-surface adjacent sections collapse the second section's top
+ * padding to 0 — visually tightens continuous bands of one colour.
+ *
+ * Hero, footer, and other chrome-level surfaces are deliberately
+ * exempt from this system and own their own padding models.
+ */
+
+/* Base rhythm */
+.ibv-section {
+	padding-block: var(--ibv-section-pad-y);
+}
+
+/* Rhythm tiers */
+.ibv-section--rhythm-sm {
+	padding-block: var(--ibv-section-pad-y-sm);
+}
+
+/* Surface modifiers */
+.ibv-section--surface-bg {
+	background: var(--ibv-color-bg);
+}
+
+.ibv-section--surface-white {
+	background: var(--ibv-color-white);
+}
+
+.ibv-section--surface-tint-teal {
+	background: var(--ibv-color-tint-teal);
+}
+
+.ibv-section--surface-tint-gold {
+	background: var(--ibv-color-tint-gold);
+}
+
+.ibv-section--surface-tint-blue {
+	background: var(--ibv-color-tint-blue);
+}
+
+.ibv-section--surface-forest-green {
+	background: var(--ibv-color-forest-green-deep);
+	/* Bare default — bright off-white prevents dark-on-dark.
+	 * Consumers (e.g. why-iv2000) declare their own child colours
+	 * (sage body, etc.) explicitly. This rule is the legibility
+	 * floor, not the design system for dark sections. */
+	color: var(--ibv-color-text-on-dark);
+}
+
+/* Same-surface adjacency collapse — drops the second section's
+ * top padding so two same-surface sections feel continuous. */
+.ibv-section--surface-bg + .ibv-section--surface-bg,
+.ibv-section--surface-white + .ibv-section--surface-white,
+.ibv-section--surface-tint-teal + .ibv-section--surface-tint-teal,
+.ibv-section--surface-tint-gold + .ibv-section--surface-tint-gold,
+.ibv-section--surface-tint-blue + .ibv-section--surface-tint-blue,
+.ibv-section--surface-forest-green + .ibv-section--surface-forest-green {
+	padding-block-start: 0;
+}

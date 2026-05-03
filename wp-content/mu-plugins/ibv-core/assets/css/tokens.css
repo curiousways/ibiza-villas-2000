@@ -179,7 +179,8 @@
 	--ibv-container-max:    72rem;  /* 1152px */
 	--ibv-container-narrow: 44rem;  /*  704px */
 	--ibv-container-pad-x:  var(--ibv-space-lg);
-	--ibv-section-pad-y:    var(--ibv-space-3xl);
+	--ibv-section-pad-y:    var(--ibv-space-3xl); /* 72px — standard section rhythm */
+	--ibv-section-pad-y-sm: var(--ibv-space-2xl); /* 48px — tighter rhythm for chrome-ish bands (trust-strip etc) */
 	--ibv-grid-gutter:      var(--ibv-space-lg);
 	--ibv-sticky-offset:    var(--ibv-space-md);
 

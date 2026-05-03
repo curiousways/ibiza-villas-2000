@@ -1,4 +1,1 @@
-/* Homepage Weekly Offer — section chrome only */
-.ibv-section-weekly-offer {
-	padding-block: 4.375rem; /* 70px — Figma section padding; same rhythm as featured villas */
-}
+/* Homepage Weekly Offer — tinted surface and rhythm from .ibv-section--surface-tint-teal; offer panel is structural only inside .ibv-container. */

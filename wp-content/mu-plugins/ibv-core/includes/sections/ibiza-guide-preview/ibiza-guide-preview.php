@@ -48,7 +48,7 @@ function ibv_core_section_ibiza_guide_preview() {
 		$intro = __( 'Our Ibiza Guide', 'ibv' );
 	}
 	?>
-	<section class="ibv-section-ibiza-guide-preview ibv-section">
+	<section class="ibv-section-ibiza-guide-preview ibv-section ibv-section--surface-bg">
 		<div class="ibv-container">
 
 			<header class="ibv-section-ibiza-guide-preview__header">

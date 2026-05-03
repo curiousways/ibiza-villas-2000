@@ -1,10 +1,4 @@
-/* How It Works — three steps on a gold-tint panel (saturated gold on step-number circles only). */
-
-.ibv-section-three-step {
-	background: var(--ibv-color-tint-gold);
-	color: var(--ibv-color-text);
-	padding-block: 4.375rem; /* 70px — Figma section padding */
-}
+/* How It Works — gold-tint surface from foundation (saturated gold on step-number circles only). */
 
 /* Centred heading — eyebrow + title + 100px rule (gold-500 on tint — readable) */
 .ibv-section-three-step__header {

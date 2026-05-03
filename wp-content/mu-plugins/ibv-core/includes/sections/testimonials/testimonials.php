@@ -20,7 +20,7 @@ function ibv_core_section_testimonials() {
 		return;
 	}
 	?>
-	<section class="ibv-section-testimonials ibv-section">
+	<section class="ibv-section-testimonials ibv-section ibv-section--surface-tint-blue">
 		<div class="ibv-container">
 
 			<header class="ibv-section-testimonials__header">

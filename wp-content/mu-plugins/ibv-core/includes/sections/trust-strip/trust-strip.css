@@ -1,7 +1,3 @@
-.ibv-section-trust-strip {
-	padding-block: var(--ibv-space-2xl);
-}
-
 .ibv-section-trust-strip__row {
 	display: flex;
 	flex-wrap: wrap;

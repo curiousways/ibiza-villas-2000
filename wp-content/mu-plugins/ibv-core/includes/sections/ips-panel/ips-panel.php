@@ -29,12 +29,13 @@ function ibv_core_section_ips_panel() {
 
 	ibv_core_image_text_section(
 		[
-			'title'         => $title ? (string) $title : '',
-			'description'   => $text ? (string) $text : '',
-			'cta_url'       => $curl ? esc_url( $curl ) : '',
-			'cta_label'     => $clab ? (string) $clab : '',
-			'image'         => $img,
-			'image_side'    => 'left',
+			'title'       => $title ? (string) $title : '',
+			'description' => $text ? (string) $text : '',
+			'cta_url'     => $curl ? esc_url( $curl ) : '',
+			'cta_label'   => $clab ? (string) $clab : '',
+			'image'       => $img,
+			'image_side'  => 'left',
+			'surface'     => 'white',
 		]
 	);
 }

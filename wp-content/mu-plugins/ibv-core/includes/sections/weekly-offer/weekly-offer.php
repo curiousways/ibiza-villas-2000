@@ -28,7 +28,7 @@ function ibv_core_section_weekly_offer() {
 	$vfrom = get_field( 'weekly_offer_valid_from' );
 	$vto   = get_field( 'weekly_offer_valid_to' );
 	?>
-	<section class="ibv-section-weekly-offer ibv-section">
+	<section class="ibv-section-weekly-offer ibv-section ibv-section--surface-tint-teal">
 		<div class="ibv-container">
 			<?php
 			ibv_core_offer_panel(
