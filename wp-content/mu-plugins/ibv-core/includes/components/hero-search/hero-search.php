@@ -43,10 +43,15 @@ function ibv_core_hero_search() {
 				<input class="ibv-hero-search__input" type="number" id="ibv-hero-pax" name="pax" min="1" max="30" required value="<?php echo esc_attr( $qs['pax'] ); ?>">
 			</div>
 			<button class="ibv-hero-search__submit" type="submit" aria-label="<?php esc_attr_e( 'Search villas', 'ibv' ); ?>">
-				<svg class="ibv-hero-search__submit-icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
-					<circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/>
-					<path d="M10.5 10.5L15 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-				</svg>
+				<?php
+				echo ibv_core_icon(
+					'search',
+					[
+						'class' => 'ibv-hero-search__submit-icon',
+						'size'  => 18,
+					]
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				?>
 			</button>
 		</div>
 	</form>

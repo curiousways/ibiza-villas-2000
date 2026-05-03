@@ -50,26 +50,28 @@ function ibv_core_section_ibiza_guide_preview() {
 	?>
 	<section class="ibv-section-ibiza-guide-preview ibv-section">
 		<div class="ibv-container">
-			<div class="ibv-section-ibiza-guide-preview__head">
+
+			<header class="ibv-section-ibiza-guide-preview__header">
+				<h2 class="ibv-section-ibiza-guide-preview__title ibv-font-display">
+					<?php echo esc_html( $intro ); ?>
+				</h2>
 				<?php
-				ibv_core_section_heading(
-					[
-						'title' => $intro,
-						'level' => 'h2',
-					]
-				);
 				if ( $viewall ) {
 					ibv_core_button(
 						[
 							'url'     => esc_url( $viewall ),
-							'label'   => __( 'View all articles', 'ibv' ),
-							'variant' => 'ghost',
+							'label'   => __( 'View all Articles', 'ibv' ),
+							'variant' => 'primary',
+							'size'    => 'small',
 						]
 					);
 				}
 				?>
-			</div>
-			<div class="ibv-section-ibiza-guide-preview__grid ibv-grid ibv-grid--3">
+			</header>
+
+			<hr class="ibv-section-ibiza-guide-preview__divider" aria-hidden="true">
+
+			<div class="ibv-section-ibiza-guide-preview__grid">
 				<?php
 				foreach ( $ids as $pid ) {
 					$post = get_post( $pid );
@@ -98,6 +100,11 @@ function ibv_core_section_ibiza_guide_preview() {
 							?>
 						</a>
 						<div class="ibv-article-card__body">
+
+							<h3 class="ibv-article-card__title ibv-font-display">
+								<a href="<?php the_permalink( $pid ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a>
+							</h3>
+
 							<p class="ibv-article-card__meta">
 								<?php if ( $catname ) : ?>
 									<span class="ibv-article-card__cat"><?php echo esc_html( $catname ); ?></span>
@@ -112,10 +119,11 @@ function ibv_core_section_ibiza_guide_preview() {
 									?>
 								</span>
 							</p>
-							<h3 class="ibv-article-card__title">
-								<a href="<?php the_permalink( $pid ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a>
-							</h3>
+
+							<hr class="ibv-article-card__rule" aria-hidden="true">
+
 							<p class="ibv-article-card__excerpt"><?php echo esc_html( $excerpt ); ?></p>
+
 							<?php
 							ibv_core_button(
 								[

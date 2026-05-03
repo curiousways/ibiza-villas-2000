@@ -1,0 +1,133 @@
+/*
+ * Forms — shared field shape for multi-field forms.
+ *
+ * Consumed by the .ibv-form wrapper class on the form's outer
+ * container. Targets standard HTML form elements plus Gravity Forms
+ * class hierarchy underneath.
+ *
+ * Light surface (default): transparent fill, --ibv-color-border
+ * stroke, --ibv-color-text colour. Used on the cream off-white
+ * page surfaces (villa enquiry, contact, search).
+ *
+ * Dark surface (.ibv-form--dark): white-alpha fill and stroke, white
+ * text. Used on dark panels (none currently consume; reserved for
+ * future).
+ *
+ * The footer newsletter pill is a different structural pattern
+ * (single wrapper containing input + submit) and lives in
+ * newsletter-cta.css. It consumes the same --ibv-radius-field token
+ * but does not use .ibv-form.
+ */
+
+.ibv-form input[type="text"],
+.ibv-form input[type="email"],
+.ibv-form input[type="tel"],
+.ibv-form input[type="number"],
+.ibv-form input[type="date"],
+.ibv-form input[type="search"],
+.ibv-form input[type="url"],
+.ibv-form input[type="password"],
+.ibv-form textarea,
+.ibv-form select,
+.ibv-form .ginput_container input,
+.ibv-form .ginput_container textarea,
+.ibv-form .ginput_container select {
+	width: 100%;
+	background: transparent;
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	padding: 1rem; /* 16px — Figma body form vertical breathing room */
+	color: var(--ibv-color-text);
+	font-family: inherit;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-snug);
+	transition: border-color 150ms ease;
+}
+
+.ibv-form input::placeholder,
+.ibv-form textarea::placeholder {
+	color: var(--ibv-color-text-muted);
+	opacity: 1; /* Firefox uses 0.54 by default; reset */
+}
+
+.ibv-form input:focus,
+.ibv-form textarea:focus,
+.ibv-form select:focus {
+	outline: 2px solid var(--ibv-color-link);
+	outline-offset: -1px;
+	border-color: var(--ibv-color-link);
+}
+
+.ibv-form textarea {
+	min-height: 7.5rem; /* 120px — comfortable default; consumers can override */
+	resize: vertical;
+}
+
+.ibv-form select {
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23055353" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 1rem center;
+	padding-right: 2.5rem;
+}
+
+/* Labels — visible by default; consumers hide via .gfield_label_before_complex
+   or visually-hidden helper as needed. */
+.ibv-form label,
+.ibv-form .gfield_label {
+	display: block;
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	margin-block-end: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
+}
+
+/* Field groupings */
+.ibv-form .gform_fields {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-form .gfield {
+	margin: 0;
+}
+
+/* ===== Dark surface variant ===== */
+.ibv-form--dark input[type="text"],
+.ibv-form--dark input[type="email"],
+.ibv-form--dark input[type="tel"],
+.ibv-form--dark input[type="number"],
+.ibv-form--dark input[type="date"],
+.ibv-form--dark input[type="search"],
+.ibv-form--dark input[type="url"],
+.ibv-form--dark input[type="password"],
+.ibv-form--dark textarea,
+.ibv-form--dark select,
+.ibv-form--dark .ginput_container input,
+.ibv-form--dark .ginput_container textarea,
+.ibv-form--dark .ginput_container select {
+	background: rgb(from var(--ibv-color-text-on-dark) r g b / 0.1);
+	border-color: rgb(from var(--ibv-color-text-on-dark) r g b / 0.2);
+	color: var(--ibv-color-text-on-dark);
+}
+
+.ibv-form--dark input::placeholder,
+.ibv-form--dark textarea::placeholder {
+	color: rgb(from var(--ibv-color-text-on-dark) r g b / 0.7);
+}
+
+.ibv-form--dark input:focus,
+.ibv-form--dark textarea:focus,
+.ibv-form--dark select:focus {
+	outline-color: var(--ibv-color-gold-500);
+	border-color: rgb(from var(--ibv-color-text-on-dark) r g b / 0.4);
+}
+
+.ibv-form--dark label,
+.ibv-form--dark .gfield_label {
+	color: var(--ibv-color-text-on-dark);
+}

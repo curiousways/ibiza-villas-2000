@@ -1,0 +1,94 @@
+/* Accommodation tile — image + content in a card; pair on home + listing. */
+
+.ibv-accommodation-tile-pair {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-accommodation-tile-pair {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.ibv-accommodation-tile {
+	display: flex;
+	flex-direction: column;
+	background: var(--ibv-color-surface);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+}
+
+.ibv-accommodation-tile__media {
+	aspect-ratio: 287 / 303; /* Figma */
+	overflow: hidden;
+}
+
+.ibv-accommodation-tile__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ibv-accommodation-tile__body {
+	padding: 2rem; /* 32px — Figma tile padding */
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	flex: 1;
+	justify-content: center;
+}
+
+.ibv-accommodation-tile__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-accommodation-tile__rule {
+	width: 3.125rem; /* 50px — Figma */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+	align-self: flex-start;
+}
+
+.ibv-accommodation-tile__description {
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-accommodation-tile__description p:first-child {
+	margin-block-start: 0;
+}
+
+.ibv-accommodation-tile__description p:last-child {
+	margin-block-end: 0;
+}
+
+@media (min-width: 36rem) {
+	.ibv-accommodation-tile {
+		flex-direction: row;
+	}
+
+	.ibv-accommodation-tile__media {
+		aspect-ratio: auto;
+		flex: 1 1 50%;
+		min-height: 100%;
+	}
+
+	.ibv-accommodation-tile__body {
+		flex: 1 1 50%;
+	}
+}

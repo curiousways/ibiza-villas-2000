@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Testimonials grid on teal background.
+ * Testimonials grid on blue tint background.
  */
 function ibv_core_section_testimonials() {
 	wp_enqueue_style( 'ibv-section-testimonials' );
@@ -22,27 +22,30 @@ function ibv_core_section_testimonials() {
 	?>
 	<section class="ibv-section-testimonials ibv-section">
 		<div class="ibv-container">
-			<?php
-			ibv_core_section_heading(
-				[
-					'title' => __( 'What our guests say', 'ibv' ),
-					'level' => 'h2',
-					'align' => 'center',
-				]
-			);
-			?>
-			<div class="ibv-section-testimonials__grid ibv-grid ibv-grid--3">
-				<?php foreach ( $rows as $row ) : ?>
-					<?php if ( empty( $row['quote'] ) ) { continue; } ?>
-					<blockquote class="ibv-quote-card">
-						<p class="ibv-quote-card__stars" aria-hidden="true">★★★★★</p>
-						<p class="ibv-quote-card__quote"><?php echo esc_html( $row['quote'] ); ?></p>
-						<?php if ( ! empty( $row['attribution'] ) ) : ?>
-							<footer class="ibv-quote-card__attr"><?php echo esc_html( $row['attribution'] ); ?></footer>
-						<?php endif; ?>
-					</blockquote>
-				<?php endforeach; ?>
+
+			<header class="ibv-section-testimonials__header">
+				<h2 class="ibv-section-testimonials__title ibv-font-display">
+					<?php esc_html_e( 'What our guests say', 'ibv' ); ?>
+				</h2>
+				<hr class="ibv-section-testimonials__rule" aria-hidden="true">
+			</header>
+
+			<div class="ibv-section-testimonials__grid">
+				<?php
+				foreach ( $rows as $row ) {
+					if ( empty( $row['quote'] ) ) {
+						continue;
+					}
+					ibv_core_quote_card(
+						[
+							'quote'       => $row['quote'],
+							'attribution' => $row['attribution'] ?? '',
+						]
+					);
+				}
+				?>
 			</div>
+
 		</div>
 	</section>
 	<?php

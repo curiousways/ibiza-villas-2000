@@ -1,0 +1,34 @@
+/* Quote card — off-white surface for guest testimonials. */
+
+.ibv-quote-card {
+	margin: 0;
+	padding: 2rem; /* 32px — Figma card padding */
+	background: var(--ibv-color-off-white);
+	border: 1px solid var(--ibv-color-off-white); /* near-invisible by design; surface contrast does the lifting */
+	border-radius: var(--ibv-radius-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg); /* 24px — Figma item gap */
+}
+
+.ibv-quote-card__stars {
+	margin: 0;
+	color: var(--ibv-color-gold-500);
+	font-size: 0.75rem; /* 12px — Figma star size */
+	letter-spacing: 0.125em; /* small breathing room between glyphs */
+	line-height: 1;
+}
+
+.ibv-quote-card__quote {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-quote-card__attr {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-link); /* forest-green-deep — Figma's brand-coloured metadata */
+	font-style: normal; /* override <footer> default if any */
+}

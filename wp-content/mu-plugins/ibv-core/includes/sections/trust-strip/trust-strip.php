@@ -49,9 +49,15 @@ function ibv_core_section_trust_strip() {
 							?>
 						</span>
 						<?php if ( $url ) : ?>
-							<svg class="ibv-trust-item__arrow" width="11" height="10" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false">
-								<path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-							</svg>
+							<?php
+							echo ibv_core_icon(
+								'arrow-right',
+								[
+									'class' => 'ibv-trust-item__arrow',
+									'size'  => 11,
+								]
+							); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
 						<?php endif; ?>
 					<?php if ( $url ) : ?>
 						</a>

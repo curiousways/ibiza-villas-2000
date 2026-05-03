@@ -22,34 +22,50 @@ function ibv_core_section_why_iv2000() {
 	?>
 	<section class="ibv-section-why-iv2000 ibv-section">
 		<div class="ibv-container">
-			<?php
-			ibv_core_section_heading(
-				[
-					'title' => __( 'Why Ibiza Villas 2000?', 'ibv' ),
-					'lead'  => __( 'Value, Service, Trust — the three pillars behind every booking.', 'ibv' ),
-					'level' => 'h2',
-					'align' => 'center',
-					'class' => 'ibv-section-why-iv2000__heading',
-				]
-			);
-			?>
-			<div class="ibv-section-why-iv2000__grid ibv-grid ibv-grid--3">
+
+			<header class="ibv-section-why-iv2000__header">
+				<h2 class="ibv-section-why-iv2000__title ibv-font-display">
+					<?php esc_html_e( 'Why Ibiza Villas 2000?', 'ibv' ); ?>
+				</h2>
+				<hr class="ibv-section-why-iv2000__rule" aria-hidden="true">
+				<p class="ibv-section-why-iv2000__lead">
+					<?php esc_html_e( 'Two decades of experience providing the most authentic island stays.', 'ibv' ); ?>
+				</p>
+			</header>
+
+			<div class="ibv-section-why-iv2000__grid">
 				<?php foreach ( $pillars as $p ) : ?>
-					<div class="ibv-pillar-card">
+					<article class="ibv-pillar-card">
 						<?php if ( ! empty( $p['icon']['ID'] ) ) : ?>
 							<div class="ibv-pillar-card__icon">
-								<?php ibv_core_image( $p['icon'], 'thumbnail', [ 'class' => 'ibv-pillar-card__icon-img' ] ); ?>
+								<?php
+								ibv_core_image(
+									$p['icon'],
+									'thumbnail',
+									[
+										'class'    => 'ibv-pillar-card__icon-img',
+										'loading'  => 'lazy',
+										'decoding' => 'async',
+									]
+								);
+								?>
 							</div>
 						<?php endif; ?>
 						<?php if ( ! empty( $p['title'] ) ) : ?>
-							<h3 class="ibv-pillar-card__title"><?php echo esc_html( $p['title'] ); ?></h3>
+							<h3 class="ibv-pillar-card__title ibv-font-display">
+								<?php echo esc_html( $p['title'] ); ?>
+							</h3>
+							<hr class="ibv-pillar-card__rule" aria-hidden="true">
 						<?php endif; ?>
 						<?php if ( ! empty( $p['text'] ) ) : ?>
-							<div class="ibv-pillar-card__text"><?php echo wp_kses_post( wpautop( $p['text'] ) ); ?></div>
+							<div class="ibv-pillar-card__text">
+								<?php echo wp_kses_post( wpautop( $p['text'] ) ); ?>
+							</div>
 						<?php endif; ?>
-					</div>
+					</article>
 				<?php endforeach; ?>
 			</div>
+
 		</div>
 	</section>
 	<?php

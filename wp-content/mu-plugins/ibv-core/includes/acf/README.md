@@ -44,3 +44,4 @@ CPT singulars: target by `post_type`.
 - One ACF group per page template → `register-page-{slug}.php`.
 - One ACF group per CPT → `register-cpt-{slug}.php`.
 - Reusable field groups (e.g. `seo`) used via clone fields → `register-shared-{name}.php`.
+

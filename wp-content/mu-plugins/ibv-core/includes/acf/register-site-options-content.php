@@ -3,6 +3,7 @@
  * Site Options content fields — global chrome + shared cross-page content.
  *
  * Homepage-only fields live on the Front Page (register-page-home.php).
+ * Newsletter footer fields live here (global footer).
  *
  * @package Ibiza_Villas_2000
  */
@@ -108,6 +109,32 @@ function ibv_register_site_options_content_fields() {
 					),
 				),
 				array(
+					'key'           => 'field_ibv_global_accreditations',
+					'label'         => __( 'Accreditations', 'ibv' ),
+					'name'          => 'accreditations',
+					'type'          => 'repeater',
+					'layout'        => 'block',
+					'instructions'  => __( 'Logos appear in the footer below the newsletter form. Upload pre-prepared white versions of each logo (the footer background is dark). Most accreditation bodies provide brand-compliant white variations on request.', 'ibv' ),
+					'sub_fields'    => array(
+						array(
+							'key'           => 'field_ibv_global_accreditation_image',
+							'label'         => __( 'Logo', 'ibv' ),
+							'name'          => 'image',
+							'type'          => 'image',
+							'return_format' => 'array',
+							'preview_size'  => 'medium',
+							'instructions'  => __( 'White on transparent. SVG preferred for crisp scaling; PNG fine.', 'ibv' ),
+						),
+						array(
+							'key'          => 'field_ibv_global_accreditation_url',
+							'label'        => __( 'URL (optional)', 'ibv' ),
+							'name'         => 'url',
+							'type'         => 'url',
+							'instructions' => __( 'Optional link to the accrediting body\'s website.', 'ibv' ),
+						),
+					),
+				),
+				array(
 					'key'   => 'field_ibv_global_footer_tagline',
 					'label' => __( 'Footer tagline', 'ibv' ),
 					'name'  => 'footer_tagline',
@@ -135,6 +162,29 @@ function ibv_register_site_options_content_fields() {
 					'label' => __( 'Contact page', 'ibv' ),
 					'name'  => 'contact_page',
 					'type'  => 'page_link',
+				),
+				array(
+					'key'            => 'field_ibv_global_newsletter_intro',
+					'label'          => __( 'Newsletter intro', 'ibv' ),
+					'name'           => 'newsletter_intro',
+					'type'           => 'text',
+					'instructions'   => __( 'Title above the newsletter form. Renders in the global footer.', 'ibv' ),
+				),
+				array(
+					'key'            => 'field_ibv_global_newsletter_body',
+					'label'          => __( 'Newsletter body', 'ibv' ),
+					'name'           => 'newsletter_body',
+					'type'           => 'textarea',
+					'rows'           => 2,
+					'instructions'   => __( 'Subtitle line beneath the newsletter title. Defaults to "Sign up to receive marketing from Ibiza Villas 2000" if empty.', 'ibv' ),
+				),
+				array(
+					'key'            => 'field_ibv_global_newsletter_form_id',
+					'label'          => __( 'Newsletter Gravity Form ID', 'ibv' ),
+					'name'           => 'newsletter_form_id',
+					'type'           => 'number',
+					'min'            => 0,
+					'instructions'   => __( 'ID of the Gravity Form to embed. Find it under Forms in the WP admin.', 'ibv' ),
 				),
 			),
 			'location'              => $loc_option,

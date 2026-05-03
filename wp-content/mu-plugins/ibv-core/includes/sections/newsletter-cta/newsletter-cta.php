@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Newsletter CTA (footer; fields stored on Front Page).
+ * Section: Newsletter CTA (footer; fields in Site Options).
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,23 +10,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gravity Forms newsletter embed. Reads ACF from the site Front Page so the
- * block can render in the global footer while content is edited on Home.
+ * Gravity Forms newsletter embed. Reads ACF from Site Options (global footer).
  */
 function ibv_core_section_newsletter_cta() {
 	wp_enqueue_style( 'ibv-section-newsletter-cta' );
 
-	$front_id = (int) get_option( 'page_on_front' );
-	$intro    = $front_id ? (string) get_field( 'newsletter_intro', $front_id ) : '';
-	$fid      = $front_id ? (int) get_field( 'newsletter_form_id', $front_id ) : 0;
+	$intro = (string) get_field( 'newsletter_intro', 'option' );
+	$body  = (string) get_field( 'newsletter_body', 'option' );
+	$fid   = (int) get_field( 'newsletter_form_id', 'option' );
 
 	if ( ! $intro && ! $fid ) {
 		return;
 	}
+
+	if ( ! $intro ) {
+		$intro = __( 'Newsletter set-up', 'ibv' );
+	}
+	if ( ! $body ) {
+		$body = __( 'Sign up to receive marketing from Ibiza Villas 2000', 'ibv' );
+	}
 	?>
 	<div class="ibv-newsletter-cta">
-		<?php if ( $intro ) : ?>
-			<h4 class="ibv-newsletter-cta__title"><?php echo esc_html( $intro ); ?></h4>
+		<h3 class="ibv-newsletter-cta__title ibv-font-display"><?php echo esc_html( $intro ); ?></h3>
+		<?php if ( $body ) : ?>
+			<p class="ibv-newsletter-cta__body"><?php echo esc_html( $body ); ?></p>
 		<?php endif; ?>
 		<?php if ( $fid ) : ?>
 			<div class="ibv-newsletter-cta__form">

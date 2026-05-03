@@ -83,7 +83,7 @@
 	color: var(--ibv-color-link);
 	border-radius: var(--ibv-radius-pill);
 	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
-	font-size: var(--ibv-fs-xs, var(--ibv-fs-small));
+	font-size: var(--ibv-fs-eyebrow);
 	font-weight: var(--ibv-font-weight-regular);
 }
 
@@ -138,7 +138,7 @@
 }
 
 .ibv-offer-panel__price-eyebrow {
-	font-size: var(--ibv-fs-xs, var(--ibv-fs-small));
+	font-size: var(--ibv-fs-eyebrow);
 	font-weight: var(--ibv-font-weight-bold);
 	color: var(--ibv-color-text);
 }

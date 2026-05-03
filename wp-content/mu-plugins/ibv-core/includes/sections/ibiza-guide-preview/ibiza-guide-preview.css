@@ -1,25 +1,67 @@
-.ibv-section-ibiza-guide-preview__head {
+/* Ibiza Guide preview — three article cards on the page. */
+
+.ibv-section-ibiza-guide-preview {
+	padding-block: 4.375rem; /* 70px — system block-section rhythm */
+}
+
+/* Header: title left, CTA right at desktop; hairline divider below */
+.ibv-section-ibiza-guide-preview__header {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	justify-content: space-between;
 	margin-block-end: var(--ibv-space-xl);
 }
 
+.ibv-section-ibiza-guide-preview__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
+}
+
 @media (min-width: 48rem) {
-	.ibv-section-ibiza-guide-preview__head {
+	.ibv-section-ibiza-guide-preview__header {
 		flex-direction: row;
-		align-items: flex-end;
-		justify-content: space-between;
+		align-items: center;
 	}
 }
 
+.ibv-section-ibiza-guide-preview__divider {
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-forest-green-light);
+	margin: 0 0 var(--ibv-space-2xl);
+	width: 100%;
+}
+
+/* Card grid */
+.ibv-section-ibiza-guide-preview__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-ibiza-guide-preview__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Article card */
 .ibv-article-card {
 	display: flex;
 	flex-direction: column;
 	background: var(--ibv-color-surface);
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-lg);
+	border: 1px solid var(--ibv-color-off-white); /* near-invisible per Figma; shadow does the lifting */
+	border-radius: var(--ibv-radius-md);
 	overflow: hidden;
+	box-shadow: var(--ibv-shadow-sm);
 	min-width: 0;
 }
 
@@ -36,31 +78,28 @@
 }
 
 .ibv-article-card__body {
-	padding: var(--ibv-space-md);
+	padding: 2rem; /* 32px — Figma card content padding */
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-sm);
 	flex-grow: 1;
-}
-
-.ibv-article-card__meta {
-	margin: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--ibv-space-sm);
+	align-items: flex-start;
 }
 
 .ibv-article-card__title {
 	margin: 0;
-	font-size: var(--ibv-fs-h4);
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
 }
 
 .ibv-article-card__title a {
 	text-decoration: none;
-	color: var(--ibv-color-text);
+	color: inherit;
 }
 
 .ibv-article-card__title a:hover,
@@ -68,14 +107,52 @@
 	color: var(--ibv-color-link-hover);
 }
 
-.ibv-article-card__excerpt {
+/* Meta row — category + small sage dot + min read */
+.ibv-article-card__meta {
 	margin: 0;
 	font-size: var(--ibv-fs-small);
 	color: var(--ibv-color-text-muted);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
+}
+
+/* Sage dot separator — only renders when both cat AND time are present */
+.ibv-article-card__cat + .ibv-article-card__time::before {
+	content: '';
+	display: inline-block;
+	width: 0.25rem; /* 4px — Figma bullet size */
+	height: 0.25rem;
+	border-radius: 50%;
+	background: var(--ibv-color-sage-500);
+	vertical-align: middle;
+	margin-inline-end: var(--ibv-space-2xs);
+}
+
+.ibv-article-card__rule {
+	width: 3.125rem; /* 50px — matches Figma, consistent with other gold rules */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+	align-self: flex-start;
+}
+
+.ibv-article-card__excerpt {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-link); /* forest-green-deep — Figma's deliberate brand-coloured body */
+	line-height: var(--ibv-lh-relaxed);
 	flex-grow: 1;
 }
 
-.ibv-article-card__body .ibv-button {
+/* "Read more" — ghost button styled as underlined text link, padding zeroed
+   so the underline starts flush left under the body content */
+.ibv-article-card__body .ibv-button--ghost {
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+	padding-inline: 0;
 	align-self: flex-start;
 	margin-block-start: var(--ibv-space-xs);
 }

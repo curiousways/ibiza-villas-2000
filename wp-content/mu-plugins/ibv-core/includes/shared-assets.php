@@ -54,6 +54,13 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	wp_register_style(
+		'ibv-forms',
+		IBV_CORE_URL . 'assets/css/forms.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
 	// Components — each registered with `ibv-base` as a dependency.
 	wp_register_style(
 		'ibv-button',
@@ -91,6 +98,20 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-image-text-section',
+		IBV_CORE_URL . 'includes/components/image-text-section/image-text-section.css',
+		[ 'ibv-base', 'ibv-button' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-accommodation-tile',
+		IBV_CORE_URL . 'includes/components/accommodation-tile/accommodation-tile.css',
+		[ 'ibv-base', 'ibv-button' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-villa-card',
 		IBV_CORE_URL . 'includes/components/villa-card/villa-card.css',
 		[ 'ibv-base' ],
@@ -104,18 +125,21 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	wp_register_style(
+		'ibv-quote-card',
+		IBV_CORE_URL . 'includes/components/quote-card/quote-card.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
 	$section_handles = [
 		'ibv-section-hero'                 => 'includes/sections/hero/hero.css',
 		'ibv-section-featured-villas'       => 'includes/sections/featured-villas/featured-villas.css',
 		'ibv-section-trust-strip'          => 'includes/sections/trust-strip/trust-strip.css',
 		'ibv-section-weekly-offer'         => 'includes/sections/weekly-offer/weekly-offer.css',
-		'ibv-section-short-breaks'       => 'includes/sections/short-breaks/short-breaks.css',
 		'ibv-section-why-iv2000'           => 'includes/sections/why-iv2000/why-iv2000.css',
-		'ibv-section-fancy-different'     => 'includes/sections/fancy-different/fancy-different.css',
-		'ibv-section-ips-panel'           => 'includes/sections/ips-panel/ips-panel.css',
 		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
-		'ibv-section-meet-team-teaser'    => 'includes/sections/meet-team-teaser/meet-team-teaser.css',
 		'ibv-section-testimonials'        => 'includes/sections/testimonials/testimonials.css',
 		'ibv-section-newsletter-cta'      => 'includes/sections/newsletter-cta/newsletter-cta.css',
 		'ibv-section-special-offers-page' => 'includes/sections/special-offers-page/special-offers-page.css',
@@ -130,6 +154,13 @@ function ibv_register_styles() {
 		);
 	}
 
+	wp_register_style(
+		'ibv-section-fancy-different',
+		IBV_CORE_URL . 'includes/sections/fancy-different/fancy-different.css',
+		[ 'ibv-base', 'ibv-accommodation-tile' ],
+		IBV_CORE_VERSION
+	);
+
 	$detail_handles = [
 		'ibv-facts-strip'                   => 'includes/components/facts-strip/facts-strip.css',
 		'ibv-amenity-ticks'                 => 'includes/components/amenity-ticks/amenity-ticks.css',
@@ -137,7 +168,6 @@ function ibv_register_styles() {
 		'ibv-villa-map'                    => 'includes/components/villa-map/villa-map.css',
 		'ibv-gallery'                      => 'includes/components/gallery/gallery.css',
 		'ibv-enquiry-panel'                => 'includes/components/enquiry-panel/enquiry-panel.css',
-		'ibv-alternative-accommodation'    => 'includes/components/alternative-accommodation/alternative-accommodation.css',
 		'ibv-villa-detail'                 => 'includes/sections/villa-detail-shell/villa-detail-shell.css',
 		'ibv-section-villa-hero'           => 'includes/sections/villa-hero/villa-hero.css',
 		'ibv-section-villa-overview'       => 'includes/sections/villa-overview/villa-overview.css',
@@ -159,6 +189,13 @@ function ibv_register_styles() {
 			IBV_CORE_VERSION
 		);
 	}
+
+	wp_register_style(
+		'ibv-alternative-accommodation',
+		IBV_CORE_URL . 'includes/components/alternative-accommodation/alternative-accommodation.css',
+		[ 'ibv-base', 'ibv-accommodation-tile' ],
+		IBV_CORE_VERSION
+	);
 
 	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
 	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );

@@ -41,12 +41,14 @@
 }
 
 .ibv-site-header__brand .custom-logo {
-	max-height: 2.1875rem; /* 35px — Figma logo lockup; no spacing token matches */
+	/* Explicit height so width:auto resolves from intrinsic aspect ratio; max-height + height:auto
+	   (reset) can collapse SVG <img> to 0×0 inside flex (same fix as footer .custom-logo). */
+	height: 2.1875rem; /* 35px — Figma logo lockup */
 	width: auto;
+	max-width: 100%;
 }
 
-.ibv-site-header__nav .ibv-nav-list,
-.ibv-site-footer .ibv-nav-list {
+.ibv-site-header__nav .ibv-nav-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -85,26 +87,26 @@
 
 /* Footer */
 .ibv-site-footer {
-	background: var(--ibv-color-brand-teal);
-	color: var(--ibv-color-text-inverse);
-	padding-block: var(--ibv-section-pad-y);
+	background: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-text-muted-on-dark); /* default — bright only on explicit headings */
+	padding-block: 5rem 2.5rem; /* 80/40 — Figma asymmetric padding */
 	margin-block-start: var(--ibv-space-3xl);
 }
 
 .ibv-site-footer a {
-	color: var(--ibv-color-text-inverse);
-	text-decoration: underline;
-	text-underline-offset: 0.15em;
+	color: var(--ibv-color-text-muted-on-dark);
+	text-decoration: none;
 }
 
 .ibv-site-footer a:hover,
 .ibv-site-footer a:focus-visible {
-	opacity: 0.9;
+	color: var(--ibv-color-link-hover-on-dark);
 }
 
+/* Column grid */
 .ibv-site-footer__grid {
 	display: grid;
-	gap: var(--ibv-space-xl);
+	gap: var(--ibv-space-2xl);
 }
 
 @media (min-width: 48rem) {
@@ -115,73 +117,176 @@
 
 @media (min-width: 64rem) {
 	.ibv-site-footer__grid {
-		grid-template-columns: 1.2fr repeat(3, 1fr);
+		/* Figma proportions: 363/157/157/363 ≈ 2.3/1/1/2.3 */
+		grid-template-columns: 2.3fr 1fr 1fr 2.3fr;
+		gap: var(--ibv-space-3xl);
 	}
 }
 
-.ibv-site-footer__brand-col .custom-logo-link {
+/* Brand column */
+.ibv-site-footer__brand-col {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-site-footer__brand .custom-logo-link {
 	display: inline-block;
-	margin-block-end: var(--ibv-space-md);
+}
+
+.ibv-site-footer__brand .custom-logo {
+	/* Explicit height so width:auto resolves from intrinsic aspect ratio; max-height + width:auto alone
+	   can collapse to 0×0 for SVG <img> inside nested flex (Chrome). */
+	height: 3.875rem; /* 62px — Figma footer logo height */
+	width: auto;
+	max-width: 100%;
 }
 
 .ibv-site-footer__tagline {
-	margin: 0 0 var(--ibv-space-md);
-	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-relaxed);
-	opacity: 0.92;
-}
-
-.ibv-site-footer__col h4,
-.ibv-site-footer .ibv-newsletter-cta h4 {
-	margin: 0 0 var(--ibv-space-md);
-	font-size: var(--ibv-fs-h4);
-	font-weight: var(--ibv-font-weight-semibold);
-}
-
-.ibv-site-footer .ibv-nav-list {
-	flex-direction: column;
-	gap: var(--ibv-space-xs);
-}
-
-.ibv-site-footer .ibv-nav-list a {
-	text-decoration: none;
-	font-size: var(--ibv-fs-small);
-}
-
-.ibv-site-footer__legal {
-	margin-block-start: var(--ibv-space-2xl);
-	padding-block-start: var(--ibv-space-xl);
-	border-block-start: 1px solid rgb(255 255 255 / 0.2);
-	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-relaxed);
-}
-
-.ibv-site-footer__legal p:first-child {
-	margin-top: 0;
-}
-
-.ibv-site-footer__badges {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--ibv-space-md);
-	margin-block-start: var(--ibv-space-lg);
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-medium);
-}
-
-.ibv-socials {
-	list-style: none;
 	margin: 0;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	max-width: 20rem;
+}
+
+/* Social icons — circular outlined buttons */
+.ibv-site-footer__socials {
+	list-style: none;
+	margin: var(--ibv-space-md) 0 0;
 	padding: 0;
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--ibv-space-sm);
 }
 
-.ibv-socials a {
-	text-decoration: none;
+.ibv-site-footer__social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem; /* 40px — Figma social button size */
+	height: 2.5rem;
+	border: 1px solid rgb(from var(--ibv-color-off-white) r g b / 0.4);
+	border-radius: 50%;
+	/* Icon stroke via currentColor — inherits muted from .ibv-site-footer a */
+	transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.ibv-site-footer__social-link svg {
+	width: 1rem;
+	height: 1rem;
+}
+
+.ibv-site-footer__social-fallback {
+	font-size: 0.625rem;
+	line-height: 1;
+	text-align: center;
+}
+
+.ibv-site-footer .ibv-site-footer__social-link:hover,
+.ibv-site-footer .ibv-site-footer__social-link:focus-visible {
+	color: var(--ibv-color-text-on-dark); /* icon brightens to off-white — beats .ibv-site-footer a:hover */
+	border-color: rgb(from var(--ibv-color-off-white) r g b / 0.8);
+	background: transparent; /* no fill; subtle outlined control */
+}
+
+/* Accreditation logo strip (newsletter column) */
+.ibv-site-footer__accreditations {
+	list-style: none;
+	margin: var(--ibv-space-2xl) 0 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-xl);
+}
+
+.ibv-site-footer__accreditation {
+	margin: 0;
+}
+
+.ibv-site-footer__accreditation a,
+.ibv-site-footer__accreditation img {
+	display: block;
+}
+
+.ibv-site-footer__accreditation img {
+	max-height: 2.5rem; /* 40px — Figma; normalises vertical alignment */
+	width: auto;
+}
+
+/* Column titles */
+.ibv-site-footer__col-title {
+	margin: 0 0 var(--ibv-space-md);
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text-on-dark);
+}
+
+/* Nav lists in footer — reset ul/li away from global `p, ul, ol` (body size +
+   relaxed lh) so wrapped items use snug spacing; optional li-level WP classes
+   then inherit this stack instead of 1.7 from typography.css. */
+.ibv-site-footer .ibv-nav-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-xs);
 	font-size: var(--ibv-fs-small);
-	text-transform: capitalize;
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-site-footer .ibv-nav-list a {
+	text-decoration: none;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+/* Divider before legal */
+.ibv-site-footer__divider {
+	margin: var(--ibv-space-2xl) 0 var(--ibv-space-lg);
+	height: 1px;
+	border: 0;
+	background: rgb(from var(--ibv-color-off-white) r g b / 0.2);
+}
+
+/* Legal block — entire stack below divider is micro type. Global `p, ul, ol`
+   in typography.css set --ibv-fs-body; reset those to inherit so WYSIWYG
+   output inside .ibv-site-footer__legal-detail matches copyright. */
+.ibv-site-footer__legal {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	font-size: var(--ibv-fs-micro);
+	line-height: var(--ibv-lh-relaxed);
+	color: rgb(from var(--ibv-color-text-on-dark) r g b / 0.7);
+}
+
+.ibv-site-footer__legal p,
+.ibv-site-footer__legal ul,
+.ibv-site-footer__legal ol,
+.ibv-site-footer__legal li {
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.ibv-site-footer__copyright {
+	margin: 0;
+}
+
+.ibv-site-footer__legal-detail {
+	margin: 0;
+}
+
+.ibv-site-footer__legal-detail p {
+	margin: 0 0 var(--ibv-space-xs);
+}
+
+.ibv-site-footer__legal-detail p:last-child {
+	margin-bottom: 0;
 }
 
 .ibv-site-main {

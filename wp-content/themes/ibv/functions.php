@@ -34,6 +34,7 @@ function ibv_theme_setup() {
  *
  *     @type string $link_class Classes for the home link (include layout classes).
  *     @type string $img_class  Classes for the img element.
+ *     @type string $variant    'default' | 'on-dark'. Uses ibv-logo.svg vs ibv-logo-on-dark.svg.
  * }
  */
 function ibv_the_theme_logo( array $args = [] ) {
@@ -42,10 +43,12 @@ function ibv_the_theme_logo( array $args = [] ) {
 		[
 			'link_class' => 'custom-logo-link',
 			'img_class'  => 'custom-logo',
+			'variant'    => 'default',
 		]
 	);
 	$home = home_url( '/' );
-	$src  = get_template_directory_uri() . '/assets/brand/ibv-logo.svg';
+	$file = ( 'on-dark' === $args['variant'] ) ? 'ibv-logo-on-dark.svg' : 'ibv-logo.svg';
+	$src  = get_template_directory_uri() . '/assets/brand/' . $file;
 	$name = get_bloginfo( 'name', 'display' );
 	printf(
 		'<a href="%1$s" class="%2$s" rel="home"><img class="%3$s" src="%4$s" width="842" height="229" alt="%5$s" decoding="async" /></a>',

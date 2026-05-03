@@ -19,7 +19,7 @@
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
-	gap: var(--ibv-space-3xs, var(--ibv-space-2xs));
+	gap: var(--ibv-space-2xs);
 	padding-inline: var(--ibv-space-md);
 	border-inline-end: 1px solid var(--ibv-color-border);
 }
@@ -33,7 +33,7 @@
 }
 
 .ibv-hero-search__label {
-	font-size: var(--ibv-fs-xs, var(--ibv-fs-small));
+	font-size: var(--ibv-fs-eyebrow);
 	font-weight: var(--ibv-font-weight-medium);
 	color: var(--ibv-color-text);
 	letter-spacing: 0;

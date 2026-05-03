@@ -70,8 +70,8 @@
 	background: rgb(249 248 244 / 0.9);
 	color: var(--ibv-color-link);
 	border-radius: var(--ibv-radius-pill);
-	padding: var(--ibv-space-3xs, var(--ibv-space-2xs)) var(--ibv-space-sm);
-	font-size: var(--ibv-fs-xs, var(--ibv-fs-small));
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-eyebrow);
 	font-weight: var(--ibv-font-weight-regular);
 }
 

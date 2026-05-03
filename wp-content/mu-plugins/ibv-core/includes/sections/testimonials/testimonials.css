@@ -1,38 +1,48 @@
+/* Testimonials — three quote cards on a blue tint panel. */
+
 .ibv-section-testimonials {
-	background: var(--ibv-color-brand-teal-mid);
-	color: var(--ibv-color-text-inverse);
+	background: var(--ibv-color-tint-blue);
+	padding-block: 4.375rem; /* 70px — system rhythm, matches Figma */
 }
 
-.ibv-section-testimonials .ibv-section-heading__title {
-	color: var(--ibv-color-text-inverse);
+/* Centered header — title + 100px sage rule */
+.ibv-section-testimonials__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+	margin-block-end: var(--ibv-space-2xl);
 }
 
-.ibv-section-testimonials__grid {
-	margin-block-start: var(--ibv-space-xl);
-}
-
-.ibv-quote-card {
+.ibv-section-testimonials__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
 	margin: 0;
-	padding: var(--ibv-space-lg);
-	background: rgb(255 255 255 / 0.08);
-	border-radius: var(--ibv-radius-lg);
-	border: 1px solid rgb(255 255 255 / 0.15);
+	color: var(--ibv-color-text);
 }
 
-.ibv-quote-card__stars {
-	margin: 0 0 var(--ibv-space-sm);
-	color: var(--ibv-color-accent-gold);
-	font-size: var(--ibv-fs-small);
+.ibv-section-testimonials__rule {
+	width: 6.25rem; /* 100px — system standard */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-sage-500);
+	margin: 0;
 }
 
-.ibv-quote-card__quote {
-	margin: 0 0 var(--ibv-space-md);
-	font-size: var(--ibv-fs-body);
-	line-height: var(--ibv-lh-relaxed);
+/* Card grid */
+.ibv-section-testimonials__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
 }
 
-.ibv-quote-card__attr {
-	font-size: var(--ibv-fs-small);
-	opacity: 0.9;
-	font-style: normal;
+@media (min-width: 56rem) {
+	.ibv-section-testimonials__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }

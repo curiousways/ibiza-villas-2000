@@ -1,52 +1,112 @@
-.ibv-section-three-step__grid {
-	margin-block-start: var(--ibv-space-xl);
+/* How It Works — three steps on a gold-tint panel (saturated gold on step-number circles only). */
+
+.ibv-section-three-step {
+	background: var(--ibv-color-tint-gold);
+	color: var(--ibv-color-text);
+	padding-block: 4.375rem; /* 70px — Figma section padding */
 }
 
-.ibv-step-card {
-	position: relative;
-	padding: var(--ibv-space-xl);
-	background: var(--ibv-color-surface);
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-lg);
+/* Centred heading — eyebrow + title + 100px rule (gold-500 on tint — readable) */
+.ibv-section-three-step__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	text-align: center;
+	gap: var(--ibv-space-md);
+	margin-block-end: var(--ibv-space-2xl);
+}
+
+.ibv-section-three-step__eyebrow {
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-regular);
+	color: var(--ibv-color-text);
+	margin: 0;
+}
+
+.ibv-section-three-step__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-three-step__rule {
+	width: 6.25rem; /* 100px — Figma */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+}
+
+/* Step grid */
+.ibv-section-three-step__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-three-step__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Step card */
+.ibv-step-card {
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-md);
+	padding: 3rem 3.6875rem; /* 48px / 59px — Figma */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+	box-shadow: var(--ibv-shadow-sm);
 }
 
 .ibv-step-card__num {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 2.75rem;
-	height: 2.75rem;
-	margin-inline: auto;
-	margin-block-end: var(--ibv-space-md);
+	width: 4rem; /* 64px — Figma circle size */
+	height: 4rem;
 	border-radius: 50%;
-	background: var(--ibv-color-accent-gold);
-	color: var(--ibv-color-brand-teal);
-	font-weight: var(--ibv-font-weight-bold);
-	font-size: var(--ibv-fs-small);
+	background: var(--ibv-color-gold-500);
+	color: var(--ibv-color-link); /* forest-green-deep */
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: 1.875rem; /* 30px — Figma value */
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1;
+	letter-spacing: 0;
+	margin: 0;
 }
 
 .ibv-step-card__title {
-	margin: 0 0 var(--ibv-space-sm);
-	font-size: var(--ibv-fs-h4);
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
 }
 
 .ibv-step-card__text {
 	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
-	text-align: left;
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
 }
 
 .ibv-step-card__text p:first-child {
-	margin-top: 0;
+	margin-block-start: 0;
 }
 
 .ibv-step-card__text p:last-child {
-	margin-bottom: 0;
-}
-
-.ibv-section-three-step__cta {
-	text-align: center;
-	margin-block-start: var(--ibv-space-2xl);
 	margin-block-end: 0;
 }

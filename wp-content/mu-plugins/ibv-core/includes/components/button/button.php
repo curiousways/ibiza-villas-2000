@@ -65,7 +65,13 @@ function ibv_core_button( $args = [] ) {
 
 	$arrow_svg = '';
 	if ( $show_arrow ) {
-		$arrow_svg = '<svg class="ibv-button__arrow" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true" focusable="false"><path d="M3 9h12M11 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+		$arrow_svg = ibv_core_icon(
+			'arrow-right',
+			[
+				'class' => 'ibv-button__arrow',
+				'size'  => 18,
+			]
+		);
 	}
 
 	$classes = [

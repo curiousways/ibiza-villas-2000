@@ -82,6 +82,7 @@
 	   per visually-distinct tint, not one per source family. */
 	--ibv-color-tint-teal: #e1e8e4;
 	--ibv-color-tint-gold: #faf2dc;
+	--ibv-color-tint-blue: #ccdadc;
 
 	/* Feedback (per style guide) */
 	--ibv-color-info-100:      #e3efff;
@@ -105,6 +106,9 @@
 	--ibv-color-surface-inverse: var(--ibv-color-forest-green-deep);
 	--ibv-color-text:            var(--ibv-color-black);
 	--ibv-color-text-muted:      var(--ibv-color-web-grey-300);
+	--ibv-color-text-on-dark:    var(--ibv-color-off-white);
+	/* Composited: #FFFFFF at α0.7 over forest-green-deep #055353. */
+	--ibv-color-text-muted-on-dark: #b4cbcb;
 	--ibv-color-text-subtle:     var(--ibv-color-web-grey-200);
 	--ibv-color-text-inverse:    var(--ibv-color-white);
 	--ibv-color-accent:          var(--ibv-color-sage-500);
@@ -112,9 +116,10 @@
 	/* Faint teal-tinted divider / input border — design-specific; not on any ramp. */
 	--ibv-color-border:          #bfc8c8;
 	--ibv-color-border-strong:   var(--ibv-color-web-grey-200);
-	--ibv-color-link:            var(--ibv-color-forest-green-deep);
-	--ibv-color-link-hover:      var(--ibv-color-sage-500);
-	--ibv-color-focus-ring:      var(--ibv-color-forest-green-deep);
+	--ibv-color-link:               var(--ibv-color-forest-green-deep);
+	--ibv-color-link-hover:         var(--ibv-color-sage-500);
+	--ibv-color-link-hover-on-dark: var(--ibv-color-text-on-dark);
+	--ibv-color-focus-ring:         var(--ibv-color-forest-green-deep);
 
 	/* Legacy marketing names — section CSS still references these; map to IV2000 foundation (migrate to semantic tokens in a later pass). */
 	--ibv-color-brand-teal:            var(--ibv-color-forest-green-deep);
@@ -142,6 +147,10 @@
 	--ibv-fs-body:    1rem;
 	--ibv-fs-small:   0.875rem;
 	--ibv-fs-eyebrow: 0.8125rem;
+	/* Auxiliary microcopy only — legal text, business reg, very small badges.
+	   Below comfortable reading size; do NOT use for body, metadata, or
+	   any text the user needs to engage with. */
+	--ibv-fs-micro:   0.625rem; /* 10px */
 
 	--ibv-lh-tight:   1.1;
 	--ibv-lh-snug:    1.25;
@@ -178,6 +187,7 @@
 	--ibv-radius-sm:    0.125rem;
 	--ibv-radius-md:    0.25rem;
 	--ibv-radius-lg:    0.5rem;
+	--ibv-radius-field: var(--ibv-radius-lg); /* 8px — multi-field inputs + newsletter pill outer/submit */
 	--ibv-radius-pill:  999px;
 	--ibv-radius-image: 0;
 

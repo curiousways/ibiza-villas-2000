@@ -159,34 +159,43 @@ function ibv_core_villa_card( $args = [] ) {
 				<ul class="ibv-villa-card__facts">
 					<?php if ( '' !== $bedrooms && null !== $bedrooms ) : ?>
 						<li class="ibv-villa-card__fact" aria-label="<?php echo esc_attr( sprintf( _n( '%d bedroom', '%d bedrooms', (int) $bedrooms, 'ibv' ), (int) $bedrooms ) ); ?>">
-							<svg class="ibv-villa-card__fact-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-								<path d="M1 11V5" />
-								<path d="M13 11V8" />
-								<path d="M1 8h12" />
-								<path d="M3 8V6h4v2" />
-							</svg>
+							<?php
+							echo ibv_core_icon(
+								'bed',
+								[
+									'class' => 'ibv-villa-card__fact-icon',
+									'size'  => 14,
+								]
+							); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
 							<span class="ibv-villa-card__fact-value"><?php echo esc_html( (int) $bedrooms ); ?></span>
 						</li>
 					<?php endif; ?>
 					<?php if ( '' !== $baths && null !== $baths ) : ?>
 						<li class="ibv-villa-card__fact" aria-label="<?php echo esc_attr( sprintf( _n( '%d bathroom', '%d bathrooms', (int) $baths, 'ibv' ), (int) $baths ) ); ?>">
-							<svg class="ibv-villa-card__fact-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-								<path d="M2 7h10v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
-								<path d="M4 7V4a1.5 1.5 0 0 1 3 0" />
-								<path d="M2 11l-1 2" />
-								<path d="M12 11l1 2" />
-							</svg>
+							<?php
+							echo ibv_core_icon(
+								'bath',
+								[
+									'class' => 'ibv-villa-card__fact-icon',
+									'size'  => 14,
+								]
+							); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
 							<span class="ibv-villa-card__fact-value"><?php echo esc_html( (int) $baths ); ?></span>
 						</li>
 					<?php endif; ?>
 					<?php if ( '' !== $sleeps && null !== $sleeps ) : ?>
 						<li class="ibv-villa-card__fact" aria-label="<?php echo esc_attr( sprintf( __( 'Sleeps %d', 'ibv' ), (int) $sleeps ) ); ?>">
-							<svg class="ibv-villa-card__fact-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-								<circle cx="5" cy="5" r="2" />
-								<circle cx="10" cy="5" r="2" />
-								<path d="M2 12c0-1.7 1.3-3 3-3s3 1.3 3 3" />
-								<path d="M7 12c0-1.7 1.3-3 3-3s3 1.3 3 3" />
-							</svg>
+							<?php
+							echo ibv_core_icon(
+								'users',
+								[
+									'class' => 'ibv-villa-card__fact-icon',
+									'size'  => 14,
+								]
+							); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							?>
 							<span class="ibv-villa-card__fact-value"><?php echo esc_html( (int) $sleeps ); ?></span>
 						</li>
 					<?php endif; ?>

@@ -2,6 +2,8 @@
 /**
  * Section: IPS responsible tourism panel.
  *
+ * Thin wrapper around `ibv_core_image_text_section()`.
+ *
  * @package Ibiza_Villas_2000
  */
 
@@ -13,45 +15,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * IPS panel — image + copy.
  */
 function ibv_core_section_ips_panel() {
-	wp_enqueue_style( 'ibv-section-ips-panel' );
-
 	$img   = get_field( 'ips_image' );
 	$title = get_field( 'ips_title' );
 	$text  = get_field( 'ips_text' );
 	$clab  = get_field( 'ips_cta_label' );
 	$curl  = get_field( 'ips_cta_url' );
 
-	if ( ! $title && ! $text && empty( $img['ID'] ) ) {
+	$has_image = ( is_array( $img ) && ! empty( $img['ID'] ) ) || ( is_numeric( $img ) && (int) $img > 0 );
+
+	if ( ! $title && ! $text && ! $has_image ) {
 		return;
 	}
-	?>
-	<section class="ibv-section-ips-panel ibv-section">
-		<div class="ibv-container ibv-section-ips-panel__layout">
-			<?php if ( ! empty( $img['ID'] ) ) : ?>
-				<div class="ibv-section-ips-panel__media">
-					<?php ibv_core_image( $img, 'ibv-card', [ 'class' => 'ibv-section-ips-panel__image' ] ); ?>
-				</div>
-			<?php endif; ?>
-			<div class="ibv-section-ips-panel__content">
-				<?php if ( $title ) : ?>
-					<h2 class="ibv-section-ips-panel__title"><?php echo esc_html( $title ); ?></h2>
-				<?php endif; ?>
-				<?php if ( $text ) : ?>
-					<div class="ibv-section-ips-panel__text"><?php echo wp_kses_post( wpautop( $text ) ); ?></div>
-				<?php endif; ?>
-				<?php if ( $clab && $curl ) : ?>
-					<?php
-					ibv_core_button(
-						[
-							'url'     => esc_url( $curl ),
-							'label'   => $clab,
-							'variant' => 'primary',
-						]
-					);
-					?>
-				<?php endif; ?>
-			</div>
-		</div>
-	</section>
-	<?php
+
+	ibv_core_image_text_section(
+		[
+			'title'         => $title ? (string) $title : '',
+			'description'   => $text ? (string) $text : '',
+			'cta_url'       => $curl ? esc_url( $curl ) : '',
+			'cta_label'     => $clab ? (string) $clab : '',
+			'image'         => $img,
+			'image_side'    => 'left',
+		]
+	);
 }

@@ -18,6 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // 1. Helpers and shared assets.
 require_once IBV_CORE_PATH . 'includes/helpers.php';
+require_once IBV_CORE_PATH . 'includes/helpers/icon.php';
 require_once IBV_CORE_PATH . 'includes/shared-assets.php';
 
 // 2. Data layer — pass 3b: CPT first, taxonomies next (slug preservation).
@@ -36,12 +37,17 @@ require_once IBV_CORE_PATH . 'includes/editor.php';
 require_once IBV_CORE_PATH . 'includes/admin/admin-columns-villa.php';
 require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
 
+// WP-CLI commands (no-op when WP-CLI is not running).
+require_once IBV_CORE_PATH . 'includes/cli/migrate-newsletter-to-options.php';
+
 // 4. Components — each registers its own CSS handle and exposes a `ibv_core_*` helper.
 require_once IBV_CORE_PATH . 'includes/components/button/button.php';
 require_once IBV_CORE_PATH . 'includes/components/section-heading/section-heading.php';
 require_once IBV_CORE_PATH . 'includes/components/image/image.php';
+require_once IBV_CORE_PATH . 'includes/components/image-text-section/image-text-section.php';
 require_once IBV_CORE_PATH . 'includes/components/villa-card/villa-card.php';
 require_once IBV_CORE_PATH . 'includes/components/offer-panel/offer-panel.php';
+require_once IBV_CORE_PATH . 'includes/components/quote-card/quote-card.php';
 require_once IBV_CORE_PATH . 'includes/components/header-search/header-search.php';
 require_once IBV_CORE_PATH . 'includes/components/hero-search/hero-search.php';
 require_once IBV_CORE_PATH . 'includes/components/facts-strip/facts-strip.php';
@@ -50,6 +56,7 @@ require_once IBV_CORE_PATH . 'includes/components/distance-ticks/distance-ticks.
 require_once IBV_CORE_PATH . 'includes/components/villa-map/villa-map.php';
 require_once IBV_CORE_PATH . 'includes/components/gallery/gallery.php';
 require_once IBV_CORE_PATH . 'includes/components/enquiry-panel/enquiry-panel.php';
+require_once IBV_CORE_PATH . 'includes/components/accommodation-tile/accommodation-tile.php';
 require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alternative-accommodation.php';
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';

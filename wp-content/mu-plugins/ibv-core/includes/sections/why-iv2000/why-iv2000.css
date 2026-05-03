@@ -1,49 +1,115 @@
+/* Why IV2000 — three pillars on a dark forest-green-deep panel. */
+
 .ibv-section-why-iv2000 {
-	background: var(--ibv-color-brand-teal);
-	color: var(--ibv-color-text-inverse);
+	background: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-text-on-dark);
+	padding-block: 4.375rem 5.625rem; /* 70px top / 90px bottom — Figma */
 }
 
-.ibv-section-why-iv2000 .ibv-section-heading__eyebrow,
-.ibv-section-why-iv2000 .ibv-section-heading__title,
-.ibv-section-why-iv2000 .ibv-section-heading__lead {
-	color: var(--ibv-color-text-inverse);
-	opacity: 0.95;
-}
-
-.ibv-section-why-iv2000__heading {
-	margin-block-end: var(--ibv-space-xl);
-}
-
-.ibv-section-why-iv2000__grid {
-	margin-block-start: var(--ibv-space-lg);
-}
-
-.ibv-pillar-card {
+/* Centered heading — title, gold rule, sage-100 lead */
+.ibv-section-why-iv2000__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	text-align: center;
+	gap: var(--ibv-space-md);
+	margin-block-end: 4rem; /* 64px — Figma gap to grid */
+}
+
+.ibv-section-why-iv2000__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text-on-dark);
+}
+
+.ibv-section-why-iv2000__rule {
+	width: 6.25rem; /* 100px — Figma section rule */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+}
+
+.ibv-section-why-iv2000__lead {
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-sage-100);
+	margin: 0;
+	max-width: 38rem;
+}
+
+/* Pillar grid */
+.ibv-section-why-iv2000__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-why-iv2000__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+/* Pillar card */
+.ibv-pillar-card {
+	background: var(--ibv-color-forest-green-light);
+	border: 1px solid rgb(from var(--ibv-color-off-white) r g b / 0.1); /* off-white α0.1 — border over card fill */
+	border-radius: var(--ibv-radius-md);
+	padding: 2.5625rem; /* 41px — Figma card padding */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-lg);
+}
+
+.ibv-pillar-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .ibv-pillar-card__icon-img {
-	max-height: 3rem;
+	max-height: 3.125rem; /* 50px — Figma icon cap */
 	width: auto;
-	margin-inline: auto;
+	display: block;
 }
 
 .ibv-pillar-card__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
 	font-size: var(--ibv-fs-h3);
-	margin: var(--ibv-space-md) 0 var(--ibv-space-sm);
-	color: inherit;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text-on-dark);
+}
+
+.ibv-pillar-card__rule {
+	width: 3.125rem; /* 50px — Figma card rule */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
 }
 
 .ibv-pillar-card__text {
 	font-size: var(--ibv-fs-small);
 	line-height: var(--ibv-lh-relaxed);
-	opacity: 0.92;
+	color: var(--ibv-color-sage-100);
 }
 
 .ibv-pillar-card__text p:first-child {
-	margin-top: 0;
+	margin-block-start: 0;
 }
 
 .ibv-pillar-card__text p:last-child {
-	margin-bottom: 0;
+	margin-block-end: 0;
 }

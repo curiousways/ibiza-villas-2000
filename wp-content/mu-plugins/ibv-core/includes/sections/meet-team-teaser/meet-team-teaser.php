@@ -10,48 +10,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Meet the team block — image + copy.
+ * Meet the team block — image + copy via shared image-text-section (image left).
  */
 function ibv_core_section_meet_team_teaser() {
-	wp_enqueue_style( 'ibv-section-meet-team-teaser' );
-
 	$img   = get_field( 'meet_team_image' );
 	$title = get_field( 'meet_team_title' );
 	$text  = get_field( 'meet_team_text' );
 	$clab  = get_field( 'meet_team_cta_label' );
 	$curl  = get_field( 'meet_team_cta_url' );
 
-	if ( ! $title && ! $text && empty( $img['ID'] ) ) {
+	$has_image = ! empty( $img['ID'] ) || ( is_numeric( $img ) && (int) $img > 0 );
+
+	if ( ! $title && ! $text && ! $has_image ) {
 		return;
 	}
-	?>
-	<section class="ibv-section-meet-team-teaser ibv-section ibv-section--alt">
-		<div class="ibv-container ibv-section-meet-team-teaser__layout">
-			<?php if ( ! empty( $img['ID'] ) ) : ?>
-				<div class="ibv-section-meet-team-teaser__media">
-					<?php ibv_core_image( $img, 'ibv-card', [ 'class' => 'ibv-section-meet-team-teaser__image' ] ); ?>
-				</div>
-			<?php endif; ?>
-			<div class="ibv-section-meet-team-teaser__content">
-				<?php if ( $title ) : ?>
-					<h2 class="ibv-section-meet-team-teaser__title"><?php echo esc_html( $title ); ?></h2>
-				<?php endif; ?>
-				<?php if ( $text ) : ?>
-					<div class="ibv-section-meet-team-teaser__text"><?php echo wp_kses_post( wpautop( $text ) ); ?></div>
-				<?php endif; ?>
-				<?php if ( $clab && $curl ) : ?>
-					<?php
-					ibv_core_button(
-						[
-							'url'     => esc_url( $curl ),
-							'label'   => $clab,
-							'variant' => 'secondary',
-						]
-					);
-					?>
-				<?php endif; ?>
-			</div>
-		</div>
-	</section>
-	<?php
+
+	ibv_core_image_text_section(
+		[
+			'title'       => $title,
+			'description' => $text,
+			'cta_url'     => $curl ? esc_url( $curl ) : '',
+			'cta_label'   => $clab,
+			'image'       => $img,
+			'image_side'  => 'left',
+			// No background — sits on the page off-white directly
+		]
+	);
 }

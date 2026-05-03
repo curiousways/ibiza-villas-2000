@@ -42,7 +42,7 @@ function ibv_core_villa_map( $villa_id ) {
 		return;
 	}
 
-	$pin_url = IBV_CORE_URL . 'assets/img/map-pin.svg';
+	$pin_url = IBV_CORE_URL . 'assets/icons/lucide/map-pin.svg';
 
 	$map_url = add_query_arg(
 		array(
