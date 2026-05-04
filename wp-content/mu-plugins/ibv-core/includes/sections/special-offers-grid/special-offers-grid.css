@@ -1,0 +1,16 @@
+/* Special Offers grid — 3-up desktop; cards supply internal layout. */
+
+.ibv-section-special-offers-grid__cards {
+	display: grid;
+	gap: var(--ibv-space-xl);
+}
+
+.ibv-section-special-offers-grid__cards .ibv-villa-card {
+	min-width: 0;
+}
+
+@media (min-width: 48rem) {
+	.ibv-section-special-offers-grid__cards {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

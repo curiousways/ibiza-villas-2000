@@ -65,6 +65,8 @@ require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.
 require_once IBV_CORE_PATH . 'includes/sections/trust-strip/trust-strip.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-offer/featured-offer.php';
 require_once IBV_CORE_PATH . 'includes/sections/short-breaks/short-breaks.php';
+require_once IBV_CORE_PATH . 'includes/sections/special-offers-grid/special-offers-grid.php';
+require_once IBV_CORE_PATH . 'includes/sections/special-offers-empty-state/special-offers-empty-state.php';
 require_once IBV_CORE_PATH . 'includes/sections/why-iv2000/why-iv2000.php';
 require_once IBV_CORE_PATH . 'includes/sections/fancy-different/fancy-different.php';
 require_once IBV_CORE_PATH . 'includes/sections/ips-panel/ips-panel.php';
@@ -87,5 +89,6 @@ require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-globals-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

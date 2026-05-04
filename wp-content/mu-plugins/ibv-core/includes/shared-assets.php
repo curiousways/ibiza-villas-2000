@@ -148,8 +148,9 @@ function ibv_register_styles() {
 		'ibv-section-why-iv2000'           => 'includes/sections/why-iv2000/why-iv2000.css',
 		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
-		'ibv-section-testimonials'        => 'includes/sections/testimonials/testimonials.css',
-		'ibv-section-special-offers-page' => 'includes/sections/special-offers-page/special-offers-page.css',
+		'ibv-section-testimonials'                  => 'includes/sections/testimonials/testimonials.css',
+		'ibv-section-special-offers-grid'           => 'includes/sections/special-offers-grid/special-offers-grid.css',
+		'ibv-section-special-offers-empty-state'    => 'includes/sections/special-offers-empty-state/special-offers-empty-state.css',
 	];
 
 	foreach ( $section_handles as $handle => $rel ) {

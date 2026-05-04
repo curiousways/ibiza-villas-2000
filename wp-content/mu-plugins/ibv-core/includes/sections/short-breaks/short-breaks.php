@@ -13,8 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Short breaks teaser.
+ *
+ * @param array $args {
+ *     @type string $surface Surface modifier for `ibv_core_image_text_section`: `bg`, `white`, etc. Default `bg`.
+ * }
  */
-function ibv_core_section_short_breaks() {
+function ibv_core_section_short_breaks( $args = [] ) {
+	$defaults = [
+		'surface' => 'bg',
+	];
+	$args = wp_parse_args( $args, $defaults );
+
+	$valid_surfaces = [ 'bg', 'white', 'tint-teal', 'tint-gold', 'tint-blue', 'forest-green' ];
+	$surface        = in_array( $args['surface'], $valid_surfaces, true ) ? $args['surface'] : 'bg';
+
 	$img   = get_field( 'short_breaks_image', 'option' );
 	$title = get_field( 'short_breaks_title', 'option' );
 	$text  = get_field( 'short_breaks_text', 'option' );
@@ -32,7 +44,7 @@ function ibv_core_section_short_breaks() {
 			'cta_label'   => __( 'Search Short Breaks', 'ibv' ),
 			'image'       => $img,
 			'image_side'  => 'right',
-			'surface'     => 'bg',
+			'surface'     => $surface,
 		]
 	);
 }

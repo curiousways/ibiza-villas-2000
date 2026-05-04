@@ -129,6 +129,21 @@ function ibv_core_villa_card( $args = [] ) {
 
 	$thumb_id = get_post_thumbnail_id( $villa_id );
 
+	$show_offer_row = ( 'offer' === $variant )
+		|| (
+			'default' === $variant
+			&& (
+				$args['was_price']
+				|| $args['now_price']
+				|| $args['offer_price_text']
+				|| $args['valid_from']
+				|| $args['valid_to']
+				|| $args['offer_dates_text']
+				|| $args['footnote']
+				|| ! empty( $args['show_now_asterisk'] )
+			)
+		);
+
 	$root_classes = [
 		'ibv-villa-card',
 		'ibv-villa-card--' . $variant,
@@ -220,7 +235,7 @@ function ibv_core_villa_card( $args = [] ) {
 				<p class="ibv-villa-card__excerpt"><?php echo esc_html( $excerpt ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( 'offer' === $variant ) : ?>
+			<?php if ( $show_offer_row ) : ?>
 				<div class="ibv-villa-card__offer-pricing">
 					<?php if ( $args['was_price'] || $args['now_price'] ) : ?>
 						<?php if ( $args['was_price'] ) : ?>

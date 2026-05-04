@@ -1,0 +1,69 @@
+/* Empty state — two-column layout; surface/ rhythm from .ibv-section modifiers. */
+
+.ibv-section-special-offers-empty-state__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xl);
+	align-items: stretch;
+}
+
+.ibv-section-special-offers-empty-state__copy {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	flex: 1 1 50%;
+}
+
+.ibv-section-special-offers-empty-state__title {
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-special-offers-empty-state__rule {
+	width: 6.25rem;
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-sage-500);
+	margin: 0;
+	align-self: flex-start;
+}
+
+.ibv-section-special-offers-empty-state__body {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-special-offers-empty-state__copy .ibv-button {
+	margin-block-start: var(--ibv-space-xs);
+}
+
+.ibv-section-special-offers-empty-state__media {
+	flex: 1 1 50%;
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+	aspect-ratio: 552 / 363;
+}
+
+.ibv-section-special-offers-empty-state__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-special-offers-empty-state__inner {
+		flex-direction: row;
+		align-items: center;
+		gap: 4rem;
+	}
+}
