@@ -34,12 +34,12 @@ WP_CLI::add_command(
 			WP_CLI::error( 'ACF is not active; cannot migrate.' );
 		}
 
-		$fields = array( 'newsletter_intro', 'newsletter_body', 'newsletter_form_id' );
+		$same_name_fields = array( 'newsletter_intro', 'newsletter_body' );
 		$moved            = array();
 		$skipped_empty    = array();
 		$skipped_present  = array();
 
-		foreach ( $fields as $name ) {
+		foreach ( $same_name_fields as $name ) {
 			$src = get_field( $name, $front_id );
 			$dst = get_field( $name, 'option' );
 
@@ -55,6 +55,19 @@ WP_CLI::add_command(
 
 			update_field( $name, $src, 'option' );
 			$moved[] = $name;
+		}
+
+		// Legacy front-page field name → globals option field (Brief 03).
+		$src_form = get_field( 'newsletter_form_id', $front_id );
+		$dst_form = get_field( 'newsletter_gravity_form_id', 'option' );
+
+		if ( null === $src_form || '' === $src_form || 0 === $src_form ) {
+			$skipped_empty[] = 'newsletter_form_id (front) → newsletter_gravity_form_id';
+		} elseif ( null !== $dst_form && '' !== $dst_form && 0 !== $dst_form ) {
+			$skipped_present[] = 'newsletter_gravity_form_id';
+		} else {
+			update_field( 'newsletter_gravity_form_id', $src_form, 'option' );
+			$moved[] = 'newsletter_gravity_form_id (from front newsletter_form_id)';
 		}
 
 		if ( $moved ) {

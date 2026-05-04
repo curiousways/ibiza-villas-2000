@@ -94,6 +94,9 @@ function ibv_core_villa_card( $args = [] ) {
 		'cta_label'         => __( 'View Villa', 'ibv' ),
 		'cta_url'           => '',
 		'badge'             => '',
+		'badge_variant'     => 'default',
+		'footnote'          => '',
+		'show_now_asterisk' => false,
 	];
 	$args = wp_parse_args( $args, $defaults );
 
@@ -106,6 +109,11 @@ function ibv_core_villa_card( $args = [] ) {
 	wp_enqueue_style( 'ibv-button' );
 
 	$variant = in_array( $args['variant'], [ 'default', 'offer', 'similar' ], true ) ? $args['variant'] : 'default';
+
+	$valid_badge_variants = [ 'default', 'gold', 'teal', 'red' ];
+	$badge_variant        = in_array( $args['badge_variant'], $valid_badge_variants, true )
+		? $args['badge_variant']
+		: 'default';
 
 	$permalink = $args['cta_url'] ? $args['cta_url'] : get_permalink( $villa_id );
 	$title     = get_field( 'villa_pretty_name', $villa_id );
@@ -127,8 +135,10 @@ function ibv_core_villa_card( $args = [] ) {
 	];
 	?>
 	<article class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
-		<?php if ( 'similar' === $variant && ! empty( $args['badge'] ) ) : ?>
-			<span class="ibv-villa-card__badge"><?php echo esc_html( $args['badge'] ); ?></span>
+		<?php if ( ! empty( $args['badge'] ) ) : ?>
+			<span class="ibv-villa-card__badge ibv-villa-card__badge--<?php echo esc_attr( $badge_variant ); ?>">
+				<?php echo esc_html( $args['badge'] ); ?>
+			</span>
 		<?php endif; ?>
 
 		<a href="<?php echo esc_url( $permalink ); ?>" class="ibv-villa-card__media">
@@ -237,6 +247,9 @@ function ibv_core_villa_card( $args = [] ) {
 										esc_html__( 'From €%s / wk', 'ibv' ),
 										esc_html( number_format_i18n( (float) $args['now_price'] ) )
 									);
+									if ( ! empty( $args['show_now_asterisk'] ) ) {
+										echo '<span class="ibv-villa-card__now-asterisk" aria-hidden="true">*</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									}
 									?>
 								</span>
 							</p>
@@ -263,6 +276,9 @@ function ibv_core_villa_card( $args = [] ) {
 					}
 					?>
 				</div>
+				<?php if ( $args['footnote'] ) : ?>
+					<p class="ibv-villa-card__footnote"><?php echo esc_html( $args['footnote'] ); ?></p>
+				<?php endif; ?>
 			<?php else : ?>
 				<div class="ibv-villa-card__price">
 					<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback. */ ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Site Options — shared editorial content (featured offer, short breaks).
+ * Site Options — shared editorial content (featured offer, short breaks, newsletter form ID).
  *
  * Single source of truth for sections reused across homepage and Special Offers.
  *
@@ -135,6 +135,31 @@ function ibv_register_globals_content_fields() {
 			),
 			'location'              => $loc_option,
 			'menu_order'            => 4,
+			'position'              => 'normal',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'active'                => true,
+			'show_in_rest'          => false,
+		)
+	);
+
+	acf_add_local_field_group(
+		array(
+			'key'                   => 'group_ibv_global_newsletter',
+			'title'                 => __( 'Newsletter (global)', 'ibv' ),
+			'fields'                => array(
+				array(
+					'key'            => 'field_ibv_global_newsletter_gravity_form_id',
+					'label'          => __( 'Newsletter Gravity Form ID', 'ibv' ),
+					'name'           => 'newsletter_gravity_form_id',
+					'type'           => 'number',
+					'min'            => 0,
+					'instructions'   => __( 'Gravity Form ID used by all newsletter forms across the site (footer, empty states, etc.). Set once here.', 'ibv' ),
+				),
+			),
+			'location'              => $loc_option,
+			'menu_order'            => 5,
 			'position'              => 'normal',
 			'style'                 => 'default',
 			'label_placement'       => 'top',

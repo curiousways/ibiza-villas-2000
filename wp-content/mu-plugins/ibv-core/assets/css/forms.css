@@ -15,7 +15,7 @@
  *
  * The footer newsletter pill is a different structural pattern
  * (single wrapper containing input + submit) and lives in
- * newsletter-cta.css. It consumes the same --ibv-radius-field token
+ * newsletter-form.css (--footer variant). It consumes the same --ibv-radius-field token
  * but does not use .ibv-form.
  */
 

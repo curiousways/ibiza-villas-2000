@@ -126,6 +126,8 @@
 	--ibv-color-brand-teal-mid:        var(--ibv-color-forest-green-light);
 	--ibv-color-brand-panel-green:     var(--ibv-color-forest-green);
 	--ibv-color-accent-gold:           var(--ibv-color-gold-500);
+	/* Placeholder — verify against Figma brand palette. */
+	--ibv-color-accent-red:            #c8102e;
 
 	/* ---------- Typography ---------- */
 	/* Fonts are self-hosted and declared in assets/css/fonts.css (enqueued as

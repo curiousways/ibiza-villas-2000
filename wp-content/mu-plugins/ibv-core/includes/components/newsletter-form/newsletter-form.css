@@ -1,12 +1,13 @@
-/* Newsletter CTA — pill input with embedded gold submit button. */
+/* Newsletter form — base + variants. Footer: pill input + embedded gold submit. */
 
-.ibv-newsletter-cta {
+/* Footer variant (global footer column). */
+.ibv-newsletter-form--footer {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-md);
 }
 
-.ibv-newsletter-cta__title {
+.ibv-newsletter-form--footer .ibv-newsletter-form__title {
 	margin: 0;
 	font-family: var(--ibv-font-display);
 	font-optical-sizing: auto;
@@ -16,7 +17,7 @@
 	color: var(--ibv-color-text-on-dark);
 }
 
-.ibv-newsletter-cta__body {
+.ibv-newsletter-form--footer .ibv-newsletter-form__body {
 	margin: 0;
 	font-size: var(--ibv-fs-small);
 	line-height: var(--ibv-lh-relaxed);
@@ -24,32 +25,32 @@
 }
 
 /* The form wrapper. Gravity Forms shortcode renders inside. */
-.ibv-newsletter-cta__form {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed {
 	/* The pill outer becomes the form wrapper */
 }
 
 /* Gravity Forms targeting — pill shape on form, embedded button */
-.ibv-newsletter-cta__form .gform_wrapper {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_wrapper {
 	margin: 0;
 }
 
-.ibv-newsletter-cta__form .gform_body {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_body {
 	margin: 0;
 	flex: 1;
 	min-width: 0;
 }
 
-.ibv-newsletter-cta__form .gform_fields {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_fields {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
 
-.ibv-newsletter-cta__form .gfield {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield {
 	margin: 0;
 }
 
-.ibv-newsletter-cta__form .gfield_label {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield_label {
 	/* Hide visible labels (placeholders carry the affordance) */
 	position: absolute;
 	width: 1px;
@@ -63,7 +64,7 @@
 }
 
 /* Pill container — wrap the form's inner area */
-.ibv-newsletter-cta__form form {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed form {
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -75,8 +76,8 @@
 }
 
 /* Email input */
-.ibv-newsletter-cta__form input[type="email"],
-.ibv-newsletter-cta__form input[type="text"] {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"],
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"] {
 	flex: 1;
 	background: transparent;
 	border: 0;
@@ -89,29 +90,29 @@
 	min-width: 0;
 }
 
-.ibv-newsletter-cta__form input[type="email"]::placeholder,
-.ibv-newsletter-cta__form input[type="text"]::placeholder {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"]::placeholder,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"]::placeholder {
 	color: var(--ibv-color-text-on-dark); /* full off-white — Figma placeholder */
 	opacity: 1;
 }
 
-.ibv-newsletter-cta__form input[type="email"]:focus,
-.ibv-newsletter-cta__form input[type="text"]:focus {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"]:focus,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"]:focus {
 	outline: 2px solid var(--ibv-color-gold-500);
 	outline-offset: -2px;
 	border-radius: var(--ibv-radius-field);
 }
 
 /* Submit button — square gold disc with arrow (::after does not work on input) */
-.ibv-newsletter-cta__form .gform_footer,
-.ibv-newsletter-cta__form .gform_footer.top_label {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_footer,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_footer.top_label {
 	margin: 0;
 	padding: 0;
 	flex-shrink: 0;
 }
 
-.ibv-newsletter-cta__form input[type="submit"],
-.ibv-newsletter-cta__form button[type="submit"] {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"],
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"] {
 	appearance: none;
 	-webkit-appearance: none;
 	background-color: var(--ibv-color-gold-500);
@@ -132,23 +133,27 @@
 	transition: background-color 150ms ease, filter 150ms ease;
 }
 
-.ibv-newsletter-cta__form input[type="submit"]:hover,
-.ibv-newsletter-cta__form button[type="submit"]:hover,
-.ibv-newsletter-cta__form input[type="submit"]:focus-visible,
-.ibv-newsletter-cta__form button[type="submit"]:focus-visible {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"]:hover,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"]:hover,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"]:focus-visible,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"]:focus-visible {
 	filter: brightness(0.92);
 }
 
 /* Validation / confirmation messages (light styling) */
-.ibv-newsletter-cta__form .gform_confirmation_message {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_confirmation_message {
 	color: var(--ibv-color-sage-100);
 	font-size: var(--ibv-fs-small);
 	margin-block-start: var(--ibv-space-sm);
 }
 
-.ibv-newsletter-cta__form .gfield_validation_message,
-.ibv-newsletter-cta__form .validation_error {
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield_validation_message,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .validation_error {
 	color: var(--ibv-color-gold-500);
 	font-size: var(--ibv-fs-small);
 	margin-block-start: var(--ibv-space-2xs);
+}
+
+/* Empty-state variant — styled by special-offers-empty-state context (brief 05). */
+.ibv-newsletter-form--empty-state {
 }

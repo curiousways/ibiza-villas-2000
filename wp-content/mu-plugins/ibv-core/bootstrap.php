@@ -58,6 +58,7 @@ require_once IBV_CORE_PATH . 'includes/components/gallery/gallery.php';
 require_once IBV_CORE_PATH . 'includes/components/enquiry-panel/enquiry-panel.php';
 require_once IBV_CORE_PATH . 'includes/components/accommodation-tile/accommodation-tile.php';
 require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alternative-accommodation.php';
+require_once IBV_CORE_PATH . 'includes/components/newsletter-form/newsletter-form.php';
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';

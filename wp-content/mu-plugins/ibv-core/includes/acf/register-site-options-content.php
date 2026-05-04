@@ -4,7 +4,7 @@
  *
  * Homepage-only fields live on the Front Page (register-page-home.php).
  * Featured offer and short breaks live in register-globals-content.php.
- * Newsletter footer fields live here (global footer).
+ * Newsletter footer copy lives here; Gravity Form ID lives in register-globals-content.php.
  *
  * @package Ibiza_Villas_2000
  */
@@ -178,14 +178,6 @@ function ibv_register_site_options_content_fields() {
 					'type'           => 'textarea',
 					'rows'           => 2,
 					'instructions'   => __( 'Subtitle line beneath the newsletter title. Defaults to "Sign up to receive marketing from Ibiza Villas 2000" if empty.', 'ibv' ),
-				),
-				array(
-					'key'            => 'field_ibv_global_newsletter_form_id',
-					'label'          => __( 'Newsletter Gravity Form ID', 'ibv' ),
-					'name'           => 'newsletter_form_id',
-					'type'           => 'number',
-					'min'            => 0,
-					'instructions'   => __( 'ID of the Gravity Form to embed. Find it under Forms in the WP admin.', 'ibv' ),
 				),
 			),
 			'location'              => $loc_option,

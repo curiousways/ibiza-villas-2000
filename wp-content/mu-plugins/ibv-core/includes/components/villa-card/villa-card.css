@@ -32,6 +32,21 @@
 	border-radius: var(--ibv-radius-sm);
 }
 
+.ibv-villa-card__badge--gold {
+	background: var(--ibv-color-accent-gold);
+	color: var(--ibv-color-brand-teal);
+}
+
+.ibv-villa-card__badge--teal {
+	background: var(--ibv-color-brand-teal);
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-villa-card__badge--red {
+	background: var(--ibv-color-accent-red);
+	color: var(--ibv-color-text-inverse);
+}
+
 .ibv-villa-card__media {
 	position: relative;
 	display: block;
@@ -267,6 +282,17 @@
 .ibv-villa-card__valid {
 	margin: 0;
 	color: var(--ibv-color-text-muted);
+}
+
+.ibv-villa-card__footnote {
+	margin: var(--ibv-space-sm) 0 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	font-style: italic;
+}
+
+.ibv-villa-card__now-asterisk {
+	margin-inline-start: 0.125em;
 }
 
 .ibv-villa-card__body .ibv-button {

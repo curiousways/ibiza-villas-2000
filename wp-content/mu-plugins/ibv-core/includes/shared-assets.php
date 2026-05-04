@@ -113,6 +113,13 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-newsletter-form',
+		IBV_CORE_URL . 'includes/components/newsletter-form/newsletter-form.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-villa-card',
 		IBV_CORE_URL . 'includes/components/villa-card/villa-card.css',
 		[ 'ibv-base' ],
@@ -142,7 +149,6 @@ function ibv_register_styles() {
 		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
 		'ibv-section-testimonials'        => 'includes/sections/testimonials/testimonials.css',
-		'ibv-section-newsletter-cta'      => 'includes/sections/newsletter-cta/newsletter-cta.css',
 		'ibv-section-special-offers-page' => 'includes/sections/special-offers-page/special-offers-page.css',
 	];
 
