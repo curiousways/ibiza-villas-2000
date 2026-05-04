@@ -73,3 +73,7 @@
 	width: 100%;
 	max-width: 44rem;
 }
+
+.ibv-section-hero--compact {
+	min-height: 30rem; /* 480px — About / inner-page hero */
+}

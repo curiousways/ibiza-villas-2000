@@ -14,11 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param array $args {
  *     @type callable|null $after_copy Optional. Invoked with no arguments; output appears below the copy block.
+ *     @type bool          $compact    Optional. When true, the hero uses a reduced min-height (480px instead of 720px). All other styling unchanged. Default false.
  * }
  */
 function ibv_core_section_hero( $args = [] ) {
 	$defaults = [
 		'after_copy' => null,
+		'compact'    => false,
 	];
 	$args = wp_parse_args( $args, $defaults );
 
@@ -37,8 +39,13 @@ function ibv_core_section_hero( $args = [] ) {
 	if ( $bg ) {
 		$style_attr = sprintf( '--ibv-hero-image: url(%s)', esc_url_raw( $bg ) );
 	}
+
+	$classes = [ 'ibv-section-hero', 'ibv-section' ];
+	if ( ! empty( $args['compact'] ) ) {
+		$classes[] = 'ibv-section-hero--compact';
+	}
 	?>
-	<section class="ibv-section-hero ibv-section"<?php echo $style_attr ? ' style="' . esc_attr( $style_attr ) . '"' : ''; ?>>
+	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $style_attr ? ' style="' . esc_attr( $style_attr ) . '"' : ''; ?>>
 		<div class="ibv-container ibv-section-hero__inner">
 			<div class="ibv-section-hero__copy">
 				<?php if ( $title ) : ?>
