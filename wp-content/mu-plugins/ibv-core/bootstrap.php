@@ -62,7 +62,7 @@ require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alte
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';
 require_once IBV_CORE_PATH . 'includes/sections/trust-strip/trust-strip.php';
-require_once IBV_CORE_PATH . 'includes/sections/weekly-offer/weekly-offer.php';
+require_once IBV_CORE_PATH . 'includes/sections/featured-offer/featured-offer.php';
 require_once IBV_CORE_PATH . 'includes/sections/short-breaks/short-breaks.php';
 require_once IBV_CORE_PATH . 'includes/sections/why-iv2000/why-iv2000.php';
 require_once IBV_CORE_PATH . 'includes/sections/fancy-different/fancy-different.php';
@@ -84,6 +84,7 @@ require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-t
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-globals-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

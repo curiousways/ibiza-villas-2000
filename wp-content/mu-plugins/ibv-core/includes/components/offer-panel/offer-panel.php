@@ -3,7 +3,7 @@
  * Component: Offer panel.
  *
  * Reusable side-by-side panel rendering a villa with Was/Now pricing.
- * Used by the homepage weekly-offer section and the special-offers page.
+ * Used by the featured-offer section and the special-offers page.
  *
  * @package Ibiza_Villas_2000
  */

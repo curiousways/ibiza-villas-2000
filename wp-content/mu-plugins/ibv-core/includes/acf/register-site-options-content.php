@@ -3,6 +3,7 @@
  * Site Options content fields — global chrome + shared cross-page content.
  *
  * Homepage-only fields live on the Front Page (register-page-home.php).
+ * Featured offer and short breaks live in register-globals-content.php.
  * Newsletter footer fields live here (global footer).
  *
  * @package Ibiza_Villas_2000

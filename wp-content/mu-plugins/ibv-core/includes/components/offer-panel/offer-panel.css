@@ -1,6 +1,6 @@
 /* Offer panel — structural composition: header, divider, image + body layout.
  * Surface chrome (background, radius, padding) lives on the consumer
- * (e.g. homepage weekly-offer section provides a full-width tint band). */
+ * (e.g. homepage featured-offer section provides a full-width tint band). */
 
 .ibv-offer-panel {
 	display: flex;

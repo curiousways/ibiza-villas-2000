@@ -137,7 +137,7 @@ function ibv_register_styles() {
 		'ibv-section-hero'                 => 'includes/sections/hero/hero.css',
 		'ibv-section-featured-villas'       => 'includes/sections/featured-villas/featured-villas.css',
 		'ibv-section-trust-strip'          => 'includes/sections/trust-strip/trust-strip.css',
-		'ibv-section-weekly-offer'         => 'includes/sections/weekly-offer/weekly-offer.css',
+		'ibv-section-featured-offer'      => 'includes/sections/featured-offer/featured-offer.css',
 		'ibv-section-why-iv2000'           => 'includes/sections/why-iv2000/why-iv2000.css',
 		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
