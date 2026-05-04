@@ -22,6 +22,7 @@ function ibv_core_section_villa_listing_hero() {
 
 	$title           = get_the_title( $page_id );
 	$hero_image      = get_field( 'listing_hero_image', $page_id );
+	$description     = (string) get_field( 'listing_description', $page_id );
 	$note_text       = (string) get_field( 'listing_note_text', $page_id );
 	$note_link_url   = (string) get_field( 'listing_note_link_url', $page_id );
 	$note_link_label = (string) get_field( 'listing_note_link_label', $page_id );
@@ -39,9 +40,9 @@ function ibv_core_section_villa_listing_hero() {
 
 				<span class="ibv-section-villa-listing-hero__rule" aria-hidden="true"></span>
 
-				<div class="ibv-section-villa-listing-hero__intro ibv-prose">
-					<?php the_content(); ?>
-				</div>
+				<?php if ( $description ) : ?>
+					<p class="ibv-section-villa-listing-hero__intro"><?php echo esc_html( $description ); ?></p>
+				<?php endif; ?>
 
 				<?php if ( $show_note ) : ?>
 					<p class="ibv-section-villa-listing-hero__note">

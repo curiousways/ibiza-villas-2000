@@ -30,6 +30,14 @@ function ibv_register_page_villa_listing_fields() {
 					'return_format' => 'array',
 				),
 				array(
+					'key'          => 'field_ibv_listing_description',
+					'label'        => __( 'Description', 'ibv' ),
+					'name'         => 'listing_description',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'instructions' => __( 'Short intro paragraph shown below the page title.', 'ibv' ),
+				),
+				array(
 					'key'          => 'field_ibv_listing_note_text',
 					'label'        => __( 'Note text', 'ibv' ),
 					'name'         => 'listing_note_text',
