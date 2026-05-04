@@ -39,6 +39,9 @@
 !/wp-content/themes/ibiza-villas-2000/
 !/wp-content/themes/ibv/
 
+# Local staging export zip (temporary; do not commit)
+/ibiza-villas-2000-staging.zip
+
 # Local backup of former nested repo (git bundle)
 /.git-backup-*.bundle
 
