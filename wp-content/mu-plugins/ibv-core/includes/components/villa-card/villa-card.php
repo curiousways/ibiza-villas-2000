@@ -125,8 +125,16 @@ function ibv_core_villa_card( $args = [] ) {
 		'ibv-villa-card',
 		'ibv-villa-card--' . $variant,
 	];
+
+	$property_id     = (string) get_field( 'property_id', $villa_id );
+	$indicative_from = get_field( 'villa_indicative_from_price', $villa_id );
+	$sort_price      = $indicative_from ? (float) $indicative_from : 420.0;
 	?>
-	<article class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
+	<article
+		class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>"
+		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
+		data-price="<?php echo esc_attr( (string) $sort_price ); ?>"
+	>
 		<?php if ( 'similar' === $variant && ! empty( $args['badge'] ) ) : ?>
 			<span class="ibv-villa-card__badge"><?php echo esc_html( $args['badge'] ); ?></span>
 		<?php endif; ?>
