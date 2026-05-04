@@ -11,7 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-ibv_core_section_hero();
+ibv_core_section_hero(
+	[
+		'after_copy' => 'ibv_core_hero_search',
+	]
+);
 ibv_core_section_trust_strip();
 ibv_core_section_featured_villas();
 ibv_core_section_featured_offer();

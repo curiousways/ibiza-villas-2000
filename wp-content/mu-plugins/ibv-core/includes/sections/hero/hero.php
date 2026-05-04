@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Homepage hero.
+ * Section: Hero (presentational; optional slot below copy).
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,9 +10,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Render homepage hero.
+ * Render hero section.
+ *
+ * @param array $args {
+ *     @type callable|null $after_copy Optional. Invoked with no arguments; output appears below the copy block.
+ * }
  */
-function ibv_core_section_hero() {
+function ibv_core_section_hero( $args = [] ) {
+	$defaults = [
+		'after_copy' => null,
+	];
+	$args = wp_parse_args( $args, $defaults );
+
 	wp_enqueue_style( 'ibv-section-hero' );
 
 	$image    = get_field( 'hero_image' );
@@ -40,9 +49,11 @@ function ibv_core_section_hero() {
 					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
 				<?php endif; ?>
 			</div>
-			<div class="ibv-section-hero__search">
-				<?php ibv_core_hero_search(); ?>
-			</div>
+			<?php if ( is_callable( $args['after_copy'] ) ) : ?>
+				<div class="ibv-section-hero__after-copy">
+					<?php call_user_func( $args['after_copy'] ); ?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php
