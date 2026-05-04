@@ -251,12 +251,14 @@ function ibv_register_site_options_content_fields() {
 					'default_value' => __( 'Our 3-Step Process', 'ibv' ),
 				),
 				array(
-					'key'        => 'field_ibv_globals_three_step_steps',
-					'label'      => __( '3-step cards', 'ibv' ),
-					'name'       => 'three_step_steps',
-					'type'       => 'repeater',
-					'layout'     => 'block',
-					'sub_fields' => array(
+					'key'          => 'field_ibv_globals_three_step_steps',
+					'label'        => __( '3-step cards', 'ibv' ),
+					'name'         => 'three_step_steps',
+					'type'         => 'repeater',
+					'layout'       => 'block',
+					'max'          => 3,
+					'button_label' => __( 'Add step', 'ibv' ),
+					'sub_fields'   => array(
 						array(
 							'key'   => 'field_ibv_globals_three_step_card_title',
 							'label' => __( 'Title', 'ibv' ),
