@@ -18,10 +18,12 @@
 
 .ibv-section-villa-listing-hero__title {
 	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
 	font-size: var(--ibv-fs-display);
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-tight);
-	color: var(--ibv-color-brand-teal);
+	letter-spacing: 0;
+	color: var(--ibv-color-sage-500);
 	margin: 0;
 }
 
@@ -33,16 +35,23 @@
 }
 
 .ibv-section-villa-listing-hero__intro {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h3);
+	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text);
+	margin: 0;
 }
 
 .ibv-section-villa-listing-hero__note {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h3);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
 	margin: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
 }
 
 .ibv-section-villa-listing-hero__note-link {
+	font-size: var(--ibv-fs-small);
 	color: inherit;
 	text-decoration: underline;
 }
@@ -54,11 +63,11 @@
 .ibv-section-villa-listing-hero__media {
 	border-radius: var(--ibv-radius-lg);
 	overflow: hidden;
-	border: 1px solid var(--ibv-color-border);
 }
 
 .ibv-section-villa-listing-hero__image {
 	width: 100%;
-	height: auto;
+	aspect-ratio: 9 / 10;
+	object-fit: cover;
 	display: block;
 }
