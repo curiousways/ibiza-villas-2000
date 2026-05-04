@@ -40,7 +40,7 @@ function ibv_core_section_trust_strip() {
 							<?php
 							ibv_core_image(
 								$logo,
-								'thumbnail',
+								'ibv-trust-logo',
 								[
 									'class'    => 'ibv-trust-item__logo-img',
 									'loading'  => 'lazy',

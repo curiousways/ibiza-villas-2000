@@ -100,18 +100,6 @@ function ibv_register_page_home_fields() {
 							'return_format' => 'array',
 						),
 						array(
-							'key'   => 'field_ibv_page_home_trust_label',
-							'label' => __( 'Label', 'ibv' ),
-							'name'  => 'label',
-							'type'  => 'text',
-						),
-						array(
-							'key'   => 'field_ibv_page_home_trust_subtext',
-							'label' => __( 'Subtext', 'ibv' ),
-							'name'  => 'subtext',
-							'type'  => 'text',
-						),
-						array(
 							'key'   => 'field_ibv_page_home_trust_url',
 							'label' => __( 'URL (optional)', 'ibv' ),
 							'name'  => 'url',

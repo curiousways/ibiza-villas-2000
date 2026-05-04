@@ -90,7 +90,6 @@
 	background: var(--ibv-color-forest-green-deep);
 	color: var(--ibv-color-text-muted-on-dark); /* default — bright only on explicit headings */
 	padding-block: 5rem 2.5rem; /* 80/40 — Figma asymmetric padding */
-	margin-block-start: var(--ibv-space-3xl);
 }
 
 .ibv-site-footer a {

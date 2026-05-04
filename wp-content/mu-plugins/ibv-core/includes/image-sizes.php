@@ -24,4 +24,9 @@ function ibv_register_image_sizes() {
 
 	// Square portrait / headshot.
 	add_image_size( 'ibv-square', 800, 800, true );
+
+	// Trust strip logos — bounded but non-cropped to preserve aspect.
+	// Logos vary widely in shape (square Google G, wide Booking.com lockup);
+	// hard-cropped sizes clip them. The fourth `false` argument disables crop.
+	add_image_size( 'ibv-trust-logo', 600, 200, false );
 }
