@@ -44,14 +44,13 @@
 
 .ibv-section-villa-listing-hero__note {
 	font-family: var(--ibv-font-display);
-	font-size: var(--ibv-fs-h3);
+	font-size: var(--ibv-fs-h4);
 	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text);
 	margin: 0;
 }
 
 .ibv-section-villa-listing-hero__note-link {
-	font-size: var(--ibv-fs-small);
 	color: inherit;
 	text-decoration: underline;
 }
