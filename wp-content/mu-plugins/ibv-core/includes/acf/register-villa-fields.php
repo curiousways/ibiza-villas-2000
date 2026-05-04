@@ -964,44 +964,6 @@ function ibv_register_villa_acf_fields() {
 		'allow_ai_access'           => false,
 		'ai_description'            => '',
 	) );
-
-	acf_add_local_field_group(
-		array(
-			'key'                   => 'group_ibv_villa_listing_page',
-			'title'                 => __( 'Villa listing page', 'ibv' ),
-			'fields'                => array(
-				array(
-					'key'           => 'field_ibv_listing_hero_image',
-					'label'         => __( 'Hero image', 'ibv' ),
-					'name'          => 'listing_hero_image',
-					'type'          => 'image',
-					'return_format' => 'array',
-				),
-				array(
-					'key'   => 'field_ibv_listing_contact_page',
-					'label' => __( 'Contact page (large groups CTA)', 'ibv' ),
-					'name'  => 'listing_contact_page',
-					'type'  => 'page_link',
-				),
-			),
-			'location'              => array(
-				array(
-					array(
-						'param'    => 'page_template',
-						'operator' => '==',
-						'value'    => 'page-villa-listing.php',
-					),
-				),
-			),
-			'menu_order'            => 0,
-			'position'              => 'normal',
-			'style'                 => 'default',
-			'label_placement'       => 'top',
-			'instruction_placement' => 'label',
-			'active'                => true,
-			'show_in_rest'          => false,
-		)
-	);
 }
 
 add_action( 'acf/init', 'ibv_register_villa_acf_fields', 15 );

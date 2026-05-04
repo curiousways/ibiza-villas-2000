@@ -185,7 +185,7 @@ function ibv_register_styles() {
 		'ibv-section-what-happens-next'    => 'includes/sections/what-happens-next/what-happens-next.css',
 		'ibv-section-concierge-cross-sell' => 'includes/sections/concierge-cross-sell/concierge-cross-sell.css',
 		'ibv-section-villa-testimonial-teaser' => 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.css',
-		'ibv-villa-listing'                 => 'includes/sections/villa-listing-page/villa-listing-page.css',
+		'ibv-section-villa-listing-hero'    => 'includes/sections/villa-listing-hero/villa-listing-hero.css',
 		'ibv-booking-confirmation'         => 'includes/sections/booking-confirmation-page/booking-confirmation-page.css',
 	];
 
@@ -214,10 +214,6 @@ add_action( 'wp_enqueue_scripts', 'ibv_enqueue_template_styles', 20 );
 function ibv_enqueue_template_styles() {
 	if ( is_singular( 'villas' ) && wp_style_is( 'ibv-villa-detail', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-villa-detail' );
-	}
-
-	if ( is_page_template( 'page-villa-listing.php' ) && wp_style_is( 'ibv-villa-listing', 'registered' ) ) {
-		wp_enqueue_style( 'ibv-villa-listing' );
 	}
 
 	if ( is_page_template( 'page-booking-confirmation.php' ) && wp_style_is( 'ibv-booking-confirmation', 'registered' ) ) {

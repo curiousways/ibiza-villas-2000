@@ -78,6 +78,7 @@ require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.ph
 require_once IBV_CORE_PATH . 'includes/sections/villa-hero/villa-hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-overview/villa-overview.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-similar/villa-similar.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-listing-hero/villa-listing-hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-listing-grid/villa-listing-grid.php';
 require_once IBV_CORE_PATH . 'includes/sections/listing-empty-state/listing-empty-state.php';
 require_once IBV_CORE_PATH . 'includes/sections/what-happens-next/what-happens-next.php';
@@ -90,5 +91,6 @@ require_once IBV_CORE_PATH . 'includes/acf/register-site-options-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-globals-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';
