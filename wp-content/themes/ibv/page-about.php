@@ -21,10 +21,7 @@ while ( have_posts() ) :
 	ibv_core_section_testimonials();
 
 	ibv_core_section_about_faq();
-
-	// TODO: Team section — brief 05.
-
-	ibv_core_section_newsletter_cta();
+	ibv_core_section_about_team();
 
 endwhile;
 

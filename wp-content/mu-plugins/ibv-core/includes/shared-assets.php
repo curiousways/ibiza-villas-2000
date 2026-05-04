@@ -150,6 +150,7 @@ function ibv_register_styles() {
 		'ibv-section-about-stats'         => 'includes/sections/about-stats/about-stats.css',
 		'ibv-section-about-story'         => 'includes/sections/about-story/about-story.css',
 		'ibv-section-about-faq'           => 'includes/sections/about-faq/about-faq.css',
+		'ibv-section-about-team'          => 'includes/sections/about-team/about-team.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
 		'ibv-section-testimonials'                  => 'includes/sections/testimonials/testimonials.css',
 		'ibv-section-special-offers-grid'           => 'includes/sections/special-offers-grid/special-offers-grid.css',
