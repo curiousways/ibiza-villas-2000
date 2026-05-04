@@ -63,12 +63,6 @@
 	font-weight: var(--ibv-font-weight-bold);
 }
 
-.ibv-enquiry-panel__price-gbp {
-	margin: var(--ibv-space-2xs) 0 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
-}
-
 .ibv-enquiry-panel__breakdown {
 	list-style: none;
 	margin: var(--ibv-space-sm) 0 0;
