@@ -101,14 +101,14 @@
 
 		var rateByPropertyId = {};
 		results.forEach( function ( r ) {
-			rateByPropertyId[ r.propertyId ] = r.weeklyRate;
+			rateByPropertyId[ String( r.propertyId ).toLowerCase() ] = r.weeklyRate;
 		} );
 
 		var cards = $$( 'article[data-bob-property-id]', grid );
 		var visible = [];
 
 		cards.forEach( function ( card ) {
-			var pid = card.getAttribute( 'data-bob-property-id' );
+			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();
 			if ( ! pid || ! Object.prototype.hasOwnProperty.call( rateByPropertyId, pid ) ) {
 				card.hidden = true;
 				return;
@@ -170,6 +170,8 @@
 			date_to: params.date_to,
 			pax: params.pax,
 		} );
+
+		console.log( '[ibv listing search] fetching', url );
 
 		fetch( url, {
 			method: 'GET',

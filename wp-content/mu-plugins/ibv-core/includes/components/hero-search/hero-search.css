@@ -1,17 +1,154 @@
+/* Villa listing — hero section.
+ * Source of truth: Figma node 282:3737. */
+
+ .ibv-villa-listing__hero {
+	background-color: var(--ibv-color-bg);
+}
+
+.ibv-villa-listing__hero-grid {
+	display: grid;
+	gap: var(--ibv-space-2xl);
+	align-items: center;
+}
+
+/* Below desktop: image stacks above the text + search form so the listing
+ * grid below sits flush under the form. */
+.ibv-villa-listing__hero-image {
+	order: 1;
+}
+
+.ibv-villa-listing__hero-text {
+	order: 2;
+}
+
+@media (min-width: 64rem) {
+	.ibv-villa-listing__hero-grid {
+		gap: var(--ibv-space-lg);
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+
+	.ibv-villa-listing__hero-image,
+	.ibv-villa-listing__hero-text {
+		order: initial;
+	}
+}
+
+/* Outer text column — Figma: gap-[38px] between content block and search bar. */
+.ibv-villa-listing__hero-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2.375rem;
+	align-items: flex-start;
+}
+
+/* Inner content block — Figma: gap-[24px] between title, gold rule, paragraphs. */
+.ibv-villa-listing__hero-content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+	align-items: flex-start;
+	width: 100%;
+}
+
+.ibv-villa-listing__hero-content > * {
+	margin: 0;
+}
+
+/* H1 + gold rule. */
+.ibv-villa-listing__hero-text .ibv-section-heading {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+	margin: 0;
+}
+
+.ibv-villa-listing__hero-text .ibv-section-heading__title {
+	margin: 0;
+	color: var(--ibv-color-accent);
+	font-family: var(--ibv-font-display);
+	font-size: clamp(2.5rem, 6vw, 4rem);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1;
+	letter-spacing: 0;
+}
+
+.ibv-villa-listing__hero-text .ibv-section-heading__title::after {
+	content: "";
+	display: block;
+	width: 100px;
+	height: 1px;
+	background-color: var(--ibv-color-accent-gold);
+	margin-top: var(--ibv-space-lg);
+}
+
+/* Subtitle paragraph block (the_content). */
+.ibv-villa-listing__hero-text .ibv-prose {
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-listing__hero-text .ibv-prose > * {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: 1.375rem;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.1;
+	color: var(--ibv-color-text);
+}
+
+/* "Looking for 12+ guests?" line. */
+.ibv-villa-listing__large-group-note {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: 1.125rem;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-listing__large-group-note a {
+	color: var(--ibv-color-blue-500);
+	text-decoration: underline;
+}
+
+/* Hero image. Below 64rem: full-width landscape banner (matches the
+ * "Short Breaks" pattern). At 64rem+: Figma 587×661 portrait, right-aligned. */
+.ibv-villa-listing__hero-image {
+	width: 100%;
+	aspect-ratio: 552 / 363;
+	border-radius: 0.625rem;
+	overflow: hidden;
+}
+
+@media (min-width: 64rem) {
+	.ibv-villa-listing__hero-image {
+		max-width: 36.6875rem;
+		aspect-ratio: 587 / 661;
+		justify-self: end;
+	}
+}
+
+.ibv-villa-listing__hero-image .ibv-villa-listing__hero-img-el {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: cover;
+}
+
 .ibv-hero-search {
 	width: 100%;
-	background: var(--ibv-color-off-white);
-	border-radius: var(--ibv-radius-pill);
-	padding: var(--ibv-space-xs);
-	padding-inline-start: var(--ibv-space-md);
-	box-shadow: var(--ibv-shadow-md);
+	max-width: 35.4375rem;
+	background-color: var(--ibv-color-bg-alt);
+	border-radius: 5.25rem;
+	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	box-shadow: 0 0 5px rgb(52 52 52 / 0.1);
 }
 
 .ibv-hero-search__inner {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: var(--ibv-space-md);
+	justify-content: space-between;
+	gap: 0;
 }
 
 .ibv-hero-search__field {
@@ -20,12 +157,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-2xs);
-	padding-inline: var(--ibv-space-md);
-	border-inline-end: 1px solid var(--ibv-color-border);
-}
-
-.ibv-hero-search__field:first-child {
-	padding-inline-start: 0;
+	padding-inline: 1rem 1.0625rem;
+	border-inline-end: 1px solid rgb(191 200 200 / 0.3);
 }
 
 .ibv-hero-search__field:last-of-type {
@@ -33,18 +166,22 @@
 }
 
 .ibv-hero-search__label {
-	font-size: var(--ibv-fs-eyebrow);
+	font-family: var(--ibv-font-body);
+	font-size: 0.75rem;
 	font-weight: var(--ibv-font-weight-medium);
+	line-height: 1.4;
 	color: var(--ibv-color-text);
 	letter-spacing: 0;
 }
 
 .ibv-hero-search__input {
 	border: 0;
-	background: transparent;
+	background-color: transparent;
 	padding: 0;
 	font-family: var(--ibv-font-body);
-	font-size: var(--ibv-fs-small);
+	font-size: 0.875rem;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
 	color: var(--ibv-color-text);
 	width: 100%;
 	min-width: 0;
@@ -54,10 +191,27 @@
 	color: var(--ibv-color-border);
 }
 
+/* Date inputs read as muted (placeholder-style) until filled. */
+.ibv-hero-search__input[type="date"]:not(:focus):invalid,
+.ibv-hero-search__input[type="number"]:placeholder-shown {
+	color: var(--ibv-color-border);
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-calendar-picker-indicator {
+	/* Hide the native date picker icon. */
+	display: none;
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-inner-spin-button {
+	display: none;
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-datetime-edit {
+	color: inherit;
+}
+
 .ibv-hero-search__input:focus {
-	outline: 2px solid var(--ibv-color-focus-ring);
-	outline-offset: 2px;
-	border-radius: var(--ibv-radius-sm);
+	outline: none;
 }
 
 .ibv-hero-search__submit {
@@ -70,7 +224,7 @@
 	padding: 0;
 	border: 0;
 	border-radius: 50%;
-	background: var(--ibv-color-accent);
+	background-color: var(--ibv-color-accent);
 	color: var(--ibv-color-accent-contrast);
 	cursor: pointer;
 	transition: background-color var(--ibv-duration-normal) var(--ibv-ease-standard);
@@ -78,11 +232,15 @@
 
 .ibv-hero-search__submit:hover,
 .ibv-hero-search__submit:focus-visible {
-	background: var(--ibv-color-link);
+	background-color: var(--ibv-color-link);
 }
 
 .ibv-hero-search__submit-icon {
 	flex-shrink: 0;
+	width: 0.84375rem;
+	height: 0.84375rem;
+	color: var(--ibv-color-accent-contrast);
+	stroke: currentColor;
 }
 
 @media (max-width: 47.999rem) {
@@ -100,7 +258,7 @@
 	.ibv-hero-search__field {
 		padding-inline: 0;
 		border-inline-end: 0;
-		border-block-end: 1px solid var(--ibv-color-border);
+		border-block-end: 1px solid rgb(191 200 200 / 0.3);
 		padding-block-end: var(--ibv-space-sm);
 	}
 
