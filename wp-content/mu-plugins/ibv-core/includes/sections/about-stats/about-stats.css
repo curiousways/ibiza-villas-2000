@@ -10,28 +10,32 @@
 @media (min-width: 48rem) {
 	.ibv-section-about-stats__grid {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: var(--ibv-space-2xl);
+		gap: 0;
 	}
 }
 
 .ibv-section-about-stats__tile {
 	display: flex;
 	flex-direction: column;
-	gap: var(--ibv-space-xs);
+	min-height: 14.625rem; /* 234px — combines with --rhythm-sm padding (48+48) for 330px section min-height */
 	text-align: left;
 }
 
+@media (min-width: 48rem) {
+	.ibv-section-about-stats__tile {
+		border-inline-start: 1px solid var(--ibv-color-text-muted-on-dark);
+		padding-inline-start: var(--ibv-space-lg);
+	}
+}
+
 .ibv-section-about-stats__eyebrow {
-	margin: 0;
-	font-size: var(--ibv-fs-eyebrow);
-	font-weight: var(--ibv-font-weight-medium);
-	letter-spacing: var(--ibv-tracking-eyebrow);
-	text-transform: uppercase;
-	color: var(--ibv-color-text-muted-on-dark);
+	margin: 0 0 auto 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-on-dark);
 }
 
 .ibv-section-about-stats__value {
-	margin: 0;
+	margin: 0 0 var(--ibv-space-xs) 0;
 	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-display);
 	font-weight: var(--ibv-font-weight-regular);
@@ -41,7 +45,7 @@
 
 .ibv-section-about-stats__caption {
 	margin: 0;
-	font-size: var(--ibv-fs-small);
+	font-size: var(--ibv-fs-body);
 	line-height: var(--ibv-lh-normal);
 	color: var(--ibv-color-text-on-dark);
 }
