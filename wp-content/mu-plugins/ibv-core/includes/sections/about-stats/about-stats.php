@@ -17,7 +17,7 @@ function ibv_core_section_about_stats() {
 
 	wp_enqueue_style( 'ibv-section-about-stats' );
 	?>
-	<section class="ibv-section-about-stats ibv-section ibv-section--surface-forest-green ibv-section--rhythm-sm">
+	<section class="ibv-section-about-stats ibv-section ibv-section--surface-blue ibv-section--rhythm-sm">
 		<div class="ibv-container">
 			<ul class="ibv-section-about-stats__grid">
 				<?php foreach ( $stats as $stat ) : ?>
