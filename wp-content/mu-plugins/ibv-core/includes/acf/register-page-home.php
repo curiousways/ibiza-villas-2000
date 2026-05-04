@@ -193,46 +193,6 @@ function ibv_register_page_home_fields() {
 					'type'  => 'url',
 				),
 				array(
-					'key'       => 'field_ibv_page_home_tab_three_step',
-					'label'     => __( 'Three steps', 'ibv' ),
-					'type'      => 'tab',
-					'placement' => 'left',
-				),
-				array(
-					'key'   => 'field_ibv_page_home_three_step_intro_eyebrow',
-					'label' => __( '3-step eyebrow', 'ibv' ),
-					'name'  => 'three_step_intro_eyebrow',
-					'type'  => 'text',
-				),
-				array(
-					'key'   => 'field_ibv_page_home_three_step_intro_title',
-					'label' => __( '3-step title', 'ibv' ),
-					'name'  => 'three_step_intro_title',
-					'type'  => 'text',
-				),
-				array(
-					'key'        => 'field_ibv_page_home_three_step_steps',
-					'label'      => __( '3-step cards', 'ibv' ),
-					'name'       => 'three_step_steps',
-					'type'       => 'repeater',
-					'layout'     => 'block',
-					'sub_fields' => array(
-						array(
-							'key'   => 'field_ibv_page_home_three_step_card_title',
-							'label' => __( 'Title', 'ibv' ),
-							'name'  => 'title',
-							'type'  => 'text',
-						),
-						array(
-							'key'   => 'field_ibv_page_home_three_step_card_text',
-							'label' => __( 'Text', 'ibv' ),
-							'name'  => 'text',
-							'type'  => 'textarea',
-							'rows'  => 3,
-						),
-					),
-				),
-				array(
 					'key'       => 'field_ibv_page_home_tab_guide',
 					'label'     => __( 'Ibiza guide', 'ibv' ),
 					'type'      => 'tab',

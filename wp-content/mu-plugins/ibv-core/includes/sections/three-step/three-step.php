@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_three_step() {
 	wp_enqueue_style( 'ibv-section-three-step' );
 
-	$eyebrow = get_field( 'three_step_intro_eyebrow' );
-	$title   = get_field( 'three_step_intro_title' );
-	$steps   = get_field( 'three_step_steps' );
+	$eyebrow = get_field( 'three_step_intro_eyebrow', 'option' );
+	$title   = get_field( 'three_step_intro_title', 'option' );
+	$steps   = get_field( 'three_step_steps', 'option' );
 
 	if ( ! is_array( $steps ) || ! count( $steps ) ) {
 		return;

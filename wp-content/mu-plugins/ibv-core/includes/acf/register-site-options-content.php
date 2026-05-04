@@ -237,6 +237,42 @@ function ibv_register_site_options_content_fields() {
 					'type'  => 'page_link',
 				),
 				array(
+					'key'           => 'field_ibv_globals_three_step_intro_eyebrow',
+					'label'         => __( '3-step eyebrow', 'ibv' ),
+					'name'          => 'three_step_intro_eyebrow',
+					'type'          => 'text',
+					'default_value' => __( 'Simple & Swift', 'ibv' ),
+				),
+				array(
+					'key'           => 'field_ibv_globals_three_step_intro_title',
+					'label'         => __( '3-step title', 'ibv' ),
+					'name'          => 'three_step_intro_title',
+					'type'          => 'text',
+					'default_value' => __( 'Our 3-Step Process', 'ibv' ),
+				),
+				array(
+					'key'        => 'field_ibv_globals_three_step_steps',
+					'label'      => __( '3-step cards', 'ibv' ),
+					'name'       => 'three_step_steps',
+					'type'       => 'repeater',
+					'layout'     => 'block',
+					'sub_fields' => array(
+						array(
+							'key'   => 'field_ibv_globals_three_step_card_title',
+							'label' => __( 'Title', 'ibv' ),
+							'name'  => 'title',
+							'type'  => 'text',
+						),
+						array(
+							'key'   => 'field_ibv_globals_three_step_card_text',
+							'label' => __( 'Text', 'ibv' ),
+							'name'  => 'text',
+							'type'  => 'textarea',
+							'rows'  => 3,
+						),
+					),
+				),
+				array(
 					'key'        => 'field_ibv_home_testimonials',
 					'label'      => __( 'Testimonials', 'ibv' ),
 					'name'       => 'testimonials',
