@@ -63,6 +63,7 @@ require_once IBV_CORE_PATH . 'includes/components/newsletter-form/newsletter-for
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-stats/about-stats.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-story/about-story.php';
+require_once IBV_CORE_PATH . 'includes/sections/about-faq/about-faq.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';
 require_once IBV_CORE_PATH . 'includes/sections/trust-strip/trust-strip.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-offer/featured-offer.php';
