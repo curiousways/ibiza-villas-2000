@@ -19,11 +19,37 @@
 	var config = window.ibvListingSearch;
 	var params = config.params || {};
 
-	if ( ! params.date_from || ! params.date_to || ! params.pax ) {
-		return;
+	// When no user search is active, probe the API with a default future
+	// week so cards can show a real "from" weekly rate instead of the
+	// €420 ACF fallback. In probe mode we hydrate prices only — never
+	// filter, hide, sort, or toggle the empty state.
+	var isProbe = ! params.date_from || ! params.date_to || ! params.pax;
+	if ( isProbe ) {
+		var probe = defaultProbeRange();
+		params = {
+			date_from: probe.from,
+			date_to: probe.to,
+			pax: 2,
+		};
 	}
 
 	var TIMEOUT_MS = 6000;
+
+	function pad( n ) {
+		return n < 10 ? '0' + n : String( n );
+	}
+
+	function formatYmd( d ) {
+		return d.getUTCFullYear() + '-' + pad( d.getUTCMonth() + 1 ) + '-' + pad( d.getUTCDate() );
+	}
+
+	function defaultProbeRange() {
+		var from = new Date();
+		from.setUTCDate( from.getUTCDate() + 30 );
+		var to = new Date( from.getTime() );
+		to.setUTCDate( to.getUTCDate() + 7 );
+		return { from: formatYmd( from ), to: formatYmd( to ) };
+	}
 
 	function $( selector, root ) {
 		return ( root || document ).querySelector( selector );
@@ -63,8 +89,14 @@
 				if ( ! row || typeof row !== 'object' ) {
 					return null;
 				}
-				var pid = row.property_id || row.propertyId || row.id || row.villa;
-				var rate = row.weekly_rate;
+				if ( row.available !== undefined && Number( row.available ) !== 1 ) {
+					return null;
+				}
+				var pid = row.villa || row.property_id || row.propertyId || row.id;
+				var rate = row.eur_base_rental;
+				if ( rate === undefined ) {
+					rate = row.weekly_rate;
+				}
 				if ( rate === undefined ) {
 					rate = row.weeklyRate;
 				}
@@ -109,10 +141,15 @@
 
 		cards.forEach( function ( card ) {
 			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();
-			if ( ! pid || ! Object.prototype.hasOwnProperty.call( rateByPropertyId, pid ) ) {
-				card.hidden = true;
+			var hasMatch = pid && Object.prototype.hasOwnProperty.call( rateByPropertyId, pid );
+
+			if ( ! hasMatch ) {
+				if ( ! isProbe ) {
+					card.hidden = true;
+				}
 				return;
 			}
+
 			card.hidden = false;
 			var rate = rateByPropertyId[ pid ];
 			if ( rate !== null && !isNaN( rate ) ) {
@@ -124,6 +161,11 @@
 			}
 			visible.push( card );
 		} );
+
+		// Probe mode: prices only, leave grid order and visibility alone.
+		if ( isProbe ) {
+			return;
+		}
 
 		visible.sort( function ( a, b ) {
 			var pa = parseFloat( a.getAttribute( 'data-price' ) ) || Infinity;
@@ -171,7 +213,7 @@
 			pax: params.pax,
 		} );
 
-		console.log( '[ibv listing search] fetching', url );
+		// console.log( '[ibv listing search] fetching', url );
 
 		fetch( url, {
 			method: 'GET',
@@ -192,9 +234,9 @@
 			.catch( function ( err ) {
 				clearTimeout( timeoutId );
 				// Per spec: leave server fallback in place on failure.
-				if ( window.console && console.warn ) {
-					console.warn( '[ibv listing search] availability fetch failed:', err );
-				}
+				// if ( window.console && console.warn ) {
+				// 	console.warn( '[ibv listing search] availability fetch failed:', err );
+				// }
 			} );
 	}
 
