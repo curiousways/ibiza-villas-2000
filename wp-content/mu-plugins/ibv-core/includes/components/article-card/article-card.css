@@ -1,0 +1,105 @@
+/* Article card — vertical post tile (image / title / meta / rule / excerpt / read-more).
+   Used by Ibiza Guide preview and the Ibiza Guide page article grid. */
+
+.ibv-article-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--ibv-color-surface);
+	border: 1px solid var(--ibv-color-off-white); /* near-invisible per Figma; shadow does the lifting */
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+	box-shadow: var(--ibv-shadow-sm);
+	min-width: 0;
+}
+
+.ibv-article-card__media {
+	display: block;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+}
+
+.ibv-article-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.ibv-article-card__body {
+	padding: 2rem; /* 32px — Figma card content padding */
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+	flex-grow: 1;
+	align-items: flex-start;
+}
+
+.ibv-article-card__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-article-card__title a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.ibv-article-card__title a:hover,
+.ibv-article-card__title a:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
+/* Meta row — category + small sage dot + min read */
+.ibv-article-card__meta {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
+}
+
+/* Sage dot separator — only renders when both cat AND time are present */
+.ibv-article-card__cat + .ibv-article-card__time::before {
+	content: '';
+	display: inline-block;
+	width: 0.25rem; /* 4px — Figma bullet size */
+	height: 0.25rem;
+	border-radius: 50%;
+	background: var(--ibv-color-sage-500);
+	vertical-align: middle;
+	margin-inline-end: var(--ibv-space-2xs);
+}
+
+.ibv-article-card__rule {
+	width: 3.125rem; /* 50px — matches Figma, consistent with other gold rules */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+	align-self: flex-start;
+}
+
+.ibv-article-card__excerpt {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-link); /* forest-green-deep — Figma's deliberate brand-coloured body */
+	line-height: var(--ibv-lh-relaxed);
+	flex-grow: 1;
+}
+
+/* "Read more" — ghost button styled as underlined text link, padding zeroed
+   so the underline starts flush left under the body content */
+.ibv-article-card__body .ibv-button--ghost {
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+	padding-inline: 0;
+	align-self: flex-start;
+	margin-block-start: var(--ibv-space-xs);
+}

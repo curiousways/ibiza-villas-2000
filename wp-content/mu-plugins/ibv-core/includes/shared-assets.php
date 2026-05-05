@@ -113,6 +113,13 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-article-card',
+		IBV_CORE_URL . 'includes/components/article-card/article-card.css',
+		[ 'ibv-base', 'ibv-button' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-newsletter-form',
 		IBV_CORE_URL . 'includes/components/newsletter-form/newsletter-form.css',
 		[ 'ibv-base' ],
@@ -152,6 +159,7 @@ function ibv_register_styles() {
 		'ibv-section-about-faq'           => 'includes/sections/about-faq/about-faq.css',
 		'ibv-section-about-team'          => 'includes/sections/about-team/about-team.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',
+		'ibv-section-featured-article'    => 'includes/sections/featured-article/featured-article.css',
 		'ibv-section-testimonials'                  => 'includes/sections/testimonials/testimonials.css',
 		'ibv-section-special-offers-grid'           => 'includes/sections/special-offers-grid/special-offers-grid.css',
 		'ibv-section-special-offers-empty-state'    => 'includes/sections/special-offers-empty-state/special-offers-empty-state.css',

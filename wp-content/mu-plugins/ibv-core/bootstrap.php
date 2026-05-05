@@ -58,6 +58,7 @@ require_once IBV_CORE_PATH . 'includes/components/gallery/gallery.php';
 require_once IBV_CORE_PATH . 'includes/components/enquiry-panel/enquiry-panel.php';
 require_once IBV_CORE_PATH . 'includes/components/accommodation-tile/accommodation-tile.php';
 require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alternative-accommodation.php';
+require_once IBV_CORE_PATH . 'includes/components/article-card/article-card.php';
 require_once IBV_CORE_PATH . 'includes/components/newsletter-form/newsletter-form.php';
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
@@ -76,6 +77,7 @@ require_once IBV_CORE_PATH . 'includes/sections/fancy-different/fancy-different.
 require_once IBV_CORE_PATH . 'includes/sections/ips-panel/ips-panel.php';
 require_once IBV_CORE_PATH . 'includes/sections/three-step/three-step.php';
 require_once IBV_CORE_PATH . 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.php';
+require_once IBV_CORE_PATH . 'includes/sections/featured-article/featured-article.php';
 require_once IBV_CORE_PATH . 'includes/sections/meet-team-teaser/meet-team-teaser.php';
 require_once IBV_CORE_PATH . 'includes/sections/testimonials/testimonials.php';
 require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.php';
