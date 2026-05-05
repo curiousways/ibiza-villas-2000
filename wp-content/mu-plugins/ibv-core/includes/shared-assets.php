@@ -224,7 +224,6 @@ function ibv_register_styles() {
 		'ibv-section-villa-similar'        => 'includes/sections/villa-similar/villa-similar.css',
 		'ibv-section-villa-listing-grid'   => 'includes/sections/villa-listing-grid/villa-listing-grid.css',
 		'ibv-section-listing-empty-state'  => 'includes/sections/listing-empty-state/listing-empty-state.css',
-		'ibv-section-what-happens-next'    => 'includes/sections/what-happens-next/what-happens-next.css',
 		'ibv-section-concierge-cross-sell' => 'includes/sections/concierge-cross-sell/concierge-cross-sell.css',
 		'ibv-section-villa-testimonial-teaser' => 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.css',
 		'ibv-section-villa-listing-hero'    => 'includes/sections/villa-listing-hero/villa-listing-hero.css',
