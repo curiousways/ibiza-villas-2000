@@ -65,7 +65,7 @@
 
 .ibv-accommodation-tile__description {
 	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-normal);
+	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text);
 }
 
