@@ -89,32 +89,35 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			<input type="hidden" name="villa_id" value="<?php echo esc_attr( (string) $villa_id ); ?>">
 
 			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-from"><?php esc_html_e( 'Arrive', 'ibv' ); ?></label>
-				<input type="date" id="ibv-ep-from" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" required>
+				<label for="ibv-ep-from" class="ibv-u-visually-hidden"><?php esc_html_e( 'Arrive', 'ibv' ); ?></label>
+				<input type="date" id="ibv-ep-from" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" placeholder="<?php esc_attr_e( 'Arrive', 'ibv' ); ?>" required>
 			</div>
 
 			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-to"><?php esc_html_e( 'Depart', 'ibv' ); ?></label>
-				<input type="date" id="ibv-ep-to" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" required>
+				<label for="ibv-ep-to" class="ibv-u-visually-hidden"><?php esc_html_e( 'Depart', 'ibv' ); ?></label>
+				<input type="date" id="ibv-ep-to" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" placeholder="<?php esc_attr_e( 'Depart', 'ibv' ); ?>" required>
 			</div>
 
 			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-pax"><?php esc_html_e( 'Guests', 'ibv' ); ?></label>
-				<input type="number" id="ibv-ep-pax" name="pax" min="1" max="30" value="<?php echo esc_attr( $prefill_pax ); ?>" required>
+				<label for="ibv-ep-pax" class="ibv-u-visually-hidden"><?php esc_html_e( 'Guests', 'ibv' ); ?></label>
+				<input type="number" id="ibv-ep-pax" name="pax" min="1" max="30" value="<?php echo esc_attr( $prefill_pax ); ?>" placeholder="<?php esc_attr_e( 'Guests', 'ibv' ); ?>" required>
 			</div>
 
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--message">
-				<label for="ibv-ep-message"><?php esc_html_e( 'Message (optional)', 'ibv' ); ?></label>
-				<textarea id="ibv-ep-message" name="message" rows="3"></textarea>
+				<label for="ibv-ep-message" class="ibv-u-visually-hidden"><?php esc_html_e( 'Message', 'ibv' ); ?></label>
+				<textarea id="ibv-ep-message" name="message" rows="6" placeholder="<?php esc_attr_e( 'Message (Optional)', 'ibv' ); ?>"></textarea>
 			</div>
 
 			<div class="ibv-enquiry-panel__price-block">
 				<p class="ibv-enquiry-panel__price-label"><?php esc_html_e( 'Total price', 'ibv' ); ?></p>
-				<p class="ibv-enquiry-panel__price-eur" data-bob-total-eur><?php echo esc_html( '—' ); ?></p>
+				<ul class="ibv-enquiry-panel__price-list">
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur>€1,420</li>
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp>£1,620</li>
+				</ul>
 				<ul class="ibv-enquiry-panel__breakdown">
-					<li><span data-bob-base-rental><?php echo esc_html( '—' ); ?></span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
-					<li><span data-bob-adw><?php echo esc_html( '—' ); ?></span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
-					<li><span data-bob-cleaning><?php echo esc_html( '—' ); ?></span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental>€1,200</span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw>€120</span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning>€100</span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
 				</ul>
 				<p class="ibv-enquiry-panel__eco-note"><?php esc_html_e( 'Total does not include the government Eco Tax of €2.20 per person, per night, payable in resort.', 'ibv' ); ?></p>
 			</div>
@@ -144,39 +147,32 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		<hr class="ibv-enquiry-panel__divider">
 
 		<div class="ibv-enquiry-panel__chat">
-			<p class="ibv-enquiry-panel__chat-label"><?php esc_html_e( 'Prefer to chat?', 'ibv' ); ?></p>
 			<?php
 			$whatsapp = get_field( 'whatsapp_number', 'option' );
-			if ( $whatsapp ) :
-				$digits       = preg_replace( '/[^0-9]/', '', (string) $whatsapp );
-				$whatsapp_url = $digits ? 'https://wa.me/' . $digits : '';
-				if ( $whatsapp_url ) :
-					?>
-					<a class="ibv-enquiry-panel__chat-link" href="<?php echo esc_url( $whatsapp_url ); ?>" target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'WhatsApp us', 'ibv' ); ?>
-						<span class="ibv-enquiry-panel__chat-number"><?php echo esc_html( (string) $whatsapp ); ?></span>
-					</a>
-					<?php
-				endif;
-			endif;
-
+			$digits   = $whatsapp ? preg_replace( '/[^0-9]/', '', (string) $whatsapp ) : '';
+			$wa_url   = $digits ? 'https://wa.me/' . $digits : '';
+			?>
+			<p class="ibv-enquiry-panel__chat-label">
+				<?php esc_html_e( 'Prefer to chat?', 'ibv' ); ?>
+				<?php if ( $wa_url ) : ?>
+					<a href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'WhatsApp us', 'ibv' ); ?></a>
+				<?php endif; ?>
+			</p>
+			<?php
 			$phones = [
-				[ 'label' => __( 'Call UK', 'ibv' ),     'value' => get_field( 'phone_uk', 'option' ) ],
-				[ 'label' => __( 'Call Ibiza', 'ibv' ), 'value' => get_field( 'phone_ibiza', 'option' ) ],
+				get_field( 'phone_uk', 'option' ),
+				get_field( 'phone_ibiza', 'option' ),
 			];
-			foreach ( $phones as $phone ) :
-				if ( empty( $phone['value'] ) ) {
+			foreach ( $phones as $phone_val ) :
+				if ( empty( $phone_val ) ) {
 					continue;
 				}
-				$tel_digits = preg_replace( '/[^0-9+]/', '', (string) $phone['value'] );
+				$tel_digits = preg_replace( '/[^0-9+]/', '', (string) $phone_val );
 				if ( ! $tel_digits ) {
 					continue;
 				}
 				?>
-				<a class="ibv-enquiry-panel__chat-link" href="<?php echo esc_url( 'tel:' . $tel_digits ); ?>">
-					<?php echo esc_html( $phone['label'] ); ?>
-					<span class="ibv-enquiry-panel__chat-number"><?php echo esc_html( (string) $phone['value'] ); ?></span>
-				</a>
+				<span class="ibv-enquiry-panel__chat-number"><?php echo esc_html( (string) $phone_val ); ?></span>
 				<?php
 			endforeach;
 
