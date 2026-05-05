@@ -19,34 +19,6 @@
 	overflow: visible;
 }
 
-.ibv-villa-card__badge {
-	position: absolute;
-	inset-block-start: var(--ibv-space-sm);
-	inset-inline-start: var(--ibv-space-sm);
-	z-index: 1;
-	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-semibold);
-	background: var(--ibv-color-accent-gold);
-	color: var(--ibv-color-brand-teal);
-	border-radius: var(--ibv-radius-sm);
-}
-
-.ibv-villa-card__badge--gold {
-	background: var(--ibv-color-accent-gold);
-	color: var(--ibv-color-brand-teal);
-}
-
-.ibv-villa-card__badge--teal {
-	background: var(--ibv-color-brand-teal);
-	color: var(--ibv-color-text-inverse);
-}
-
-.ibv-villa-card__badge--red {
-	background: var(--ibv-color-accent-red);
-	color: var(--ibv-color-text-inverse);
-}
-
 .ibv-villa-card__media {
 	position: relative;
 	display: block;
@@ -252,47 +224,35 @@
 	}
 }
 
-.ibv-villa-card__offer-pricing {
+/* Offer block — populated by the Special Offers grid (per-villa-offer
+   row from the `villa_offers` repeater). Replaces the legacy was/now
+   pricing block; sits in the same vertical position. The dates and
+   headline read as one statement ("for these dates, this price"),
+   so they share a single meta line joined by the sage dot used on
+   article-card meta and pull-quote attribution. */
+.ibv-villa-card__offer {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
 	margin-block-start: var(--ibv-space-sm);
-	font-size: var(--ibv-fs-small);
 }
 
-.ibv-villa-card__was,
-.ibv-villa-card__now {
-	margin: 0 0 var(--ibv-space-xs);
-}
-
-.ibv-villa-card__was-amount {
-	text-decoration: line-through;
-	color: var(--ibv-color-text-muted);
-	margin-inline-start: var(--ibv-space-xs);
-}
-
-.ibv-villa-card__now-amount {
-	font-weight: var(--ibv-font-weight-bold);
-	color: var(--ibv-color-text);
-	margin-inline-start: var(--ibv-space-xs);
-}
-
-.ibv-villa-card__offer-line {
-	font-weight: var(--ibv-font-weight-semibold);
-	margin: 0 0 var(--ibv-space-xs);
-}
-
-.ibv-villa-card__valid {
+.ibv-villa-card__offer-meta {
 	margin: 0;
-	color: var(--ibv-color-text-muted);
-}
-
-.ibv-villa-card__footnote {
-	margin: var(--ibv-space-sm) 0 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
 	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-bold);
 	color: var(--ibv-color-text-muted);
-	font-style: italic;
 }
 
-.ibv-villa-card__now-asterisk {
-	margin-inline-start: 0.125em;
+.ibv-villa-card__offer-desc {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-card__body .ibv-button {

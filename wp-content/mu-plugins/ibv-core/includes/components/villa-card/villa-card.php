@@ -85,18 +85,15 @@ function ibv_core_villa_card( $args = [] ) {
 	$defaults = [
 		'villa'             => 0,
 		'variant'           => 'default',
-		'was_price'         => null,
-		'now_price'         => null,
-		'valid_from'        => null,
-		'valid_to'          => null,
-		'offer_price_text'  => '',
-		'offer_dates_text'  => '',
 		'cta_label'         => __( 'View Villa', 'ibv' ),
 		'cta_url'           => '',
-		'badge'             => '',
-		'badge_variant'     => 'default',
-		'footnote'          => '',
-		'show_now_asterisk' => false,
+		// Offer fields — populated by the Special Offers grid only.
+		// `offer_dates` is a pre-formatted string (date-range formatter
+		// lives with the villa-offers component to keep one source of
+		// truth for offer date formatting).
+		'offer_dates'       => '',
+		'offer_headline'    => '',
+		'offer_description' => '',
 	];
 	$args = wp_parse_args( $args, $defaults );
 
@@ -109,11 +106,6 @@ function ibv_core_villa_card( $args = [] ) {
 	wp_enqueue_style( 'ibv-button' );
 
 	$variant = in_array( $args['variant'], [ 'default', 'offer', 'similar' ], true ) ? $args['variant'] : 'default';
-
-	$valid_badge_variants = [ 'default', 'gold', 'teal', 'red' ];
-	$badge_variant        = in_array( $args['badge_variant'], $valid_badge_variants, true )
-		? $args['badge_variant']
-		: 'default';
 
 	$permalink = $args['cta_url'] ? $args['cta_url'] : get_permalink( $villa_id );
 	$title     = get_field( 'villa_pretty_name', $villa_id );
@@ -133,14 +125,9 @@ function ibv_core_villa_card( $args = [] ) {
 		|| (
 			'default' === $variant
 			&& (
-				$args['was_price']
-				|| $args['now_price']
-				|| $args['offer_price_text']
-				|| $args['valid_from']
-				|| $args['valid_to']
-				|| $args['offer_dates_text']
-				|| $args['footnote']
-				|| ! empty( $args['show_now_asterisk'] )
+				$args['offer_dates']
+				|| $args['offer_headline']
+				|| $args['offer_description']
 			)
 		);
 
@@ -150,12 +137,6 @@ function ibv_core_villa_card( $args = [] ) {
 	];
 	?>
 	<article class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
-		<?php if ( ! empty( $args['badge'] ) ) : ?>
-			<span class="ibv-villa-card__badge ibv-villa-card__badge--<?php echo esc_attr( $badge_variant ); ?>">
-				<?php echo esc_html( $args['badge'] ); ?>
-			</span>
-		<?php endif; ?>
-
 		<a href="<?php echo esc_url( $permalink ); ?>" class="ibv-villa-card__media">
 			<?php
 			if ( $thumb_id ) {
@@ -236,64 +217,24 @@ function ibv_core_villa_card( $args = [] ) {
 			<?php endif; ?>
 
 			<?php if ( $show_offer_row ) : ?>
-				<div class="ibv-villa-card__offer-pricing">
-					<?php if ( $args['was_price'] || $args['now_price'] ) : ?>
-						<?php if ( $args['was_price'] ) : ?>
-							<p class="ibv-villa-card__was">
-								<span class="ibv-villa-card__was-label"><?php esc_html_e( 'Was', 'ibv' ); ?></span>
-								<span class="ibv-villa-card__was-amount">
-									<?php
-									printf(
-										/* translators: %s formatted price */
-										esc_html__( 'From €%s / wk', 'ibv' ),
-										esc_html( number_format_i18n( (float) $args['was_price'] ) )
-									);
-									?>
-								</span>
-							</p>
-						<?php endif; ?>
-						<?php if ( $args['now_price'] ) : ?>
-							<p class="ibv-villa-card__now">
-								<span class="ibv-villa-card__now-label"><?php esc_html_e( 'Now', 'ibv' ); ?></span>
-								<span class="ibv-villa-card__now-amount">
-									<?php
-									printf(
-										/* translators: %s formatted price */
-										esc_html__( 'From €%s / wk', 'ibv' ),
-										esc_html( number_format_i18n( (float) $args['now_price'] ) )
-									);
-									if ( ! empty( $args['show_now_asterisk'] ) ) {
-										echo '<span class="ibv-villa-card__now-asterisk" aria-hidden="true">*</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									}
-									?>
-								</span>
-							</p>
-						<?php endif; ?>
-					<?php elseif ( $args['offer_price_text'] ) : ?>
-						<p class="ibv-villa-card__offer-line"><?php echo esc_html( $args['offer_price_text'] ); ?></p>
+				<div class="ibv-villa-card__offer">
+					<?php if ( $args['offer_dates'] || $args['offer_headline'] ) : ?>
+						<p class="ibv-villa-card__offer-meta">
+							<?php if ( $args['offer_dates'] ) : ?>
+								<span class="ibv-villa-card__offer-dates"><?php echo esc_html( $args['offer_dates'] ); ?></span>
+							<?php endif; ?>
+							<?php if ( $args['offer_dates'] && $args['offer_headline'] ) : ?>
+								<span class="ibv-meta-dot" aria-hidden="true"></span>
+							<?php endif; ?>
+							<?php if ( $args['offer_headline'] ) : ?>
+								<span class="ibv-villa-card__offer-headline"><?php echo esc_html( $args['offer_headline'] ); ?></span>
+							<?php endif; ?>
+						</p>
 					<?php endif; ?>
-					<?php
-					$from_d = ibv_format_acf_date_display( (string) $args['valid_from'] );
-					$to_d   = ibv_format_acf_date_display( (string) $args['valid_to'] );
-					if ( $from_d && $to_d ) {
-						printf(
-							'<p class="ibv-villa-card__valid"><span class="ibv-villa-card__valid-label">%s</span> %s – %s</p>',
-							esc_html__( 'Valid:', 'ibv' ),
-							esc_html( $from_d ),
-							esc_html( $to_d )
-						);
-					} elseif ( $args['offer_dates_text'] ) {
-						printf(
-							'<p class="ibv-villa-card__valid"><span class="ibv-villa-card__valid-label">%s</span> %s</p>',
-							esc_html__( 'Valid:', 'ibv' ),
-							esc_html( $args['offer_dates_text'] )
-						);
-					}
-					?>
+					<?php if ( $args['offer_description'] ) : ?>
+						<p class="ibv-villa-card__offer-desc"><?php echo esc_html( $args['offer_description'] ); ?></p>
+					<?php endif; ?>
 				</div>
-				<?php if ( $args['footnote'] ) : ?>
-					<p class="ibv-villa-card__footnote"><?php echo esc_html( $args['footnote'] ); ?></p>
-				<?php endif; ?>
 			<?php else : ?>
 				<div class="ibv-villa-card__price">
 					<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback. */ ?>

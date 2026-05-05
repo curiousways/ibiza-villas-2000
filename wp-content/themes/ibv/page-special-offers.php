@@ -25,12 +25,9 @@ while ( have_posts() ) :
 		]
 	);
 
-	$offers = get_field( 'offer_table' );
-	if ( ! empty( $offers ) && is_array( $offers ) ) {
-		ibv_core_section_special_offers_grid( $offers );
-	} else {
-		ibv_core_section_special_offers_empty_state();
-	}
+	// The grid section owns its own data — aggregates active offers
+	// across all villas, falls back to the empty state internally.
+	ibv_core_section_special_offers_grid();
 
 	ibv_core_section_short_breaks(
 		[
