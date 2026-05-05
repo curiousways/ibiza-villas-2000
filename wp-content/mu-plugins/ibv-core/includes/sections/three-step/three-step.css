@@ -93,7 +93,7 @@
 
 .ibv-step-card__text {
 	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-normal);
+	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-text);
 }
 
