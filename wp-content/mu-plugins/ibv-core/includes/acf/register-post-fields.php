@@ -68,14 +68,16 @@ function ibv_register_post_fields() {
 					'key'           => 'field_ibv_post_related_articles',
 					'label'         => __( 'Related Articles', 'ibv' ),
 					'name'          => 'related_articles',
-					'type'          => 'post_object',
+					// Relationship (not post_object): native min/max enforcement
+					// and drag-to-reorder, which matters here since pick order
+					// is the rendered order.
+					'type'          => 'relationship',
 					'post_type'     => array( 'post' ),
+					'filters'       => array( 'search' ),
 					'return_format' => 'id',
-					'multiple'      => 1,
-					'allow_null'    => 1,
 					'min'           => 0,
 					'max'           => 3,
-					'instructions'  => __( 'Up to three posts to feature in the related-articles block at the bottom of the article. Leave empty to fall back to category-related posts (brief 02).', 'ibv' ),
+					'instructions'  => __( 'Up to three posts to feature in the related-articles block at the bottom of the article. Drag to reorder. Leave empty to fall back to category-related posts.', 'ibv' ),
 				),
 			),
 			'location'              => $location,

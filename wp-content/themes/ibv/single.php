@@ -79,11 +79,7 @@ while ( have_posts() ) :
 	</article>
 
 	<?php
-	/*
-	 * TODO brief 02: Related articles section here.
-	 * Reads ACF related_articles, falls back to category-related auto query,
-	 * renders 3-up grid via ibv_core_article_card.
-	 */
+	ibv_core_section_related_articles();
 
 endwhile;
 

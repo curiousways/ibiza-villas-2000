@@ -81,6 +81,7 @@ require_once IBV_CORE_PATH . 'includes/sections/three-step/three-step.php';
 require_once IBV_CORE_PATH . 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-article/featured-article.php';
 require_once IBV_CORE_PATH . 'includes/sections/article-grid/article-grid.php';
+require_once IBV_CORE_PATH . 'includes/sections/related-articles/related-articles.php';
 require_once IBV_CORE_PATH . 'includes/sections/meet-team-teaser/meet-team-teaser.php';
 require_once IBV_CORE_PATH . 'includes/sections/testimonials/testimonials.php';
 require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.php';
