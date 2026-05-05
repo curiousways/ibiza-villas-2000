@@ -67,7 +67,7 @@ function ibv_render_booking_details_panel() {
 	}
 	?>
 	<section class="ibv-booking-confirmation__details ibv-section ibv-section--surface-bg ibv-section--rhythm-sm">
-		<div class="ibv-container ibv-container--narrow">
+		<div class="ibv-container">
 			<ul class="ibv-booking-confirmation__details-list">
 				<?php if ( $villa_name ) : ?>
 					<li>
