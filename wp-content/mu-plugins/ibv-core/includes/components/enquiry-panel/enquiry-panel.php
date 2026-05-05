@@ -47,6 +47,13 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			$prefill_pax = (string) $pax;
 		}
 	}
+
+	// Server-rendered fallback total for direct arrivals (no API call yet).
+	// JS overwrites this once the live response lands.
+	$indicative = get_field( 'villa_indicative_from_price', $villa_id );
+	$total_eur_fallback = $indicative
+		? '€' . number_format_i18n( (float) $indicative )
+		: '—';
 	?>
 	<?php /* ─────────────────────────────────────────────────────────────
 	       BOB API INTEGRATION SHELL — enquiry panel
@@ -73,8 +80,18 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	       Spec: Notion → IBZ002 → API Integration Spec
 	       ──────────────────────────────────────────────────────────── */ ?>
 
+	<?php
+	// When the visitor arrives with all three search params, JS will fire a
+	// pricing fetch on init. Hide the server-rendered fallback values until
+	// the response lands so they don't flicker over with API data.
+	$is_loading = ( '' !== $prefill_from && '' !== $prefill_to && '' !== $prefill_pax );
+	$panel_classes = [ 'ibv-enquiry-panel' ];
+	if ( $is_loading ) {
+		$panel_classes[] = 'is-pricing-loading';
+	}
+	?>
 	<div
-		class="ibv-enquiry-panel"
+		class="<?php echo esc_attr( implode( ' ', $panel_classes ) ); ?>"
 		data-bob-enquiry-panel
 		data-villa-id="<?php echo esc_attr( (string) $villa_id ); ?>"
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
@@ -98,9 +115,11 @@ function ibv_core_enquiry_panel( $villa_id ) {
 				<input type="date" id="ibv-ep-to" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" placeholder="<?php esc_attr_e( 'Depart', 'ibv' ); ?>" required>
 			</div>
 
-			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-pax" class="ibv-u-visually-hidden"><?php esc_html_e( 'Guests', 'ibv' ); ?></label>
-				<input type="number" id="ibv-ep-pax" name="pax" min="1" max="30" value="<?php echo esc_attr( $prefill_pax ); ?>" placeholder="<?php esc_attr_e( 'Guests', 'ibv' ); ?>" required>
+			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--pax">
+				<label for="ibv-ep-pax">
+					<input type="number" id="ibv-ep-pax" name="pax" min="1" max="30" placeholder="1" value="<?php echo esc_attr( $prefill_pax ); ?>" placeholder="" required>
+					<span class="ibv-enquiry-panel__field-suffix" aria-hidden="true"><?php esc_html_e( 'Guests', 'ibv' ); ?></span>
+				</label>
 			</div>
 
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--message">
@@ -111,13 +130,13 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			<div class="ibv-enquiry-panel__price-block">
 				<p class="ibv-enquiry-panel__price-label"><?php esc_html_e( 'Total price', 'ibv' ); ?></p>
 				<ul class="ibv-enquiry-panel__price-list">
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur>€1,420</li>
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp>£1,620</li>
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur><?php echo esc_html( $total_eur_fallback ); ?></li>
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp>—</li>
 				</ul>
 				<ul class="ibv-enquiry-panel__breakdown">
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental>€1,200</span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw>€120</span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning>€100</span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental>—</span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw>—</span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning>—</span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
 				</ul>
 				<p class="ibv-enquiry-panel__eco-note"><?php esc_html_e( 'Total does not include the government Eco Tax of €2.20 per person, per night, payable in resort.', 'ibv' ); ?></p>
 			</div>
@@ -195,159 +214,4 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	<?php
 
 	wp_enqueue_script( 'ibv-enquiry-panel' );
-	$inline = <<<'JS'
-(function () {
-	function init(panel) {
-		var endpoint   = panel.getAttribute('data-bob-endpoint') || '';
-		var propertyId = panel.getAttribute('data-bob-property-id') || '';
-		var confirmUrl = panel.getAttribute('data-bob-confirm-url') || '';
-		var villaSlug  = panel.getAttribute('data-bob-villa-slug') || '';
-
-		var form = panel.querySelector('.ibv-enquiry-panel__form');
-		if (!form) return;
-
-		var fromEl = form.querySelector('[name="date_from"]');
-		var toEl   = form.querySelector('[name="date_to"]');
-		var paxEl  = form.querySelector('[name="pax"]');
-		var submitEl = panel.querySelector('[data-bob-submit]');
-
-		var totalEl    = panel.querySelector('[data-bob-total-eur]');
-		var rentalEl   = panel.querySelector('[data-bob-base-rental]');
-		var adwEl      = panel.querySelector('[data-bob-adw]');
-		var cleaningEl = panel.querySelector('[data-bob-cleaning]');
-
-		var EUR = (typeof Intl !== 'undefined' && Intl.NumberFormat)
-			? new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
-			: { format: function (n) { return '€' + Math.round(n); } };
-
-		function isValidDate(s) { return /^\d{4}-\d{2}-\d{2}$/.test(s || ''); }
-
-		function readState() {
-			return {
-				date_from: fromEl ? fromEl.value : '',
-				date_to:   toEl ? toEl.value : '',
-				pax:       paxEl ? parseInt(paxEl.value, 10) || 0 : 0
-			};
-		}
-
-		function gateReady(s) {
-			return isValidDate(s.date_from) && isValidDate(s.date_to) && s.pax > 0;
-		}
-
-		function updateGate() {
-			if (!submitEl) return;
-			if (gateReady(readState())) {
-				submitEl.removeAttribute('disabled');
-			} else {
-				submitEl.setAttribute('disabled', 'disabled');
-			}
-		}
-
-		function setText(el, txt) { if (el) el.textContent = txt; }
-
-		function resetPrices() {
-			setText(totalEl, '—');
-			setText(rentalEl, '—');
-			setText(adwEl, '—');
-			setText(cleaningEl, '—');
-		}
-
-		function pickNumber(obj, keys) {
-			for (var i = 0; i < keys.length; i++) {
-				var v = obj && obj[keys[i]];
-				if (typeof v === 'number') return v;
-				if (typeof v === 'string' && v !== '' && !isNaN(parseFloat(v))) return parseFloat(v);
-			}
-			return null;
-		}
-
-		function paint(data) {
-			var node = (data && data.villa) ? data.villa : data;
-			var total = pickNumber(node, ['total', 'total_price', 'total_eur', 'price_total']);
-			var rent  = pickNumber(node, ['base_rental', 'rental', 'weekly_rate', 'rate']);
-			var adw   = pickNumber(node, ['adw', 'damage_waiver']);
-			var clean = pickNumber(node, ['cleaning', 'cleaning_fee']);
-
-			setText(totalEl,    total !== null ? EUR.format(total) : '—');
-			setText(rentalEl,   rent  !== null ? EUR.format(rent)  : '—');
-			setText(adwEl,      adw   !== null ? EUR.format(adw)   : '—');
-			setText(cleaningEl, clean !== null ? EUR.format(clean) : '—');
-		}
-
-		var inflight = null;
-		function fetchPricing() {
-			if (!endpoint || !propertyId) return;
-			var s = readState();
-			if (!gateReady(s)) { resetPrices(); return; }
-
-			var url = endpoint
-				+ '?villa='     + encodeURIComponent(propertyId)
-				+ '&date_from=' + encodeURIComponent(s.date_from)
-				+ '&date_to='   + encodeURIComponent(s.date_to)
-				+ '&pax='       + encodeURIComponent(String(s.pax));
-
-			if (inflight && typeof inflight.abort === 'function') {
-				try { inflight.abort(); } catch (e) {}
-			}
-			var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-			inflight = ctrl;
-
-			fetch(url, { method: 'GET', credentials: 'omit', signal: ctrl ? ctrl.signal : undefined })
-				.then(function (r) {
-					if (!r.ok) throw new Error('HTTP ' + r.status);
-					return r.json();
-				})
-				.then(paint)
-				.catch(function (err) {
-					if (err && err.name === 'AbortError') return;
-					console.warn('[ibv-enquiry-panel] pricing fetch failed', err);
-					resetPrices();
-				});
-		}
-
-		var debounceTimer = null;
-		function schedule() {
-			updateGate();
-			if (debounceTimer) clearTimeout(debounceTimer);
-			debounceTimer = setTimeout(fetchPricing, 300);
-		}
-
-		[fromEl, toEl, paxEl].forEach(function (el) {
-			if (!el) return;
-			el.addEventListener('change', schedule);
-			el.addEventListener('input', schedule);
-		});
-
-		form.addEventListener('submit', function (ev) {
-			ev.preventDefault();
-			var s = readState();
-			if (!gateReady(s)) { updateGate(); return; }
-			// TODO: POST to enquiry endpoint when Steve confirms URL — for now redirect direct.
-			var sep = confirmUrl.indexOf('?') === -1 ? '?' : '&';
-			var target = confirmUrl
-				+ (confirmUrl.indexOf('villa=') === -1 ? sep + 'villa=' + encodeURIComponent(villaSlug) : '')
-				+ '&date_from=' + encodeURIComponent(s.date_from)
-				+ '&date_to='   + encodeURIComponent(s.date_to)
-				+ '&pax='       + encodeURIComponent(String(s.pax));
-			window.location.assign(target);
-		});
-
-		updateGate();
-		if (gateReady(readState())) {
-			fetchPricing();
-		}
-	}
-
-	function boot() {
-		document.querySelectorAll('[data-bob-enquiry-panel]').forEach(init);
-	}
-
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', boot);
-	} else {
-		boot();
-	}
-}());
-JS;
-	wp_add_inline_script( 'ibv-enquiry-panel', $inline );
 }

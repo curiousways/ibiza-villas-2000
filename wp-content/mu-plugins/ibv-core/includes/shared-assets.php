@@ -201,6 +201,14 @@ function ibv_register_styles() {
 	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
 	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );
 	wp_register_script( 'ibv-gallery-script', '', [], IBV_CORE_VERSION, true );
+
+	wp_register_script(
+		'ibv-enquiry-panel',
+		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.js',
+		[],
+		IBV_CORE_VERSION,
+		true
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'ibv_enqueue_template_styles', 20 );
