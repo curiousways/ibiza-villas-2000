@@ -95,7 +95,7 @@
 
 .ibv-pillar-card__text {
 	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-relaxed);
+	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-sage-100);
 }
 

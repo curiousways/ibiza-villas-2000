@@ -35,7 +35,6 @@ p,
 ul,
 ol {
 	font-size: var(--ibv-fs-body);
-	line-height: var(--ibv-lh-relaxed);
 }
 
 p + p,
@@ -59,7 +58,13 @@ small,
 	color: var(--ibv-color-text-muted);
 }
 
-/* Editor / WYSIWYG flow — applied to wrappers around editor output. */
+/* Editor / WYSIWYG flow — applied to wrappers around editor output.
+   Relaxed line-height set on the container so it inherits to <p>/<ul>/<ol>
+   without a direct rule that would override component containers elsewhere. */
+.ibv-prose {
+	line-height: var(--ibv-lh-relaxed);
+}
+
 .ibv-prose > * + * {
 	margin-top: var(--ibv-space-md);
 }
