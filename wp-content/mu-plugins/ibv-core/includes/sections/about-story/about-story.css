@@ -22,15 +22,6 @@
 	gap: var(--ibv-space-sm);
 }
 
-.ibv-section-about-story__eyebrow {
-	margin: 0;
-	font-size: var(--ibv-fs-eyebrow);
-	font-weight: var(--ibv-font-weight-medium);
-	letter-spacing: var(--ibv-tracking-eyebrow);
-	text-transform: uppercase;
-	color: var(--ibv-color-text-muted);
-}
-
 .ibv-section-about-story__title {
 	margin: 0;
 	font-family: var(--ibv-font-display);
@@ -38,6 +29,14 @@
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-snug);
 	color: var(--ibv-color-text);
+}
+
+.ibv-section-about-story__rule {
+	width: 6.25rem; /* 100px — section-title rule pattern (matches three-step) */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
 }
 
 .ibv-section-about-story__entries {
@@ -61,16 +60,15 @@
 
 .ibv-section-about-story__label {
 	margin: 0;
-	font-family: var(--ibv-font-display);
-	font-size: var(--ibv-fs-h4);
-	font-weight: var(--ibv-font-weight-medium);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-bold);
 	color: var(--ibv-color-text);
 }
 
 .ibv-section-about-story__body {
 	margin: 0;
 	font-size: var(--ibv-fs-body);
-	line-height: var(--ibv-lh-relaxed);
+	line-height: var(--ibv-lh-snug);
 	color: var(--ibv-color-text);
 }
 

@@ -110,13 +110,6 @@ function ibv_register_page_about_fields() {
 					'placement' => 'left',
 				),
 				array(
-					'key'           => 'field_ibv_page_about_story_eyebrow',
-					'label'         => __( 'Eyebrow', 'ibv' ),
-					'name'          => 'about_story_eyebrow',
-					'type'          => 'text',
-					'default_value' => __( 'Our Story', 'ibv' ),
-				),
-				array(
 					'key'   => 'field_ibv_page_about_story_title',
 					'label' => __( 'Title', 'ibv' ),
 					'name'  => 'about_story_title',

@@ -15,9 +15,8 @@ function ibv_core_section_about_story() {
 		return;
 	}
 
-	$eyebrow = (string) get_field( 'about_story_eyebrow' );
-	$title   = (string) get_field( 'about_story_title' );
-	$image   = get_field( 'about_story_image' );
+	$title = (string) get_field( 'about_story_title' );
+	$image = get_field( 'about_story_image' );
 
 	wp_enqueue_style( 'ibv-section-about-story' );
 	?>
@@ -25,11 +24,9 @@ function ibv_core_section_about_story() {
 		<div class="ibv-container ibv-section-about-story__inner">
 			<div class="ibv-section-about-story__copy">
 				<header class="ibv-section-about-story__header">
-					<?php if ( $eyebrow ) : ?>
-						<p class="ibv-section-about-story__eyebrow"><?php echo esc_html( $eyebrow ); ?></p>
-					<?php endif; ?>
 					<?php if ( $title ) : ?>
 						<h2 class="ibv-section-about-story__title ibv-font-display"><?php echo esc_html( $title ); ?></h2>
+						<hr class="ibv-section-about-story__rule" aria-hidden="true">
 					<?php endif; ?>
 				</header>
 
