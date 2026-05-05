@@ -65,18 +65,6 @@
 	gap: var(--ibv-space-2xs);
 }
 
-/* Sage dot separator — only renders when both cat AND time are present */
-.ibv-article-card__cat + .ibv-article-card__time::before {
-	content: '';
-	display: inline-block;
-	width: 0.25rem; /* 4px — Figma bullet size */
-	height: 0.25rem;
-	border-radius: 50%;
-	background: var(--ibv-color-sage-500);
-	vertical-align: middle;
-	margin-inline-end: var(--ibv-space-2xs);
-}
-
 .ibv-article-card__rule {
 	width: 3.125rem; /* 50px — matches Figma, consistent with other gold rules */
 	height: 1px;

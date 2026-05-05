@@ -120,6 +120,20 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-pull-quote',
+		IBV_CORE_URL . 'includes/components/pull-quote/pull-quote.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-article-shell',
+		IBV_CORE_URL . 'includes/sections/article-shell/article-shell.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-facetwp',
 		IBV_CORE_URL . 'includes/integrations/facetwp.css',
 		[ 'ibv-base' ],

@@ -1,0 +1,86 @@
+/* Article shell — single-post template wrapper.
+   Header (meta + title + subtitle) and body are constrained to a narrow
+   reading column; featured image spans the full container so it reads
+   wider than the copy below. .ibv-prose owns body content typography;
+   .ibv-pull-quote owns its own block. */
+
+.ibv-article > .ibv-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xl);
+	/* Default container max applies (1152px) — featured image fills this. */
+}
+
+/* Reading-column constraint applied per-block, not on the container,
+   so siblings (featured image, pull quote) can choose their own width. */
+.ibv-article__header,
+.ibv-article__body {
+	width: 100%;
+	max-width: 48rem; /* 768px reading column */
+	margin-inline: auto;
+}
+
+.ibv-article__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-article__meta {
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-xs);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+/* Category pill — bordered outline on the page bg. */
+.ibv-article__cat {
+	display: inline-block;
+	padding: var(--ibv-space-2xs) var(--ibv-space-md);
+	background: var(--ibv-color-bg-alt);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-pill);
+	color: var(--ibv-color-text);
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-article__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-article__subtitle {
+	margin: 0;
+	max-width: 36rem; /* deck wraps narrower than the title for hierarchy */
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted);
+}
+
+/* Featured image — full container width (1152px max), 6:4 crop, rounded. */
+.ibv-article__featured {
+	margin: 0;
+	aspect-ratio: 6 / 4;
+	overflow: hidden;
+	border-radius: var(--ibv-radius-lg);
+}
+
+.ibv-article__featured-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}

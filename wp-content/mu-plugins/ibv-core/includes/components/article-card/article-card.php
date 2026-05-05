@@ -68,6 +68,7 @@ function ibv_core_article_card( $args = [] ) {
 			<p class="ibv-article-card__meta">
 				<?php if ( $catname ) : ?>
 					<span class="ibv-article-card__cat"><?php echo esc_html( $catname ); ?></span>
+					<span class="ibv-meta-dot" aria-hidden="true"></span>
 				<?php endif; ?>
 				<span class="ibv-article-card__time">
 					<?php

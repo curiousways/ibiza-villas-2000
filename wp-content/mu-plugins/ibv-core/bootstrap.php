@@ -60,6 +60,7 @@ require_once IBV_CORE_PATH . 'includes/components/enquiry-panel/enquiry-panel.ph
 require_once IBV_CORE_PATH . 'includes/components/accommodation-tile/accommodation-tile.php';
 require_once IBV_CORE_PATH . 'includes/components/alternative-accommodation/alternative-accommodation.php';
 require_once IBV_CORE_PATH . 'includes/components/article-card/article-card.php';
+require_once IBV_CORE_PATH . 'includes/components/pull-quote/pull-quote.php';
 require_once IBV_CORE_PATH . 'includes/components/newsletter-form/newsletter-form.php';
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
@@ -102,5 +103,6 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-about.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-post-fields.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';
