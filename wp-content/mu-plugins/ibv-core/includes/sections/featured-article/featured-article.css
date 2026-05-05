@@ -93,8 +93,15 @@
 @media (min-width: 56rem) {
 	.ibv-section-featured-article__inner {
 		flex-direction: row;
-		align-items: center;
+		align-items: stretch; /* media grows to content column height */
 		gap: 4rem; /* 64px — matches image-text-section column gap */
+	}
+
+	/* Drop the mobile aspect ratio at desktop so the image fills the
+	   stretched column height when copy is long instead of leaving a
+	   gap below the image. */
+	.ibv-section-featured-article__media {
+		aspect-ratio: auto;
 	}
 
 	.ibv-section-featured-article--image-right .ibv-section-featured-article__inner {
