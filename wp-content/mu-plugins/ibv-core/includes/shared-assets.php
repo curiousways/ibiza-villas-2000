@@ -207,7 +207,7 @@ function ibv_register_styles() {
 		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.js',
 		[],
 		IBV_CORE_VERSION,
-		true
+		[ 'in_footer' => true ]
 	);
 }
 
