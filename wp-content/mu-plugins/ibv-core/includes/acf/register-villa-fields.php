@@ -887,6 +887,74 @@ function ibv_register_villa_acf_fields() {
 		'key'                       => 'group_565863fd600a6',
 		'title'                     => 'Villa Special Offers',
 		'fields'                    => array(
+			// Pass 3c-villa-offers — structured per-villa offers repeater.
+			// The two legacy fields below feed the (legacy) Special Offers
+			// page carousel and remain in place until that page is
+			// refactored to aggregate from this repeater.
+			array(
+				'key'             => 'field_ibv_villa_offers',
+				'label'           => __( 'Special Offers', 'ibv' ),
+				'name'            => 'villa_offers',
+				'type'            => 'repeater',
+				'instructions'    => __( 'Add active special offers for this villa. Offers automatically disappear from the site after their "Valid to" date passes.', 'ibv' ),
+				'min'             => 0,
+				'max'             => 0,
+				'layout'          => 'block',
+				'button_label'    => __( 'Add offer', 'ibv' ),
+				'sub_fields'      => array(
+					array(
+						'key'             => 'field_ibv_villa_offer_name',
+						'label'           => __( 'Offer name', 'ibv' ),
+						'name'            => 'offer_name',
+						'type'            => 'text',
+						'required'        => 1,
+						'instructions'    => __( 'Marketing label, e.g. "Spring 4-night escape". Identifies the offer in enquiries.', 'ibv' ),
+						'parent_repeater' => 'field_ibv_villa_offers',
+					),
+					array(
+						'key'             => 'field_ibv_villa_offer_date_from',
+						'label'           => __( 'Valid from', 'ibv' ),
+						'name'            => 'offer_date_from',
+						'type'            => 'date_picker',
+						'required'        => 1,
+						'display_format'  => 'j M Y',
+						'return_format'   => 'Ymd',
+						'first_day'       => 1,
+						'parent_repeater' => 'field_ibv_villa_offers',
+					),
+					array(
+						'key'             => 'field_ibv_villa_offer_date_to',
+						'label'           => __( 'Valid to', 'ibv' ),
+						'name'            => 'offer_date_to',
+						'type'            => 'date_picker',
+						'required'        => 1,
+						'display_format'  => 'j M Y',
+						'return_format'   => 'Ymd',
+						'first_day'       => 1,
+						'parent_repeater' => 'field_ibv_villa_offers',
+					),
+					array(
+						'key'             => 'field_ibv_villa_offer_headline',
+						'label'           => __( 'Headline', 'ibv' ),
+						'name'            => 'offer_headline',
+						'type'            => 'text',
+						'required'        => 1,
+						'maxlength'       => 30,
+						'instructions'    => __( 'Short marketing line, ≤30 chars. e.g. "20% off" or "From €1,800/wk".', 'ibv' ),
+						'parent_repeater' => 'field_ibv_villa_offers',
+					),
+					array(
+						'key'             => 'field_ibv_villa_offer_description',
+						'label'           => __( 'Description', 'ibv' ),
+						'name'            => 'offer_description',
+						'type'            => 'textarea',
+						'rows'            => 3,
+						'new_lines'       => 'wpautop',
+						'instructions'    => __( 'Optional supporting copy, ~2 sentences.', 'ibv' ),
+						'parent_repeater' => 'field_ibv_villa_offers',
+					),
+				),
+			),
 			array(
 				'allow_backendsearch'    => false,
 				'show_column_filter'     => false,
@@ -900,7 +968,7 @@ function ibv_register_villa_acf_fields() {
 				'name'                   => 'property_special_offers_text',
 				'aria-label'             => '',
 				'type'                   => 'wysiwyg',
-				'instructions'           => '',
+				'instructions'           => 'Legacy free-text offer copy used by the Special Offers page carousel. Use the structured "Special Offers" repeater above for new offers; this section will be retired once the SO page is migrated.',
 				'required'               => 0,
 				'conditional_logic'      => 0,
 				'wrapper'                => array(

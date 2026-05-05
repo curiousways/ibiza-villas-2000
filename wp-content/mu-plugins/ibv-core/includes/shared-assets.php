@@ -127,6 +127,13 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-villa-offers',
+		IBV_CORE_URL . 'includes/components/villa-offers/villa-offers.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-article-shell',
 		IBV_CORE_URL . 'includes/sections/article-shell/article-shell.css',
 		[ 'ibv-base' ],

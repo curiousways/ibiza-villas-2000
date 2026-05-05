@@ -1,0 +1,104 @@
+/* Villa offers accordion — native <details>/<summary> with a tinted
+   bordered container; same mechanism as About FAQ but a different
+   visual treatment (filled card, not list rows). */
+
+.ibv-villa-offers {
+	background: var(--ibv-color-bg-alt);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-lg);
+	overflow: hidden;
+}
+
+.ibv-villa-offers__summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-md);
+	padding: var(--ibv-space-md) var(--ibv-space-lg);
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-offers__summary::-webkit-details-marker {
+	display: none;
+}
+
+.ibv-villa-offers__summary:focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: -2px;
+}
+
+.ibv-villa-offers__label {
+	font-weight: var(--ibv-font-weight-bold);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-snug);
+	flex-grow: 1;
+}
+
+.ibv-villa-offers__count {
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+/* CSS-only chevron: rotated L-corner. 45° = down, 225° = up. */
+.ibv-villa-offers__chevron {
+	width: 0.5rem;
+	height: 0.5rem;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform var(--ibv-duration-fast) var(--ibv-ease-standard);
+	flex-shrink: 0;
+	/* Visual centring compensation for the rotation's diamond bounding box. */
+	margin-block-end: 0.25rem;
+}
+
+.ibv-villa-offers[open] > .ibv-villa-offers__summary .ibv-villa-offers__chevron {
+	transform: rotate(225deg);
+	margin-block-end: 0;
+	margin-block-start: 0.25rem;
+}
+
+.ibv-villa-offers__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ibv-villa-offers__item {
+	padding: var(--ibv-space-lg);
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+	border-block-start: 1px solid var(--ibv-color-border);
+}
+
+.ibv-villa-offers__item-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--ibv-space-2xs) var(--ibv-space-md);
+}
+
+.ibv-villa-offers__dates {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-villa-offers__headline {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-offers__desc {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
