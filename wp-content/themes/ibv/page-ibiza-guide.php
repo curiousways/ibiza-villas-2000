@@ -45,7 +45,26 @@ while ( have_posts() ) :
 	</section>
 	<?php
 
-	ibv_core_section_newsletter_cta();
+	$nl_title = (string) get_field( 'newsletter_title' );
+	$nl_body  = (string) get_field( 'newsletter_body' );
+
+	if ( $nl_title || $nl_body ) :
+		?>
+		<section class="ibv-section ibv-section--surface-blue">
+			<div class="ibv-container">
+				<?php
+				ibv_core_newsletter_form(
+					[
+						'title'       => $nl_title,
+						'description' => $nl_body,
+						'variant'     => 'default',
+					]
+				);
+				?>
+			</div>
+		</section>
+		<?php
+	endif;
 
 endwhile;
 

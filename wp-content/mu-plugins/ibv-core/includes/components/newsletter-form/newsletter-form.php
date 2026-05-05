@@ -43,6 +43,9 @@ function ibv_core_newsletter_form( $args = [] ) {
 	<div class="ibv-newsletter-form ibv-newsletter-form--<?php echo esc_attr( $variant ); ?>">
 		<?php if ( $args['title'] ) : ?>
 			<h3 class="ibv-newsletter-form__title ibv-font-display"><?php echo esc_html( $args['title'] ); ?></h3>
+			<?php if ( 'default' === $variant ) : ?>
+				<hr class="ibv-newsletter-form__rule" aria-hidden="true">
+			<?php endif; ?>
 		<?php endif; ?>
 		<?php if ( $args['description'] ) : ?>
 			<p class="ibv-newsletter-form__body"><?php echo esc_html( $args['description'] ); ?></p>
