@@ -22,15 +22,28 @@ while ( have_posts() ) :
 		ibv_core_section_featured_article( [ 'post_id' => $featured_id ] );
 	}
 
-	/*
-	 * TODO brief 03 (FacetWP): replace direct article-grid call with
-	 * a FacetWP-wrapped listing for filter + pagination.
-	 */
+	wp_enqueue_style( 'ibv-facetwp' );
+	?>
+	<section class="ibv-section ibv-section--surface-bg ibv-section--rhythm-sm">
+		<div class="ibv-container">
+			<?php echo facetwp_display( 'facet', 'category' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- FacetWP returns sanitised markup. ?>
+		</div>
+	</section>
+	<?php
+
 	ibv_core_section_article_grid(
 		[
 			'exclude' => $featured_id ? [ $featured_id ] : [],
+			'facetwp' => true,
 		]
 	);
+	?>
+	<section class="ibv-section ibv-section--surface-bg ibv-section--rhythm-sm">
+		<div class="ibv-container">
+			<?php echo facetwp_display( 'facet', 'pager' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- FacetWP returns sanitised markup. ?>
+		</div>
+	</section>
+	<?php
 
 	ibv_core_section_newsletter_cta();
 

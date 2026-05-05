@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once IBV_CORE_PATH . 'includes/helpers.php';
 require_once IBV_CORE_PATH . 'includes/helpers/icon.php';
 require_once IBV_CORE_PATH . 'includes/shared-assets.php';
+require_once IBV_CORE_PATH . 'includes/integrations/facetwp.php';
 
 // 2. Data layer — pass 3b: CPT first, taxonomies next (slug preservation).
 require_once IBV_CORE_PATH . 'includes/post-types/villa.php';

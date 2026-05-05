@@ -120,6 +120,13 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-facetwp',
+		IBV_CORE_URL . 'includes/integrations/facetwp.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-newsletter-form',
 		IBV_CORE_URL . 'includes/components/newsletter-form/newsletter-form.css',
 		[ 'ibv-base' ],

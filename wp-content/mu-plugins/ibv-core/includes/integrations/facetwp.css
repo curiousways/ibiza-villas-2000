@@ -1,0 +1,115 @@
+/* FacetWP facet styling — opt-in via wp_enqueue_style( 'ibv-facetwp' ).
+   Targets FacetWP's own class names (.facetwp-radio, .facetwp-pager etc.)
+   to avoid forking the plugin's markup. */
+
+/* ---------- Category radio facet — horizontal underline-on-active ---------- */
+
+.facetwp-facet[data-name="category"] {
+	display: flex;
+	flex-wrap: wrap;
+	/* Loose between items, tight between rows — Figma horizontal-nav feel
+	   even when terms wrap to a second line. */
+	column-gap: var(--ibv-space-lg);
+	row-gap: var(--ibv-space-xs);
+	align-items: center;
+	margin: 0;
+}
+
+/* Override FacetWP's default radio styling: it draws a radio.png circle via
+   background-image with padding-left: 20px and margin-bottom: 4px. We render
+   plain bold text with an underlined active state instead. */
+.facetwp-facet[data-name="category"] .facetwp-radio {
+	cursor: pointer;
+	margin: 0;
+	padding: var(--ibv-space-2xs) 0;
+	background: none;
+	color: var(--ibv-color-text);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: var(--ibv-lh-snug);
+	transition: color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.facetwp-facet[data-name="category"] .facetwp-radio:hover {
+	color: var(--ibv-color-link-hover);
+}
+
+.facetwp-facet[data-name="category"] .facetwp-radio.checked {
+	text-decoration: underline;
+	text-decoration-color: var(--ibv-color-gold-500);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.5em;
+}
+
+.facetwp-facet[data-name="category"] .facetwp-radio.disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+/* Counts read as visual noise on a horizontal underline-style filter. */
+.facetwp-facet[data-name="category"] .facetwp-counter {
+	display: none;
+}
+
+/* Mobile: scroll horizontally rather than wrap into a multi-row strip. */
+@media (max-width: 47.99rem) {
+	.facetwp-facet[data-name="category"] {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		gap: var(--ibv-space-md);
+		padding-bottom: var(--ibv-space-2xs);
+	}
+
+	.facetwp-facet[data-name="category"] .facetwp-radio {
+		flex: 0 0 auto;
+	}
+}
+
+/* ---------- Pager ---------- */
+
+.facetwp-facet[data-name="pager"] .facetwp-pager {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-xs);
+	align-items: center;
+	justify-content: center;
+}
+
+.facetwp-pager .facetwp-page {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.25rem;
+	height: 2.25rem;
+	padding-inline: var(--ibv-space-xs);
+	color: var(--ibv-color-text);
+	font-size: var(--ibv-fs-body);
+	text-decoration: none;
+	border-radius: var(--ibv-radius-md);
+	cursor: pointer;
+	transition:
+		background var(--ibv-duration-fast) var(--ibv-ease-standard),
+		color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.facetwp-pager .facetwp-page:hover {
+	background: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-link);
+}
+
+.facetwp-pager .facetwp-page.active {
+	background: var(--ibv-color-link);
+	color: var(--ibv-color-text-inverse);
+	font-weight: var(--ibv-font-weight-medium);
+}
+
+.facetwp-pager .facetwp-page.dots {
+	cursor: default;
+	background: transparent;
+	color: var(--ibv-color-text-muted);
+}
+
+.facetwp-pager .facetwp-page.dots:hover {
+	background: transparent;
+	color: var(--ibv-color-text-muted);
+}
