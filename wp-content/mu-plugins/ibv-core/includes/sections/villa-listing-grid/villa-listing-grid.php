@@ -31,7 +31,7 @@ function ibv_core_section_villa_listing_grid() {
 				$fallback = new WP_Query(
 					[
 						'post_type'           => 'villas',
-						'posts_per_page'      => 6,
+						'posts_per_page'      => -1,
 						'orderby'             => 'menu_order',
 						'order'               => 'ASC',
 						'no_found_rows'       => true,
