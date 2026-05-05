@@ -16,8 +16,8 @@
 	display: flex;
 	flex-direction: column;
 	background: var(--ibv-color-surface);
-	border: 1px solid var(--ibv-color-border);
 	border-radius: var(--ibv-radius-md);
+	box-shadow: var(--ibv-shadow-md);
 	overflow: hidden;
 }
 
