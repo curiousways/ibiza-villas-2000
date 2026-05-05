@@ -200,11 +200,9 @@
 			}
 			// TODO: POST to enquiry endpoint when Steve confirms URL — redirect-only for now.
 			var sep    = confirmUrl.indexOf( '?' ) === -1 ? '?' : '&';
-			var target = confirmUrl
-				+ ( confirmUrl.indexOf( 'villa=' ) === -1 ? sep + 'villa=' + encodeURIComponent( villaSlug ) : '' )
-				+ '&date_from=' + encodeURIComponent( s.date_from )
-				+ '&date_to='   + encodeURIComponent( s.date_to )
-				+ '&pax='       + encodeURIComponent( String( s.pax ) );
+			var target = confirmUrl.indexOf( 'villa=' ) === -1
+				? confirmUrl + sep + 'villa=' + encodeURIComponent( villaSlug )
+				: confirmUrl;
 			window.location.assign( target );
 		} );
 
