@@ -48,12 +48,6 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		}
 	}
 
-	// Server-rendered fallback total for direct arrivals (no API call yet).
-	// JS overwrites this once the live response lands.
-	$indicative = get_field( 'villa_indicative_from_price', $villa_id );
-	$total_eur_fallback = $indicative
-		? '€' . number_format_i18n( (float) $indicative )
-		: '—';
 	?>
 	<?php /* ─────────────────────────────────────────────────────────────
 	       BOB API INTEGRATION SHELL — enquiry panel
@@ -81,17 +75,13 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	       ──────────────────────────────────────────────────────────── */ ?>
 
 	<?php
-	// When the visitor arrives with all three search params, JS will fire a
-	// pricing fetch on init. Hide the server-rendered fallback values until
-	// the response lands so they don't flicker over with API data.
-	$is_loading = ( '' !== $prefill_from && '' !== $prefill_to && '' !== $prefill_pax );
-	$panel_classes = [ 'ibv-enquiry-panel' ];
-	if ( $is_loading ) {
-		$panel_classes[] = 'is-pricing-loading';
-	}
+	// Hide the price block until JS calls revealPriceBlock() after paint().
+	// Both arrival flows (direct + search) start hidden — search arrival
+	// fires the fetch on init and reveals once the response lands; direct
+	// arrival fires the fetch when the visitor finishes the form.
 	?>
 	<div
-		class="<?php echo esc_attr( implode( ' ', $panel_classes ) ); ?>"
+		class="ibv-enquiry-panel is-pricing-pending"
 		data-bob-enquiry-panel
 		data-villa-id="<?php echo esc_attr( (string) $villa_id ); ?>"
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
@@ -130,13 +120,13 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			<div class="ibv-enquiry-panel__price-block">
 				<p class="ibv-enquiry-panel__price-label"><?php esc_html_e( 'Total price', 'ibv' ); ?></p>
 				<ul class="ibv-enquiry-panel__price-list">
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur><?php echo esc_html( $total_eur_fallback ); ?></li>
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp>—</li>
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur></li>
+					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp></li>
 				</ul>
 				<ul class="ibv-enquiry-panel__breakdown">
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental>—</span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw>—</span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning>—</span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental></span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw></span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
+					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning></span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
 				</ul>
 				<p class="ibv-enquiry-panel__eco-note"><?php esc_html_e( 'Total does not include the government Eco Tax of €2.20 per person, per night, payable in resort.', 'ibv' ); ?></p>
 			</div>

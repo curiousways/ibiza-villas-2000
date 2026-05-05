@@ -75,8 +75,8 @@
 			}
 		}
 
-		function clearLoading() {
-			panel.classList.remove( 'is-pricing-loading' );
+		function revealPriceBlock() {
+			panel.classList.remove( 'is-pricing-pending' );
 		}
 
 		function resetPrices() {
@@ -162,7 +162,7 @@
 				} )
 				.then( function ( data ) {
 					paint( data );
-					clearLoading();
+					revealPriceBlock();
 				} )
 				.catch( function ( err ) {
 					if ( err && err.name === 'AbortError' ) {
@@ -170,7 +170,7 @@
 					}
 					console.warn( '[ibv-enquiry-panel] pricing fetch failed', err );
 					resetPrices();
-					clearLoading();
+					revealPriceBlock();
 				} );
 		}
 

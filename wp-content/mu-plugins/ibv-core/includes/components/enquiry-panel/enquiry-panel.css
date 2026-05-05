@@ -119,16 +119,23 @@
 	color: var(--ibv-color-text-muted);
 }
 
-/* Loading state — hides server-rendered price fallbacks while the JS fetch
-   is in flight, so search-arrival users don't see a flash of stale figures. */
-.ibv-enquiry-panel__price-list,
-.ibv-enquiry-panel__breakdown {
-	transition: opacity 200ms ease-out;
+/* Pending state — the price block is hidden until JS removes the
+   .is-pricing-pending class after paint() succeeds. Uses transition-
+   behavior: allow-discrete + @starting-style so the block collapses out
+   of layout while hidden but still fades in on reveal. */
+.ibv-enquiry-panel__price-block {
+	transition: opacity 200ms ease-out, display 200ms allow-discrete;
 }
 
-.ibv-enquiry-panel.is-pricing-loading .ibv-enquiry-panel__price-list,
-.ibv-enquiry-panel.is-pricing-loading .ibv-enquiry-panel__breakdown {
+.ibv-enquiry-panel.is-pricing-pending .ibv-enquiry-panel__price-block {
+	display: none;
 	opacity: 0;
+}
+
+@starting-style {
+	.ibv-enquiry-panel:not(.is-pricing-pending) .ibv-enquiry-panel__price-block {
+		opacity: 0;
+	}
 }
 
 /* Price block — no card chrome, flows inline with form */
