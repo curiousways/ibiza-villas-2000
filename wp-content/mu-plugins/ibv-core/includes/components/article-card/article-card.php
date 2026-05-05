@@ -48,7 +48,7 @@ function ibv_core_article_card( $args = [] ) {
 	$permalink = get_permalink( $post_id );
 	?>
 	<article class="ibv-article-card">
-		<a href="<?php echo esc_url( $permalink ); ?>" class="ibv-article-card__media">
+		<a href="<?php echo esc_url( $permalink ); ?>" class="ibv-article-card__media" aria-label="<?php echo esc_attr( get_the_title( $post ) ); ?>">
 			<?php
 			if ( has_post_thumbnail( $post_id ) ) {
 				ibv_core_image(
