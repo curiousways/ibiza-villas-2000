@@ -134,6 +134,18 @@ function ibv_get_booking_confirmation_url( $villa_slug = '' ) {
 }
 
 /**
+ * Absolute URL of Steve's PMS availability endpoint.
+ *
+ * Single source of truth for the Bob API base URL. Reused by JS hydration on
+ * the villa listing, villa detail enquiry panel, and "from price" hooks.
+ *
+ * @return string
+ */
+function ibv_get_bob_endpoint_url() {
+	return 'https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl';
+}
+
+/**
  * Current GET params when on the villa listing template (search form persistence).
  *
  * @return array{date_from: string, date_to: string, pax: string}

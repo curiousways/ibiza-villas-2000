@@ -1,17 +1,18 @@
 .ibv-hero-search {
 	width: 100%;
-	background: var(--ibv-color-off-white);
-	border-radius: var(--ibv-radius-pill);
-	padding: var(--ibv-space-xs);
-	padding-inline-start: var(--ibv-space-md);
-	box-shadow: var(--ibv-shadow-md);
+	max-width: 35.4375rem;
+	background-color: var(--ibv-color-bg-alt);
+	border-radius: 5.25rem;
+	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	box-shadow: 0 0 5px rgb(52 52 52 / 0.1);
 }
 
 .ibv-hero-search__inner {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	gap: var(--ibv-space-md);
+	justify-content: space-between;
+	gap: 0;
 }
 
 .ibv-hero-search__field {
@@ -20,12 +21,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-2xs);
-	padding-inline: var(--ibv-space-md);
-	border-inline-end: 1px solid var(--ibv-color-border);
-}
-
-.ibv-hero-search__field:first-child {
-	padding-inline-start: 0;
+	padding-inline: 1rem 1.0625rem;
+	border-inline-end: 1px solid rgb(191 200 200 / 0.3);
 }
 
 .ibv-hero-search__field:last-of-type {
@@ -33,18 +30,22 @@
 }
 
 .ibv-hero-search__label {
-	font-size: var(--ibv-fs-eyebrow);
+	font-family: var(--ibv-font-body);
+	font-size: 0.75rem;
 	font-weight: var(--ibv-font-weight-medium);
+	line-height: 1.4;
 	color: var(--ibv-color-text);
 	letter-spacing: 0;
 }
 
 .ibv-hero-search__input {
 	border: 0;
-	background: transparent;
+	background-color: transparent;
 	padding: 0;
 	font-family: var(--ibv-font-body);
-	font-size: var(--ibv-fs-small);
+	font-size: 0.875rem;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
 	color: var(--ibv-color-text);
 	width: 100%;
 	min-width: 0;
@@ -54,10 +55,27 @@
 	color: var(--ibv-color-border);
 }
 
+/* Date inputs read as muted (placeholder-style) until filled. */
+.ibv-hero-search__input[type="date"]:not(:focus):invalid,
+.ibv-hero-search__input[type="number"]:placeholder-shown {
+	color: var(--ibv-color-border);
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-calendar-picker-indicator {
+	/* Hide the native date picker icon. */
+	display: none;
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-inner-spin-button {
+	display: none;
+}
+
+.ibv-hero-search__input[type="date"]::-webkit-datetime-edit {
+	color: inherit;
+}
+
 .ibv-hero-search__input:focus {
-	outline: 2px solid var(--ibv-color-focus-ring);
-	outline-offset: 2px;
-	border-radius: var(--ibv-radius-sm);
+	outline: none;
 }
 
 .ibv-hero-search__submit {
@@ -70,7 +88,7 @@
 	padding: 0;
 	border: 0;
 	border-radius: 50%;
-	background: var(--ibv-color-accent);
+	background-color: var(--ibv-color-accent);
 	color: var(--ibv-color-accent-contrast);
 	cursor: pointer;
 	transition: background-color var(--ibv-duration-normal) var(--ibv-ease-standard);
@@ -78,11 +96,15 @@
 
 .ibv-hero-search__submit:hover,
 .ibv-hero-search__submit:focus-visible {
-	background: var(--ibv-color-link);
+	background-color: var(--ibv-color-link);
 }
 
 .ibv-hero-search__submit-icon {
 	flex-shrink: 0;
+	width: 0.84375rem;
+	height: 0.84375rem;
+	color: var(--ibv-color-accent-contrast);
+	stroke: currentColor;
 }
 
 @media (max-width: 47.999rem) {
@@ -100,7 +122,7 @@
 	.ibv-hero-search__field {
 		padding-inline: 0;
 		border-inline-end: 0;
-		border-block-end: 1px solid var(--ibv-color-border);
+		border-block-end: 1px solid rgb(191 200 200 / 0.3);
 		padding-block-end: var(--ibv-space-sm);
 	}
 

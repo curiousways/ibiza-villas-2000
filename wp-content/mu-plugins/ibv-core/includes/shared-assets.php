@@ -257,6 +257,14 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION,
 		[ 'in_footer' => true ]
 	);
+
+	wp_register_script(
+		'ibv-villa-listing-search',
+		IBV_CORE_URL . 'includes/sections/villa-listing-grid/villa-listing-grid.js',
+		[],
+		IBV_CORE_VERSION,
+		[ 'in_footer' => true ]
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'ibv_enqueue_template_styles', 20 );

@@ -1,4 +1,7 @@
 /* Villa card */
+.ibv-villa-card[hidden] {
+	display: none;
+}
 .ibv-villa-card {
 	display: flex;
 	flex-direction: column;
