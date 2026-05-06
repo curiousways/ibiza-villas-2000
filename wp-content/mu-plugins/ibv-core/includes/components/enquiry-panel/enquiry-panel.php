@@ -21,9 +21,8 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	wp_enqueue_style( 'ibv-enquiry-panel' );
 	wp_enqueue_style( 'ibv-button' );
 
-	$villa_slug   = (string) get_post_field( 'post_name', $villa_id );
 	$property_id  = (string) get_field( 'property_id', $villa_id );
-	$confirm_url  = ibv_get_booking_confirmation_url( $villa_slug );
+	$confirm_url  = ibv_get_booking_confirmation_url();
 	$endpoint_url = 'https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl';
 
 	$prefill_from = '';
@@ -68,7 +67,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 
 	       On submit:
 	         - TODO: POST to API enquiry endpoint when Steve confirms URL
-	         - Currently: redirect to /booking-confirmation/?villa={slug}&...
+	         - Currently: redirect to /booking-confirmation/?villa={post_id}&arrival=...&departure=...&guests=...
 
 	       Endpoint reference: https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl
 	       Spec: Notion → IBZ002 → API Integration Spec
@@ -87,14 +86,10 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
 		data-bob-endpoint="<?php echo esc_url( $endpoint_url ); ?>"
 		data-bob-confirm-url="<?php echo esc_url( $confirm_url ); ?>"
-		data-bob-villa-slug="<?php echo esc_attr( $villa_slug ); ?>"
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
 		<form class="ibv-enquiry-panel__form" method="get" action="<?php echo esc_url( $confirm_url ); ?>">
-			<input type="hidden" name="villa" value="<?php echo esc_attr( $villa_slug ); ?>">
-			<input type="hidden" name="villa_id" value="<?php echo esc_attr( (string) $villa_id ); ?>">
-
 			<div class="ibv-enquiry-panel__field">
 				<label for="ibv-ep-from" class="ibv-u-visually-hidden"><?php esc_html_e( 'Arrive', 'ibv' ); ?></label>
 				<input type="date" id="ibv-ep-from" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" placeholder="<?php esc_attr_e( 'Arrive', 'ibv' ); ?>" required>

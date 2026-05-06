@@ -18,7 +18,7 @@
 		var endpoint   = panel.getAttribute( 'data-bob-endpoint' ) || '';
 		var propertyId = panel.getAttribute( 'data-bob-property-id' ) || '';
 		var confirmUrl = panel.getAttribute( 'data-bob-confirm-url' ) || '';
-		var villaSlug  = panel.getAttribute( 'data-bob-villa-slug' ) || '';
+		var villaId    = panel.getAttribute( 'data-villa-id' ) || '';
 
 		var form = panel.querySelector( '.ibv-enquiry-panel__form' );
 		if ( ! form ) {
@@ -199,11 +199,21 @@
 				return;
 			}
 			// TODO: POST to enquiry endpoint when Steve confirms URL — redirect-only for now.
-			var sep    = confirmUrl.indexOf( '?' ) === -1 ? '?' : '&';
-			var target = confirmUrl.indexOf( 'villa=' ) === -1
-				? confirmUrl + sep + 'villa=' + encodeURIComponent( villaSlug )
-				: confirmUrl;
-			window.location.assign( target );
+			var params = new URLSearchParams();
+			if ( villaId ) {
+				params.set( 'villa', villaId );
+			}
+			if ( s.date_from ) {
+				params.set( 'arrival', s.date_from );
+			}
+			if ( s.date_to ) {
+				params.set( 'departure', s.date_to );
+			}
+			if ( s.pax ) {
+				params.set( 'guests', String( s.pax ) );
+			}
+			var sep = confirmUrl.indexOf( '?' ) === -1 ? '?' : '&';
+			window.location.assign( confirmUrl + sep + params.toString() );
 		} );
 
 		updateGate();

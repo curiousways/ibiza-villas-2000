@@ -109,12 +109,15 @@ function ibv_get_contact_page_url() {
 }
 
 /**
- * Booking confirmation page URL; optional villa slug query arg.
+ * Booking confirmation page URL.
  *
- * @param string $villa_slug Post slug for ?villa=.
+ * The full query string (villa, arrival, departure, guests, offer) is
+ * assembled by the enquiry-panel JS at submit time — see the contract in
+ * page-booking-confirmation.php.
+ *
  * @return string Escaped URL.
  */
-function ibv_get_booking_confirmation_url( $villa_slug = '' ) {
+function ibv_get_booking_confirmation_url() {
 	$pages = get_posts(
 		array(
 			'post_type'      => 'page',
@@ -127,9 +130,6 @@ function ibv_get_booking_confirmation_url( $villa_slug = '' ) {
 		)
 	);
 	$base = ! empty( $pages ) ? get_permalink( $pages[0] ) : home_url( '/booking-confirmation/' );
-	if ( $villa_slug ) {
-		return esc_url( add_query_arg( 'villa', sanitize_title( $villa_slug ), $base ) );
-	}
 	return esc_url( $base );
 }
 
