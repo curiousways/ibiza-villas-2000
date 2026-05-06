@@ -16,8 +16,8 @@
 	display: flex;
 	flex-direction: column;
 	background: var(--ibv-color-surface);
-	border: 1px solid var(--ibv-color-border);
 	border-radius: var(--ibv-radius-md);
+	box-shadow: var(--ibv-shadow-md);
 	overflow: hidden;
 }
 
@@ -65,7 +65,7 @@
 
 .ibv-accommodation-tile__description {
 	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-relaxed);
+	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-text);
 }
 

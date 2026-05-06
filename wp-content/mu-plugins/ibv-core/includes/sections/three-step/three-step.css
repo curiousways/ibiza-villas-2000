@@ -49,7 +49,9 @@
 	}
 }
 
-/* Step card */
+/* Step card — off-white card sits well on the default tint-gold surface;
+   on the page-background surface (booking confirmation) the cards
+   need pure white for contrast against the off-white page bg. */
 .ibv-step-card {
 	background: var(--ibv-color-off-white);
 	border-radius: var(--ibv-radius-md);
@@ -93,7 +95,7 @@
 
 .ibv-step-card__text {
 	font-size: var(--ibv-fs-small);
-	line-height: var(--ibv-lh-relaxed);
+	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-text);
 }
 
@@ -103,4 +105,8 @@
 
 .ibv-step-card__text p:last-child {
 	margin-block-end: 0;
+}
+
+.ibv-section-three-step.ibv-section--surface-bg .ibv-step-card {
+	background: var(--ibv-color-white);
 }

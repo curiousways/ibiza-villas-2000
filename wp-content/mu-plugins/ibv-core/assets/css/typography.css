@@ -35,7 +35,6 @@ p,
 ul,
 ol {
 	font-size: var(--ibv-fs-body);
-	line-height: var(--ibv-lh-relaxed);
 }
 
 p + p,
@@ -59,9 +58,20 @@ small,
 	color: var(--ibv-color-text-muted);
 }
 
-/* Editor / WYSIWYG flow — applied to wrappers around editor output. */
+/* Editor / WYSIWYG flow — applied to wrappers around editor output.
+   Relaxed line-height set on the container so it inherits to <p>/<ul>/<ol>
+   without a direct rule that would override component containers elsewhere. */
+.ibv-prose {
+	line-height: var(--ibv-lh-relaxed);
+}
+
 .ibv-prose > * + * {
 	margin-top: var(--ibv-space-md);
+}
+
+.ibv-prose h1 {
+	margin-top: var(--ibv-space-3xl);
+	font-family: var(--ibv-font-display);
 }
 
 .ibv-prose h2 {
@@ -70,6 +80,26 @@ small,
 
 .ibv-prose h3 {
 	margin-top: var(--ibv-space-xl);
+}
+
+.ibv-prose h4 {
+	margin-top: var(--ibv-space-lg);
+}
+
+.ibv-prose h5 {
+	margin-top: var(--ibv-space-md);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-prose h6 {
+	margin-top: var(--ibv-space-md);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-snug);
+	text-transform: uppercase;
+	letter-spacing: var(--ibv-tracking-eyebrow);
 }
 
 .ibv-prose ul,
@@ -84,6 +114,134 @@ small,
 	color: var(--ibv-color-text-muted);
 }
 
+/* Inline images — natural aspect, rounded corners. Do NOT force the
+   featured-image 6:4 here; that's article-shell's job. */
+.ibv-prose img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--ibv-radius-lg);
+}
+
+.ibv-prose figure {
+	margin: 0;
+}
+
+.ibv-prose figure img {
+	display: block;
+}
+
+.ibv-prose figcaption {
+	margin-top: var(--ibv-space-xs);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	text-align: center;
+}
+
+/* WordPress alignment classes inside prose. */
+.ibv-prose .alignleft {
+	float: left;
+	margin-inline-end: var(--ibv-space-lg);
+	margin-block-end: var(--ibv-space-md);
+	max-width: 50%;
+}
+
+.ibv-prose .alignright {
+	float: right;
+	margin-inline-start: var(--ibv-space-lg);
+	margin-block-end: var(--ibv-space-md);
+	max-width: 50%;
+}
+
+.ibv-prose .aligncenter {
+	display: block;
+	margin-inline: auto;
+}
+
+/* alignfull — full-bleed: image goes to viewport edges, no rounded corners. */
+.ibv-prose .alignfull {
+	margin-inline-start: calc(50% - 50vw);
+	margin-inline-end: calc(50% - 50vw);
+	max-width: 100vw;
+	width: 100vw;
+	border-radius: 0;
+}
+
+.ibv-prose .alignfull img {
+	width: 100%;
+	height: auto;
+	border-radius: 0;
+}
+
+/* alignwide — modest breakout from the reading column.
+   Dimensions are placeholders until design specifies; refine later. */
+.ibv-prose .alignwide {
+	margin-inline: -2rem;
+	max-width: calc(100% + 4rem);
+}
+
+@media (min-width: 64rem) {
+	.ibv-prose .alignwide {
+		margin-inline: -4rem;
+		max-width: calc(100% + 8rem);
+	}
+}
+
+.ibv-prose .alignwide img {
+	width: 100%;
+	height: auto;
+}
+
+/* Light divider with breathing room. */
+.ibv-prose hr {
+	margin-block: var(--ibv-space-2xl);
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-border);
+}
+
+/* Tables — minimal but legible. */
+.ibv-prose table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--ibv-fs-small);
+}
+
+.ibv-prose th,
+.ibv-prose td {
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	border-bottom: 1px solid var(--ibv-color-border);
+	text-align: start;
+}
+
+.ibv-prose th {
+	font-weight: var(--ibv-font-weight-bold);
+	border-bottom-width: 2px;
+	border-bottom-color: var(--ibv-color-border-strong);
+}
+
+/* Code — light touch; unlikely in editorial content but covered. */
+.ibv-prose code,
+.ibv-prose pre {
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+	font-size: 0.9em;
+	background: var(--ibv-color-web-grey-100);
+	border-radius: var(--ibv-radius-sm);
+}
+
+.ibv-prose code {
+	padding: 0.125em 0.25em;
+}
+
+.ibv-prose pre {
+	padding: var(--ibv-space-md);
+	overflow-x: auto;
+}
+
+.ibv-prose pre code {
+	padding: 0;
+	background: none;
+}
+
 /* ---------- Utilities ---------- */
 
 /* Opt in to the display typeface. Apply explicitly to elements that should
@@ -93,4 +251,18 @@ small,
 .ibv-font-display {
 	font-family: var(--ibv-font-display);
 	font-optical-sizing: auto;
+}
+
+/* Sage-coloured separator dot for meta lines (date · category, author ·
+   title, etc). Render as <span class="ibv-meta-dot" aria-hidden="true">
+   between two adjacent inline meta items. Parent's flex gap handles the
+   spacing on either side. */
+.ibv-meta-dot {
+	display: inline-block;
+	width: 0.25rem; /* 4px — matches Figma bullet size */
+	height: 0.25rem;
+	border-radius: 50%;
+	background: var(--ibv-color-sage-500);
+	vertical-align: middle;
+	flex-shrink: 0;
 }

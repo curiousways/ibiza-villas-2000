@@ -1,0 +1,116 @@
+.ibv-section-about-team__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	column-gap: var(--ibv-space-2xl);
+	row-gap: var(--ibv-space-2xl);
+}
+
+@media (min-width: 64rem) {
+	.ibv-section-about-team__inner {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+.ibv-section-about-team__header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+}
+
+@media (min-width: 64rem) {
+	.ibv-section-about-team__header {
+		grid-column: 1;
+	}
+}
+
+.ibv-section-about-team__eyebrow {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-regular);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-about-team__title {
+	margin: 0;
+	max-width: 22ch;
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-about-team__grid {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	column-gap: var(--ibv-space-xl);
+	row-gap: var(--ibv-space-2xl);
+}
+
+@media (min-width: 48rem) {
+	.ibv-section-about-team__grid {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+}
+
+@media (min-width: 64rem) {
+	.ibv-section-about-team__grid {
+		grid-column: 2 / -1;
+	}
+}
+
+.ibv-section-about-team__member {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-section-about-team__media {
+	aspect-ratio: 4 / 5;
+	overflow: hidden;
+	border-radius: var(--ibv-radius-lg);
+}
+
+.ibv-section-about-team__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ibv-section-about-team__name-role {
+	margin: 0;
+}
+
+.ibv-section-about-team__name {
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-about-team__role {
+	color: var(--ibv-color-text-muted);
+	font-weight: var(--ibv-font-weight-regular);
+}
+
+.ibv-section-about-team__bio {
+	margin: 0;
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-section-about-team__closing {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+}
+
+@media (min-width: 64rem) {
+	.ibv-section-about-team__closing {
+		grid-column: 2 / -1;
+	}
+}

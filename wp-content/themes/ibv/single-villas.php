@@ -25,6 +25,17 @@ while ( have_posts() ) :
 
 				<div class="ibv-villa-detail__main">
 					<?php
+					/*
+					 * TODO villa-detail-page-rebuild:
+					 * The villa detail page is due a full rebuild against
+					 * wireframe v0.4 (hero / sticky bar / overview / pricing
+					 * / location / enquiry form). When that work runs,
+					 * reposition this accordion to live at the top of the
+					 * overview block as designed. For now, it renders inline
+					 * at the top of the existing template so the data +
+					 * component are live for editorial use.
+					 */
+					ibv_core_villa_offers( [ 'post_id' => $villa_id ] );
 					ibv_core_section_villa_overview( $villa_id );
 					ibv_core_villa_map( $villa_id );
 					ibv_core_distance_ticks( $villa_id );

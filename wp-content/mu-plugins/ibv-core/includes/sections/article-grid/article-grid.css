@@ -1,0 +1,14 @@
+/* Article grid — three-column layout of article cards.
+   Card-level styles live in components/article-card/article-card.css. */
+
+.ibv-section-article-grid__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-article-grid__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

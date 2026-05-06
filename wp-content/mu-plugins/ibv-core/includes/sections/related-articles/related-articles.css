@@ -1,0 +1,43 @@
+/* Related articles — surface-blue band with centered heading + 3-up card grid.
+   Heading mirrors the three-step section pattern; grid mirrors article-grid.
+   Title colour inherits from .ibv-section--surface-blue (text-on-dark) — no
+   override here so the surface system stays in charge. */
+
+.ibv-section-related-articles__header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+	margin-block-end: var(--ibv-space-2xl);
+}
+
+.ibv-section-related-articles__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+}
+
+.ibv-section-related-articles__rule {
+	width: 6.25rem; /* 100px — matches three-step rule */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+}
+
+.ibv-section-related-articles__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-lg);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-related-articles__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}

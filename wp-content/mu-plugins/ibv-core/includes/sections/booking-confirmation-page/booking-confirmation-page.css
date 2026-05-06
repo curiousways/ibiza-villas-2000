@@ -1,25 +1,70 @@
-.ibv-booking-confirmation__hero {
-	padding-block: var(--ibv-space-3xl);
-	background: var(--ibv-color-bg-alt);
+/* Booking Confirmation page — confirmation panel + URL-driven details
+   panel. Section rhythm and surface come from `.ibv-section` +
+   `.ibv-section--surface-bg`; this stylesheet only owns inner layout. */
+
+.ibv-booking-confirmation__panel-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	text-align: center;
-	border-bottom: 1px solid var(--ibv-color-border);
+	gap: var(--ibv-space-md);
 }
 
-.ibv-booking-confirmation__check {
+.ibv-booking-confirmation__icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 3rem;
-	height: 3rem;
-	margin-bottom: var(--ibv-space-md);
-	border-radius: var(--ibv-radius-pill);
-	background: var(--ibv-color-brand-panel-green);
-	color: var(--ibv-color-text-inverse);
-	font-size: var(--ibv-fs-h3);
-	line-height: 1;
+	width: 5rem;
+	height: 5rem;
+	border-radius: 50%;
+	background: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-text-on-dark);
+	flex-shrink: 0;
 }
 
 .ibv-booking-confirmation__title {
 	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
 	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-booking-confirmation__subtitle {
+	margin: 0;
+	max-width: 36rem;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted);
+}
+
+/* Booking details panel — URL-driven; renders only when at least one
+   sanitised query param survives validation. No header — the page
+   H1 ("Booking request received") already implies what this list is. */
+.ibv-booking-confirmation__details-list {
+	list-style: none;
+	margin: 0 auto;
+	padding: 0;
+	max-width: 32rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+	text-align: center;
+}
+
+.ibv-booking-confirmation__details-list li {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: baseline;
+	gap: var(--ibv-space-2xs) var(--ibv-space-sm);
+	font-size: var(--ibv-fs-body);
+	color: var(--ibv-color-text);
+}
+
+.ibv-booking-confirmation__details-list strong {
+	font-weight: var(--ibv-font-weight-bold);
 }

@@ -1,0 +1,38 @@
+/* Pull quote — centred display quote + author attribution.
+   Sage dot between author name and title mirrors the article-card meta pattern. */
+
+.ibv-pull-quote {
+	margin: 0;
+	max-width: 48rem; /* 768px — Figma reading-column */
+	margin-inline: auto;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	text-align: center;
+}
+
+.ibv-pull-quote__text {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+	quotes: none;
+}
+
+.ibv-pull-quote__attribution {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-2xs);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-pull-quote__author-name {
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
+}

@@ -1,0 +1,462 @@
+/* Newsletter form — base + variants. Footer: pill input + embedded gold submit.
+   Default: banded in-page treatment (Ibiza Guide newsletter band).
+   GForms targeting duplicates across variants — fine for now; a base
+   selector pass could DRY this in a later sweep. */
+
+/* Default variant — banded in-page treatment. Lives inside a section
+   carrying --surface-forest-green; centred copy + pill input. */
+.ibv-newsletter-form--default {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+	max-width: 36rem; /* 576px — Figma copy column */
+	margin-inline: auto;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	color: var(--ibv-color-text-on-dark);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__rule {
+	width: 6.25rem; /* 100px — section-title rule pattern */
+	height: 1px;
+	border: 0;
+	background: var(--ibv-color-gold-500);
+	margin: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__body {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted-on-dark);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed {
+	width: 100%;
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_wrapper {
+	margin: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_body {
+	margin: 0;
+	flex: 1;
+	min-width: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_fields {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gfield {
+	margin: 0;
+	width: 100%;
+}
+
+/* GForms wraps the <input> in .ginput_container; without an explicit
+   width: 100%, the input's flex:1 is inert (its direct parent is a block
+   div, not the flex form). Forces the click-area to match the visible pill. */
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .ginput_container {
+	width: 100%;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gfield_label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed form {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	background: rgb(from var(--ibv-color-text-on-dark) r g b / 0.1);
+	border: 1px solid rgb(from var(--ibv-color-text-on-dark) r g b / 0.2);
+	border-radius: var(--ibv-radius-field);
+	padding: 0.375rem;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="email"],
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="text"] {
+	width: 100%;
+	background: transparent;
+	border: 0;
+	outline: 0;
+	color: var(--ibv-color-text-on-dark);
+	font-family: inherit;
+	font-size: var(--ibv-fs-body);
+	line-height: 1.5;
+	padding: 0.5rem 1rem;
+	min-width: 0;
+	text-align: start;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="email"]::placeholder,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="text"]::placeholder {
+	color: var(--ibv-color-text-on-dark);
+	opacity: 1;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="email"]:focus,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="text"]:focus {
+	outline: 2px solid var(--ibv-color-gold-500);
+	outline-offset: -2px;
+	border-radius: var(--ibv-radius-field);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_footer,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_footer.top_label {
+	margin: 0;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="submit"],
+.ibv-newsletter-form--default .ibv-newsletter-form__embed button[type="submit"] {
+	appearance: none;
+	-webkit-appearance: none;
+	background-color: var(--ibv-color-gold-500);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23055353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 1rem 1rem;
+	color: transparent;
+	text-indent: -9999px;
+	overflow: hidden;
+	border: 0;
+	border-radius: var(--ibv-radius-field);
+	width: 2rem;
+	height: 2rem;
+	font-size: 0;
+	cursor: pointer;
+	position: relative;
+	transition: background-color 150ms ease, filter 150ms ease;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="submit"]:hover,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed button[type="submit"]:hover,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed input[type="submit"]:focus-visible,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed button[type="submit"]:focus-visible {
+	filter: brightness(0.92);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_confirmation_message {
+	color: var(--ibv-color-sage-100);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gfield_validation_message,
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .validation_error {
+	color: var(--ibv-color-gold-500);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-2xs);
+}
+
+
+/* Footer variant (global footer column). */
+.ibv-newsletter-form--footer {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text-on-dark);
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__body {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted-on-dark);
+}
+
+/* The form wrapper. Gravity Forms shortcode renders inside. */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed {
+	/* The pill outer becomes the form wrapper */
+}
+
+/* Gravity Forms targeting — pill shape on form, embedded button */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_wrapper {
+	margin: 0;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_body {
+	margin: 0;
+	flex: 1;
+	min-width: 0;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_fields {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield {
+	margin: 0;
+	width: 100%;
+}
+
+/* Force the input's container chain to full width — see notes on the
+   default variant for why .ginput_container needs explicit width. */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .ginput_container {
+	width: 100%;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield_label {
+	/* Hide visible labels (placeholders carry the affordance) */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Pill container — wrap the form's inner area */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed form {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.375rem; /* 6px — small gap between input and submit */
+	background: rgb(from var(--ibv-color-text-on-dark) r g b / 0.1);
+	border: 1px solid rgb(from var(--ibv-color-text-on-dark) r g b / 0.2);
+	border-radius: var(--ibv-radius-field);
+	padding: 0.375rem; /* 6px — breathing room around embedded submit */
+}
+
+/* Email input */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"],
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"] {
+	width: 100%;
+	background: transparent;
+	border: 0;
+	outline: 0;
+	color: var(--ibv-color-text-on-dark);
+	font-family: inherit;
+	font-size: var(--ibv-fs-small);
+	line-height: 1.5;
+	padding: 0.5rem 1rem; /* 8px / 16px */
+	min-width: 0;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"]::placeholder,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"]::placeholder {
+	color: var(--ibv-color-text-on-dark); /* full off-white — Figma placeholder */
+	opacity: 1;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="email"]:focus,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="text"]:focus {
+	outline: 2px solid var(--ibv-color-gold-500);
+	outline-offset: -2px;
+	border-radius: var(--ibv-radius-field);
+}
+
+/* Submit button — square gold disc with arrow (::after does not work on input) */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_footer,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_footer.top_label {
+	margin: 0;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"],
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"] {
+	appearance: none;
+	-webkit-appearance: none;
+	background-color: var(--ibv-color-gold-500);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23055353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 1rem 1rem;
+	color: transparent;
+	text-indent: -9999px;
+	overflow: hidden;
+	border: 0;
+	border-radius: var(--ibv-radius-field);
+	width: 2rem; /* 32px — Figma */
+	height: 2rem;
+	font-size: 0;
+	cursor: pointer;
+	position: relative;
+	transition: background-color 150ms ease, filter 150ms ease;
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"]:hover,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"]:hover,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed input[type="submit"]:focus-visible,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed button[type="submit"]:focus-visible {
+	filter: brightness(0.92);
+}
+
+/* Validation / confirmation messages (light styling) */
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_confirmation_message {
+	color: var(--ibv-color-sage-100);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield_validation_message,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .validation_error {
+	color: var(--ibv-color-gold-500);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-2xs);
+}
+
+/* Empty-state variant — on .ibv-section--surface-tint-teal; section owns title/body. */
+.ibv-newsletter-form--empty-state {
+	width: 100%;
+	max-width: 28rem;
+	margin-block-start: var(--ibv-space-xs);
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_wrapper {
+	margin: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_body {
+	margin: 0;
+	flex: 1;
+	min-width: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_fields {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gfield {
+	margin: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gfield_label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed form {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	background: var(--ibv-color-white);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	padding: 0.375rem;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="email"],
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="text"] {
+	flex: 1;
+	background: transparent;
+	border: 0;
+	outline: 0;
+	color: var(--ibv-color-text);
+	font-family: inherit;
+	font-size: var(--ibv-fs-small);
+	line-height: 1.5;
+	padding: 0.5rem 1rem;
+	min-width: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="email"]::placeholder,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="text"]::placeholder {
+	color: var(--ibv-color-text-muted);
+	opacity: 1;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="email"]:focus,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="text"]:focus {
+	outline: 2px solid var(--ibv-color-gold-500);
+	outline-offset: -2px;
+	border-radius: var(--ibv-radius-field);
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_footer,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_footer.top_label {
+	margin: 0;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="submit"],
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed button[type="submit"] {
+	appearance: none;
+	-webkit-appearance: none;
+	background-color: var(--ibv-color-gold-500);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23055353' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 1rem 1rem;
+	color: transparent;
+	text-indent: -9999px;
+	overflow: hidden;
+	border: 0;
+	border-radius: var(--ibv-radius-field);
+	width: 2rem;
+	height: 2rem;
+	font-size: 0;
+	cursor: pointer;
+	position: relative;
+	transition: background-color 150ms ease, filter 150ms ease;
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="submit"]:hover,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed button[type="submit"]:hover,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="submit"]:focus-visible,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed button[type="submit"]:focus-visible {
+	filter: brightness(0.92);
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_confirmation_message {
+	color: var(--ibv-color-text-muted);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gfield_validation_message,
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .validation_error {
+	color: var(--ibv-color-forest-green-deep);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-2xs);
+}

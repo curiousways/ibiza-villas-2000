@@ -3,7 +3,8 @@
  * Site Options content fields — global chrome + shared cross-page content.
  *
  * Homepage-only fields live on the Front Page (register-page-home.php).
- * Newsletter footer fields live here (global footer).
+ * Featured offer and short breaks live in register-globals-content.php.
+ * Newsletter footer copy lives here; Gravity Form ID lives in register-globals-content.php.
  *
  * @package Ibiza_Villas_2000
  */
@@ -178,14 +179,6 @@ function ibv_register_site_options_content_fields() {
 					'rows'           => 2,
 					'instructions'   => __( 'Subtitle line beneath the newsletter title. Defaults to "Sign up to receive marketing from Ibiza Villas 2000" if empty.', 'ibv' ),
 				),
-				array(
-					'key'            => 'field_ibv_global_newsletter_form_id',
-					'label'          => __( 'Newsletter Gravity Form ID', 'ibv' ),
-					'name'           => 'newsletter_form_id',
-					'type'           => 'number',
-					'min'            => 0,
-					'instructions'   => __( 'ID of the Gravity Form to embed. Find it under Forms in the WP admin.', 'ibv' ),
-				),
 			),
 			'location'              => $loc_option,
 			'menu_order'            => 1,
@@ -242,6 +235,44 @@ function ibv_register_site_options_content_fields() {
 					'label' => __( 'Hotel page', 'ibv' ),
 					'name'  => 'fancy_hotel_url',
 					'type'  => 'page_link',
+				),
+				array(
+					'key'           => 'field_ibv_globals_three_step_intro_eyebrow',
+					'label'         => __( '3-step eyebrow', 'ibv' ),
+					'name'          => 'three_step_intro_eyebrow',
+					'type'          => 'text',
+					'default_value' => __( 'Simple & Swift', 'ibv' ),
+				),
+				array(
+					'key'           => 'field_ibv_globals_three_step_intro_title',
+					'label'         => __( '3-step title', 'ibv' ),
+					'name'          => 'three_step_intro_title',
+					'type'          => 'text',
+					'default_value' => __( 'Our 3-Step Process', 'ibv' ),
+				),
+				array(
+					'key'          => 'field_ibv_globals_three_step_steps',
+					'label'        => __( '3-step cards', 'ibv' ),
+					'name'         => 'three_step_steps',
+					'type'         => 'repeater',
+					'layout'       => 'block',
+					'max'          => 3,
+					'button_label' => __( 'Add step', 'ibv' ),
+					'sub_fields'   => array(
+						array(
+							'key'   => 'field_ibv_globals_three_step_card_title',
+							'label' => __( 'Title', 'ibv' ),
+							'name'  => 'title',
+							'type'  => 'text',
+						),
+						array(
+							'key'   => 'field_ibv_globals_three_step_card_text',
+							'label' => __( 'Text', 'ibv' ),
+							'name'  => 'text',
+							'type'  => 'textarea',
+							'rows'  => 3,
+						),
+					),
 				),
 				array(
 					'key'        => 'field_ibv_home_testimonials',

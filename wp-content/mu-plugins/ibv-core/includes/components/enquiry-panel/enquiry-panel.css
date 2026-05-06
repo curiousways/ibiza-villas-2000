@@ -1,9 +1,6 @@
 .ibv-enquiry-panel {
-	padding: var(--ibv-space-lg);
-	background: var(--ibv-color-surface);
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-lg);
-	box-shadow: var(--ibv-shadow-sm);
+	padding: var(--ibv-space-2xl) var(--ibv-space-lg) var(--ibv-space-lg);
+	background: var(--ibv-color-bg);
 }
 
 @media (min-width: 64rem) {
@@ -14,9 +11,12 @@
 }
 
 .ibv-enquiry-panel__title {
-	margin: 0 0 var(--ibv-space-md);
+	margin: 0 0 var(--ibv-space-lg);
+	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h3);
-	line-height: var(--ibv-lh-snug);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
+	letter-spacing: 0;
 }
 
 .ibv-enquiry-panel__form {
@@ -25,10 +25,11 @@
 	gap: var(--ibv-space-md);
 }
 
+/* Fields: no labels — inputs are self-describing (Figma pattern) */
 .ibv-enquiry-panel__field label {
 	display: block;
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-medium);
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-bold);
 	margin-bottom: var(--ibv-space-2xs);
 	color: var(--ibv-color-text);
 }
@@ -37,54 +38,170 @@
 .ibv-enquiry-panel__field textarea {
 	width: 100%;
 	font: inherit;
-	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	font-size: var(--ibv-fs-body);
+	padding: var(--ibv-space-md) var(--ibv-space-lg);
 	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-sm);
+	border-radius: var(--ibv-radius-field);
 	background: var(--ibv-color-bg);
 	color: var(--ibv-color-text);
+	appearance: none;
+	-webkit-appearance: none;
 }
 
-.ibv-enquiry-panel__price-block {
-	padding: var(--ibv-space-md);
-	background: var(--ibv-color-bg-alt);
-	border-radius: var(--ibv-radius-sm);
+.ibv-enquiry-panel__field input[type="date"] {
+	min-height: 3.375rem; /* 54px — matches Figma */
+}
+
+.ibv-enquiry-panel__field input[type="date"]::-webkit-calendar-picker-indicator {
+	display: none;
+}
+
+.ibv-enquiry-panel__field input[type="number"] {
+	-moz-appearance: textfield;
+	appearance: textfield;
+	width: fit-content;
+	min-width: 1ch;
+}
+
+.ibv-enquiry-panel__field input[type="number"]::-webkit-outer-spin-button,
+.ibv-enquiry-panel__field input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Pax field: label sits outside the chrome; the inner control wraps the
+   input + "Guests" suffix and carries the input border/padding/radius. */
+.ibv-enquiry-panel__field--pax label {
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
+	min-height: 3.375rem;
+	padding: var(--ibv-space-md) var(--ibv-space-lg);
 	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	background: var(--ibv-color-bg);
+	font-weight: var(--ibv-font-weight-normal);
+}
+
+.ibv-enquiry-panel__field--pax label input {
+	min-width: 0;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	flex: 0 1 auto;
+	width: 3ch;
+	field-sizing: content; /* Modern browsers shrink/grow to content; falls back to width: 3ch. */
+}
+
+.ibv-enquiry-panel__field--pax label input:focus {
+	outline: none;
+}
+
+.ibv-enquiry-panel__field--pax:has(input:focus-visible) label {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: 2px;
+}
+
+.ibv-enquiry-panel__field--pax label .ibv-enquiry-panel__field-suffix {
+	flex: 0 0 auto;
+	font-size: var(--ibv-fs-body);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__field textarea {
+	min-height: 13.125rem; /* 210px — matches Figma */
+	resize: vertical;
+}
+
+.ibv-enquiry-panel__field textarea::placeholder {
+	color: var(--ibv-color-text-muted);
+}
+
+/* Pending state — the price block is hidden until JS removes the
+   .is-pricing-pending class after paint() succeeds. Uses transition-
+   behavior: allow-discrete + @starting-style so the block collapses out
+   of layout while hidden but still fades in on reveal. */
+.ibv-enquiry-panel__price-block {
+	transition: opacity 200ms ease-out, display 200ms allow-discrete;
+}
+
+.ibv-enquiry-panel.is-pricing-pending .ibv-enquiry-panel__price-block {
+	display: none;
+	opacity: 0;
+}
+
+@starting-style {
+	.ibv-enquiry-panel:not(.is-pricing-pending) .ibv-enquiry-panel__price-block {
+		opacity: 0;
+	}
+}
+
+/* Price block — no card chrome, flows inline with form */
+.ibv-enquiry-panel__price-block {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem; /* 12px — matches Figma gap between label/price and breakdown */
+	padding: 0;
+	background: transparent;
+	border: 0;
+}
+
+.ibv-enquiry-panel__price-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ibv-enquiry-panel__price-list-item {
+	margin: 0;
 }
 
 .ibv-enquiry-panel__price-label {
-	margin: 0 0 var(--ibv-space-xs);
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-semibold);
+	margin: 0;
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: 1.4;
+	color: var(--ibv-color-text);
 }
 
 .ibv-enquiry-panel__price-eur {
 	margin: 0;
-	font-size: var(--ibv-fs-h4);
-	font-weight: var(--ibv-font-weight-bold);
+	font-family: var(--ibv-font-display);
+	font-size: 2rem; /* 32px — Figma Desktop/H3 */
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
+	color: var(--ibv-color-brand-teal);
 }
 
 .ibv-enquiry-panel__price-gbp {
-	margin: var(--ibv-space-2xs) 0 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: 1.25rem; /* 20px — Figma Desktop/H5 */
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
+	color: var(--ibv-color-brand-teal);
 }
 
 .ibv-enquiry-panel__breakdown {
 	list-style: none;
-	margin: var(--ibv-space-sm) 0 0;
+	margin: 0;
 	padding: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	font-size: var(--ibv-fs-small); /* 14px — Figma Paragraph/Small */
+	line-height: 1.2;
+	color: var(--ibv-color-brand-teal);
 }
 
-.ibv-enquiry-panel__breakdown li + li {
-	margin-top: var(--ibv-space-2xs);
+.ibv-enquiry-panel__breakdown-item {
+	margin: 0;
 }
 
 .ibv-enquiry-panel__eco-note {
-	margin: var(--ibv-space-sm) 0 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	margin: 0;
+	font-size: var(--ibv-fs-micro); /* 10px */
+	color: var(--ibv-color-text);
+	line-height: var(--ibv-lh-normal);
 }
 
 .ibv-enquiry-panel__error {
@@ -97,36 +214,46 @@
 
 .ibv-enquiry-panel__response-note {
 	margin: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text);
+	line-height: var(--ibv-lh-normal);
 }
 
 .ibv-enquiry-panel__divider {
 	border: 0;
-	border-top: 1px solid var(--ibv-color-border);
-	margin: var(--ibv-space-lg) 0;
+	border-top: 1px solid var(--ibv-color-accent-gold);
+	margin: var(--ibv-space-md) 0;
+	width: 3.125rem; /* 50px narrow rule — matches Figma separator */
 }
 
+/* Chat block — "Prefer to chat? WhatsApp us" on one line */
 .ibv-enquiry-panel__chat-label {
-	margin: 0 0 var(--ibv-space-sm);
-	font-weight: var(--ibv-font-weight-semibold);
+	margin: 0 0 var(--ibv-space-xs);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
 }
 
-.ibv-enquiry-panel__chat-link {
-	display: block;
-	font-size: var(--ibv-fs-small);
-	margin-top: var(--ibv-space-sm);
-	color: var(--ibv-color-link);
+.ibv-enquiry-panel__chat-label a {
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
 	text-decoration: underline;
 }
 
 .ibv-enquiry-panel__chat-number {
 	display: block;
-	font-weight: var(--ibv-font-weight-medium);
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-regular);
+	color: var(--ibv-color-text);
+	margin-top: var(--ibv-space-2xs);
 }
 
-.ibv-enquiry-panel .ibv-enquiry-panel__submit {
-	width: 100%;
+.ibv-enquiry-panel__chat-link {
+	display: block;
+	font-size: var(--ibv-fs-micro);
+	margin-top: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
+	text-decoration: underline;
 }
 
 .ibv-enquiry-panel .ibv-enquiry-panel__submit[disabled] {

@@ -1,0 +1,110 @@
+/* Featured article — single post in a two-column horizontal block.
+   Layout intentionally duplicated from image-text-section rather than
+   composed via that helper: pill above title, meta line below it, and
+   no rule under the title. Surface/rhythm from .ibv-section + modifiers. */
+
+.ibv-section-featured-article__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xl);
+	align-items: stretch;
+}
+
+.ibv-section-featured-article__media {
+	display: block;
+	flex: 1 1 50%;
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+	aspect-ratio: 552 / 363; /* matches image-text-section pattern */
+}
+
+.ibv-section-featured-article__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.ibv-section-featured-article__content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	flex: 1 1 50%;
+}
+
+.ibv-section-featured-article__pill {
+	display: inline-block;
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	background: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-link);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	border-radius: var(--ibv-radius-pill);
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-section-featured-article__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-featured-article__title a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.ibv-section-featured-article__title a:hover,
+.ibv-section-featured-article__title a:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
+.ibv-section-featured-article__meta {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-section-featured-article__meta-icon {
+	display: block;
+	flex-shrink: 0;
+}
+
+.ibv-section-featured-article__description {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-featured-article__content .ibv-button {
+	margin-block-start: var(--ibv-space-xs);
+}
+
+@media (min-width: 56rem) {
+	.ibv-section-featured-article__inner {
+		flex-direction: row;
+		align-items: stretch; /* media grows to content column height */
+		gap: 4rem; /* 64px — matches image-text-section column gap */
+	}
+
+	/* Drop the mobile aspect ratio at desktop so the image fills the
+	   stretched column height when copy is long instead of leaving a
+	   gap below the image. */
+	.ibv-section-featured-article__media {
+		aspect-ratio: auto;
+	}
+
+	.ibv-section-featured-article--image-right .ibv-section-featured-article__inner {
+		flex-direction: row-reverse;
+	}
+}

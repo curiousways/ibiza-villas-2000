@@ -58,6 +58,11 @@
 	color: var(--ibv-color-text-on-dark);
 }
 
+.ibv-section--surface-blue {
+	background: var(--ibv-color-blue-400);
+	color: var(--ibv-color-text-on-dark);
+}
+
 /* Same-surface adjacency collapse — drops the second section's
  * top padding so two same-surface sections feel continuous. */
 .ibv-section--surface-bg + .ibv-section--surface-bg,
@@ -65,6 +70,7 @@
 .ibv-section--surface-tint-teal + .ibv-section--surface-tint-teal,
 .ibv-section--surface-tint-gold + .ibv-section--surface-tint-gold,
 .ibv-section--surface-tint-blue + .ibv-section--surface-tint-blue,
-.ibv-section--surface-forest-green + .ibv-section--surface-forest-green {
+.ibv-section--surface-forest-green + .ibv-section--surface-forest-green,
+.ibv-section--surface-blue + .ibv-section--surface-blue {
 	padding-block-start: 0;
 }
