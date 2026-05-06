@@ -108,6 +108,32 @@ function ibv_core_villa_card( $args = [] ) {
 	$variant = in_array( $args['variant'], [ 'default', 'offer', 'similar' ], true ) ? $args['variant'] : 'default';
 
 	$permalink = $args['cta_url'] ? $args['cta_url'] : get_permalink( $villa_id );
+
+	// Forward an active villa-listing search (date_from/date_to/pax from
+	// the current URL) to the detail page so the enquiry panel can prefill
+	// and fetch live pricing on arrival.
+	$forward_params = [];
+	if ( isset( $_GET['date_from'] ) ) {
+		$raw = sanitize_text_field( wp_unslash( $_GET['date_from'] ) );
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
+			$forward_params['date_from'] = $raw;
+		}
+	}
+	if ( isset( $_GET['date_to'] ) ) {
+		$raw = sanitize_text_field( wp_unslash( $_GET['date_to'] ) );
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
+			$forward_params['date_to'] = $raw;
+		}
+	}
+	if ( isset( $_GET['pax'] ) ) {
+		$pax = absint( wp_unslash( $_GET['pax'] ) );
+		if ( $pax > 0 ) {
+			$forward_params['pax'] = $pax;
+		}
+	}
+	if ( ! empty( $forward_params ) ) {
+		$permalink = add_query_arg( $forward_params, $permalink );
+	}
 	$title     = get_field( 'villa_pretty_name', $villa_id );
 	if ( ! $title ) {
 		$title = get_the_title( $villa_id );
