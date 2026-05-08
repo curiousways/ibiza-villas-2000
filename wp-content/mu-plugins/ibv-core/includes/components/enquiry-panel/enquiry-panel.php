@@ -20,6 +20,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 
 	wp_enqueue_style( 'ibv-enquiry-panel' );
 	wp_enqueue_style( 'ibv-button' );
+	ibv_core_date_range_picker_enqueue();
 
 	$property_id  = (string) get_field( 'property_id', $villa_id );
 	$confirm_url  = ibv_get_booking_confirmation_url();
@@ -89,15 +90,17 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
-		<form class="ibv-enquiry-panel__form" method="get" action="<?php echo esc_url( $confirm_url ); ?>">
-			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-from" class="ibv-u-visually-hidden"><?php esc_html_e( 'Arrive', 'ibv' ); ?></label>
-				<input type="date" id="ibv-ep-from" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" placeholder="<?php esc_attr_e( 'Arrive', 'ibv' ); ?>" required>
-			</div>
-
-			<div class="ibv-enquiry-panel__field">
-				<label for="ibv-ep-to" class="ibv-u-visually-hidden"><?php esc_html_e( 'Depart', 'ibv' ); ?></label>
-				<input type="date" id="ibv-ep-to" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" placeholder="<?php esc_attr_e( 'Depart', 'ibv' ); ?>" required>
+		<form class="ibv-enquiry-panel__form" method="get" action="<?php echo esc_url( $confirm_url ); ?>" data-bob-date-range="enquiry">
+			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--when" data-bob-date-range-anchor>
+				<button type="button" class="ibv-enquiry-panel__when-trigger" id="ibv-ep-when" data-bob-date-range-trigger>
+					<span class="ibv-u-visually-hidden"><?php esc_html_e( 'When', 'ibv' ); ?></span>
+					<span class="ibv-enquiry-panel__when-value" data-bob-date-range-display data-placeholder="<?php esc_attr_e( 'When', 'ibv' ); ?>"><?php esc_html_e( 'When', 'ibv' ); ?></span>
+				</button>
+				<button type="button" class="ibv-enquiry-panel__when-clear" data-bob-date-range-clear hidden aria-label="<?php esc_attr_e( 'Clear dates', 'ibv' ); ?>">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<input type="hidden" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" required data-bob-date-from>
+				<input type="hidden" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" required data-bob-date-to>
 			</div>
 
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--pax">

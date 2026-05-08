@@ -52,6 +52,79 @@
 	min-height: 3.375rem; /* 54px — matches Figma */
 }
 
+/* "When" trigger — single button replacing the two visible date inputs.
+ * Matches the existing input chrome (border, radius, padding, height).
+ * Hidden inputs still hold date_from / date_to for the form contract. */
+.ibv-enquiry-panel__field--when {
+	position: relative;
+}
+
+.ibv-enquiry-panel__when-trigger {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 3.375rem;
+	padding: var(--ibv-space-md) calc(var(--ibv-space-lg) + 1.5rem) var(--ibv-space-md) var(--ibv-space-lg);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	background: var(--ibv-color-bg);
+	color: var(--ibv-color-text);
+	font: inherit;
+	font-size: var(--ibv-fs-body);
+	text-align: start;
+	cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.ibv-enquiry-panel__when-trigger:focus,
+.ibv-enquiry-panel__when-trigger:focus-visible {
+	outline: none;
+	border-color: var(--ibv-color-focus-ring);
+}
+
+.ibv-enquiry-panel__when-value {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ibv-enquiry-panel__when-value.is-empty {
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-enquiry-panel__when-clear {
+	position: absolute;
+	inset-inline-end: var(--ibv-space-sm);
+	inset-block-start: 50%;
+	translate: 0 -50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background-color: transparent;
+	color: var(--ibv-color-text-muted);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 120ms ease, color 120ms ease;
+}
+
+.ibv-enquiry-panel__when-clear[hidden] {
+	display: none;
+}
+
+.ibv-enquiry-panel__when-clear:hover,
+.ibv-enquiry-panel__when-clear:focus-visible {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+	outline: none;
+}
+
 .ibv-enquiry-panel__field input[type="date"]::-webkit-calendar-picker-indicator {
 	display: none;
 }

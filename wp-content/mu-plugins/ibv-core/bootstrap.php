@@ -49,6 +49,7 @@ require_once IBV_CORE_PATH . 'includes/components/image-text-section/image-text-
 require_once IBV_CORE_PATH . 'includes/components/villa-card/villa-card.php';
 require_once IBV_CORE_PATH . 'includes/components/offer-panel/offer-panel.php';
 require_once IBV_CORE_PATH . 'includes/components/quote-card/quote-card.php';
+require_once IBV_CORE_PATH . 'includes/components/date-range-picker/date-range-picker.php';
 require_once IBV_CORE_PATH . 'includes/components/header-search/header-search.php';
 require_once IBV_CORE_PATH . 'includes/components/hero-search/hero-search.php';
 require_once IBV_CORE_PATH . 'includes/components/facts-strip/facts-strip.php';
