@@ -72,6 +72,9 @@
 .ibv-section-hero__after-copy {
 	width: 100%;
 	max-width: 44rem;
+	.ibv-hero-search {
+		margin-inline: auto;
+	}
 }
 
 .ibv-section-hero--compact {

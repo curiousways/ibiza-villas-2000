@@ -233,10 +233,13 @@
 			} )
 			.catch( function ( err ) {
 				clearTimeout( timeoutId );
-				// Per spec: leave server fallback in place on failure.
-				// if ( window.console && console.warn ) {
-				// 	console.warn( '[ibv listing search] availability fetch failed:', err );
-				// }
+				// Per spec: leave server fallback in place on failure. We still
+				// surface the error to the console so silent CORS / endpoint
+				// failures are diagnosable in dev — production fallback is the
+				// same regardless.
+				if ( window.console && console.warn ) {
+					console.warn( '[ibv listing search] availability fetch failed:', err );
+				}
 			} );
 	}
 

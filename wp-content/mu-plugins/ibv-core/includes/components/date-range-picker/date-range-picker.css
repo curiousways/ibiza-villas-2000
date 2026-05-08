@@ -1,0 +1,329 @@
+/* Date range picker — IBV brand theme overrides for Vanilla Calendar Pro v3.x.
+ *
+ * The popover element uses the native Popover API (popover="auto") for
+ * top-layer rendering, light-dismiss and Escape-to-close, and CSS Anchor
+ * Positioning to anchor under the "Arrive" input. Both are Baseline as of
+ * 2026 — no JS fallback positioning needed.
+ *
+ * VCP ships with a Tailwind-based light theme (cyan + slate). The selectors
+ * below override colours, radii and shadow to match the brand. They're
+ * scoped under .ibv-drp__popover so they only apply to our calendar.
+ */
+
+.ibv-drp__popover {
+	/* User-agent gives [popover] `position: fixed; margin: auto; inset: 0;`
+	 * which centres it. Override with CSS Anchor Positioning so the popover
+	 * tracks its anchor (the wrapping form) on every layout/scroll update.
+	 * The actual `anchor-name` / `position-anchor` declarations are injected
+	 * per-instance via a <style> element from the JS, so each picker on the
+	 * page gets its own anchor pairing.
+	 *
+	 * Position is anchor-driven AND viewport-clamped declaratively via
+	 * `clamp()`: ideal placement is centred on the anchor (anchor centre
+	 * minus half the popover width), but the lower bound keeps the left
+	 * edge ≥ 1rem and the upper bound keeps the right edge ≥ 1rem from the
+	 * viewport edge. `translate` is intentionally NOT used for centring —
+	 * it stays free for the open/close Y-axis animation, so the entrance
+	 * is a clean fade + slide-down with no horizontal artefacts.
+	 *
+	 * `position-try-fallbacks` was tried for the edge-clamping but proved
+	 * unreliable in current Chromium — collapsed-width artefacts, fallbacks
+	 * not triggering on narrow viewports. The `clamp()` math is declarative,
+	 * runs every layout pass, and has no testing side-effects.
+	 */
+	margin: 0;
+	inset: auto;
+	top: anchor(bottom);
+	left: clamp(1rem, anchor(center) - 21rem, calc(100vw - 42rem - 1rem));
+	margin-top: 0.5rem;
+
+	width: 42rem; /* 672px — comfortably fits two months side-by-side */
+	max-width: calc(100vw - 2rem);
+	box-sizing: border-box;
+
+	/* Match .ibv-hero-search visual treatment so the popover reads as part
+	 * of the same control — same fill, radius, padding, and shadow. */
+	background-color: var(--ibv-color-bg-alt);
+	/* border-radius: 5.25rem; */
+	border-radius: 38px;
+	padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+	box-shadow: 0 0 5px rgb(52 52 52 / 0.1);
+	box-shadow: var(--ibv-shadow-md);
+	border: 0;
+
+	font-family: var(--ibv-font-body);
+	color: var(--ibv-color-text);
+
+	/* Show/hide animation.
+	 *   - Custom strong ease-out (`--ibv-ease-out`, cubic-bezier(0.16, 1, 0.3, 1))
+	 *     instead of the weak built-in `ease` — the entrance starts fast and
+	 *     settles, which makes the popover feel like it actually arrived.
+	 *   - Asymmetric duration: enter 220ms (the user is looking), exit 120ms
+	 *     (the system responding). The exit duration is set in the
+	 *     `:not(:popover-open)` block via `transition-duration`.
+	 *   - Scale + translateY combined: 0.97 → 1 with a 0.5rem slide-down,
+	 *     scaling from `top center` so the popover reads as emerging from
+	 *     the trigger above it.
+	 *   - `display` and `overlay` use `allow-discrete` so the popover stays
+	 *     in the top layer for the full transition (otherwise it snaps out
+	 *     of top layer mid-fade and clips against the page).
+	 */
+	opacity: 1;
+	scale: 1;
+	transform-origin: top center;
+	/* Backdrop leads on entry, content trails by 40ms (iOS-sheet pattern):
+	 * the wash dims first, then the calendar lands inside it. */
+	transition:
+		opacity var(--ibv-duration-normal) var(--ibv-ease-out) 40ms,
+		scale var(--ibv-duration-normal) var(--ibv-ease-out) 40ms,
+		translate var(--ibv-duration-normal) var(--ibv-ease-out) 40ms,
+		display var(--ibv-duration-normal) allow-discrete 40ms,
+		overlay var(--ibv-duration-normal) allow-discrete 40ms;
+}
+
+/* Closing state — content leads on exit (no delay), backdrop trails (see
+ * `::backdrop` block below). Faster duration per Emil's asymmetric pattern. */
+.ibv-drp__popover:not(:popover-open) {
+	opacity: 0;
+	scale: 0.97;
+	translate: 0 -0.5rem;
+	transition-duration: var(--ibv-duration-fast);
+	transition-delay: 0ms;
+}
+
+/* Starting state — the "from" frame for entry. Without @starting-style the
+ * browser has no prior value to interpolate from. */
+@starting-style {
+	.ibv-drp__popover:popover-open {
+		opacity: 0;
+		scale: 0.97;
+		translate: 0 -0.5rem;
+	}
+}
+
+/* Backdrop — light white wash. Leads on entry (no delay), trails on exit
+ * by 40ms so the popover leaves first and the wash clears after.
+ * Asymmetric durations match the popover content. */
+.ibv-drp__popover::backdrop {
+	background-color: rgb(255 255 255 / 0.4);
+	transition:
+		background-color var(--ibv-duration-normal) var(--ibv-ease-out),
+		display var(--ibv-duration-normal) allow-discrete,
+		overlay var(--ibv-duration-normal) allow-discrete;
+}
+
+.ibv-drp__popover:not(:popover-open)::backdrop {
+	background-color: rgb(255 255 255 / 0);
+	transition-duration: var(--ibv-duration-fast);
+	transition-delay: 40ms;
+}
+
+@starting-style {
+	.ibv-drp__popover:popover-open::backdrop {
+		background-color: rgb(255 255 255 / 0);
+	}
+}
+
+/* Reduced-motion: keep the opacity (and backdrop) fade for comprehension,
+ * drop positional/scale motion. Per Emil: "fewer and gentler animations,
+ * not zero". */
+@media (prefers-reduced-motion: reduce) {
+	.ibv-drp__popover,
+	.ibv-drp__popover:not(:popover-open) {
+		scale: 1;
+		translate: 0;
+	}
+
+	@starting-style {
+		.ibv-drp__popover:popover-open {
+			scale: 1;
+			translate: 0;
+		}
+	}
+}
+
+/* Lock page scroll while the picker is open. `:has()` matches the body
+ * whenever any ibv-drp popover inside it is in its open state. */
+body:has(.ibv-drp__popover:popover-open) {
+	overflow: hidden;
+}
+
+
+/* Calendar root — let it size to its grid; remove its own background. */
+.ibv-drp__popover [data-vc="calendar"] {
+	background-color: transparent;
+	min-width: 0;
+	padding: var(--ibv-space-sm);
+	border-radius: var(--ibv-radius-field);
+}
+
+/* Two-month grid spacing on desktop. */
+.ibv-drp__popover [data-vc="grid"] {
+	gap: var(--ibv-space-xl);
+}
+
+/* Day buttons — body type, brand-aligned hover. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date .vc-date__btn {
+	color: var(--ibv-color-text);
+	font-family: var(--ibv-font-body);
+	font-weight: var(--ibv-font-weight-regular);
+	border-radius: var(--ibv-radius-md);
+	transition: background-color 120ms ease, color 120ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date .vc-date__btn:hover {
+		background-color: var(--ibv-color-tint-teal);
+		color: var(--ibv-color-text);
+	}
+}
+
+/* Today — keep the bold weight from upstream, but recolour to brand gold. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-today] .vc-date__btn {
+	background-color: transparent;
+	font-weight: var(--ibv-font-weight-semibold);
+}
+
+/* Disabled (past, out-of-range, beyond +30 cap). */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-disabled] .vc-date__btn {
+	color: var(--ibv-color-web-grey-200);
+	text-decoration: line-through;
+	text-decoration-thickness: 1px;
+}
+
+/* Range hover (between first click and second click). */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-hover] .vc-date__btn {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+}
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-hover="first"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-hover="last"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-hover="first-and-last"] .vc-date__btn {
+	background-color: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-white);
+}
+
+/* Selected range — catch-all matches every value VCP writes including the
+ * empty-string state used right after the first click (before the second
+ * click lands), so we never fall back to upstream's cyan. The "middle"
+ * override below re-tints in-between days. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected] .vc-date__btn {
+	background-color: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-white);
+}
+
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"] .vc-date__btn {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+}
+
+/* Overflow days (prev/next month) shown as part of the selected range.
+ * Upstream paints them slate-200/-300; we keep them in the same brand
+ * teal as in-month days. Specificity 0,6,0 matches/beats upstream's
+ * `[data-vc-date-selected=middle][data-vc-date-month=prev]` rule. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected][data-vc-date-month="prev"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected][data-vc-date-month="next"] .vc-date__btn {
+	background-color: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-white);
+}
+
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-month="prev"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-month="next"] .vc-date__btn {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+}
+
+/* Weekend / holiday endpoints — same brand teal as regular endpoints.
+ * Beats VCP's [data-vc-date-weekend][data-vc-date-selected] (specificity 0,5,0)
+ * because we add .ibv-drp__popover (+1) to make it 0,6,0 and load later. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-selected] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-selected] .vc-date__btn {
+	background-color: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-white);
+}
+
+/* Weekend / holiday in-between — same tint-teal as regular middle.
+ * Beats VCP's middle+weekend rule (0,6,0) by adding .ibv-drp__popover (0,7,0). */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-weekend] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-holiday] .vc-date__btn {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+}
+
+/* Weekend / holiday hover (during range selection — between first and second
+ * click). Upstream paints these pink; we want the same teal range affordance
+ * as ordinary days. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-hover] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-hover] .vc-date__btn {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+}
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-hover="first"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-hover="last"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-hover="first-and-last"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-hover="first"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-hover="last"] .vc-date__btn,
+.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-hover="first-and-last"] .vc-date__btn {
+	background-color: var(--ibv-color-forest-green-deep);
+	color: var(--ibv-color-white);
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="first"] .vc-date__btn:hover,
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="last"] .vc-date__btn:hover,
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="first-and-last"] .vc-date__btn:hover {
+		background-color: var(--ibv-color-forest-green-light);
+		color: var(--ibv-color-white);
+	}
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"] .vc-date__btn:hover {
+		background-color: var(--ibv-color-tint-teal);
+		color: var(--ibv-color-text);
+	}
+	/* Hover states for weekend / holiday selected dates. */
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-weekend][data-vc-date-selected] .vc-date__btn:hover,
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-holiday][data-vc-date-selected] .vc-date__btn:hover {
+		background-color: var(--ibv-color-forest-green-light);
+		color: var(--ibv-color-white);
+	}
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-weekend] .vc-date__btn:hover,
+	.ibv-drp__popover [data-vc-theme="light"] .vc-date[data-vc-date-selected="middle"][data-vc-date-holiday] .vc-date__btn:hover {
+		background-color: var(--ibv-color-tint-teal);
+		color: var(--ibv-color-text);
+	}
+}
+
+/* Header (month/year title + arrows). */
+.ibv-drp__popover [data-vc-theme="light"] .vc-month,
+.ibv-drp__popover [data-vc-theme="light"] .vc-year {
+	color: var(--ibv-color-brand-teal);
+	font-family: var(--ibv-font-display);
+	font-weight: var(--ibv-font-weight-regular);
+}
+
+.ibv-drp__popover [data-vc-arrow] {
+	color: var(--ibv-color-brand-teal);
+}
+
+/* Weekday header row. */
+.ibv-drp__popover [data-vc-theme="light"] .vc-week__day {
+	font-family: var(--ibv-font-body);
+    font-size: 0.75rem;
+    font-weight: var(--ibv-font-weight-medium);
+    line-height: 1.4;
+    color: var(--ibv-color-text-muted);
+    letter-spacing: 0;
+}
+
+/* Focus ring — brand teal, not the default outline. */
+.ibv-drp__popover [data-vc="calendar"] [tabindex="0"]:focus-visible,
+.ibv-drp__popover [data-vc="calendar"] button:focus-visible {
+	outline-color: var(--ibv-color-focus-ring);
+}
+
+/* The two text inputs that the picker controls — give them a subtle "trigger"
+ * affordance so users know they're not regular text fields. */
+[data-bob-date-from],
+[data-bob-date-to] {
+	cursor: pointer;
+	caret-color: transparent;
+}

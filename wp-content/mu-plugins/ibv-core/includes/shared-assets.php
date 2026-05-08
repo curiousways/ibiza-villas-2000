@@ -85,6 +85,20 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-vanilla-calendar-pro',
+		IBV_CORE_URL . 'includes/components/date-range-picker/vendor/vanilla-calendar-pro/styles/index.css',
+		[],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
+		'ibv-date-range-picker',
+		IBV_CORE_URL . 'includes/components/date-range-picker/date-range-picker.css',
+		[ 'ibv-base', 'ibv-vanilla-calendar-pro' ],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-header-search',
 		IBV_CORE_URL . 'includes/components/header-search/header-search.css',
 		[ 'ibv-base' ],
@@ -249,6 +263,22 @@ function ibv_register_styles() {
 	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
 	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );
 	wp_register_script( 'ibv-gallery-script', '', [], IBV_CORE_VERSION, true );
+
+	wp_register_script(
+		'ibv-vanilla-calendar-pro',
+		IBV_CORE_URL . 'includes/components/date-range-picker/vendor/vanilla-calendar-pro/index.js',
+		[],
+		IBV_CORE_VERSION,
+		[ 'in_footer' => true ]
+	);
+
+	wp_register_script(
+		'ibv-date-range-picker',
+		IBV_CORE_URL . 'includes/components/date-range-picker/date-range-picker.js',
+		[ 'ibv-vanilla-calendar-pro' ],
+		IBV_CORE_VERSION,
+		[ 'in_footer' => true ]
+	);
 
 	wp_register_script(
 		'ibv-enquiry-panel',

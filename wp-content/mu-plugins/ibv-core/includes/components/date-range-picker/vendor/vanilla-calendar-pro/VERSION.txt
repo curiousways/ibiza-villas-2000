@@ -1,0 +1,5 @@
+vanilla-calendar-pro v3.1.0
+Fetched: 2026-05-08T07:08:31Z
+Source: https://registry.npmjs.org/vanilla-calendar-pro/-/vanilla-calendar-pro-3.1.0.tgz
+Files vendored: index.js (UMD, exposes window.VanillaCalendarPro), styles/index.css (layout + light theme)
+License: MIT (see upstream LICENSE)
