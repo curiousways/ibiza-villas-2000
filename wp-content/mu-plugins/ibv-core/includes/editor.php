@@ -57,6 +57,17 @@ function ibv_clean_mce_buttons( $buttons ) {
 }
 add_filter( 'mce_buttons_2', '__return_empty_array' );
 
+/**
+ * Hide Gravity Forms' "Add Form" button from the Classic editor toolbar.
+ *
+ * Uses Gravity Forms' own `gform_display_add_form_button` filter rather than
+ * unhooking its `media_buttons` action — the filter is the documented,
+ * update-safe control point and avoids coupling to GF's hook priority. This
+ * only hides the toolbar shortcut; existing `[gravityform]` shortcodes still
+ * render and the form can still be inserted via the shortcode manually.
+ */
+add_filter( 'gform_display_add_form_button', '__return_false' );
+
 // Defence in depth: strip `align*` classes from images inserted via the
 // media modal, in case a saved preference or older option still applies one.
 add_filter( 'image_send_to_editor', 'ibv_strip_align_from_inserted_image' );
