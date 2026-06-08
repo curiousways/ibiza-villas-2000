@@ -43,7 +43,6 @@ function ibv_villa_admin_columns( $columns ) {
 
 	$taxonomies = array(
 		'taxonomy-property_location' => __( 'Location', 'ibv' ),
-		'taxonomy-villa_amenity'     => __( 'Amenities', 'ibv' ),
 		'taxonomy-villa_poi'         => __( 'POIs', 'ibv' ),
 	);
 

@@ -783,7 +783,8 @@ function ibv_register_villa_acf_fields() {
 				'readonly'               => 0,
 				'disabled'               => 0,
 			),
-			// Pass 3c-detail — villa detail / listing support (native taxonomy `villa_amenity` for ticks).
+			// Pass 3c-detail — villa detail / listing support. Amenity ticks render
+			// from the property_features repeater above; villa_amenity taxonomy retired.
 			array(
 				'key'               => 'field_ibv_villa_rating_score',
 				'label'             => __( 'Rating score', 'ibv' ),

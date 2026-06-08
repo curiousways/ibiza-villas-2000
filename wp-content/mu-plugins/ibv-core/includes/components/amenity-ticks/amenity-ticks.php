@@ -4,8 +4,7 @@
  *
  * Each row's `property_feature_text` becomes a pill; the row's
  * `property_feature_icon` is intentionally ignored — the design uses a
- * uniform ✓ glyph. The `villa_amenity` taxonomy is retained elsewhere
- * but is not the source here.
+ * uniform ✓ glyph.
  *
  * @package Ibiza_Villas_2000
  */

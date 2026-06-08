@@ -26,7 +26,6 @@ require_once IBV_CORE_PATH . 'includes/integrations/facetwp.php';
 require_once IBV_CORE_PATH . 'includes/post-types/villa.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/property-location.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/villa-type.php';
-require_once IBV_CORE_PATH . 'includes/taxonomies/villa-amenity.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/villa-poi.php';
 
 // 3. Site chrome.
