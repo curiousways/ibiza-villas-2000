@@ -35,6 +35,7 @@ while ( have_posts() ) :
 					 * at the top of the existing template so the data +
 					 * component are live for editorial use.
 					 */
+					ibv_core_section_villa_header( $villa_id );
 					ibv_core_villa_offers( [ 'post_id' => $villa_id ] );
 					ibv_core_section_villa_overview( $villa_id );
 					ibv_core_villa_map( $villa_id );

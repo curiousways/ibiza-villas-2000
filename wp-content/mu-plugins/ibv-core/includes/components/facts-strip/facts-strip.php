@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render bedrooms / bathrooms / sleeps list.
  *
  * @param int    $villa_id Post ID.
- * @param string $variant  horizontal|compact.
+ * @param string $variant  horizontal|compact|icons.
  */
 function ibv_core_facts_strip( $villa_id, $variant = 'horizontal' ) {
 	$villa_id = (int) $villa_id;
@@ -31,7 +31,28 @@ function ibv_core_facts_strip( $villa_id, $variant = 'horizontal' ) {
 
 	wp_enqueue_style( 'ibv-facts-strip' );
 
-	$variant_class = 'compact' === $variant ? 'compact' : 'horizontal';
+	$allowed       = [ 'horizontal', 'compact', 'icons' ];
+	$variant_class = in_array( $variant, $allowed, true ) ? $variant : 'horizontal';
+
+	if ( 'icons' === $variant_class ) {
+		$items = [
+			[ 'icon' => 'bed',   'value' => $bedrooms, 'label' => _n( '%d bedroom', '%d bedrooms', (int) $bedrooms, 'ibv' ) ],
+			[ 'icon' => 'bath',  'value' => $baths,    'label' => _n( '%d bathroom', '%d bathrooms', (int) $baths, 'ibv' ) ],
+			[ 'icon' => 'users', 'value' => $sleeps,   'label' => _n( 'Sleeps %d', 'Sleeps %d', (int) $sleeps, 'ibv' ) ],
+		];
+		?>
+		<ul class="ibv-facts-strip ibv-facts-strip--icons">
+			<?php foreach ( $items as $item ) : ?>
+				<?php if ( '' === $item['value'] || null === $item['value'] ) { continue; } ?>
+				<li class="ibv-facts-strip__item" aria-label="<?php echo esc_attr( sprintf( $item['label'], (int) $item['value'] ) ); ?>">
+					<?php ibv_core_the_icon( $item['icon'], [ 'size' => 16, 'class' => 'ibv-facts-strip__icon' ] ); ?>
+					<span class="ibv-facts-strip__value"><?php echo esc_html( number_format_i18n( (int) $item['value'] ) ); ?></span>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		<?php
+		return;
+	}
 	?>
 	<ul class="ibv-facts-strip ibv-facts-strip--<?php echo esc_attr( $variant_class ); ?>">
 		<?php if ( '' !== $bedrooms && null !== $bedrooms ) : ?>

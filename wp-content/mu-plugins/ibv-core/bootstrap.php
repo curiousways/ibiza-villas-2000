@@ -88,6 +88,7 @@ require_once IBV_CORE_PATH . 'includes/sections/meet-team-teaser/meet-team-tease
 require_once IBV_CORE_PATH . 'includes/sections/testimonials/testimonials.php';
 require_once IBV_CORE_PATH . 'includes/sections/newsletter-cta/newsletter-cta.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-hero/villa-hero.php';
+require_once IBV_CORE_PATH . 'includes/sections/villa-header/villa-header.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-overview/villa-overview.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-similar/villa-similar.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-listing-hero/villa-listing-hero.php';

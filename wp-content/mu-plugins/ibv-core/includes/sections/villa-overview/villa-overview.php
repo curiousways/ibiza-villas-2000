@@ -1,6 +1,9 @@
 <?php
 /**
- * Section: Villa overview (title, rating, summary, facts, amenities, price).
+ * Section: Villa overview (summary, amenities, from-price).
+ *
+ * Title / rating / location / facts moved to `villa-header` section.
+ * The "Villa Overview" <h2> + redesigned description land in a later brief.
  *
  * @package Ibiza_Villas_2000
  */
@@ -22,77 +25,16 @@ function ibv_core_section_villa_overview( $villa_id ) {
 	wp_enqueue_style( 'ibv-section-villa-overview' );
 	wp_enqueue_style( 'ibv-section-heading' );
 
-	$title = get_field( 'villa_pretty_name', $villa_id );
-	if ( ! $title ) {
-		$title = get_the_title( $villa_id );
-	}
-
-	$rating  = get_field( 'villa_rating_score', $villa_id );
-	$rv_ct   = get_field( 'villa_review_count', $villa_id );
-	$rv_url  = get_field( 'villa_review_source_url', $villa_id );
-	$loc     = ibv_villa_location_label( $villa_id );
-	$summary = get_field( 'property_summary', $villa_id );
-
-	$first_distance = '';
-	$rows           = get_field( 'villa_distances', $villa_id );
-	if ( is_array( $rows ) && count( $rows ) ) {
-		$first = $rows[0];
-		if ( ! empty( $first['distance_text'] ) ) {
-			$first_distance = (string) $first['distance_text'];
-		}
-	}
-
+	$summary    = get_field( 'property_summary', $villa_id );
 	$indicative = get_field( 'villa_indicative_from_price', $villa_id );
 
 	$summary_id  = wp_unique_id( 'ibv-vo-summary-' );
-	$heading_id  = wp_unique_id( 'ibv-vo-heading-' );
 	$plain_len   = $summary ? mb_strlen( wp_strip_all_tags( (string) $summary ) ) : 0;
 	$use_clamp   = $plain_len > 200;
+	// Accessible name reintroduced by the later overview-redesign brief
+	// when the "Villa Overview" <h2> (Figma 1:5978) lands.
 	?>
-	<section class="ibv-villa-overview" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>">
-		<h1 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__title"><?php echo esc_html( $title ); ?></h1>
-
-		<?php if ( $rating || $rv_ct ) : ?>
-			<div class="ibv-villa-overview__rating">
-				<?php if ( $rating ) : ?>
-					<span class="ibv-villa-overview__score"><?php echo esc_html( number_format_i18n( (float) $rating, 1 ) ); ?></span>
-				<?php endif; ?>
-				<?php if ( $rv_ct && $rv_url ) : ?>
-					<a class="ibv-villa-overview__reviews-link" href="<?php echo esc_url( $rv_url ); ?>" target="_blank" rel="noopener noreferrer">
-						<?php
-						printf(
-							/* translators: %d: review count */
-							esc_html( _n( '%d review', '%d reviews', (int) $rv_ct, 'ibv' ) ),
-							(int) $rv_ct
-						);
-						?>
-					</a>
-				<?php elseif ( $rv_ct ) : ?>
-					<span class="ibv-villa-overview__reviews-count">
-						<?php
-						printf(
-							esc_html( _n( '%d review', '%d reviews', (int) $rv_ct, 'ibv' ) ),
-							(int) $rv_ct
-						);
-						?>
-					</span>
-				<?php endif; ?>
-			</div>
-		<?php endif; ?>
-
-		<?php if ( $loc || $first_distance ) : ?>
-			<p class="ibv-villa-overview__location-row">
-				<?php if ( $loc ) : ?>
-					<span class="ibv-villa-overview__location-pill"><?php echo esc_html( $loc ); ?></span>
-				<?php endif; ?>
-				<?php if ( $first_distance ) : ?>
-					<span class="ibv-villa-overview__distance-note"><?php echo esc_html( $first_distance ); ?></span>
-				<?php endif; ?>
-			</p>
-		<?php endif; ?>
-
-		<?php ibv_core_facts_strip( $villa_id, 'horizontal' ); ?>
-
+	<section class="ibv-villa-overview">
 		<?php if ( $summary ) : ?>
 			<div class="ibv-villa-overview__summary-block">
 				<div

@@ -23,3 +23,21 @@
 .ibv-facts-strip__icon {
 	line-height: 1;
 }
+
+/* `icons` variant — bare-number Lucide-icon facts (villa-header). */
+.ibv-facts-strip--icons {
+	gap: var(--ibv-space-md);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	color: var(--ibv-color-text);
+}
+
+.ibv-facts-strip--icons .ibv-facts-strip__item {
+	gap: var(--ibv-space-2xs);
+}
+
+.ibv-facts-strip--icons .ibv-facts-strip__icon {
+	flex-shrink: 0;
+	color: var(--ibv-color-text);
+}

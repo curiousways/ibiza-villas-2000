@@ -1,0 +1,103 @@
+/* Villa detail — header section. Matches Figma node 1:5940. */
+
+.ibv-villa-header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md); /* Figma outer gap 14px; 16px is the closest token. */
+}
+
+/* Title + rating cluster — Figma groups these tighter (4px) than the
+   outer rhythm to bind the rating to the name visually. */
+.ibv-villa-header__title-cluster {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
+}
+
+.ibv-villa-header__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-weight: var(--ibv-font-weight-regular);
+	/* Figma is a fixed 32px desktop; scale down gracefully on mobile, top at 2rem. */
+	font-size: clamp(1.75rem, 4vw, 2rem);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+}
+
+/* Rating ------------------------------------------------------------- */
+.ibv-villa-header__rating {
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-xs);
+}
+
+/* Two-layer star rating — grey outlined track underneath, gold filled
+   overlay clipped to (rating / 5) × 100% width. Continuous fill: 4.9
+   shows ~98%, 4.0 shows 80%, etc. */
+.ibv-villa-header__stars {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	line-height: 0;
+}
+
+.ibv-villa-header__stars-track,
+.ibv-villa-header__stars-fill {
+	display: inline-flex;
+	align-items: center;
+}
+
+.ibv-villa-header__stars-track {
+	color: var(--ibv-color-web-grey-200);
+}
+
+.ibv-villa-header__stars-fill {
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	overflow: hidden;
+	color: var(--ibv-color-gold-500);
+}
+
+.ibv-villa-header__stars-fill .ibv-villa-header__star {
+	fill: currentColor;
+	stroke: none;
+}
+
+.ibv-villa-header__star {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+}
+
+.ibv-villa-header__rating-text {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	color: var(--ibv-color-text);
+}
+
+/* Tags --------------------------------------------------------------- */
+.ibv-villa-header__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-2xs);
+}
+
+.ibv-villa-header__tag {
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	border-radius: var(--ibv-radius-pill);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-villa-header__tag--location {
+	background: var(--ibv-color-gold-100);
+}
+
+.ibv-villa-header__tag--distance {
+	background: var(--ibv-color-mint-100);
+}
