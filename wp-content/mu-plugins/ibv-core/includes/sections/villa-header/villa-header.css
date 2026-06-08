@@ -88,7 +88,7 @@
 	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
 	border-radius: var(--ibv-radius-pill);
 	font-family: var(--ibv-font-body);
-	font-size: var(--ibv-fs-micro);
+	font-size: var(--ibv-fs-small);
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-forest-green-deep);

@@ -1,6 +1,11 @@
 <?php
 /**
- * Component: Amenity ticks from native taxonomy `villa_amenity`.
+ * Component: Amenity ticks from the `property_features` ACF repeater.
+ *
+ * Each row's `property_feature_text` becomes a pill; the row's
+ * `property_feature_icon` is intentionally ignored — the design uses a
+ * uniform ✓ glyph. The `villa_amenity` taxonomy is retained elsewhere
+ * but is not the source here.
  *
  * @package Ibiza_Villas_2000
  */
@@ -18,18 +23,30 @@ function ibv_core_amenity_ticks( $villa_id ) {
 		return;
 	}
 
-	$terms = get_the_terms( $villa_id, 'villa_amenity' );
-	if ( empty( $terms ) || is_wp_error( $terms ) ) {
+	$rows = get_field( 'property_features', $villa_id );
+	if ( ! is_array( $rows ) || ! count( $rows ) ) {
+		return;
+	}
+
+	$labels = [];
+	foreach ( $rows as $row ) {
+		$label = isset( $row['property_feature_text'] ) ? trim( (string) $row['property_feature_text'] ) : '';
+		if ( '' !== $label ) {
+			$labels[] = $label;
+		}
+	}
+
+	if ( empty( $labels ) ) {
 		return;
 	}
 
 	wp_enqueue_style( 'ibv-amenity-ticks' );
 	?>
 	<ul class="ibv-amenity-ticks">
-		<?php foreach ( $terms as $term ) : ?>
+		<?php foreach ( $labels as $label ) : ?>
 			<li class="ibv-amenity-ticks__item">
 				<span class="ibv-amenity-ticks__tick" aria-hidden="true"><?php echo esc_html( '✓' ); ?></span>
-				<?php echo esc_html( $term->name ); ?>
+				<?php echo esc_html( $label ); ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

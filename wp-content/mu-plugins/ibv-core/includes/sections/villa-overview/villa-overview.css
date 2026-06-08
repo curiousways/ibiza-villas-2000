@@ -1,5 +1,36 @@
+/* Villa detail — overview section. Matches Figma node 1:5973.
+   Renders inside .ibv-villa-detail__main (shell owns vertical rhythm).
+   The top border + padding-block-start is section-specific chrome from
+   the design, not the rhythm system. */
+
+.ibv-villa-overview {
+	display: flex;
+	flex-direction: column;
+	border-block-start: 1px solid var(--ibv-color-border);
+	/* Match `.ibv-villa-detail__main`'s gap so the space above and below
+	   the divider is equal. */
+	padding-block-start: var(--ibv-space-lg);
+}
+
+.ibv-villa-overview__heading {
+	margin: 0 0 var(--ibv-space-md);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text);
+}
+
+/* Description ------------------------------------------------------- */
 .ibv-villa-overview__summary-block {
-	margin-bottom: var(--ibv-space-lg);
+	margin: 0;
+}
+
+.ibv-villa-overview__summary {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open) {
@@ -22,20 +53,54 @@
 	margin-top: var(--ibv-space-sm);
 	font: inherit;
 	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-semibold);
+	font-weight: var(--ibv-font-weight-regular);
 	background: none;
 	border: 0;
 	padding: 0;
 	cursor: pointer;
-	color: var(--ibv-color-link);
+	color: var(--ibv-color-text);
 	text-decoration: underline;
 }
 
+/* Amenities --------------------------------------------------------- */
 .ibv-villa-overview .ibv-amenity-ticks {
-	margin-bottom: var(--ibv-space-lg);
+	margin-block-start: var(--ibv-space-2xl);
 }
 
-.ibv-villa-overview__from-price {
-	font-size: var(--ibv-fs-body);
-	font-weight: var(--ibv-font-weight-semibold);
+/* Price block ------------------------------------------------------- */
+.ibv-villa-overview__price {
+	margin-block-start: var(--ibv-space-xl);
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-sm);
+}
+
+.ibv-villa-overview__price-row {
+	display: flex;
+	align-items: baseline;
+	gap: var(--ibv-space-2xs);
+	margin: 0;
+}
+
+.ibv-villa-overview__price-from,
+.ibv-villa-overview__price-unit,
+.ibv-villa-overview__price-note {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-overview__price-note {
+	margin: 0;
+}
+
+.ibv-villa-overview__price-amount {
+	font-family: var(--ibv-font-display);
+	font-weight: var(--ibv-font-weight-regular);
+	/* --ibv-fs-h2 clamps 24→36px — closest semantic token to Figma's 32px.
+	   Renders ~4px taller than the design on desktop; deliberate trade for
+	   staying on the named scale. */
+	font-size: var(--ibv-fs-h2);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-forest-green-deep);
 }

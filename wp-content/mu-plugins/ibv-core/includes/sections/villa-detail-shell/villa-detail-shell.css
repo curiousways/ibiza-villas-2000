@@ -19,7 +19,7 @@
 .ibv-villa-detail__main {
 	display: flex;
 	flex-direction: column;
-	gap: var(--ibv-space-3xl);
+	gap: var(--ibv-space-lg);
 }
 
 .ibv-villa-detail__sidebar {

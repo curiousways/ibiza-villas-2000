@@ -1,9 +1,9 @@
 <?php
 /**
- * Section: Villa overview (summary, amenities, from-price).
+ * Section: Villa overview (heading, summary, amenities, price).
  *
- * Title / rating / location / facts moved to `villa-header` section.
- * The "Villa Overview" <h2> + redesigned description land in a later brief.
+ * Matches Figma node 1:5973 (02b | Villa Detail → Overview container).
+ * Title / rating / location / facts live in `villa-header`.
  *
  * @package Ibiza_Villas_2000
  */
@@ -28,13 +28,16 @@ function ibv_core_section_villa_overview( $villa_id ) {
 	$summary    = get_field( 'property_summary', $villa_id );
 	$indicative = get_field( 'villa_indicative_from_price', $villa_id );
 
-	$summary_id  = wp_unique_id( 'ibv-vo-summary-' );
-	$plain_len   = $summary ? mb_strlen( wp_strip_all_tags( (string) $summary ) ) : 0;
-	$use_clamp   = $plain_len > 200;
-	// Accessible name reintroduced by the later overview-redesign brief
-	// when the "Villa Overview" <h2> (Figma 1:5978) lands.
+	$summary_id = wp_unique_id( 'ibv-vo-summary-' );
+	$heading_id = wp_unique_id( 'ibv-vo-heading-' );
+	$plain_len  = $summary ? mb_strlen( wp_strip_all_tags( (string) $summary ) ) : 0;
+	$use_clamp  = $plain_len > 200;
 	?>
-	<section class="ibv-villa-overview">
+	<section class="ibv-villa-overview" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>">
+		<h2 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__heading">
+			<?php esc_html_e( 'Villa Overview', 'ibv' ); ?>
+		</h2>
+
 		<?php if ( $summary ) : ?>
 			<div class="ibv-villa-overview__summary-block">
 				<div
@@ -66,17 +69,23 @@ function ibv_core_section_villa_overview( $villa_id ) {
 
 		<?php ibv_core_amenity_ticks( $villa_id ); ?>
 
-		<?php if ( $indicative ) : ?>
-			<div class="ibv-villa-overview__from-price">
-				<?php
-				printf(
-					/* translators: 1: formatted EUR amount */
-					esc_html__( 'From €%1$s / wk · Price varies by season', 'ibv' ),
-					esc_html( number_format_i18n( (float) $indicative ) )
-				);
-				?>
-			</div>
-		<?php endif; ?>
+		<div class="ibv-villa-overview__price">
+			<p class="ibv-villa-overview__price-row">
+				<span class="ibv-villa-overview__price-from"><?php esc_html_e( 'From', 'ibv' ); ?></span>
+				<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback; €420 placeholder mirrors villa-card behaviour. */ ?>
+				<span class="ibv-villa-overview__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+					<?php
+					if ( $indicative ) {
+						printf( '€%s', esc_html( number_format_i18n( (float) $indicative ) ) );
+					} else {
+						echo '€420';
+					}
+					?>
+				</span>
+				<span class="ibv-villa-overview__price-unit"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+			</p>
+			<p class="ibv-villa-overview__price-note"><?php esc_html_e( 'Price varies by season', 'ibv' ); ?></p>
+		</div>
 	</section>
 	<?php
 }
