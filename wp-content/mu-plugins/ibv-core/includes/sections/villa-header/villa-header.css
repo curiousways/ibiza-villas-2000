@@ -24,6 +24,18 @@
 	color: var(--ibv-color-text);
 }
 
+/* Descriptive subhead under the H1 — not in the Figma; an SEO-protection
+   addition that restores the legacy keyword-bearing post title on-page.
+   Sans + muted + body-size to stay clearly subordinate to the serif H1. */
+.ibv-villa-header__subtitle {
+	margin: 0;
+	font-family: var(--ibv-font-body);
+	font-weight: var(--ibv-font-weight-regular);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text-muted);
+}
+
 /* Rating ------------------------------------------------------------- */
 .ibv-villa-header__rating {
 	display: flex;

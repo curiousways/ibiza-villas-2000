@@ -25,10 +25,14 @@ function ibv_core_section_villa_header( $villa_id ) {
 	wp_enqueue_style( 'ibv-villa-detail' );
 	wp_enqueue_style( 'ibv-section-villa-header' );
 
-	$title = get_field( 'villa_pretty_name', $villa_id );
-	if ( ! $title ) {
-		$title = get_the_title( $villa_id );
-	}
+	$pretty   = (string) get_field( 'villa_pretty_name', $villa_id );
+	$wp_title = (string) get_the_title( $villa_id );
+	$title    = $pretty ? $pretty : $wp_title;
+
+	// Descriptive subhead — restores the keyword-bearing on-page heading
+	// the legacy page carried (the WP post title) under the clean H1
+	// pretty name. Suppressed when it would just duplicate the H1.
+	$subtitle = ( $pretty && $wp_title && $wp_title !== $pretty ) ? $wp_title : '';
 
 	$rating = get_field( 'villa_rating_score', $villa_id );
 	$rv_ct  = get_field( 'villa_review_count', $villa_id );
@@ -47,6 +51,10 @@ function ibv_core_section_villa_header( $villa_id ) {
 			<h1 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-header__title">
 				<?php echo esc_html( $title ); ?>
 			</h1>
+
+			<?php if ( $subtitle ) : ?>
+				<p class="ibv-villa-header__subtitle"><?php echo esc_html( $subtitle ); ?></p>
+			<?php endif; ?>
 
 			<?php if ( $rating || $rv_ct ) : ?>
 				<div class="ibv-villa-header__rating">
