@@ -1,26 +1,65 @@
-.ibv-villa-testimonial-teaser {
-	padding-block: var(--ibv-space-xl);
-	background: var(--ibv-color-brand-teal);
-	color: var(--ibv-color-text-inverse);
+/* Villa detail — testimonial teaser. Matches Figma node 1:6040.
+   Band, rhythm, and light text come from `.ibv-section--surface-blue`;
+   this file only owns the inner heading/rule/card layout. */
+
+.ibv-villa-testimonial-teaser .ibv-container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-xl);
+	align-items: flex-start;
 }
 
-.ibv-villa-testimonial-teaser__quote {
+.ibv-villa-testimonial-teaser__heading {
 	margin: 0;
-	max-width: 40rem;
+	font-weight: var(--ibv-font-weight-regular);
+	font-size: clamp(2rem, 5vw, 2.75rem);
+	line-height: var(--ibv-lh-tight);
+}
+
+/* Negative top margin pulls the rule tight under the heading instead of
+   sitting a full container-gap below (design-match Figma 1:6040). All
+   other visual styling comes from `.ibv-rule.ibv-rule--sage`. */
+.ibv-villa-testimonial-teaser__rule {
+	margin-block-start: calc(var(--ibv-space-xl) * -0.5);
+}
+
+/* Off-white card sits left-aligned within the band; owns its own dark
+   text colour, overriding the band's light text. */
+.ibv-villa-testimonial-teaser__card {
+	margin: 0;
+	max-width: 53rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+	padding: var(--ibv-space-xl);
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-md);
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-testimonial-teaser__stars {
-	margin: 0 0 var(--ibv-space-sm);
-	color: var(--ibv-color-accent-gold);
+	display: inline-flex;
+	gap: 2px;
+	color: var(--ibv-color-gold-500);
+}
+
+.ibv-villa-testimonial-teaser__star {
+	width: 14px;
+	height: 14px;
+	fill: currentColor;
+	stroke: none;
 }
 
 .ibv-villa-testimonial-teaser__text {
-	margin: 0 0 var(--ibv-space-md);
-	font-size: var(--ibv-fs-h4);
-	line-height: var(--ibv-lh-relaxed);
+	margin: 0;
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-testimonial-teaser__attr {
+	font-family: var(--ibv-font-body);
 	font-size: var(--ibv-fs-small);
-	opacity: 0.9;
+	color: var(--ibv-color-forest-green-deep);
 }

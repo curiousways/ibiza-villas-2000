@@ -31,13 +31,6 @@
 	color: var(--ibv-color-text);
 }
 
-.ibv-section-about-story__rule {
-	width: 6.25rem; /* 100px — section-title rule pattern (matches three-step) */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-gold-500);
-	margin: 0;
-}
 
 .ibv-section-about-story__entries {
 	margin: 0;

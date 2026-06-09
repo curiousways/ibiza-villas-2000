@@ -62,7 +62,7 @@ function ibv_core_image_text_section( $args = [] ) {
 
 	$inline_styles = [];
 	if ( ! empty( $args['rule_color'] ) ) {
-		$inline_styles[] = '--ibv-image-text-section-rule: ' . $args['rule_color'];
+		$inline_styles[] = '--ibv-rule-color: ' . $args['rule_color'];
 	}
 	?>
 	<section class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>"
@@ -79,7 +79,7 @@ function ibv_core_image_text_section( $args = [] ) {
 					<h2 class="ibv-image-text-section__title ibv-font-display"><?php echo esc_html( $args['title'] ); ?></h2>
 				<?php endif; ?>
 
-				<hr class="ibv-image-text-section__rule" aria-hidden="true">
+				<hr class="ibv-rule ibv-rule--sage ibv-image-text-section__rule" aria-hidden="true">
 
 				<?php if ( $args['description'] ) : ?>
 					<div class="ibv-image-text-section__description">

@@ -27,7 +27,7 @@ function ibv_core_section_why_iv2000() {
 				<h2 class="ibv-section-why-iv2000__title ibv-font-display">
 					<?php esc_html_e( 'Why Ibiza Villas 2000?', 'ibv' ); ?>
 				</h2>
-				<hr class="ibv-section-why-iv2000__rule" aria-hidden="true">
+				<hr class="ibv-rule ibv-rule--gold" aria-hidden="true">
 				<p class="ibv-section-why-iv2000__lead">
 					<?php esc_html_e( 'Two decades of experience providing the most authentic island stays.', 'ibv' ); ?>
 				</p>

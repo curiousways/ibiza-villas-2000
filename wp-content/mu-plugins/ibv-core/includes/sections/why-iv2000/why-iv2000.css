@@ -20,14 +20,6 @@
 	margin: 0;
 }
 
-.ibv-section-why-iv2000__rule {
-	width: 6.25rem; /* 100px — Figma section rule */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-gold-500);
-	margin: 0;
-}
-
 .ibv-section-why-iv2000__lead {
 	font-size: var(--ibv-fs-body);
 	line-height: var(--ibv-lh-relaxed);

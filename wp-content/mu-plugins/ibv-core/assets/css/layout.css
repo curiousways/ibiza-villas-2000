@@ -33,6 +33,29 @@
 	grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
 }
 
+/* Short hairline accent rule used under section headings (Figma standard
+   100×1px). Default colour is gold; `.ibv-rule--sage` swaps the variant
+   used on sage-accented sections. Per-instance override via the
+   `--ibv-rule-color` custom property (e.g. inline style on the element).
+   Works on either `<hr>` or `<span>` — `display: block` ensures the
+   inline `<span>` use cases (hero, villa-listing-hero) lay out the same. */
+.ibv-rule {
+	display: block;
+	width: 6.25rem;
+	height: 1px;
+	border: 0;
+	margin: 0;
+	background: var(--ibv-rule-color, var(--ibv-color-gold-500));
+}
+
+.ibv-rule--gold {
+	--ibv-rule-color: var(--ibv-color-gold-500);
+}
+
+.ibv-rule--sage {
+	--ibv-rule-color: var(--ibv-color-sage-500);
+}
+
 .ibv-u-visually-hidden {
 	position: absolute;
 	width: 1px;

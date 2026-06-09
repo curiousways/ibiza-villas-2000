@@ -27,7 +27,7 @@ function ibv_core_section_testimonials() {
 				<h2 class="ibv-section-testimonials__title ibv-font-display">
 					<?php esc_html_e( 'What our guests say', 'ibv' ); ?>
 				</h2>
-				<hr class="ibv-section-testimonials__rule" aria-hidden="true">
+				<hr class="ibv-rule ibv-rule--sage" aria-hidden="true">
 			</header>
 
 			<div class="ibv-section-testimonials__grid">

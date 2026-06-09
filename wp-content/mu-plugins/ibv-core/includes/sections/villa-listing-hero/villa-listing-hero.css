@@ -27,13 +27,6 @@
 	margin: 0;
 }
 
-.ibv-section-villa-listing-hero__rule {
-	display: block;
-	width: 6.25rem;
-	height: 1px;
-	background: var(--ibv-color-gold-500);
-}
-
 .ibv-section-villa-listing-hero__intro {
 	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h3);

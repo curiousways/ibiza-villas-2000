@@ -1,6 +1,7 @@
 /* Image-and-text section — title + body + CTA beside an image
    (Short Breaks, IPS, Meet the Team). Rhythm/surface from .ibv-section + modifiers.
-   Rule uses sage-500 by default; optional --ibv-image-text-section-rule override. */
+   The accent rule comes from the shared `.ibv-rule.ibv-rule--sage` utility
+   in layout.css; the `rule_color` PHP arg overrides via `--ibv-rule-color`. */
 
 .ibv-image-text-section__inner {
 	display: flex;
@@ -28,12 +29,11 @@
 	color: var(--ibv-color-text);
 }
 
+/* Retains `align-self: flex-start` so the rule pins left inside the
+   text column's flex layout (visual styling from `.ibv-rule.ibv-rule--sage`
+   in layout.css; per-instance colour override available via the
+   `rule_color` PHP arg, which sets `--ibv-rule-color` inline). */
 .ibv-image-text-section__rule {
-	width: 6.25rem; /* 100px — Figma; matches hero rule */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-image-text-section-rule, var(--ibv-color-sage-500));
-	margin: 0;
 	align-self: flex-start;
 }
 

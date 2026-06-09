@@ -84,7 +84,7 @@ function ibv_core_section_three_step( $args = [] ) {
 							<?php echo esc_html( $title ); ?>
 						</h2>
 					<?php endif; ?>
-					<hr class="ibv-section-three-step__rule" aria-hidden="true">
+					<hr class="ibv-rule ibv-rule--gold" aria-hidden="true">
 				</header>
 			<?php endif; ?>
 

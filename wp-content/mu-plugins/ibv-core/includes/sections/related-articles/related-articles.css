@@ -22,14 +22,6 @@
 	letter-spacing: 0;
 }
 
-.ibv-section-related-articles__rule {
-	width: 6.25rem; /* 100px — matches three-step rule */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-gold-500);
-	margin: 0;
-}
-
 .ibv-section-related-articles__grid {
 	display: grid;
 	grid-template-columns: 1fr;

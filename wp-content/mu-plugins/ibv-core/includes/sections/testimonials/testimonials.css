@@ -21,14 +21,6 @@
 	color: var(--ibv-color-text);
 }
 
-.ibv-section-testimonials__rule {
-	width: 6.25rem; /* 100px — system standard */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-sage-500);
-	margin: 0;
-}
-
 /* Card grid */
 .ibv-section-testimonials__grid {
 	display: grid;

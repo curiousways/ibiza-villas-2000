@@ -38,7 +38,7 @@ function ibv_core_section_villa_listing_hero() {
 					</h1>
 				<?php endif; ?>
 
-				<span class="ibv-section-villa-listing-hero__rule" aria-hidden="true"></span>
+				<span class="ibv-rule ibv-rule--gold" aria-hidden="true"></span>
 
 				<?php if ( $description ) : ?>
 					<p class="ibv-section-villa-listing-hero__intro"><?php echo esc_html( $description ); ?></p>

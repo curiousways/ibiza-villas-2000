@@ -28,14 +28,6 @@
 	color: var(--ibv-color-text);
 }
 
-.ibv-section-three-step__rule {
-	width: 6.25rem; /* 100px — Figma */
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-gold-500);
-	margin: 0;
-}
-
 /* Step grid */
 .ibv-section-three-step__grid {
 	display: grid;

@@ -51,7 +51,7 @@ function ibv_core_section_hero( $args = [] ) {
 				<?php if ( $title ) : ?>
 					<h1 class="ibv-section-hero__title ibv-font-display"><?php echo esc_html( $title ); ?></h1>
 				<?php endif; ?>
-				<span class="ibv-section-hero__rule" aria-hidden="true"></span>
+				<span class="ibv-rule ibv-rule--gold" aria-hidden="true"></span>
 				<?php if ( $subtitle ) : ?>
 					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
 				<?php endif; ?>

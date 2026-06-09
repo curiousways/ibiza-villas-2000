@@ -26,7 +26,7 @@ function ibv_core_section_about_story() {
 				<header class="ibv-section-about-story__header">
 					<?php if ( $title ) : ?>
 						<h2 class="ibv-section-about-story__title ibv-font-display"><?php echo esc_html( $title ); ?></h2>
-						<hr class="ibv-section-about-story__rule" aria-hidden="true">
+						<hr class="ibv-rule ibv-rule--gold" aria-hidden="true">
 					<?php endif; ?>
 				</header>
 

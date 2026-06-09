@@ -26,12 +26,10 @@
 	color: var(--ibv-color-text);
 }
 
+/* Retains `align-self: flex-start` so the rule pins left inside this
+   section's centred flex column (the rest of the visual styling comes
+   from `.ibv-rule.ibv-rule--sage` in layout.css). */
 .ibv-section-special-offers-empty-state__rule {
-	width: 6.25rem;
-	height: 1px;
-	border: 0;
-	background: var(--ibv-color-sage-500);
-	margin: 0;
 	align-self: flex-start;
 }
 

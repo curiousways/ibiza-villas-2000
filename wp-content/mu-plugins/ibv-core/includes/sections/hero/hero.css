@@ -54,13 +54,6 @@
 	max-width: 22ch;
 }
 
-.ibv-section-hero__rule {
-	display: block;
-	width: 6.25rem; /* 100px — Figma; no width token */
-	height: 1px;
-	background: var(--ibv-color-gold-500);
-}
-
 .ibv-section-hero__subtitle {
 	font-size: var(--ibv-fs-h4);
 	line-height: var(--ibv-lh-relaxed);

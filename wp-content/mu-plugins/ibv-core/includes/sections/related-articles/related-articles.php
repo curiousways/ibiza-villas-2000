@@ -82,7 +82,7 @@ function ibv_core_section_related_articles( $args = [] ) {
 				<h2 class="ibv-section-related-articles__title ibv-font-display">
 					<?php esc_html_e( 'Related Articles', 'ibv' ); ?>
 				</h2>
-				<hr class="ibv-section-related-articles__rule" aria-hidden="true">
+				<hr class="ibv-rule ibv-rule--gold" aria-hidden="true">
 			</header>
 
 			<div class="ibv-section-related-articles__grid">

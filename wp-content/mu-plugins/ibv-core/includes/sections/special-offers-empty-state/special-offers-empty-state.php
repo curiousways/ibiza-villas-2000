@@ -38,7 +38,7 @@ function ibv_core_section_special_offers_empty_state() {
 		<div class="ibv-container ibv-section-special-offers-empty-state__inner">
 			<div class="ibv-section-special-offers-empty-state__copy">
 				<h2 class="ibv-section-special-offers-empty-state__title ibv-font-display"><?php echo esc_html( $title ); ?></h2>
-				<hr class="ibv-section-special-offers-empty-state__rule" aria-hidden="true">
+				<hr class="ibv-rule ibv-rule--sage ibv-section-special-offers-empty-state__rule" aria-hidden="true">
 				<p class="ibv-section-special-offers-empty-state__body"><?php echo esc_html( $body ); ?></p>
 				<?php
 				ibv_core_newsletter_form(
