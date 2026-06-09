@@ -1,25 +1,54 @@
+/* Villa gallery — static teaser + pop-up viewer. Figma 1:6019. */
+
 .ibv-gallery {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-md);
 }
 
-.ibv-gallery__hero {
-	border-radius: var(--ibv-radius-lg);
-	overflow: hidden;
-	border: 1px solid var(--ibv-color-border);
+/* Header row — section-heading + "View all photos" button side-by-side.
+   The section-heading component carries a bottom margin by default; reset
+   it here so it doesn't push the header row apart. */
+.ibv-gallery__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--ibv-space-md);
 }
 
-.ibv-gallery__hero-image {
+.ibv-gallery__header .ibv-section-heading {
+	margin-bottom: 0;
+}
+
+/* Hero — uniform 3:2 cosmetic crop; the entire tile is a button. */
+.ibv-gallery__main {
+	display: block;
 	width: 100%;
-	height: auto;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+	aspect-ratio: 3 / 2;
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+}
+
+.ibv-gallery__main--static {
+	cursor: default;
+}
+
+.ibv-gallery__main-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 	display: block;
 }
 
+/* Thumb strip — 6-up grid, same 3:2 crop. */
 .ibv-gallery__thumbs {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--ibv-space-sm);
+	display: grid;
+	grid-template-columns: repeat(6, minmax(0, 1fr));
+	gap: var(--ibv-space-xs);
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -27,70 +56,111 @@
 
 .ibv-gallery__thumb {
 	display: block;
+	width: 100%;
+	aspect-ratio: 3 / 2;
 	padding: 0;
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-sm);
-	overflow: hidden;
+	border: 0;
+	background: none;
 	cursor: pointer;
-	background: var(--ibv-color-surface);
+	border-radius: var(--ibv-radius-md);
+	overflow: hidden;
+	opacity: 0.85;
+	transition: opacity var(--ibv-duration-normal) var(--ibv-ease-standard);
+}
+
+.ibv-gallery__thumb:hover,
+.ibv-gallery__thumb:focus-visible {
+	opacity: 1;
 }
 
 .ibv-gallery__thumb-image {
-	width: 4.5rem;
-	height: 4.5rem;
+	width: 100%;
+	height: 100%;
 	object-fit: cover;
 	display: block;
 }
 
-.ibv-gallery__view-all {
-	align-self: flex-start;
-}
-
+/* Pop-up — source-shape image held at a fixed height. */
 .ibv-gallery__dialog {
 	padding: 0;
-	border: none;
-	max-width: min(90vw, 56rem);
-	width: 100%;
+	border: 0;
+	width: auto;
+	max-width: 94vw;
 	background: var(--ibv-color-bg);
-	border-radius: var(--ibv-radius-lg);
+	border-radius: var(--ibv-radius-md);
+	/* Center on the viewport. UA stylesheets vary on dialog vertical
+	   positioning; `inset: 0` + `margin: auto` is the reliable pattern. */
+	inset: 0;
+	margin: auto;
 }
 
 .ibv-gallery__dialog::backdrop {
-	background: rgb(0 0 0 / 0.65);
+	background: rgb(0 0 0 / 0.7);
 }
 
 .ibv-gallery__dialog-inner {
 	position: relative;
-	padding: var(--ibv-space-md);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ibv-gallery__lightbox-img {
+	display: block;
+	height: min(80vh, 44rem);
+	width: auto;
+	max-width: 92vw;
+	object-fit: contain;
 }
 
 .ibv-gallery__close {
 	position: absolute;
-	inset-block-start: var(--ibv-space-sm);
-	inset-inline-end: var(--ibv-space-sm);
+	top: var(--ibv-space-sm);
+	right: var(--ibv-space-sm);
 	z-index: 1;
-}
-
-.ibv-gallery__lightbox-img {
-	width: 100%;
-	height: auto;
-	display: block;
-	max-height: 75vh;
-	object-fit: contain;
-}
-
-.ibv-gallery__nav {
 	display: flex;
-	justify-content: space-between;
-	gap: var(--ibv-space-md);
-	margin-top: var(--ibv-space-md);
+	border: 0;
+	cursor: pointer;
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-sm);
+	padding: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
 }
 
-.ibv-gallery__nav-btn {
-	font: inherit;
+.ibv-gallery__lb-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 0;
 	cursor: pointer;
-	padding: var(--ibv-space-xs) var(--ibv-space-sm);
+	background: var(--ibv-color-off-white);
 	border-radius: var(--ibv-radius-sm);
-	border: 1px solid var(--ibv-color-border);
-	background: var(--ibv-color-bg);
+	color: var(--ibv-color-text);
+}
+
+.ibv-gallery__lb-arrow--prev {
+	left: var(--ibv-space-sm);
+}
+
+.ibv-gallery__lb-arrow--next {
+	right: var(--ibv-space-sm);
+}
+
+.ibv-gallery__counter {
+	position: absolute;
+	bottom: var(--ibv-space-sm);
+	left: 50%;
+	transform: translateX(-50%);
+	margin: 0;
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-pill);
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text);
 }
