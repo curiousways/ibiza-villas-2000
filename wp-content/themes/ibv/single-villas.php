@@ -40,9 +40,6 @@ while ( have_posts() ) :
 					ibv_core_section_villa_overview( $villa_id );
 					ibv_core_section_villa_location( $villa_id );
 					ibv_core_gallery( $villa_id );
-					ibv_core_section_concierge_cross_sell( __( 'Make the most of your stay', 'ibv' ) );
-					ibv_core_section_villa_testimonial_teaser();
-					ibv_core_section_villa_similar( $villa_id );
 					?>
 				</div>
 
@@ -52,6 +49,16 @@ while ( have_posts() ) :
 
 			</div>
 		</div>
+
+		<?php
+		// Everything below the gallery sits outside the two-column grid so it
+		// renders full-width at the page container, not constrained to the
+		// narrower main column. Concierge is the lead-in to that band; the
+		// related/testimonial sections follow.
+		ibv_core_section_concierge_cross_sell( __( 'Make the most of your stay', 'ibv' ) );
+		ibv_core_section_villa_testimonial_teaser();
+		ibv_core_section_villa_similar( $villa_id );
+		?>
 	</article>
 
 	<?php
