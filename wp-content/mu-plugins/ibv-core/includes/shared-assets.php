@@ -236,6 +236,7 @@ function ibv_register_styles() {
 		'ibv-section-villa-hero'           => 'includes/sections/villa-hero/villa-hero.css',
 		'ibv-section-villa-header'         => 'includes/sections/villa-header/villa-header.css',
 		'ibv-section-villa-overview'       => 'includes/sections/villa-overview/villa-overview.css',
+		'ibv-section-villa-location'       => 'includes/sections/villa-location/villa-location.css',
 		'ibv-section-villa-similar'        => 'includes/sections/villa-similar/villa-similar.css',
 		'ibv-section-villa-listing-grid'   => 'includes/sections/villa-listing-grid/villa-listing-grid.css',
 		'ibv-section-listing-empty-state'  => 'includes/sections/listing-empty-state/listing-empty-state.css',

@@ -17,7 +17,12 @@
 }
 
 .ibv-section-heading__title {
-	/* Inherits scale + weight from typography.css. Override per template if needed. */
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	/* Size inherits from typography.css (--ibv-fs-h2 etc). */
 }
 
 .ibv-section-heading__lead {

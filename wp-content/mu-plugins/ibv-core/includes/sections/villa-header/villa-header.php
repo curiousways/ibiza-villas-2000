@@ -34,16 +34,10 @@ function ibv_core_section_villa_header( $villa_id ) {
 	$rv_ct  = get_field( 'villa_review_count', $villa_id );
 	$loc    = ibv_villa_location_label( $villa_id );
 
-	// The repeater's `distance_text` holds an editor-chosen prefix
-	// ("5 mins from") and `poi` is a `villa_poi` taxonomy term — the
-	// pill needs both joined ("5 mins from San Antonio Bay").
 	$distance = '';
 	$rows     = get_field( 'villa_distances', $villa_id );
 	if ( is_array( $rows ) && count( $rows ) ) {
-		$first    = $rows[0];
-		$text     = isset( $first['distance_text'] ) ? trim( (string) $first['distance_text'] ) : '';
-		$poi_name = ( isset( $first['poi'] ) && $first['poi'] instanceof WP_Term ) ? $first['poi']->name : '';
-		$distance = trim( $text . ' ' . $poi_name );
+		$distance = ibv_villa_distance_label( $rows[0] );
 	}
 
 	$heading_id = wp_unique_id( 'ibv-vh-heading-' );

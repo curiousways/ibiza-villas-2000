@@ -146,6 +146,31 @@ function ibv_get_bob_endpoint_url() {
 }
 
 /**
+ * Format a single `villa_distances` repeater row for display.
+ *
+ * Joins the row's `distance_text` (editor-chosen qualifier, e.g. "5 mins
+ * from") with the `poi` taxonomy term's name (the destination), trimming
+ * empties.
+ *
+ * Known display-layer accommodation, not a permanent fix: two editorial
+ * conventions live in the data today — newer rows split the phrase
+ * (`distance_text` = qualifier, `poi` = destination), older rows put the
+ * full sentence in `distance_text` with no `poi`. This helper does not
+ * detect or dedupe; a villa with both a full-sentence `distance_text` and
+ * a `poi` term will read with the destination repeated. The real fix is
+ * content (qualifier-only convention in `distance_text`); flagged in
+ * Tina's content guidelines.
+ *
+ * @param array $row One row of the `villa_distances` repeater.
+ * @return string Joined label, trimmed; empty if both fields are blank.
+ */
+function ibv_villa_distance_label( array $row ) {
+	$text = isset( $row['distance_text'] ) ? trim( (string) $row['distance_text'] ) : '';
+	$poi  = ( isset( $row['poi'] ) && $row['poi'] instanceof WP_Term ) ? $row['poi']->name : '';
+	return trim( $text . ' ' . $poi );
+}
+
+/**
  * Current GET params when on the villa listing template (search form persistence).
  *
  * @return array{date_from: string, date_to: string, pax: string}

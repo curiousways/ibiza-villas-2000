@@ -159,6 +159,13 @@ function ibv_register_site_options_content_fields() {
 					'instructions'  => __( 'Use HTTP referrer restrictions in Google Cloud Console.', 'ibv' ),
 				),
 				array(
+					'key'           => 'field_ibv_global_google_maps_map_id',
+					'label'         => __( 'Google Maps Map ID', 'ibv' ),
+					'name'          => 'google_maps_map_id',
+					'type'          => 'text',
+					'instructions'  => __( 'Required for the AdvancedMarkerElement marker. Create one in Google Cloud Console → Map Management. Configure map styles against the same Map ID via Cloud Map Styles.', 'ibv' ),
+				),
+				array(
 					'key'   => 'field_ibv_global_contact_page',
 					'label' => __( 'Contact page', 'ibv' ),
 					'name'  => 'contact_page',

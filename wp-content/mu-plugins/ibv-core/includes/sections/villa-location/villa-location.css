@@ -1,0 +1,9 @@
+/* Villa detail — location section. Matches Figma node 1:5998.
+   Section-heading carries its own bottom margin; this file only owns the
+   gap above the distance pills. Placed on the pills (not on the map)
+   so the gap holds whether the map renders, falls back to the API-key /
+   Map-ID message, or is missing entirely. */
+
+.ibv-villa-location .ibv-distance-ticks {
+	margin-block-start: var(--ibv-space-lg);
+}

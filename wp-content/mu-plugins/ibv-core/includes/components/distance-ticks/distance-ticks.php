@@ -28,14 +28,14 @@ function ibv_core_distance_ticks( $villa_id ) {
 	<ul class="ibv-distance-ticks">
 		<?php foreach ( $rows as $row ) : ?>
 			<?php
-			$text = isset( $row['distance_text'] ) ? (string) $row['distance_text'] : '';
-			if ( '' === trim( $text ) ) {
+			$label = ibv_villa_distance_label( $row );
+			if ( '' === $label ) {
 				continue;
 			}
 			?>
 			<li class="ibv-distance-ticks__item">
-				<span class="ibv-distance-ticks__icon" aria-hidden="true">📍</span>
-				<?php echo esc_html( $text ); ?>
+				<?php ibv_core_the_icon( 'map-pin', [ 'size' => 14, 'class' => 'ibv-distance-ticks__icon' ] ); ?>
+				<span class="ibv-distance-ticks__text"><?php echo esc_html( $label ); ?></span>
 			</li>
 		<?php endforeach; ?>
 	</ul>

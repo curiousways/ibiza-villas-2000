@@ -22,16 +22,14 @@ function ibv_core_section_villa_testimonial_teaser() {
 
 	$row = $rows[0];
 	?>
-	<section class="ibv-villa-testimonial-teaser ibv-section" aria-label="<?php esc_attr_e( 'Guest testimonial', 'ibv' ); ?>">
-		<div class="ibv-container">
-			<blockquote class="ibv-villa-testimonial-teaser__quote">
-				<p class="ibv-villa-testimonial-teaser__stars" aria-hidden="true">★★★★★</p>
-				<p class="ibv-villa-testimonial-teaser__text"><?php echo esc_html( $row['quote'] ); ?></p>
-				<?php if ( ! empty( $row['attribution'] ) ) : ?>
-					<footer class="ibv-villa-testimonial-teaser__attr"><?php echo esc_html( $row['attribution'] ); ?></footer>
-				<?php endif; ?>
-			</blockquote>
-		</div>
+	<section class="ibv-villa-testimonial-teaser" aria-label="<?php esc_attr_e( 'Guest testimonial', 'ibv' ); ?>">
+		<blockquote class="ibv-villa-testimonial-teaser__quote">
+			<p class="ibv-villa-testimonial-teaser__stars" aria-hidden="true">★★★★★</p>
+			<p class="ibv-villa-testimonial-teaser__text"><?php echo esc_html( $row['quote'] ); ?></p>
+			<?php if ( ! empty( $row['attribution'] ) ) : ?>
+				<footer class="ibv-villa-testimonial-teaser__attr"><?php echo esc_html( $row['attribution'] ); ?></footer>
+			<?php endif; ?>
+		</blockquote>
 	</section>
 	<?php
 }

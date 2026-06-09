@@ -58,30 +58,28 @@ function ibv_core_section_villa_similar( $villa_id ) {
 		return;
 	}
 	?>
-	<section class="ibv-villa-similar ibv-section">
-		<div class="ibv-container">
+	<section class="ibv-villa-similar">
+		<?php
+		ibv_core_section_heading(
+			[
+				'title' => __( 'Similar Villas', 'ibv' ),
+				'level' => 'h2',
+			]
+		);
+		?>
+		<div class="ibv-villa-similar__grid ibv-grid ibv-grid--3">
 			<?php
-			ibv_core_section_heading(
-				[
-					'title' => __( 'Similar Villas', 'ibv' ),
-					'level' => 'h2',
-				]
-			);
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				ibv_core_villa_card(
+					[
+						'villa'   => get_the_ID(),
+						'variant' => 'similar',
+					]
+				);
+			endwhile;
+			wp_reset_postdata();
 			?>
-			<div class="ibv-villa-similar__grid ibv-grid ibv-grid--3">
-				<?php
-				while ( $query->have_posts() ) :
-					$query->the_post();
-					ibv_core_villa_card(
-						[
-							'villa'   => get_the_ID(),
-							'variant' => 'similar',
-						]
-					);
-				endwhile;
-				wp_reset_postdata();
-				?>
-			</div>
 		</div>
 	</section>
 	<?php

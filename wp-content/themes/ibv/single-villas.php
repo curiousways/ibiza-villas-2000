@@ -38,8 +38,7 @@ while ( have_posts() ) :
 					ibv_core_section_villa_header( $villa_id );
 					ibv_core_villa_offers( [ 'post_id' => $villa_id ] );
 					ibv_core_section_villa_overview( $villa_id );
-					ibv_core_villa_map( $villa_id );
-					ibv_core_distance_ticks( $villa_id );
+					ibv_core_section_villa_location( $villa_id );
 					ibv_core_gallery( $villa_id );
 					ibv_core_section_concierge_cross_sell( __( 'Make the most of your stay', 'ibv' ) );
 					ibv_core_section_villa_testimonial_teaser();
