@@ -267,6 +267,3 @@
 	margin-block-start: var(--ibv-space-xs);
 }
 
-.ibv-villa-card--similar .ibv-villa-card__media {
-	aspect-ratio: 4 / 3;
-}

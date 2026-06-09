@@ -105,7 +105,7 @@ function ibv_core_villa_card( $args = [] ) {
 	wp_enqueue_style( 'ibv-villa-card' );
 	wp_enqueue_style( 'ibv-button' );
 
-	$variant = in_array( $args['variant'], [ 'default', 'offer', 'similar' ], true ) ? $args['variant'] : 'default';
+	$variant = in_array( $args['variant'], [ 'default', 'offer' ], true ) ? $args['variant'] : 'default';
 
 	$permalink = $args['cta_url'] ? $args['cta_url'] : get_permalink( $villa_id );
 

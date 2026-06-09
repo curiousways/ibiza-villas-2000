@@ -1,7 +1,37 @@
-.ibv-villa-similar {
-	padding-block: var(--ibv-section-pad-y);
+/* Header row + title — mirrors `featured-villas.css` so the two villa-grid
+   sections read identically. Section rhythm and surface come from
+   `.ibv-section --surface-bg`; the grid itself uses `.ibv-grid--3` from
+   layout.css. */
+
+.ibv-villa-similar__header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	justify-content: space-between;
+	margin-block-end: var(--ibv-space-2xl);
+}
+
+.ibv-villa-similar__title {
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: 0;
+	margin: 0;
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-similar__grid {
-	margin-top: var(--ibv-space-xl);
+	gap: var(--ibv-space-xl);
+}
+
+.ibv-villa-similar__grid .ibv-villa-card {
+	min-width: 0;
+}
+
+@media (min-width: 48rem) {
+	.ibv-villa-similar__header {
+		flex-direction: row;
+		align-items: center;
+	}
 }
