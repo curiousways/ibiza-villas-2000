@@ -7,3 +7,7 @@
 .ibv-villa-location .ibv-distance-ticks {
 	margin-block-start: var(--ibv-space-lg);
 }
+
+.ibv-villa-location__detail {
+	margin-block-start: var(--ibv-space-lg);
+}

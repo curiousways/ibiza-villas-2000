@@ -25,8 +25,12 @@ function ibv_core_section_villa_overview( $villa_id ) {
 	wp_enqueue_style( 'ibv-section-villa-overview' );
 	wp_enqueue_style( 'ibv-section-heading' );
 
-	$summary    = get_field( 'property_summary', $villa_id );
-	$indicative = get_field( 'villa_indicative_from_price', $villa_id );
+	// Main villa description — the post content (keyword-rich, carries the
+	// internal links). Rendered through the_content filter so formatting,
+	// links, and embeds resolve exactly as core would output them.
+	$content_raw = get_the_content( null, false, $villa_id );
+	$summary     = ( '' !== trim( $content_raw ) ) ? apply_filters( 'the_content', $content_raw ) : '';
+	$indicative  = get_field( 'villa_indicative_from_price', $villa_id );
 
 	$summary_id = wp_unique_id( 'ibv-vo-summary-' );
 	$heading_id = wp_unique_id( 'ibv-vo-heading-' );
@@ -44,7 +48,7 @@ function ibv_core_section_villa_overview( $villa_id ) {
 					id="<?php echo esc_attr( $summary_id ); ?>"
 					class="ibv-villa-overview__summary ibv-prose<?php echo $use_clamp ? ' ibv-villa-overview__summary--clamp' : ''; ?>"
 				>
-					<?php echo wp_kses_post( $summary ); ?>
+					<?php echo $summary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content filter output, rendered as core does. ?>
 				</div>
 				<?php if ( $use_clamp ) : ?>
 					<button
