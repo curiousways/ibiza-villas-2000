@@ -87,6 +87,8 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
 		data-bob-endpoint="<?php echo esc_url( $endpoint_url ); ?>"
 		data-bob-confirm-url="<?php echo esc_url( $confirm_url ); ?>"
+		data-bob-msg-unavailable="<?php echo esc_attr__( 'This villa isn’t available for your selected dates. Try different dates, or send us your enquiry and we’ll suggest great alternatives.', 'ibv' ); ?>"
+		data-bob-msg-price-error="<?php echo esc_attr__( 'We couldn’t fetch live pricing just now. You can still send your enquiry and we’ll confirm the price by email.', 'ibv' ); ?>"
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
@@ -143,7 +145,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 				<p class="ibv-enquiry-panel__eco-note"><?php esc_html_e( 'Total does not include the government Eco Tax of €2.20 per person, per night, payable in resort.', 'ibv' ); ?></p>
 			</div>
 
-			<div class="ibv-enquiry-panel__error" data-bob-error hidden></div>
+			<div class="ibv-enquiry-panel__error" data-bob-error role="status" aria-live="polite" hidden></div>
 
 			<?php
 			ibv_core_button(

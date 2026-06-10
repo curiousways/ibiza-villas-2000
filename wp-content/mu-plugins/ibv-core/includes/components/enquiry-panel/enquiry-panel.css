@@ -283,6 +283,8 @@
 	padding: var(--ibv-space-sm);
 	border-radius: var(--ibv-radius-sm);
 	background: var(--ibv-color-bg-alt);
+	border-left: 3px solid var(--ibv-color-accent-gold);
+	line-height: var(--ibv-lh-normal);
 }
 
 .ibv-enquiry-panel__response-note {

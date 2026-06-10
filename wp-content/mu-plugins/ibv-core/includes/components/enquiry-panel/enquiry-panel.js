@@ -2,10 +2,12 @@
  * Enquiry panel — Bob API detail-mode pricing fetch.
  *
  * Reads property_id + URL state from data-* attributes on the wrapper,
- * gates the Request to Book button on dates + pax being filled, and
- * fetches live pricing from Steve's PMS endpoint to update the price
- * block. On API failure it resets prices to "—" and logs a console
- * warning — the user-facing error pattern is owned by TODO #7.
+ * gates the Request to Book button on dates + pax being filled and the
+ * villa not being confirmed-unavailable, and fetches live pricing from
+ * Steve's PMS endpoint to update the price block. When the villa is unavailable for the chosen range, or the
+ * fetch fails, the price block stays collapsed and a notice is shown
+ * in [data-bob-error] (copy comes from data-bob-msg-* attributes so
+ * the strings stay translatable in PHP).
  *
  * Response shape (per AGENTS.md):
  *   { success, count, query, villas: [ { eur_total_price, eur_base_rental,
@@ -29,6 +31,10 @@
 		var toEl     = form.querySelector( '[name="date_to"]' );
 		var paxEl    = form.querySelector( '[name="pax"]' );
 		var submitEl = panel.querySelector( '[data-bob-submit]' );
+
+		var errorEl        = panel.querySelector( '[data-bob-error]' );
+		var msgUnavailable = panel.getAttribute( 'data-bob-msg-unavailable' ) || '';
+		var msgPriceError  = panel.getAttribute( 'data-bob-msg-price-error' ) || '';
 
 		var totalEl    = panel.querySelector( '[data-bob-total-eur]' );
 		var totalGbpEl = panel.querySelector( '[data-bob-total-gbp]' );
@@ -58,11 +64,15 @@
 			return isValidDate( s.date_from ) && isValidDate( s.date_to ) && s.pax > 0;
 		}
 
+		// Confirmed-unavailable from the API blocks Request to Book; a failed
+		// fetch leaves it enabled (availability unknown — enquiry still valid).
+		var isUnavailable = false;
+
 		function updateGate() {
 			if ( ! submitEl ) {
 				return;
 			}
-			if ( gateReady( readState() ) ) {
+			if ( gateReady( readState() ) && ! isUnavailable ) {
 				submitEl.removeAttribute( 'disabled' );
 			} else {
 				submitEl.setAttribute( 'disabled', 'disabled' );
@@ -77,6 +87,24 @@
 
 		function revealPriceBlock() {
 			panel.classList.remove( 'is-pricing-pending' );
+		}
+
+		function hidePriceBlock() {
+			panel.classList.add( 'is-pricing-pending' );
+		}
+
+		function showNotice( msg ) {
+			if ( errorEl && msg ) {
+				errorEl.textContent = msg;
+				errorEl.removeAttribute( 'hidden' );
+			}
+		}
+
+		function clearNotice() {
+			if ( errorEl ) {
+				errorEl.textContent = '';
+				errorEl.setAttribute( 'hidden', '' );
+			}
 		}
 
 		function resetPrices() {
@@ -102,8 +130,9 @@
 
 		function paint( data ) {
 			var node = null;
-			if ( data && Array.isArray( data.villas ) && data.villas.length ) {
-				node = data.villas[ 0 ];
+			if ( data && Array.isArray( data.villas ) ) {
+				// Empty villas array = no availability for the range.
+				node = data.villas.length ? data.villas[ 0 ] : null;
 			} else if ( data && data.villa ) {
 				node = data.villa;
 			} else {
@@ -111,8 +140,7 @@
 			}
 
 			if ( ! node || ( node.available !== undefined && Number( node.available ) !== 1 ) ) {
-				resetPrices();
-				return;
+				return false;
 			}
 
 			var total    = pickNumber( node, [ 'eur_total_price' ] );
@@ -121,11 +149,17 @@
 			var adw      = pickNumber( node, [ 'eur_adw_amount' ] );
 			var clean    = pickNumber( node, [ 'eur_extra_cleaning' ] );
 
+			// No total = nothing worth revealing; treat as unavailable.
+			if ( total === null ) {
+				return false;
+			}
+
 			setText( totalEl,    total    !== null ? EUR.format( total )    : '—' );
 			setText( totalGbpEl, totalGbp !== null ? GBP.format( totalGbp ) : '—' );
 			setText( rentalEl,   rent     !== null ? EUR.format( rent )     : '—' );
 			setText( adwEl,      adw      !== null ? EUR.format( adw )      : '—' );
 			setText( cleaningEl, clean    !== null ? EUR.format( clean )    : '—' );
+			return true;
 		}
 
 		var inflight = null;
@@ -136,8 +170,12 @@
 			var s = readState();
 			if ( ! gateReady( s ) ) {
 				resetPrices();
+				clearNotice();
+				isUnavailable = false;
+				updateGate();
 				return;
 			}
+			clearNotice();
 
 			var url = endpoint
 				+ '?villa='     + encodeURIComponent( propertyId )
@@ -161,16 +199,28 @@
 					return r.json();
 				} )
 				.then( function ( data ) {
-					paint( data );
-					revealPriceBlock();
+					if ( paint( data ) ) {
+						isUnavailable = false;
+						clearNotice();
+						revealPriceBlock();
+					} else {
+						isUnavailable = true;
+						resetPrices();
+						hidePriceBlock();
+						showNotice( msgUnavailable );
+					}
+					updateGate();
 				} )
 				.catch( function ( err ) {
 					if ( err && err.name === 'AbortError' ) {
 						return;
 					}
 					console.warn( '[ibv-enquiry-panel] pricing fetch failed', err );
+					isUnavailable = false;
 					resetPrices();
-					revealPriceBlock();
+					hidePriceBlock();
+					showNotice( msgPriceError );
+					updateGate();
 				} );
 		}
 
@@ -194,7 +244,7 @@
 		form.addEventListener( 'submit', function ( ev ) {
 			ev.preventDefault();
 			var s = readState();
-			if ( ! gateReady( s ) ) {
+			if ( ! gateReady( s ) || isUnavailable ) {
 				updateGate();
 				return;
 			}
