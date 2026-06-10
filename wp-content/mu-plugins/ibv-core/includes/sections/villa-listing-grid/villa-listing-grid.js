@@ -116,6 +116,11 @@
 			list = data.results;
 		}
 
+		// eur_base_rental covers the whole searched stay, not one week —
+		// normalise to an average per-week rate so non-7-night searches
+		// don't show stay totals labelled "/ wk".
+		var nights = ( data && data.query ) ? Number( data.query.nights ) : NaN;
+
 		return list
 			.map( function ( row ) {
 				if ( ! row || typeof row !== 'object' ) {
@@ -138,9 +143,13 @@
 				if ( ! pid ) {
 					return null;
 				}
+				var weekly = ( rate !== undefined && rate !== null ) ? Number( rate ) : null;
+				if ( weekly !== null && nights > 0 ) {
+					weekly = ( weekly * 7 ) / nights;
+				}
 				return {
 					propertyId: String( pid ),
-					weeklyRate: rate !== undefined && rate !== null ? Number( rate ) : null,
+					weeklyRate: weekly,
 				};
 			} )
 			.filter( Boolean );

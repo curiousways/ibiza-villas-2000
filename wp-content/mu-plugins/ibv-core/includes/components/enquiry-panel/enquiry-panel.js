@@ -55,6 +55,74 @@
 		var EUR = money( 'EUR' );
 		var GBP = money( 'GBP' );
 
+		// Villa-overview indicative price ("From €X / wk"). While a priced
+		// search is active we swap in the average weekly rate for the selected
+		// dates and toggle the surrounding copy; the captured static state is
+		// restored when dates clear, the villa is unavailable, or the fetch
+		// fails.
+		var ovPrice  = document.querySelector( '.ibv-villa-overview__price' );
+		var ovAmount = ovPrice ? ovPrice.querySelector( '[data-bob-from-price]' ) : null;
+		var ovFrom   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-from' ) : null;
+		var ovUnit   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-unit' ) : null;
+		var ovSeason = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-note--season' ) : null;
+		var ovDated  = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-note--dated' ) : null;
+		var ovStatic = {
+			text:       ovAmount ? ovAmount.textContent : '',
+			onRequest:  ovAmount ? ovAmount.classList.contains( 'ibv-villa-overview__price-amount--on-request' ) : false,
+			unitHidden: ovUnit ? ovUnit.hidden : false,
+			// The on-request prompt is a <label for="ibv-ep-when"> so clicking
+			// it opens the date picker. The for attribute is removed while a
+			// price is shown — a label overrides the labelled button's
+			// accessible name, and "€5,976" is no name for a date trigger.
+			forAttr:    ovAmount ? ovAmount.getAttribute( 'for' ) : null,
+		};
+
+		function showDatedOverviewPrice( weekly ) {
+			if ( ! ovAmount || ! ( weekly > 0 ) ) {
+				return;
+			}
+			ovAmount.textContent = EUR.format( Math.round( weekly ) );
+			ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
+			ovAmount.removeAttribute( 'for' );
+			if ( ovFrom ) {
+				ovFrom.hidden = true;
+			}
+			if ( ovUnit ) {
+				ovUnit.hidden = false;
+			}
+			if ( ovSeason ) {
+				ovSeason.hidden = true;
+			}
+			if ( ovDated ) {
+				ovDated.hidden = false;
+			}
+		}
+
+		function resetOverviewPrice() {
+			if ( ! ovAmount ) {
+				return;
+			}
+			ovAmount.textContent = ovStatic.text;
+			if ( ovStatic.onRequest ) {
+				ovAmount.classList.add( 'ibv-villa-overview__price-amount--on-request' );
+			}
+			if ( ovStatic.forAttr ) {
+				ovAmount.setAttribute( 'for', ovStatic.forAttr );
+			}
+			if ( ovFrom ) {
+				ovFrom.hidden = false;
+			}
+			if ( ovUnit ) {
+				ovUnit.hidden = ovStatic.unitHidden;
+			}
+			if ( ovSeason ) {
+				ovSeason.hidden = false;
+			}
+			if ( ovDated ) {
+				ovDated.hidden = true;
+			}
+		}
+
 		function isValidDate( s ) {
 			return /^\d{4}-\d{2}-\d{2}$/.test( s || '' );
 		}
@@ -143,6 +211,7 @@
 			setText( rentalEl, '—' );
 			setText( adwEl, '—' );
 			setText( cleaningEl, '—' );
+			resetOverviewPrice();
 		}
 
 		function pickNumber( obj, keys ) {
@@ -189,6 +258,16 @@
 			setText( rentalEl,   rent     !== null ? EUR.format( rent )     : '—' );
 			setText( adwEl,      adw      !== null ? EUR.format( adw )      : '—' );
 			setText( cleaningEl, clean    !== null ? EUR.format( clean )    : '—' );
+
+			// eur_base_rental covers the whole stay; normalise to an average
+			// per-week rate for the overview's "/ wk" display. rent of 0 (no
+			// rate card loaded) keeps the static indicative price instead.
+			var nights = data && data.query ? pickNumber( data.query, [ 'nights' ] ) : null;
+			if ( rent !== null && rent > 0 ) {
+				showDatedOverviewPrice( nights > 0 ? ( rent * 7 ) / nights : rent );
+			} else {
+				resetOverviewPrice();
+			}
 			return true;
 		}
 

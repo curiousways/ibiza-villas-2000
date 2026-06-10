@@ -74,21 +74,33 @@ function ibv_core_section_villa_overview( $villa_id ) {
 		<?php ibv_core_amenity_ticks( $villa_id ); ?>
 
 		<div class="ibv-villa-overview__price">
-			<p class="ibv-villa-overview__price-row">
-				<span class="ibv-villa-overview__price-from"><?php esc_html_e( 'From', 'ibv' ); ?></span>
-				<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback; €420 placeholder mirrors villa-card behaviour. */ ?>
-				<span class="ibv-villa-overview__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
-					<?php
-					if ( $indicative ) {
-						printf( '€%s', esc_html( number_format_i18n( (float) $indicative ) ) );
-					} else {
-						echo '€420';
-					}
-					?>
-				</span>
-				<span class="ibv-villa-overview__price-unit"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
-			</p>
-			<p class="ibv-villa-overview__price-note"><?php esc_html_e( 'Price varies by season', 'ibv' ); ?></p>
+			<?php
+			/* Bob shell: ACF villa_indicative_from_price is the static fallback; empty
+			   field shows a date prompt (mirrors villa-card). The enquiry-panel JS swaps
+			   in the dated average weekly rate while a priced search is active — it
+			   toggles the from/unit spans and the two note lines, and restores the
+			   static state when dates clear or the villa is unavailable. */
+			?>
+			<?php if ( $indicative ) : ?>
+				<p class="ibv-villa-overview__price-row">
+					<span class="ibv-villa-overview__price-from"><?php esc_html_e( 'From', 'ibv' ); ?></span>
+					<span class="ibv-villa-overview__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+						<?php printf( '€%s', esc_html( number_format_i18n( (float) $indicative ) ) ); ?>
+					</span>
+					<span class="ibv-villa-overview__price-unit"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+				</p>
+				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--season"><?php esc_html_e( 'Price varies by season', 'ibv' ); ?></p>
+				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--dated" hidden><?php esc_html_e( 'For your selected dates', 'ibv' ); ?></p>
+			<?php else : ?>
+				<p class="ibv-villa-overview__price-row">
+					<?php /* <label for> the enquiry-panel date trigger — clicking the prompt opens the date picker. The panel JS drops the for attribute while a hydrated price is shown so the button keeps its own accessible name. */ ?>
+					<label class="ibv-villa-overview__price-amount ibv-villa-overview__price-amount--on-request" for="ibv-ep-when" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+						<?php esc_html_e( 'Select your dates to see pricing', 'ibv' ); ?>
+					</label>
+					<span class="ibv-villa-overview__price-unit" hidden><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+				</p>
+				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--dated" hidden><?php esc_html_e( 'For your selected dates', 'ibv' ); ?></p>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php
