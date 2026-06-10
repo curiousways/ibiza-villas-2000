@@ -51,6 +51,32 @@
 		return { from: formatYmd( from ), to: formatYmd( to ) };
 	}
 
+	/**
+	 * Format a YYYY-MM-DD pair as a compact human-readable range.
+	 * Mirrors formatRangeForDisplay() in date-range-picker.js (IIFE-scoped
+	 * there, so duplicated here to keep this script dependency-free).
+	 * Example: "2026-05-22" / "2026-05-29" -> "May 22 – 29"
+	 */
+	function formatRangeForDisplay( fromYMD, toYMD ) {
+		var from = new Date( fromYMD + 'T00:00:00' );
+		var to   = new Date( toYMD + 'T00:00:00' );
+		if ( isNaN( from.getTime() ) || isNaN( to.getTime() ) ) {
+			return '';
+		}
+		var sameYear  = from.getFullYear() === to.getFullYear();
+		var sameMonth = sameYear && from.getMonth() === to.getMonth();
+		var monthDay  = new Intl.DateTimeFormat( 'en-GB', { month: 'short', day: 'numeric' } );
+		var dayOnly   = new Intl.DateTimeFormat( 'en-GB', { day: 'numeric' } );
+		var withYear  = new Intl.DateTimeFormat( 'en-GB', { month: 'short', day: 'numeric', year: 'numeric' } );
+		if ( sameMonth ) {
+			return monthDay.format( from ) + ' – ' + dayOnly.format( to );
+		}
+		if ( sameYear ) {
+			return monthDay.format( from ) + ' – ' + monthDay.format( to );
+		}
+		return monthDay.format( from ) + ' – ' + withYear.format( to );
+	}
+
 	function $( selector, root ) {
 		return ( root || document ).querySelector( selector );
 	}
@@ -193,6 +219,19 @@
 
 		if ( toolbar ) {
 			toolbar.hidden = false;
+		}
+		// Only reachable when !isProbe (probe mode returns early above), so
+		// params still holds the user's real URL params, never probe dates.
+		var datesEl = $( '[data-bob-selected-dates]' );
+		var datesLabel = $( '[data-bob-selected-dates-label]' );
+		if ( datesEl && datesLabel ) {
+			var range = formatRangeForDisplay( params.date_from, params.date_to );
+			var pax = parseInt( params.pax, 10 );
+			var paxTemplate = ( pax === 1 )
+				? ( ( config.i18n && config.i18n.guest ) || '%d guest' )
+				: ( ( config.i18n && config.i18n.guests ) || '%d guests' );
+			datesLabel.textContent = range + ' · ' + paxTemplate.replace( '%d', String( pax ) );
+			datesEl.hidden = false;
 		}
 		if ( countEl ) {
 			countEl.hidden = false;

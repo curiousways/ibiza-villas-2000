@@ -29,6 +29,11 @@
 	align-items: center;
 }
 
+/* display rules above defeat the UA's [hidden] { display: none } — restore it */
+.ibv-listing-grid-section__filter[hidden] {
+	display: none;
+}
+
 .ibv-listing-grid-section__filter-link {
 	font-size: var(--ibv-fs-small);
 	color: var(--ibv-color-brand-teal);
@@ -58,4 +63,34 @@
 	margin: 0;
 	font-size: var(--ibv-fs-small);
 	color: var(--ibv-color-text-muted);
+}
+
+.ibv-listing-grid-section__dates {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ibv-space-xs);
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	background-color: var(--ibv-color-tint-teal);
+	border-radius: var(--ibv-radius-pill);
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-listing-grid-section__dates-clear {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.125rem;
+	height: 1.125rem;
+	border-radius: var(--ibv-radius-pill);
+	color: var(--ibv-color-forest-green-deep);
+	text-decoration: none;
+	line-height: 1;
+	transition: background-color var(--ibv-duration-fast) var(--ibv-ease-standard);
+	margin-right: -6px;
+}
+
+.ibv-listing-grid-section__dates-clear:hover,
+.ibv-listing-grid-section__dates-clear:focus-visible {
+	background-color: rgb(5 83 83 / 0.12);
 }

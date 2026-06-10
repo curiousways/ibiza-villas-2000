@@ -31,6 +31,8 @@ function ibv_core_section_villa_listing_grid() {
 			],
 			'i18n'     => [
 				'showing' => __( 'Showing %d villas', 'ibv' ),
+				'guests'  => __( '%d guests', 'ibv' ),
+				'guest'   => __( '%d guest', 'ibv' ),
 			],
 		]
 	);
@@ -50,6 +52,16 @@ function ibv_core_section_villa_listing_grid() {
 			       ──────────────────────────────────────────────────────────── */ ?>
 			<div class="ibv-listing-grid-section__toolbar" data-bob-listing-toolbar hidden>
 				<ul class="ibv-listing-grid-section__filters">
+					<li class="ibv-listing-grid-section__filter" data-bob-selected-dates hidden>
+						<span class="ibv-listing-grid-section__dates">
+							<span data-bob-selected-dates-label></span>
+							<a
+								class="ibv-listing-grid-section__dates-clear"
+								href="<?php echo esc_url( $listing_root ); ?>"
+								aria-label="<?php esc_attr_e( 'Clear selected dates', 'ibv' ); ?>"
+							>&times;</a>
+						</span>
+					</li>
 					<li class="ibv-listing-grid-section__filter ibv-listing-grid-section__filter--link">
 						<a href="<?php echo esc_url( $listing_root ); ?>" class="ibv-listing-grid-section__filter-link">
 							<?php esc_html_e( 'Short breaks', 'ibv' ); ?>
