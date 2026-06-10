@@ -206,6 +206,18 @@
 	margin: 0;
 }
 
+/* Empty from-price state ("Price on request") — must out-rank the
+   --default amount rule above, hence the double class. The JS hydrator
+   removes the modifier when a real API rate arrives. */
+.ibv-villa-card .ibv-villa-card__price-amount--on-request {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-regular);
+	letter-spacing: 0;
+	color: var(--ibv-color-text-muted);
+	margin: 0;
+}
+
 .ibv-villa-card--offer {
 	flex-direction: row;
 	flex-wrap: wrap;

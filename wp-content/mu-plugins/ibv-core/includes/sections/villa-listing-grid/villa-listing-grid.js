@@ -1,10 +1,16 @@
 /**
- * Bob API search-mode hydration for the villa listing grid.
+ * Bob API search-mode hydration + filters for the villa listing grid.
  *
  * Reads date_from / date_to / pax from the URL via the localized
  * `ibvListingSearch` object, calls Steve's PMS endpoint in search mode,
  * filters server-rendered cards down to the returned property_id set,
  * sorts price ascending, and toggles the empty-state block on zero results.
+ *
+ * The "Offers" checkbox is a pure client-side filter on the
+ * server-rendered `data-bob-has-offer` card attribute (driven by the
+ * villa_offers ACF repeater). It works with or without an active search
+ * — the two filters intersect — and stays functional when the API
+ * fetch fails.
  *
  * On API failure or timeout the server fallback grid is left intact —
  * the page must not break.
@@ -151,6 +157,70 @@
 		}
 	}
 
+	// Offers checkbox state. Pure client-side filter — independent of
+	// the availability fetch, so it works even when the API is down.
+	var offersOnly = false;
+
+	// propertyId → weekly rate from the last successful search. null =
+	// no availability filter applied (probe mode, missing params, or
+	// failed fetch): every card passes the availability check.
+	var availablePids = null;
+
+	/**
+	 * Single owner of card visibility. Intersects the availability set
+	 * (when a search is active) with the offers filter, then reconciles
+	 * grid / empty-state / count. Re-runnable: every branch sets state
+	 * both ways so check → uncheck always recovers.
+	 */
+	function applyFilters() {
+		var grid = $( '[data-bob-listing-grid]' );
+		if ( ! grid ) {
+			return;
+		}
+
+		var searchActive = availablePids !== null;
+		var visible = [];
+
+		$$( 'article[data-bob-property-id]', grid ).forEach( function ( card ) {
+			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();
+			var show = ( ! searchActive || Object.prototype.hasOwnProperty.call( availablePids, pid ) )
+				&& ( ! offersOnly || card.hasAttribute( 'data-bob-has-offer' ) );
+			card.hidden = ! show;
+			if ( show ) {
+				visible.push( card );
+			}
+		} );
+
+		// Search results are price-sorted; offers-only without a search
+		// keeps the server's menu_order, so no re-append in that case.
+		if ( searchActive ) {
+			visible.sort( function ( a, b ) {
+				var pa = parseFloat( a.getAttribute( 'data-price' ) ) || Infinity;
+				var pb = parseFloat( b.getAttribute( 'data-price' ) ) || Infinity;
+				return pa - pb;
+			} );
+			visible.forEach( function ( card ) {
+				grid.appendChild( card );
+			} );
+		}
+
+		var emptyEl = $( '[data-bob-empty-state]' );
+		grid.hidden = visible.length === 0;
+		if ( emptyEl ) {
+			emptyEl.hidden = visible.length !== 0;
+		}
+
+		var countEl = $( '[data-bob-results-count]' );
+		if ( countEl ) {
+			var showCount = ( searchActive || offersOnly ) && visible.length > 0;
+			countEl.hidden = ! showCount;
+			if ( showCount ) {
+				var template = ( config.i18n && config.i18n.showing ) || 'Showing %d villas';
+				countEl.textContent = template.replace( '%d', String( visible.length ) );
+			}
+		}
+	}
+
 	function applyResults( results ) {
 		var grid = $( '[data-bob-listing-grid]' );
 		if ( ! grid ) {
@@ -162,30 +232,33 @@
 			rateByPropertyId[ String( r.propertyId ).toLowerCase() ] = r.weeklyRate;
 		} );
 
-		var cards = $$( 'article[data-bob-property-id]', grid );
-		var visible = [];
-
-		cards.forEach( function ( card ) {
+		// Hydrate prices on matching cards. Visibility is exclusively
+		// applyFilters()'s job.
+		$$( 'article[data-bob-property-id]', grid ).forEach( function ( card ) {
 			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();
-			var hasMatch = pid && Object.prototype.hasOwnProperty.call( rateByPropertyId, pid );
-
-			if ( ! hasMatch ) {
-				if ( ! isProbe ) {
-					card.hidden = true;
-				}
+			if ( ! pid || ! Object.prototype.hasOwnProperty.call( rateByPropertyId, pid ) ) {
 				return;
 			}
-
-			card.hidden = false;
+			// rate > 0 guard: out-of-season the API returns available villas
+			// with eur_base_rental 0 (no rate card loaded) — hydrating those
+			// would show "From €0 / wk" and sort them first.
 			var rate = rateByPropertyId[ pid ];
-			if ( rate !== null && !isNaN( rate ) ) {
+			if ( rate !== null && ! isNaN( rate ) && rate > 0 ) {
 				card.setAttribute( 'data-price', String( rate ) );
 				var priceEl = card.querySelector( '[data-bob-from-price]' );
 				if ( priceEl ) {
 					priceEl.textContent = formatEuro( rate );
+					priceEl.classList.remove( 'ibv-villa-card__price-amount--on-request' );
+					var pricePrefix = card.querySelector( '.ibv-villa-card__price-prefix' );
+					var priceSuffix = card.querySelector( '.ibv-villa-card__price-suffix' );
+					if ( pricePrefix ) {
+						pricePrefix.hidden = false;
+					}
+					if ( priceSuffix ) {
+						priceSuffix.hidden = false;
+					}
 				}
 			}
-			visible.push( card );
 		} );
 
 		// Probe mode: prices only, leave grid order and visibility alone.
@@ -193,33 +266,6 @@
 			return;
 		}
 
-		visible.sort( function ( a, b ) {
-			var pa = parseFloat( a.getAttribute( 'data-price' ) ) || Infinity;
-			var pb = parseFloat( b.getAttribute( 'data-price' ) ) || Infinity;
-			return pa - pb;
-		} );
-		visible.forEach( function ( card ) {
-			grid.appendChild( card );
-		} );
-
-		var toolbar = $( '[data-bob-listing-toolbar]' );
-		var countEl = $( '[data-bob-results-count]' );
-		var emptyEl = $( '[data-bob-empty-state]' );
-
-		if ( visible.length === 0 ) {
-			grid.hidden = true;
-			if ( emptyEl ) {
-				emptyEl.hidden = false;
-			}
-			if ( toolbar ) {
-				toolbar.hidden = true;
-			}
-			return;
-		}
-
-		if ( toolbar ) {
-			toolbar.hidden = false;
-		}
 		// Only reachable when !isProbe (probe mode returns early above), so
 		// params still holds the user's real URL params, never probe dates.
 		var datesEl = $( '[data-bob-selected-dates]' );
@@ -233,11 +279,9 @@
 			datesLabel.textContent = range + ' · ' + paxTemplate.replace( '%d', String( pax ) );
 			datesEl.hidden = false;
 		}
-		if ( countEl ) {
-			countEl.hidden = false;
-			var template = ( config.i18n && config.i18n.showing ) || 'Showing %d villas';
-			countEl.textContent = template.replace( '%d', String( visible.length ) );
-		}
+
+		availablePids = rateByPropertyId;
+		applyFilters();
 	}
 
 	function fetchAvailability() {
@@ -282,9 +326,24 @@
 			} );
 	}
 
-	if ( document.readyState === 'loading' ) {
-		document.addEventListener( 'DOMContentLoaded', fetchAvailability );
-	} else {
+	function init() {
+		// Bind at init (not in the fetch callback) so the offers filter
+		// works in probe mode, after a failed fetch, and while a fetch
+		// is in flight — the response's applyFilters() call re-applies
+		// the intersection when it lands.
+		var checkbox = $( '[data-bob-filter-offers]' );
+		if ( checkbox ) {
+			checkbox.addEventListener( 'change', function () {
+				offersOnly = checkbox.checked;
+				applyFilters();
+			} );
+		}
 		fetchAvailability();
+	}
+
+	if ( document.readyState === 'loading' ) {
+		document.addEventListener( 'DOMContentLoaded', init );
+	} else {
+		init();
 	}
 }() );

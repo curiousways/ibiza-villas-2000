@@ -19,22 +19,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Render the villa-offers accordion.
+ * Get a villa's active offers from the `villa_offers` ACF repeater.
  *
- * @param array $args {
- *     @type int $post_id Required. Villa post ID.
- * }
+ * An offer is active when `offer_name`, `offer_date_from` and
+ * `offer_date_to` are all non-empty and `offer_date_to` is today or
+ * later (site timezone). Single source of truth for the rule — used
+ * by the offers accordion, the Special Offers grid, and the villa-card
+ * `data-bob-has-offer` marker.
+ *
+ * @param int $villa_id Villa post ID.
+ * @return array[] Active repeater rows sorted by `offer_date_from` ascending.
  */
-function ibv_core_villa_offers( $args = [] ) {
-	$args    = wp_parse_args( $args, [ 'post_id' => 0 ] );
-	$post_id = (int) $args['post_id'];
-	if ( ! $post_id ) {
-		return;
+function ibv_villa_get_active_offers( $villa_id ) {
+	$villa_id = (int) $villa_id;
+	if ( ! $villa_id ) {
+		return [];
 	}
 
-	$offers = get_field( 'villa_offers', $post_id );
+	$offers = get_field( 'villa_offers', $villa_id );
 	if ( ! is_array( $offers ) || ! count( $offers ) ) {
-		return;
+		return [];
 	}
 
 	$today  = current_time( 'Ymd' );
@@ -49,16 +53,34 @@ function ibv_core_villa_offers( $args = [] ) {
 		$active[] = $offer;
 	}
 
-	if ( ! count( $active ) ) {
-		return;
-	}
-
 	usort(
 		$active,
 		static function ( $a, $b ) {
 			return strcmp( (string) $a['offer_date_from'], (string) $b['offer_date_from'] );
 		}
 	);
+
+	return $active;
+}
+
+/**
+ * Render the villa-offers accordion.
+ *
+ * @param array $args {
+ *     @type int $post_id Required. Villa post ID.
+ * }
+ */
+function ibv_core_villa_offers( $args = [] ) {
+	$args    = wp_parse_args( $args, [ 'post_id' => 0 ] );
+	$post_id = (int) $args['post_id'];
+	if ( ! $post_id ) {
+		return;
+	}
+
+	$active = ibv_villa_get_active_offers( $post_id );
+	if ( ! count( $active ) ) {
+		return;
+	}
 
 	wp_enqueue_style( 'ibv-villa-offers' );
 

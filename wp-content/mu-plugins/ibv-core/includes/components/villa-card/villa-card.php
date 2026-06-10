@@ -164,12 +164,14 @@ function ibv_core_villa_card( $args = [] ) {
 
 	$property_id     = (string) get_field( 'property_id', $villa_id );
 	$indicative_from = get_field( 'villa_indicative_from_price', $villa_id );
-	$sort_price      = $indicative_from ? (float) $indicative_from : 420.0;
+	$has_offer       = count( ibv_villa_get_active_offers( $villa_id ) ) > 0;
 	?>
 	<article
 		class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>"
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
-		data-price="<?php echo esc_attr( (string) $sort_price ); ?>"
+		<?php /* No data-price when the ACF from-price is empty — the JS price sort treats a missing attribute as Infinity, so unpriced cards sort last. */ ?>
+		<?php echo $indicative_from ? ' data-price="' . esc_attr( (string) (float) $indicative_from ) . '"' : ''; ?>
+		<?php echo $has_offer ? ' data-bob-has-offer' : ''; ?>
 	>
 		<a href="<?php echo esc_url( $permalink ); ?>" class="ibv-villa-card__media">
 			<?php
@@ -272,18 +274,20 @@ function ibv_core_villa_card( $args = [] ) {
 			<?php else : ?>
 				<div class="ibv-villa-card__price">
 					<?php /* Bob shell: API may replace amount; ACF villa_indicative_from_price is static fallback. */ ?>
-					<span class="ibv-villa-card__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
-					<span class="ibv-villa-card__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
-						<?php
-						$indicative = get_field( 'villa_indicative_from_price', $villa_id );
-						if ( $indicative ) {
-							printf( '€%s', esc_html( number_format_i18n( (float) $indicative ) ) );
-						} else {
-							echo '€420';
-						}
-						?>
-					</span>
-					<span class="ibv-villa-card__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+					<?php if ( $indicative_from ) : ?>
+						<span class="ibv-villa-card__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
+						<span class="ibv-villa-card__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+							<?php printf( '€%s', esc_html( number_format_i18n( (float) $indicative_from ) ) ); ?>
+						</span>
+						<span class="ibv-villa-card__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+					<?php else : ?>
+						<?php /* Prefix/suffix stay in the DOM (hidden) so the listing JS can reveal them when it hydrates a real API rate. */ ?>
+						<span class="ibv-villa-card__price-prefix" hidden><?php esc_html_e( 'From', 'ibv' ); ?></span>
+						<span class="ibv-villa-card__price-amount ibv-villa-card__price-amount--on-request" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
+							<?php esc_html_e( 'Select dates for price', 'ibv' ); ?>
+						</span>
+						<span class="ibv-villa-card__price-suffix" hidden><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 

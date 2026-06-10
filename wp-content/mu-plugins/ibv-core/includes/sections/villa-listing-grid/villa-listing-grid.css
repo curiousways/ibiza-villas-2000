@@ -47,16 +47,11 @@
 	gap: var(--ibv-space-2xs);
 	font-size: var(--ibv-fs-small);
 	color: var(--ibv-color-text-muted);
-	cursor: not-allowed;
+	cursor: pointer;
 }
 
 .ibv-listing-grid-section__checkbox input {
 	margin: 0;
-}
-
-.ibv-listing-grid-section__filter-meta {
-	font-size: var(--ibv-fs-eyebrow);
-	color: var(--ibv-color-text-muted);
 }
 
 .ibv-listing-grid-section__count {

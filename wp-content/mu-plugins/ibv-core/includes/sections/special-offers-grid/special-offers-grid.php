@@ -33,21 +33,10 @@ function ibv_core_section_special_offers_grid() {
 		]
 	);
 
-	$today = current_time( 'Ymd' );
 	$cards = [];
 
 	foreach ( $villas as $villa_id ) {
-		$offers = get_field( 'villa_offers', $villa_id );
-		if ( ! is_array( $offers ) ) {
-			continue;
-		}
-		foreach ( $offers as $offer ) {
-			$from = (string) ( $offer['offer_date_from'] ?? '' );
-			$to   = (string) ( $offer['offer_date_to'] ?? '' );
-			$name = trim( (string) ( $offer['offer_name'] ?? '' ) );
-			if ( ! $from || ! $to || ! $name || $to < $today ) {
-				continue;
-			}
+		foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
 			$cards[] = [
 				'villa_id' => (int) $villa_id,
 				'offer'    => $offer,

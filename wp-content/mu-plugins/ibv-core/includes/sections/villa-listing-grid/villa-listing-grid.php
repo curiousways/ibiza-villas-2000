@@ -50,7 +50,7 @@ function ibv_core_section_villa_listing_grid() {
 			       Query params on this page: date_from, date_to, pax (GET).
 			       Spec: Notion → IBZ002 → API Integration Spec
 			       ──────────────────────────────────────────────────────────── */ ?>
-			<div class="ibv-listing-grid-section__toolbar" data-bob-listing-toolbar hidden>
+			<div class="ibv-listing-grid-section__toolbar" data-bob-listing-toolbar>
 				<ul class="ibv-listing-grid-section__filters">
 					<li class="ibv-listing-grid-section__filter" data-bob-selected-dates hidden>
 						<span class="ibv-listing-grid-section__dates">
@@ -67,13 +67,10 @@ function ibv_core_section_villa_listing_grid() {
 							<?php esc_html_e( 'Short breaks', 'ibv' ); ?>
 						</a>
 					</li>
-					<?php /* TODO #2 follow-up: Offers filter contract still TBD with Steve.
-					       Checkbox is rendered disabled until the response flag is confirmed. */ ?>
 					<li class="ibv-listing-grid-section__filter">
 						<label class="ibv-listing-grid-section__checkbox">
-							<input type="checkbox" disabled aria-disabled="true" data-bob-filter-offers>
+							<input type="checkbox" data-bob-filter-offers>
 							<span><?php esc_html_e( 'Offers', 'ibv' ); ?></span>
-							<span class="ibv-listing-grid-section__filter-meta"><?php esc_html_e( '(coming soon)', 'ibv' ); ?></span>
 						</label>
 					</li>
 				</ul>
