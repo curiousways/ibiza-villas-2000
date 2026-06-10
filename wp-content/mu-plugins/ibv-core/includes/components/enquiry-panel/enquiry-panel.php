@@ -109,7 +109,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 					<select id="ibv-ep-pax" name="pax" required>
 						<option value="" disabled hidden<?php selected( $prefill_pax, '' ); ?>><?php esc_html_e( 'Guests', 'ibv' ); ?></option>
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
-							<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $prefill_pax, (string) $i ); ?>><?php echo esc_html( sprintf( /* translators: %d: number of guests. */ _n( '%d Guest', '%d Guests', $i, 'ibv' ), $i ) ); ?></option>
+							<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $prefill_pax, (string) $i ); ?>><?php echo esc_html( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
 					<?php
