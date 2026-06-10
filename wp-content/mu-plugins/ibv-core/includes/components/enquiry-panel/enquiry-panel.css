@@ -184,12 +184,40 @@
 }
 
 .ibv-enquiry-panel__field textarea {
-	min-height: 13.125rem; /* 210px — matches Figma */
+	min-height: 7.5rem; /* 120px — shortened so contact fields fit above the fold */
 	resize: vertical;
 }
 
+.ibv-enquiry-panel__field input::placeholder,
 .ibv-enquiry-panel__field textarea::placeholder {
 	color: var(--ibv-color-text-muted);
+}
+
+/* Contact fields — hidden (and disabled in markup/JS) until availability
+   is confirmed or pricing fails (enquiry still possible). Same collapse +
+   fade-in mechanics as the price block below. */
+.ibv-enquiry-panel__field--name,
+.ibv-enquiry-panel__field--email,
+.ibv-enquiry-panel__field--phone,
+.ibv-enquiry-panel__field--message {
+	transition: opacity 200ms ease-out, display 200ms allow-discrete;
+}
+
+.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--name,
+.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--email,
+.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--phone,
+.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--message {
+	display: none;
+	opacity: 0;
+}
+
+@starting-style {
+	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--name,
+	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--email,
+	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--phone,
+	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--message {
+		opacity: 0;
+	}
 }
 
 /* Pending state — the price block is hidden until JS removes the

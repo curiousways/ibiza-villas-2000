@@ -53,11 +53,18 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	       BOB API INTEGRATION SHELL — enquiry panel
 	       ─────────────────────────────────────────────────────────────
 	       Form fields:
-	         - villa_id     (hidden, from current post)
-	         - date_from    (required, YYYY-MM-DD)
-	         - date_to      (required, YYYY-MM-DD)
-	         - pax          (required, integer)
-	         - message      (optional, text)
+	         - villa_id       (hidden, from current post)
+	         - date_from      (required, YYYY-MM-DD)
+	         - date_to        (required, YYYY-MM-DD)
+	         - pax            (required, integer)
+	         - enquiry_name   (required, text — browser-validated on submit)
+	         - enquiry_email  (required, email — browser-validated on submit)
+	         - enquiry_phone  (required, tel — browser-validated on submit)
+	           ^ contact fields start hidden + disabled (is-contact-pending);
+	             JS reveals them once the API confirms availability, or on
+	             fetch failure (enquiry still possible — price by email)
+	         - message        (optional, text — hidden/revealed with the
+	                           contact fields above)
 
 	       On date/pax change:
 	         - Fetch in detail mode:
@@ -81,7 +88,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	// arrival fires the fetch when the visitor finishes the form.
 	?>
 	<div
-		class="ibv-enquiry-panel is-pricing-pending"
+		class="ibv-enquiry-panel is-pricing-pending is-contact-pending"
 		data-bob-enquiry-panel
 		data-villa-id="<?php echo esc_attr( (string) $villa_id ); ?>"
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
@@ -126,9 +133,24 @@ function ibv_core_enquiry_panel( $villa_id ) {
 				</label>
 			</div>
 
+			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--name">
+				<label for="ibv-ep-name" class="ibv-u-visually-hidden"><?php esc_html_e( 'Name', 'ibv' ); ?></label>
+				<input type="text" id="ibv-ep-name" name="enquiry_name" autocomplete="name" required disabled placeholder="<?php esc_attr_e( 'Name', 'ibv' ); ?>">
+			</div>
+
+			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--email">
+				<label for="ibv-ep-email" class="ibv-u-visually-hidden"><?php esc_html_e( 'Email', 'ibv' ); ?></label>
+				<input type="email" id="ibv-ep-email" name="enquiry_email" autocomplete="email" required disabled placeholder="<?php esc_attr_e( 'Email', 'ibv' ); ?>">
+			</div>
+
+			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--phone">
+				<label for="ibv-ep-phone" class="ibv-u-visually-hidden"><?php esc_html_e( 'Phone', 'ibv' ); ?></label>
+				<input type="tel" id="ibv-ep-phone" name="enquiry_phone" autocomplete="tel" required disabled placeholder="<?php esc_attr_e( 'Phone', 'ibv' ); ?>">
+			</div>
+
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--message">
 				<label for="ibv-ep-message" class="ibv-u-visually-hidden"><?php esc_html_e( 'Message', 'ibv' ); ?></label>
-				<textarea id="ibv-ep-message" name="message" rows="6" placeholder="<?php esc_attr_e( 'Message (Optional)', 'ibv' ); ?>"></textarea>
+				<textarea id="ibv-ep-message" name="message" rows="4" disabled placeholder="<?php esc_attr_e( 'Message (Optional)', 'ibv' ); ?>"></textarea>
 			</div>
 
 			<div class="ibv-enquiry-panel__price-block">

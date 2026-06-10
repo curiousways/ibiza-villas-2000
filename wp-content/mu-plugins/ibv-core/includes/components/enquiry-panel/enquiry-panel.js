@@ -32,6 +32,13 @@
 		var paxEl    = form.querySelector( '[name="pax"]' );
 		var submitEl = panel.querySelector( '[data-bob-submit]' );
 
+		var contactEls = [
+			form.querySelector( '[name="enquiry_name"]' ),
+			form.querySelector( '[name="enquiry_email"]' ),
+			form.querySelector( '[name="enquiry_phone"]' ),
+			form.querySelector( '[name="message"]' ),
+		];
+
 		var errorEl        = panel.querySelector( '[data-bob-error]' );
 		var msgUnavailable = panel.getAttribute( 'data-bob-msg-unavailable' ) || '';
 		var msgPriceError  = panel.getAttribute( 'data-bob-msg-price-error' ) || '';
@@ -91,6 +98,29 @@
 
 		function hidePriceBlock() {
 			panel.classList.add( 'is-pricing-pending' );
+		}
+
+		// Contact fields stay hidden + disabled until an enquiry is actually
+		// possible (availability confirmed, or pricing fetch failed so we
+		// invite the enquiry anyway). Disabling keeps the hidden required
+		// inputs out of constraint validation — an invalid, non-focusable
+		// control would otherwise silently block form submission.
+		function revealContactFields() {
+			panel.classList.remove( 'is-contact-pending' );
+			contactEls.forEach( function ( el ) {
+				if ( el ) {
+					el.removeAttribute( 'disabled' );
+				}
+			} );
+		}
+
+		function hideContactFields() {
+			panel.classList.add( 'is-contact-pending' );
+			contactEls.forEach( function ( el ) {
+				if ( el ) {
+					el.setAttribute( 'disabled', 'disabled' );
+				}
+			} );
 		}
 
 		function showNotice( msg ) {
@@ -171,6 +201,7 @@
 			if ( ! gateReady( s ) ) {
 				resetPrices();
 				clearNotice();
+				hideContactFields();
 				isUnavailable = false;
 				updateGate();
 				return;
@@ -203,10 +234,12 @@
 						isUnavailable = false;
 						clearNotice();
 						revealPriceBlock();
+						revealContactFields();
 					} else {
 						isUnavailable = true;
 						resetPrices();
 						hidePriceBlock();
+						hideContactFields();
 						showNotice( msgUnavailable );
 					}
 					updateGate();
@@ -219,6 +252,7 @@
 					isUnavailable = false;
 					resetPrices();
 					hidePriceBlock();
+					revealContactFields();
 					showNotice( msgPriceError );
 					updateGate();
 				} );
