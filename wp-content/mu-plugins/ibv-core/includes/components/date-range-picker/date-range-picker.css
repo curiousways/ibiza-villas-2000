@@ -142,12 +142,6 @@
 	}
 }
 
-/* Lock page scroll while the picker is open. `:has()` matches the body
- * whenever any ibv-drp popover inside it is in its open state. */
-body:has(.ibv-drp__popover:popover-open) {
-	overflow: hidden;
-}
-
 
 /* Calendar root — let it size to its grid; remove its own background. */
 .ibv-drp__popover [data-vc="calendar"] {
