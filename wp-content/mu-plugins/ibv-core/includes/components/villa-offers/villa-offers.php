@@ -99,7 +99,8 @@ function ibv_core_villa_offers( $args = [] ) {
 					</header>
 
 					<?php if ( $description ) : ?>
-						<p class="ibv-villa-offers__desc"><?php echo esc_html( $description ); ?></p>
+						<div class="ibv-villa-offers__desc"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
+	
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
