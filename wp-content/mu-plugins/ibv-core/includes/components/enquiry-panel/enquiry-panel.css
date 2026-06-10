@@ -34,7 +34,9 @@
 	color: var(--ibv-color-text);
 }
 
-.ibv-enquiry-panel__field input,
+/* :not(.iti__search-input) keeps the field chrome off the search input
+   that intl-tel-input renders inside the phone field's dropdown. */
+.ibv-enquiry-panel__field input:not(.iti__search-input),
 .ibv-enquiry-panel__field textarea {
 	width: 100%;
 	font: inherit;
@@ -362,4 +364,80 @@
 .ibv-enquiry-panel .ibv-enquiry-panel__submit[disabled] {
 	opacity: 0.5;
 	cursor: not-allowed;
+}
+
+/* ── intl-tel-input (phone field) ─────────────────────────────────── */
+
+/* Map vendor theme vars to tokens on :root so they reach the mobile
+   fullscreen country selector, which is detached from the .iti wrapper. */
+:root {
+	--iti-border-color:        var(--ibv-color-border);
+	--iti-country-selector-bg: var(--ibv-color-bg);
+	--iti-icon-color:          var(--ibv-color-text-muted);
+	--iti-hover-color:         var(--ibv-color-tint-teal);
+	--iti-spacer-horizontal:   var(--ibv-space-md);
+}
+
+/* The widget wraps the input in .iti (inline-block by default) —
+   make it fill the field div like every other input in the form. */
+.ibv-enquiry-panel__field--phone .iti {
+	display: block;
+	width: 100%;
+}
+
+/* Country dropdown panel. Vendor-class selectors are deliberately
+   unscoped below this point so they also reach the fullscreen popup
+   variant on mobile, which is detached from the phone field. */
+.iti__country-selector {
+	overflow: hidden;
+	border-radius: var(--ibv-radius-field);
+	box-shadow: var(--ibv-shadow-md);
+}
+
+/* Search input — flat bar with the wrapper's bottom border as its only
+   chrome; the global :focus-visible ring doesn't fit inside the panel,
+   so focus is signalled on the wrapper border instead. */
+.iti__search-input {
+	font: inherit;
+	font-size: var(--ibv-fs-body);
+	padding-top: var(--ibv-space-sm);
+	padding-bottom: var(--ibv-space-sm);
+	background: transparent;
+	color: var(--ibv-color-text);
+}
+
+.iti__search-input:focus,
+.iti__search-input:focus-visible {
+	outline: none;
+}
+
+.iti__search-input::placeholder {
+	color: var(--ibv-color-text-muted);
+}
+
+.iti__search-input-wrapper:focus-within {
+	border-bottom-color: var(--ibv-color-focus-ring);
+}
+
+/* Focus ring on the flag/dial-code button, matching the pax select pattern */
+.ibv-enquiry-panel__field--phone .iti__selected-country:focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: -2px;
+	border-radius: var(--ibv-radius-field) 0 0 var(--ibv-radius-field);
+}
+
+/* Inline validation error message */
+.ibv-enquiry-panel__phone-error {
+	margin: var(--ibv-space-2xs) 0 0;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-normal);
+	color: var(--ibv-color-error-300);
+}
+
+.ibv-enquiry-panel__phone-error[hidden] {
+	display: none;
+}
+
+.ibv-enquiry-panel__field--phone.has-error input {
+	border-color: var(--ibv-color-error-200);
 }

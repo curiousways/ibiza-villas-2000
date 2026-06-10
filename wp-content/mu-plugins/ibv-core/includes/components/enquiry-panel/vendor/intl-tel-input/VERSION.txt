@@ -1,0 +1,13 @@
+intl-tel-input v29.0.5
+Fetched: 2026-06-10
+Source: https://cdn.jsdelivr.net/npm/intl-tel-input@29.0.5/dist/
+
+Files vendored:
+  js/intlTelInput.min.js  — classic IIFE bundle, exposes window.intlTelInput
+  js/utils.js             — ES module, loaded via dynamic import() through the loadUtils option (NOT a normal wp_register_script)
+  css/intlTelInput.min.css
+  img/flags.webp          — flag sprites, referenced relatively by intlTelInput.min.css (img/ must stay a sibling of css/)
+  img/flags@2x.webp
+
+No globe image — v29 uses inline SVG for icons.
+License: MIT (https://github.com/jackocnr/intl-tel-input/blob/master/LICENSE)

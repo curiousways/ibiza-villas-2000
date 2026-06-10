@@ -92,6 +92,13 @@ function ibv_register_styles() {
 	);
 
 	wp_register_style(
+		'ibv-intl-tel-input',
+		IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/css/intlTelInput.min.css',
+		[],
+		IBV_CORE_VERSION
+	);
+
+	wp_register_style(
 		'ibv-date-range-picker',
 		IBV_CORE_URL . 'includes/components/date-range-picker/date-range-picker.css',
 		[ 'ibv-base', 'ibv-vanilla-calendar-pro' ],
@@ -231,7 +238,6 @@ function ibv_register_styles() {
 		'ibv-distance-ticks'                => 'includes/components/distance-ticks/distance-ticks.css',
 		'ibv-villa-map'                    => 'includes/components/villa-map/villa-map.css',
 		'ibv-gallery'                      => 'includes/components/gallery/gallery.css',
-		'ibv-enquiry-panel'                => 'includes/components/enquiry-panel/enquiry-panel.css',
 		'ibv-villa-detail'                 => 'includes/sections/villa-detail-shell/villa-detail-shell.css',
 		'ibv-section-villa-hero'           => 'includes/sections/villa-hero/villa-hero.css',
 		'ibv-section-villa-header'         => 'includes/sections/villa-header/villa-header.css',
@@ -253,6 +259,13 @@ function ibv_register_styles() {
 			IBV_CORE_VERSION
 		);
 	}
+
+	wp_register_style(
+		'ibv-enquiry-panel',
+		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.css',
+		[ 'ibv-base', 'ibv-intl-tel-input' ],
+		IBV_CORE_VERSION
+	);
 
 	wp_register_style(
 		'ibv-alternative-accommodation',
@@ -282,11 +295,25 @@ function ibv_register_styles() {
 	);
 
 	wp_register_script(
-		'ibv-enquiry-panel',
-		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.js',
+		'ibv-intl-tel-input',
+		IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/js/intlTelInput.min.js',
 		[],
 		IBV_CORE_VERSION,
-		[ 'in_footer' => true ]
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
+	);
+
+	wp_register_script(
+		'ibv-enquiry-panel',
+		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.js',
+		[ 'ibv-intl-tel-input' ],
+		IBV_CORE_VERSION,
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
 	);
 
 	wp_register_script(

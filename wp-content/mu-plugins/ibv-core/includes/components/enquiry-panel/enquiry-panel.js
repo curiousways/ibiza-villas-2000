@@ -39,6 +39,51 @@
 			form.querySelector( '[name="message"]' ),
 		];
 
+		var phoneEl      = form.querySelector( '[name="enquiry_phone"]' );
+		var phoneFieldEl = panel.querySelector( '.ibv-enquiry-panel__field--phone' );
+		var phoneErrorEl = panel.querySelector( '[data-bob-phone-error]' );
+		var utilsUrl     = panel.getAttribute( 'data-iti-utils-url' ) || '';
+		var msgInvalidPhone = panel.getAttribute( 'data-bob-msg-invalid-phone' ) || '';
+
+		var iti = null;
+		if ( phoneEl && typeof window.intlTelInput === 'function' ) {
+			iti = window.intlTelInput( phoneEl, {
+				initialCountry:   'gb',
+				separateDialCode: true,
+				strictMode:       true,
+				// Replace the static "Phone" placeholder with an example number
+				// for the selected country once utils.js loads (e.g. "7400 123456").
+				// AGGRESSIVE because POLITE defers to the existing placeholder attr.
+				placeholderNumberPolicy: 'AGGRESSIVE',
+				loadUtils:        utilsUrl ? function () { return import( utilsUrl ); } : null,
+			} );
+		}
+
+		function showPhoneError() {
+			if ( phoneErrorEl && msgInvalidPhone ) {
+				phoneErrorEl.textContent = msgInvalidPhone;
+				phoneErrorEl.removeAttribute( 'hidden' );
+			}
+			if ( phoneFieldEl ) {
+				phoneFieldEl.classList.add( 'has-error' );
+			}
+		}
+
+		function clearPhoneError() {
+			if ( phoneErrorEl ) {
+				phoneErrorEl.textContent = '';
+				phoneErrorEl.setAttribute( 'hidden', '' );
+			}
+			if ( phoneFieldEl ) {
+				phoneFieldEl.classList.remove( 'has-error' );
+			}
+		}
+
+		if ( phoneEl ) {
+			phoneEl.addEventListener( 'input', clearPhoneError );
+			phoneEl.addEventListener( 'countrychange', clearPhoneError );
+		}
+
 		var errorEl        = panel.querySelector( '[data-bob-error]' );
 		var msgUnavailable = panel.getAttribute( 'data-bob-msg-unavailable' ) || '';
 		var msgPriceError  = panel.getAttribute( 'data-bob-msg-price-error' ) || '';
@@ -173,22 +218,36 @@
 		// invite the enquiry anyway). Disabling keeps the hidden required
 		// inputs out of constraint validation — an invalid, non-focusable
 		// control would otherwise silently block form submission.
+		function setContactDisabled( el, disabled ) {
+			if ( ! el ) {
+				return;
+			}
+			// intl-tel-input wraps the phone input and also disables its flag button;
+			// use iti.setDisabled() so both the input and the country selector toggle.
+			if ( iti && el === phoneEl ) {
+				iti.setDisabled( disabled );
+				return;
+			}
+			if ( disabled ) {
+				el.setAttribute( 'disabled', 'disabled' );
+			} else {
+				el.removeAttribute( 'disabled' );
+			}
+		}
+
 		function revealContactFields() {
 			panel.classList.remove( 'is-contact-pending' );
 			contactEls.forEach( function ( el ) {
-				if ( el ) {
-					el.removeAttribute( 'disabled' );
-				}
+				setContactDisabled( el, false );
 			} );
 		}
 
 		function hideContactFields() {
 			panel.classList.add( 'is-contact-pending' );
 			contactEls.forEach( function ( el ) {
-				if ( el ) {
-					el.setAttribute( 'disabled', 'disabled' );
-				}
+				setContactDisabled( el, true );
 			} );
+			clearPhoneError();
 		}
 
 		function showNotice( msg ) {
@@ -361,6 +420,28 @@
 				updateGate();
 				return;
 			}
+
+			// Phone validation — only once contact fields are active.
+			// Fail-open if utils.js hasn't loaded (isValidNumber/getNumber throw
+			// without utils); an enquiry must never be lost to a missing script.
+			if ( iti && phoneEl && ! panel.classList.contains( 'is-contact-pending' ) ) {
+				var phoneValid = true;
+				try {
+					phoneValid = iti.isValidNumber() === true;
+				} catch ( e ) {
+					phoneValid = true;
+				}
+				if ( ! phoneValid ) {
+					showPhoneError();
+					phoneEl.focus();
+					return;
+				}
+				clearPhoneError();
+				try {
+					phoneEl.value = iti.getNumber();
+				} catch ( e ) {}
+			}
+
 			// TODO: POST to enquiry endpoint when Steve confirms URL — redirect-only for now.
 			var params = new URLSearchParams();
 			if ( villaId ) {

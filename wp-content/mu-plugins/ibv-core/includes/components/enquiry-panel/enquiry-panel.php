@@ -96,6 +96,8 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		data-bob-confirm-url="<?php echo esc_url( $confirm_url ); ?>"
 		data-bob-msg-unavailable="<?php echo esc_attr__( 'This villa isn’t available for your selected dates. Try different dates, or send us your enquiry and we’ll suggest great alternatives.', 'ibv' ); ?>"
 		data-bob-msg-price-error="<?php echo esc_attr__( 'We couldn’t fetch live pricing just now. You can still send your enquiry and we’ll confirm the price by email.', 'ibv' ); ?>"
+		data-iti-utils-url="<?php echo esc_url( add_query_arg( 'ver', rawurlencode( IBV_CORE_VERSION ), IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/js/utils.js' ) ); ?>"
+		data-bob-msg-invalid-phone="<?php echo esc_attr__( 'Please enter a valid phone number.', 'ibv' ); ?>"
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
@@ -146,6 +148,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--phone">
 				<label for="ibv-ep-phone" class="ibv-u-visually-hidden"><?php esc_html_e( 'Phone', 'ibv' ); ?></label>
 				<input type="tel" id="ibv-ep-phone" name="enquiry_phone" autocomplete="tel" required disabled placeholder="<?php esc_attr_e( 'Phone', 'ibv' ); ?>">
+				<p class="ibv-enquiry-panel__phone-error" data-bob-phone-error role="alert" hidden></p>
 			</div>
 
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--message">
