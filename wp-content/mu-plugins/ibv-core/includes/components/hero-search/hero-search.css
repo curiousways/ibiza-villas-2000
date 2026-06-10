@@ -56,9 +56,37 @@
 }
 
 /* Date inputs read as muted (placeholder-style) until filled. */
-.ibv-hero-search__input[type="date"]:not(:focus):invalid,
-.ibv-hero-search__input[type="number"]:placeholder-shown {
+.ibv-hero-search__input[type="date"]:not(:focus):invalid {
 	color: var(--ibv-color-border);
+}
+
+/* Group size select — native chrome stripped, custom chevron overlaid. */
+.ibv-hero-search__select-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-width: 0;
+}
+
+.ibv-hero-search__input--select {
+	appearance: none;
+	padding-inline-end: 1.25rem;
+	cursor: pointer;
+}
+
+/* Reads as muted (placeholder-style) while the empty option is selected. */
+.ibv-hero-search__input--select:invalid {
+	color: var(--ibv-color-border);
+}
+
+.ibv-hero-search__select-icon {
+	position: absolute;
+	inset-inline-end: 0;
+	width: 1rem;
+	height: 1rem;
+	color: var(--ibv-color-text-muted);
+	pointer-events: none;
 }
 
 .ibv-hero-search__input[type="date"]::-webkit-calendar-picker-indicator {

@@ -44,7 +44,23 @@ function ibv_core_hero_search() {
 			</div>
 			<div class="ibv-hero-search__field">
 				<label class="ibv-hero-search__label" for="ibv-hero-pax"><?php esc_html_e( 'Group size', 'ibv' ); ?></label>
-				<input class="ibv-hero-search__input" type="number" id="ibv-hero-pax" name="pax" min="1" max="30" placeholder="<?php esc_attr_e( 'Select group size', 'ibv' ); ?>" required value="<?php echo esc_attr( $qs['pax'] ); ?>">
+				<span class="ibv-hero-search__select-wrap">
+					<select class="ibv-hero-search__input ibv-hero-search__input--select" id="ibv-hero-pax" name="pax" required>
+						<option value="" disabled hidden<?php selected( $qs['pax'], '' ); ?>><?php esc_html_e( 'Select group size', 'ibv' ); ?></option>
+						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
+							<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $qs['pax'], (string) $i ); ?>><?php echo esc_html( $i ); ?></option>
+						<?php endfor; ?>
+					</select>
+					<?php
+					echo ibv_core_icon(
+						'chevron-down',
+						[
+							'class' => 'ibv-hero-search__select-icon',
+							'size'  => 16,
+						]
+					); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?>
+				</span>
 			</div>
 			<button class="ibv-hero-search__submit" type="submit" aria-label="<?php esc_attr_e( 'Search villas', 'ibv' ); ?>">
 				<?php

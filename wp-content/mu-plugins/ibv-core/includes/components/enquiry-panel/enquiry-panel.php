@@ -105,8 +105,22 @@ function ibv_core_enquiry_panel( $villa_id ) {
 
 			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--pax">
 				<label for="ibv-ep-pax">
-					<input type="number" id="ibv-ep-pax" name="pax" min="1" max="30" placeholder="1" value="<?php echo esc_attr( $prefill_pax ); ?>" placeholder="" required>
-					<span class="ibv-enquiry-panel__field-suffix" aria-hidden="true"><?php esc_html_e( 'Guests', 'ibv' ); ?></span>
+					<span class="ibv-u-visually-hidden"><?php esc_html_e( 'Number of guests', 'ibv' ); ?></span>
+					<select id="ibv-ep-pax" name="pax" required>
+						<option value="" disabled hidden<?php selected( $prefill_pax, '' ); ?>><?php esc_html_e( 'Guests', 'ibv' ); ?></option>
+						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
+							<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $prefill_pax, (string) $i ); ?>><?php echo esc_html( sprintf( /* translators: %d: number of guests. */ _n( '%d Guest', '%d Guests', $i, 'ibv' ), $i ) ); ?></option>
+						<?php endfor; ?>
+					</select>
+					<?php
+					echo ibv_core_icon(
+						'chevron-down',
+						[
+							'class' => 'ibv-enquiry-panel__select-icon',
+							'size'  => 16,
+						]
+					); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?>
 				</label>
 			</div>
 

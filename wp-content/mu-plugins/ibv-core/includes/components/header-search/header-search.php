@@ -44,7 +44,23 @@ function ibv_core_header_search() {
 		</div>
 		<div class="ibv-header-search__field">
 			<label class="ibv-header-search__label" for="ibv-hs-pax"><?php esc_html_e( 'Group size', 'ibv' ); ?></label>
-			<input class="ibv-header-search__input" type="number" id="ibv-hs-pax" name="pax" min="1" max="30" required value="<?php echo esc_attr( $qs['pax'] ); ?>">
+			<span class="ibv-header-search__select-wrap">
+				<select class="ibv-header-search__input ibv-header-search__input--select" id="ibv-hs-pax" name="pax" required>
+					<option value="" disabled hidden<?php selected( $qs['pax'], '' ); ?>><?php esc_html_e( 'Select group size', 'ibv' ); ?></option>
+					<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
+						<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $qs['pax'], (string) $i ); ?>><?php echo esc_html( $i ); ?></option>
+					<?php endfor; ?>
+				</select>
+				<?php
+				echo ibv_core_icon(
+					'chevron-down',
+					[
+						'class' => 'ibv-header-search__select-icon',
+						'size'  => 16,
+					]
+				); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				?>
+			</span>
 		</div>
 		<?php
 		ibv_core_button(

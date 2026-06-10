@@ -31,6 +31,35 @@
 	color: var(--ibv-color-text);
 }
 
+/* Group size select — native chrome stripped, custom chevron overlaid. */
+.ibv-header-search__select-wrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.ibv-header-search__input--select {
+	appearance: none;
+	width: 100%;
+	min-width: 0;
+	padding-inline-end: calc(var(--ibv-space-sm) + 1.25rem);
+	cursor: pointer;
+}
+
+/* Reads as muted (placeholder-style) while the empty option is selected. */
+.ibv-header-search__input--select:invalid {
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-header-search__select-icon {
+	position: absolute;
+	inset-inline-end: var(--ibv-space-sm);
+	width: 1rem;
+	height: 1rem;
+	color: var(--ibv-color-text-muted);
+	pointer-events: none;
+}
+
 .ibv-header-search__submit {
 	flex-shrink: 0;
 }
