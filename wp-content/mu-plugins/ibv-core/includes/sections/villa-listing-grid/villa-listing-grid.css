@@ -1,5 +1,7 @@
 .ibv-listing-grid-section {
 	padding-block: var(--ibv-space-xl);
+	/* Anchor landing point for the search forms' #results fragment. */
+	scroll-margin-top: 120px;
 }
 
 .ibv-listing-grid {

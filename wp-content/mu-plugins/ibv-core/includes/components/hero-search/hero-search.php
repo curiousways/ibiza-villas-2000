@@ -29,7 +29,8 @@ function ibv_core_hero_search() {
 	       Endpoint reference: https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl
 	       Spec: Notion → IBZ002 → API Integration Spec
 	       ──────────────────────────────────────────────────────────── */ ?>
-	<form class="ibv-hero-search" method="get" action="<?php echo esc_url( ibv_get_search_villas_url() ); ?>" data-bob-date-range="hero">
+	<?php // GET submits keep the action URL's fragment, so the landing page anchors on the results grid. ?>
+	<form class="ibv-hero-search" method="get" action="<?php echo esc_url( ibv_get_search_villas_url() . '#results' ); ?>" data-bob-date-range="hero">
 		<div class="ibv-hero-search__inner">
 			<div class="ibv-hero-search__field ibv-hero-search__field--when">
 				<button type="button" class="ibv-hero-search__when-trigger" id="ibv-hero-when" data-bob-date-range-trigger>

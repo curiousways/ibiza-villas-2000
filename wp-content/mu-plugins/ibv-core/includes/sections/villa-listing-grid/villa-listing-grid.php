@@ -57,7 +57,7 @@ function ibv_core_section_villa_listing_grid() {
 
 	$listing_root = ibv_get_search_villas_url();
 	?>
-	<section class="ibv-listing-grid-section ibv-section">
+	<section id="results" class="ibv-listing-grid-section ibv-section">
 		<div class="ibv-container">
 			<?php /* ─────────────────────────────────────────────────────────────
 			       BOB API INTEGRATION SHELL — listing grid
