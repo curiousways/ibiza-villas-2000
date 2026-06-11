@@ -29,13 +29,26 @@
 	// week so cards can show a real "from" weekly rate instead of the
 	// €420 ACF fallback. In probe mode we hydrate prices only — never
 	// filter, hide, sort, or toggle the empty state.
+	//
+	// Prefer the server-computed window (ibvListingSearch.probe): it is the
+	// same one ibv_villa_listing_preload_availability() preloads from
+	// <head>, so using it keeps the fetch URL byte-identical and lets the
+	// browser reuse the in-flight preload instead of fetching twice.
 	var isProbe = ! params.date_from || ! params.date_to || ! params.pax;
 	if ( isProbe ) {
-		var probe = defaultProbeRange();
+		var probe = config.probe;
+		if ( ! probe || ! probe.date_from || ! probe.date_to || ! probe.pax ) {
+			var range = defaultProbeRange();
+			probe = {
+				date_from: range.from,
+				date_to: range.to,
+				pax: 2,
+			};
+		}
 		params = {
-			date_from: probe.from,
-			date_to: probe.to,
-			pax: 2,
+			date_from: probe.date_from,
+			date_to: probe.date_to,
+			pax: probe.pax,
 		};
 	}
 
@@ -138,6 +151,105 @@
 		} catch ( e ) {
 			return '€' + Math.round( amount );
 		}
+	}
+
+	/**
+	 * Soft-dismiss the skeleton row: it shares the listing stack's single
+	 * grid area with the card grid (see .ibv-listing-stack), so it overlaps
+	 * the entering cards instead of flowing below them and adds no height —
+	 * the stack takes the result set's size in the same paint, no jump.
+	 * The --dismiss class keeps it rendered once --searching leaves the
+	 * grid; it cross-fades away while the cards enter above it, and the
+	 * node is removed once the fade lands. Under prefers-reduced-motion
+	 * the transition is off, so the inline opacity applies in one paint
+	 * and the timeout sweeps the node.
+	 */
+	function dismissSkeletonRow( row ) {
+		row.classList.add( 'ibv-villa-skeleton-row--dismiss' );
+		// Flush styles so the fade transitions from the rendered state.
+		void row.offsetHeight;
+		row.style.opacity = '0';
+
+		var removed = false;
+		function remove() {
+			if ( ! removed && row.parentNode ) {
+				removed = true;
+				row.parentNode.removeChild( row );
+			}
+		}
+		row.addEventListener( 'transitionend', function ( e ) {
+			if ( e.target === row && e.propertyName === 'opacity' ) {
+				remove();
+			}
+		} );
+		// transitionend never fires inside a display:none grid (zero
+		// results) or with transitions disabled — sweep the node regardless.
+		setTimeout( remove, 1200 );
+	}
+
+	/**
+	 * End the server-rendered "searching" state (skeleton placeholders shown,
+	 * real cards CSS-hidden — see villa-listing-grid.php). Called on API
+	 * response after filtering, and on fetch failure so the fallback grid is
+	 * revealed per spec. The skeleton row cross-fades out in place over the
+	 * entering cards rather than vanishing in the same paint. No-op when no
+	 * dated search is active — PHP only adds the state then.
+	 */
+	function clearSearchingState() {
+		var grid = $( '[data-bob-listing-grid]' );
+		if ( ! grid || ! grid.classList.contains( 'ibv-listing-grid--searching' ) ) {
+			return;
+		}
+		grid.classList.remove( 'ibv-listing-grid--searching' );
+		grid.removeAttribute( 'aria-busy' );
+		// The skeleton row is the grid's stack sibling, not a child.
+		$$( '[data-bob-skeleton]' ).forEach( function ( row ) {
+			// Zero results: the grid is hidden and the empty state takes
+			// over — a lingering cross-fade would hover above it, so the
+			// row goes instantly.
+			if ( grid.hidden ) {
+				if ( row.parentNode ) {
+					row.parentNode.removeChild( row );
+				}
+				return;
+			}
+			dismissSkeletonRow( row );
+		} );
+
+		// Staggered enter: revealed cards fade/blur in, 60ms apart (capped
+		// at 600ms so long result sets don't drag).
+		// Selecting :not([hidden]) AFTER applyFilters() means delays follow
+		// the final price-sorted order, not the server's menu_order.
+		$$( 'article[data-bob-property-id]:not([hidden])', grid ).forEach( function ( card, i ) {
+			card.style.animationDelay = Math.min( i * 60, 600 ) + 'ms';
+			card.classList.add( 'ibv-villa-card--enter' );
+			card.addEventListener( 'animationend', function handler( e ) {
+				if ( e.target !== card ) {
+					return;
+				}
+				card.classList.remove( 'ibv-villa-card--enter' );
+				card.style.animationDelay = '';
+				card.removeEventListener( 'animationend', handler );
+			} );
+		} );
+	}
+
+	/**
+	 * End probe mode's --price-pending state (card price amounts masked
+	 * with a skeleton block — see villa-listing-grid.php), so the static
+	 * ACF price and the probe rate never flash in sequence. Called after
+	 * probe hydration (revealing live rates; villas the probe didn't
+	 * return show their static fallback) and on fetch failure (static
+	 * fallback for all). Separate from clearSearchingState() — that one
+	 * guards on --searching and staggers a card-enter animation that
+	 * probe mode's already-visible cards must not replay.
+	 */
+	function clearPricePendingState() {
+		var grid = $( '[data-bob-listing-grid]' );
+		if ( ! grid ) {
+			return;
+		}
+		grid.classList.remove( 'ibv-listing-grid--price-pending' );
 	}
 
 	// Offers checkbox state. Pure client-side filter — independent of
@@ -244,7 +356,9 @@
 		} );
 
 		// Probe mode: prices only, leave grid order and visibility alone.
+		// Unmasking after hydration paints each price exactly once.
 		if ( isProbe ) {
+			clearPricePendingState();
 			return;
 		}
 
@@ -254,6 +368,9 @@
 
 		availablePids = rateByPropertyId;
 		applyFilters();
+		// Reveal only after filtering/sorting — the unfiltered catalog is
+		// never painted.
+		clearSearchingState();
 	}
 
 	function fetchAvailability() {
@@ -270,11 +387,14 @@
 
 		// console.log( '[ibv listing search] fetching', url );
 
+		// Keep this request vanilla (no custom headers, default credentials):
+		// in search mode the same URL is preloaded from <head> via
+		// ibv_villa_listing_preload_availability(), and any mismatch in mode,
+		// credentials, or headers makes the browser fetch twice instead of
+		// reusing the in-flight preload.
 		fetch( url, {
 			method: 'GET',
-			headers: { Accept: 'application/json' },
 			signal: controller.signal,
-			credentials: 'omit',
 		} )
 			.then( function ( res ) {
 				clearTimeout( timeoutId );
@@ -288,6 +408,10 @@
 			} )
 			.catch( function ( err ) {
 				clearTimeout( timeoutId );
+				// Per spec: show the full fallback grid on failure/timeout —
+				// including the static ACF prices probe mode had masked.
+				clearSearchingState();
+				clearPricePendingState();
 				// Per spec: leave server fallback in place on failure. We still
 				// surface the error to the console so silent CORS / endpoint
 				// failures are diagnosable in dev — production fallback is the

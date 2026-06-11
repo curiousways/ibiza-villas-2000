@@ -20,6 +20,9 @@ function ibv_core_section_villa_listing_grid() {
 	wp_enqueue_script( 'ibv-villa-listing-search' );
 	$qs = ibv_get_villa_listing_search_params();
 
+	// Same three-param test as isProbe in villa-listing-grid.js: when a dated
+	// search is active, first paint shows skeletons instead of the unfiltered
+	// fallback catalog. JS clears the modifier on API response or failure.
 	$is_searching = '' !== $qs['date_from'] && '' !== $qs['date_to'] && '' !== $qs['pax'];
 	wp_localize_script(
 		'ibv-villa-listing-search',
@@ -31,6 +34,7 @@ function ibv_core_section_villa_listing_grid() {
 				'date_to'   => $qs['date_to'],
 				'pax'       => $qs['pax'],
 			],
+			'probe'    => ibv_villa_listing_probe_params(),
 			'i18n'     => [
 				'showing' => __( 'Showing %d villas', 'ibv' ),
 			],
@@ -90,7 +94,24 @@ function ibv_core_section_villa_listing_grid() {
 				</ul>
 				<p class="ibv-listing-grid-section__count" data-bob-results-count hidden></p>
 			</div>
-			<div class="ibv-listing-grid ibv-grid ibv-grid--4" data-bob-listing-grid>
+			<?php
+			// Without a dated search the probe fetch will overwrite the static
+			// ACF "from" prices with live rates — --price-pending masks the
+			// amounts until then so two different numbers never flash in
+			// sequence. JS clears it on probe response or failure.
+			?>
+			<?php
+			// Stack: grid and skeleton row occupy the same named grid area,
+			// overlapping instead of flowing — the stack is as tall as the
+			// taller child, so the page height never pumps when the skeleton
+			// cross-fades away over the entering cards.
+			?>
+			<div class="ibv-listing-stack">
+			<div
+				class="ibv-listing-grid ibv-grid ibv-grid--4<?php echo $is_searching ? ' ibv-listing-grid--searching' : ' ibv-listing-grid--price-pending'; ?>"
+				data-bob-listing-grid
+				<?php echo $is_searching ? 'aria-busy="true"' : ''; ?>
+			>
 				<?php
 				$fallback = new WP_Query(
 					[
@@ -108,6 +129,28 @@ function ibv_core_section_villa_listing_grid() {
 				endwhile;
 				wp_reset_postdata();
 				?>
+			</div>
+			<?php
+			if ( $is_searching ) {
+				// One self-clipping row: shows however many cells fit a single
+				// grid row at the current width (see .ibv-villa-skeleton-row in
+				// villa-listing-grid.css), so the stack never reserves more
+				// than one row of height. Placed after the grid so the
+				// --searching adjacent-sibling selector can reveal it.
+				?>
+				<div class="ibv-villa-skeleton-row" data-bob-skeleton aria-hidden="true">
+					<?php for ( $i = 0; $i < 6; $i++ ) : ?>
+						<div class="ibv-villa-skeleton">
+							<div class="ibv-villa-skeleton__media"></div>
+							<div class="ibv-villa-skeleton__line ibv-villa-skeleton__line--title"></div>
+							<div class="ibv-villa-skeleton__line ibv-villa-skeleton__line--meta"></div>
+							<div class="ibv-villa-skeleton__line ibv-villa-skeleton__line--price"></div>
+						</div>
+					<?php endfor; ?>
+				</div>
+				<?php
+			}
+			?>
 			</div>
 			<?php /* ─────────── END BOB SHELL ─────────── */ ?>
 		</div>
@@ -150,3 +193,50 @@ function ibv_villa_listing_format_range( $from_ymd, $to_ymd ) {
 	}
 	return $month_day( $from ) . ' – ' . $month_day( $to ) . ' ' . $to->format( 'Y' );
 }
+
+/**
+ * Probe-mode search window: a default future week (+30 to +37 days, 2 pax)
+ * used to fetch a real "from" weekly rate when no dated search is active.
+ * Computed in UTC to mirror defaultProbeRange() in villa-listing-grid.js,
+ * and handed to JS via ibvListingSearch.probe so the runtime fetch URL is
+ * byte-identical to the <head> preload below.
+ *
+ * @return array{date_from: string, date_to: string, pax: string}
+ */
+function ibv_villa_listing_probe_params() {
+	return [
+		'date_from' => gmdate( 'Y-m-d', time() + 30 * DAY_IN_SECONDS ),
+		'date_to'   => gmdate( 'Y-m-d', time() + 37 * DAY_IN_SECONDS ),
+		'pax'       => '2',
+	];
+}
+
+/**
+ * Head-start the availability call. On the listing page, preload the API
+ * request from <head> — the dated search when one is in the URL, the probe
+ * window otherwise — so the network round trip overlaps HTML parsing
+ * instead of starting at DOMContentLoaded. In probe mode this directly
+ * shortens the --price-pending mask on the card prices. The fetch in
+ * villa-listing-grid.js attaches to the in-flight response — its URL, mode
+ * and credentials must keep matching this hint or the browser fetches twice.
+ */
+function ibv_villa_listing_preload_availability() {
+	if ( ! is_page_template( 'page-villa-listing.php' ) ) {
+		return;
+	}
+
+	$qs = ibv_get_villa_listing_search_params();
+	if ( '' === $qs['date_from'] || '' === $qs['date_to'] || '' === $qs['pax'] ) {
+		$qs = ibv_villa_listing_probe_params();
+	}
+
+	// Built field-by-field with rawurlencode so the string is byte-identical
+	// to buildUrl() in villa-listing-grid.js (same key order, same encoding).
+	$url = ibv_get_bob_endpoint_url()
+		. '?date_from=' . rawurlencode( $qs['date_from'] )
+		. '&date_to=' . rawurlencode( $qs['date_to'] )
+		. '&pax=' . rawurlencode( $qs['pax'] );
+
+	printf( '<link rel="preload" href="%s" as="fetch" crossorigin="anonymous">' . "\n", esc_url( $url ) );
+}
+add_action( 'wp_head', 'ibv_villa_listing_preload_availability', 2 );

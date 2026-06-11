@@ -6,6 +6,19 @@
 	gap: var(--ibv-space-lg);
 }
 
+/* Stack: the listing grid and the skeleton row occupy the same named grid
+   area, overlapping instead of flowing below each other — the stack is as
+   tall as the taller child, so the page height never pumps when the
+   skeleton cross-fades away over the entering cards. */
+.ibv-listing-stack {
+	display: grid;
+	grid-template-areas: "stack";
+}
+
+.ibv-listing-stack > * {
+	grid-area: stack;
+}
+
 .ibv-listing-grid-section__toolbar {
 	display: flex;
 	flex-wrap: wrap;
@@ -119,4 +132,139 @@
 .ibv-listing-grid-section__dates-clear:hover,
 .ibv-listing-grid-section__dates-clear:focus-visible {
 	background-color: rgb(5 83 83 / 0.12);
+}
+
+/* ---- Search loading state ----
+   Server adds --searching (plus skeleton placeholders) when the page loads
+   with date_from/date_to/pax, so first paint never flashes the unfiltered
+   fallback catalog. villa-listing-grid.js removes the modifier and the
+   skeleton nodes once the API responds — or fails, revealing the fallback. */
+.ibv-listing-grid--searching > article[data-bob-property-id] {
+	display: none;
+}
+
+.ibv-villa-skeleton-row {
+	display: none;
+}
+
+/* The skeleton row sits in the listing stack and re-applies the grid's
+   fluid column template (keep in sync with .ibv-grid--4 in layout.css) so
+   its cells align with the cards sharing the stack area. Cells that don't
+   fit the first row land in zero-height gap-less rows and are clipped by
+   overflow: hidden, so exactly one row of skeletons shows at any container
+   width and the stack reserves a single row of height. */
+.ibv-listing-grid--searching + .ibv-villa-skeleton-row,
+.ibv-villa-skeleton-row--dismiss {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+	column-gap: var(--ibv-grid-gutter);
+	row-gap: 0;
+	grid-template-rows: auto;
+	grid-auto-rows: 0;
+	overflow: hidden;
+}
+
+/* Soft dismissal: once --searching leaves the grid, --dismiss keeps the
+   row rendered in the shared stack area, where it cross-fades away while
+   the cards enter (cards paint above — they're positioned). It never adds
+   height: the stack already sized itself to the taller child in the same
+   paint the results landed. JS drives opacity to 0 inline and removes the
+   node on transitionend. */
+.ibv-villa-skeleton-row--dismiss {
+	pointer-events: none;
+	transition: opacity var(--ibv-duration-slow) var(--ibv-ease-standard);
+}
+
+.ibv-villa-skeleton__media,
+.ibv-villa-skeleton__line {
+	background-color: var(--ibv-color-web-grey-100);
+	border-radius: var(--ibv-radius-md);
+}
+
+/* Mirrors .ibv-villa-card--default proportions so results land without a layout jump. */
+.ibv-villa-skeleton__media {
+	aspect-ratio: 9 / 10;
+	margin-block-end: var(--ibv-space-lg);
+}
+
+.ibv-villa-skeleton__line {
+	height: 0.875rem;
+	margin-block-end: var(--ibv-space-sm);
+}
+
+.ibv-villa-skeleton__line--title {
+	width: 70%;
+	height: 1.375rem;
+}
+
+.ibv-villa-skeleton__line--meta {
+	width: 85%;
+}
+
+.ibv-villa-skeleton__line--price {
+	width: 45%;
+	margin-block-end: 0;
+}
+
+/* Staggered enter for cards revealed when a search resolves. The listing JS
+   adds the class with a per-card animation-delay; `backwards` fill keeps a
+   delayed card invisible until its turn. The class is removed on
+   animationend so later Offers-filter toggles don't replay the entrance.
+   One-shot sequence → keyframes; opacity/filter only (compositable). */
+.ibv-villa-card--enter {
+	animation: ibv-villa-card-enter var(--ibv-duration-slow) var(--ibv-ease-out) backwards;
+}
+
+@keyframes ibv-villa-card-enter {
+	from {
+		opacity: 0;
+		filter: blur(4px);
+	}
+
+	to {
+		opacity: 1;
+		filter: blur(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ibv-villa-card--enter {
+		animation: none;
+	}
+
+	.ibv-villa-skeleton-row--dismiss {
+		transition: none;
+	}
+}
+
+/* ---- Probe price pending ----
+   Without a dated search the server paints the static ACF "from" price and
+   the probe fetch then overwrites it with a live rate — two different
+   numbers flashing in sequence. --price-pending masks the amount with a
+   skeleton block until villa-listing-grid.js clears the modifier: live
+   rate on probe response, static fallback on failure/timeout. Gated on
+   (scripting: enabled) so with JS off — or where the media feature is
+   unsupported — nothing is masked that no script would ever reveal.
+   Three classes: villa-card.css loads after this file and its two-class
+   colour rule (.ibv-villa-card--default .ibv-villa-card__price-amount)
+   would otherwise win the tie and leave the text visible over the mask. */
+@media (scripting: enabled) {
+	.ibv-listing-grid--price-pending .ibv-villa-card .ibv-villa-card__price-amount {
+		min-width: 5ch;
+		border-radius: var(--ibv-radius-md);
+		background-color: var(--ibv-color-web-grey-100);
+		color: transparent;
+	}
+}
+
+/* No JS means the searching state would never clear — reveal the
+   server-rendered fallback grid and drop the skeletons instead. */
+@media (scripting: none) {
+	.ibv-listing-grid--searching > article[data-bob-property-id] {
+		display: flex;
+	}
+
+	.ibv-listing-grid--searching + .ibv-villa-skeleton-row {
+		display: none;
+	}
 }
