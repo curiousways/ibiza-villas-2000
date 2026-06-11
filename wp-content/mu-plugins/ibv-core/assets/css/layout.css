@@ -20,17 +20,19 @@
 	gap: var(--ibv-grid-gutter);
 }
 
-/* Auto-fit grids — min column widths are project defaults; tune per template if needed. */
+/* Responsive grids — min column widths are project defaults; tune per template
+   if needed. auto-fill (not auto-fit) keeps empty tracks when there are fewer
+   items than columns, so cards hold their N-up size instead of stretching. */
 .ibv-grid--2 {
-	grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
 }
 
 .ibv-grid--3 {
-	grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
 }
 
 .ibv-grid--4 {
-	grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
 }
 
 /* Short hairline accent rule used under section headings (Figma standard
