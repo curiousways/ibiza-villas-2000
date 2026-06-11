@@ -42,7 +42,7 @@
 	to {
 		width: calc(100% - var(--ibv-space-md));
 		padding: var(--ibv-space-md);
-		box-shadow: var(--ibv-shadow-md);
+		box-shadow: var(--ibv-shadow-sm);
 	}
 }
 
