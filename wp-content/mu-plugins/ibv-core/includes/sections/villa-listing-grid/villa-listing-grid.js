@@ -231,7 +231,6 @@
 				var priceEl = card.querySelector( '[data-bob-from-price]' );
 				if ( priceEl ) {
 					priceEl.textContent = formatEuro( rate );
-					priceEl.classList.remove( 'ibv-villa-card__price-amount--on-request' );
 					var pricePrefix = card.querySelector( '.ibv-villa-card__price-prefix' );
 					var priceSuffix = card.querySelector( '.ibv-villa-card__price-suffix' );
 					if ( pricePrefix ) {

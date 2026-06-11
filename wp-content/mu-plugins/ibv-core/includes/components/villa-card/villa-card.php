@@ -281,11 +281,9 @@ function ibv_core_villa_card( $args = [] ) {
 						</span>
 						<span class="ibv-villa-card__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
 					<?php else : ?>
-						<?php /* Prefix/suffix stay in the DOM (hidden) so the listing JS can reveal them when it hydrates a real API rate. */ ?>
+						<?php /* No price known: cards show nothing rather than a "Select dates for price" prompt — that nudge lives on the villa detail page (villa-overview), where the date picker it points to actually is. The empty amount and hidden prefix/suffix stay in the DOM so the listing JS can still hydrate and reveal a real API rate. */ ?>
 						<span class="ibv-villa-card__price-prefix" hidden><?php esc_html_e( 'From', 'ibv' ); ?></span>
-						<span class="ibv-villa-card__price-amount ibv-villa-card__price-amount--on-request" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
-							<?php esc_html_e( 'Select dates for price', 'ibv' ); ?>
-						</span>
+						<span class="ibv-villa-card__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>"></span>
 						<span class="ibv-villa-card__price-suffix" hidden><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
 					<?php endif; ?>
 				</div>
