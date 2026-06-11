@@ -198,7 +198,7 @@
 .ibv-villa-card--default .ibv-villa-card__price-amount {
 	font-family: var(--ibv-font-display);
 	font-optical-sizing: auto;
-	font-size: 2.75rem; /* 44px — Figma; no matching type token */
+	font-size: var(--ibv-fs-h2);
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: 1.1;
 	letter-spacing: 0;
