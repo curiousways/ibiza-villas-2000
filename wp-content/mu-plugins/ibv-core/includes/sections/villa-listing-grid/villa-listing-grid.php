@@ -19,6 +19,8 @@ function ibv_core_section_villa_listing_grid() {
 
 	wp_enqueue_script( 'ibv-villa-listing-search' );
 	$qs = ibv_get_villa_listing_search_params();
+
+	$is_searching = '' !== $qs['date_from'] && '' !== $qs['date_to'] && '' !== $qs['pax'];
 	wp_localize_script(
 		'ibv-villa-listing-search',
 		'ibvListingSearch',
@@ -31,11 +33,23 @@ function ibv_core_section_villa_listing_grid() {
 			],
 			'i18n'     => [
 				'showing' => __( 'Showing %d villas', 'ibv' ),
-				'guests'  => __( '%d guests', 'ibv' ),
-				'guest'   => __( '%d guest', 'ibv' ),
 			],
 		]
 	);
+
+	// The active-search pill is server-rendered, not revealed by JS on API
+	// response: it is the tallest toolbar item, so a late reveal changes the
+	// sticky toolbar's height mid-view. Its label is pure URL state
+	// (date_from / date_to / pax) — the API has nothing to add.
+	$selected_label = '';
+	if ( $is_searching ) {
+		$range = ibv_villa_listing_format_range( $qs['date_from'], $qs['date_to'] );
+		if ( '' !== $range ) {
+			$pax = max( 1, (int) $qs['pax'] );
+			/* translators: %d: number of guests. */
+			$selected_label = $range . ' · ' . sprintf( _n( '%d guest', '%d guests', $pax, 'ibv' ), $pax );
+		}
+	}
 
 	$listing_root = ibv_get_search_villas_url();
 	?>
@@ -52,9 +66,9 @@ function ibv_core_section_villa_listing_grid() {
 			       ──────────────────────────────────────────────────────────── */ ?>
 			<div class="ibv-listing-grid-section__toolbar" data-bob-listing-toolbar>
 				<ul class="ibv-listing-grid-section__filters">
-					<li class="ibv-listing-grid-section__filter" data-bob-selected-dates hidden>
+					<li class="ibv-listing-grid-section__filter" data-bob-selected-dates<?php echo '' === $selected_label ? ' hidden' : ''; ?>>
 						<span class="ibv-listing-grid-section__dates">
-							<span data-bob-selected-dates-label></span>
+							<span data-bob-selected-dates-label><?php echo esc_html( $selected_label ); ?></span>
 							<a
 								class="ibv-listing-grid-section__dates-clear"
 								href="<?php echo esc_url( $listing_root ); ?>"
@@ -99,4 +113,40 @@ function ibv_core_section_villa_listing_grid() {
 		</div>
 	</section>
 	<?php
+}
+
+/**
+ * Format a YYYY-MM-DD pair as a compact human-readable range, e.g.
+ * "22 May – 29", "22 May – 4 Jun", "30 Dec – 4 Jan 2027". Mirrors
+ * formatRangeForDisplay() in date-range-picker.js (en-GB Intl output) so the
+ * toolbar pill never disagrees with the search widget's display input.
+ * Returns '' when either value is not a real Y-m-d date.
+ *
+ * @param string $from_ymd Start date, YYYY-MM-DD.
+ * @param string $to_ymd   End date, YYYY-MM-DD.
+ * @return string
+ */
+function ibv_villa_listing_format_range( $from_ymd, $to_ymd ) {
+	$from = DateTimeImmutable::createFromFormat( '!Y-m-d', (string) $from_ymd );
+	$to   = DateTimeImmutable::createFromFormat( '!Y-m-d', (string) $to_ymd );
+
+	// Round-trip check rejects rollover dates (2026-02-31) and loose
+	// formats (2026-5-2) that createFromFormat silently accepts.
+	if ( ! $from || ! $to || $from->format( 'Y-m-d' ) !== $from_ymd || $to->format( 'Y-m-d' ) !== $to_ymd ) {
+		return '';
+	}
+
+	// PHP's M prints "Sep" where en-GB Intl prints "Sept" — patch the one
+	// month that differs.
+	$month_day = static function ( DateTimeImmutable $d ) {
+		return str_replace( 'Sep', 'Sept', $d->format( 'j M' ) );
+	};
+
+	if ( $from->format( 'Y-m' ) === $to->format( 'Y-m' ) ) {
+		return $month_day( $from ) . ' – ' . $to->format( 'j' );
+	}
+	if ( $from->format( 'Y' ) === $to->format( 'Y' ) ) {
+		return $month_day( $from ) . ' – ' . $month_day( $to );
+	}
+	return $month_day( $from ) . ' – ' . $month_day( $to ) . ' ' . $to->format( 'Y' );
 }
