@@ -12,7 +12,38 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--ibv-space-md);
-	margin-bottom: var(--ibv-space-lg);
+	margin: 0 auto;
+	padding: var(--ibv-space-md) 0;
+    position: sticky;
+    top: 40px;
+    z-index: 1;
+    background-color: var(--ibv-color-bg);
+    border-radius: var(--ibv-radius-md);
+	animation: ibv-listing-toolbar-dock linear both;
+	animation-timeline: view();
+	/* cover 0% = toolbar top edge at the scrollport bottom; it sticks after
+	   travelling exactly (scrollport height − 40px), where 40px must match
+	   `top` above. The range ends at that point so the animation hits 100%
+	   the moment sticking starts, with an 80px approach ramp before it.
+	   (Offsets anchored near the range end don't work here: the sticky
+	   travel is inserted into the view timeline, pushing the end far out.)
+	   Browsers without scroll-driven animations keep the full-width bar. */
+	animation-range: cover calc(100dvh - 137px) cover calc(100dvh - 40px);
+}
+
+/* Docked (stuck) state: inset from the container edges into a floating pill. */
+@keyframes ibv-listing-toolbar-dock {
+	from {
+		width: 100%;
+		padding: var(--ibv-space-md) 0;
+		box-shadow: none;
+	}
+
+	to {
+		width: calc(100% - var(--ibv-space-md));
+		padding: var(--ibv-space-md);
+		box-shadow: var(--ibv-shadow-md);
+	}
 }
 
 .ibv-listing-grid-section__filters {
