@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // 1. Helpers and shared assets.
 require_once IBV_CORE_PATH . 'includes/helpers.php';
 require_once IBV_CORE_PATH . 'includes/helpers/icon.php';
+require_once IBV_CORE_PATH . 'includes/helpers/gravity-form.php';
 require_once IBV_CORE_PATH . 'includes/shared-assets.php';
 require_once IBV_CORE_PATH . 'includes/integrations/facetwp.php';
 
@@ -95,6 +96,8 @@ require_once IBV_CORE_PATH . 'includes/sections/villa-listing-hero/villa-listing
 require_once IBV_CORE_PATH . 'includes/sections/villa-listing-grid/villa-listing-grid.php';
 require_once IBV_CORE_PATH . 'includes/sections/listing-empty-state/listing-empty-state.php';
 require_once IBV_CORE_PATH . 'includes/sections/concierge-cross-sell/concierge-cross-sell.php';
+require_once IBV_CORE_PATH . 'includes/sections/concierge-services/concierge-services.php';
+require_once IBV_CORE_PATH . 'includes/sections/concierge-contact/concierge-contact.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.
@@ -105,6 +108,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-about.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-booking-confirmation.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-post-fields.php';

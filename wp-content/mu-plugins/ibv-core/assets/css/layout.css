@@ -58,6 +58,17 @@
 	--ibv-rule-color: var(--ibv-color-sage-500);
 }
 
+/* Elevated card surface — the canonical box-on-light-bg treatment used
+   anywhere a panel sits on the off-white page background (accommodation
+   tile, concierge service card, etc). Composed onto a component class
+   so each consumer adds its own layout rules; this only owns the
+   background, radius, and shadow. */
+.ibv-surface-card {
+	background: var(--ibv-color-surface);
+	border-radius: var(--ibv-radius-md);
+	box-shadow: var(--ibv-shadow-md);
+}
+
 .ibv-u-visually-hidden {
 	position: absolute;
 	width: 1px;

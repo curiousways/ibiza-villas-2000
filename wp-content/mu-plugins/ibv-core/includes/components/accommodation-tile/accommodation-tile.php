@@ -39,7 +39,7 @@ function ibv_core_accommodation_tile( $args = [] ) {
 
 	wp_enqueue_style( 'ibv-accommodation-tile' );
 	?>
-	<article class="ibv-accommodation-tile">
+	<article class="ibv-accommodation-tile ibv-surface-card">
 
 		<?php if ( $args['image'] ) : ?>
 			<div class="ibv-accommodation-tile__media">

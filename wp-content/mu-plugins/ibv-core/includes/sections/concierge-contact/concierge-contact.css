@@ -1,0 +1,126 @@
+/* Concierge contact — two-column sidebar + form. Figma 1:7008. */
+
+/* Heading block sits above the two-column inner. Mirrors the
+   title + accent rule + subtitle pattern used by villa-testimonial-teaser
+   and image-text-section; `.ibv-rule.ibv-rule--gold` is the shared
+   utility from layout.css. */
+.ibv-section-concierge-contact__header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md);
+	align-items: flex-start;
+	margin-block-end: var(--ibv-space-2xl);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-section-concierge-contact__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xl);
+}
+
+/* 1/3 sidebar + 2/3 form on large screens — grid keeps the proportional
+   split clean regardless of intrinsic content width. */
+@media (min-width: 56rem) {
+	.ibv-section-concierge-contact__inner {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: var(--ibv-space-xl);
+		align-items: start;
+	}
+}
+
+.ibv-section-concierge-contact__sidebar {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xl);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-section-concierge-contact__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-weight: var(--ibv-font-weight-regular);
+	font-size: clamp(2rem, 5vw, 2.75rem); /* ~44px Figma Desktop/H2 */
+	line-height: var(--ibv-lh-tight);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-section-concierge-contact__subtitle {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-weight: var(--ibv-font-weight-regular);
+	font-size: 1.25rem; /* 20px Figma Mobile/H4 */
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+/* Detail list — phone / email / WhatsApp. */
+.ibv-section-concierge-contact__details {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+}
+
+.ibv-section-concierge-contact__detail {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
+}
+
+.ibv-section-concierge-contact__detail-label {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+/* tel: + mailto: anchors styled as plain text per Figma (the bold "label"
+   above already differentiates them); underline only on hover/focus. */
+.ibv-section-concierge-contact__detail-value {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-forest-green-deep);
+	text-decoration: none;
+	transition: color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-section-concierge-contact__detail-value:hover,
+.ibv-section-concierge-contact__detail-value:focus-visible {
+	color: var(--ibv-color-link-hover);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+/* WhatsApp — bold + underlined link (Figma 1:7021). */
+.ibv-section-concierge-contact__detail-link {
+	align-self: flex-start;
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-forest-green-deep);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+	text-decoration-thickness: 1.3px;
+	transition: color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-section-concierge-contact__detail-link:hover,
+.ibv-section-concierge-contact__detail-link:focus-visible {
+	color: var(--ibv-color-link-hover);
+}
+
+/* Form column — sized by the parent grid on desktop; `min-width: 0`
+   prevents the GF embed from forcing the track wider than its share. */
+.ibv-section-concierge-contact__form {
+	min-width: 0;
+}

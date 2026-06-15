@@ -62,6 +62,13 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	wp_register_style(
+		'ibv-gravity-forms',
+		IBV_CORE_URL . 'assets/css/gravity-forms.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
 	// Components — each registered with `ibv-base` as a dependency.
 	wp_register_style(
 		'ibv-button',
@@ -214,6 +221,8 @@ function ibv_register_styles() {
 		'ibv-section-testimonials'                  => 'includes/sections/testimonials/testimonials.css',
 		'ibv-section-special-offers-grid'           => 'includes/sections/special-offers-grid/special-offers-grid.css',
 		'ibv-section-special-offers-empty-state'    => 'includes/sections/special-offers-empty-state/special-offers-empty-state.css',
+		'ibv-section-concierge-services'            => 'includes/sections/concierge-services/concierge-services.css',
+		'ibv-section-concierge-contact'             => 'includes/sections/concierge-contact/concierge-contact.css',
 	];
 
 	foreach ( $section_handles as $handle => $rel ) {

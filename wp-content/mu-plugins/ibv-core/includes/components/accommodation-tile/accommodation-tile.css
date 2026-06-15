@@ -12,12 +12,11 @@
 	}
 }
 
+/* Background, radius, and shadow come from `.ibv-surface-card` in
+   layout.css — composed in the markup. This file only owns layout. */
 .ibv-accommodation-tile {
 	display: flex;
 	flex-direction: column;
-	background: var(--ibv-color-surface);
-	border-radius: var(--ibv-radius-md);
-	box-shadow: var(--ibv-shadow-md);
 	overflow: hidden;
 }
 

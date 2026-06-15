@@ -1,6 +1,14 @@
 <?php
 /**
- * Site Options — concierge cross-sell (Pass 3c-detail).
+ * Site Options — concierge cross-sell field group.
+ *
+ * The image-text band reused across villa detail / booking confirmation
+ * (Pass 3c-detail): heading / body / image / CTA pair. Genuinely shared
+ * across pages, so it stays global.
+ *
+ * (The Concierge page's services repeater + enquiry form ID used to live
+ * here too; they now live on the Concierge page template itself —
+ * see register-page-concierge.php.)
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register concierge field group on Site Options.
+ * Register the concierge cross-sell field group on Site Options.
  */
 function ibv_register_concierge_site_options() {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {

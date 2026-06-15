@@ -17,6 +17,13 @@ rules apply to every change unless a brief explicitly overrides them.
   required from `bootstrap.php` in load order.
 - ACF groups are registered in PHP, hooked to `acf/init`. Never use
   `acf-json/` sync. One file per group under `includes/acf/`.
+- ACF field placement follows ownership: content consumed by a **single
+  page** lives on that page's template field group (`get_field('x')`);
+  content consumed by **two or more pages/surfaces** lives on Site Options
+  (`get_field('x', 'option')`). A page may still override a global default
+  by passing a page-level value into a shared section (e.g. Booking
+  Confirmation's own 3-step cards). Don't put single-page content in Site
+  Options.
 
 ## Naming
 

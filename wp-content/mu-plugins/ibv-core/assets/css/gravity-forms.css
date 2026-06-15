@@ -1,0 +1,215 @@
+/* Gravity Forms — project base treatment.
+   Scoped via `.ibv-gform` wrapper so it doesn't touch GF instances outside
+   the project's own embeds. Variants modify the base additively
+   (`.ibv-gform--card` for a card-chrome form, etc).
+
+   Newsletter forms (`.ibv-newsletter-form--*`) carry their own bespoke
+   styling and are not built on this base yet — a follow-up DRY pass can
+   migrate them. */
+
+/* ─── Wrapper + field stack ─────────────────────────────────────── */
+
+.ibv-gform .gform_wrapper {
+	margin: 0;
+}
+
+.ibv-gform .gform_body {
+	margin: 0;
+}
+
+.ibv-gform .gform_fields {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-gform .gfield {
+	margin: 0;
+	min-width: 0;
+}
+
+/* GF 2.5+ column classes — opt-in per field in the form builder. */
+@media (min-width: 48rem) {
+	.ibv-gform .gform_fields {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.ibv-gform .gfield {
+		grid-column: span 2;
+	}
+
+	.ibv-gform .gfield--width-half {
+		grid-column: span 1;
+	}
+
+	.ibv-gform .gfield--width-third {
+		grid-column: span 1;
+	}
+}
+
+/* ─── Hidden / honeypot fields ──────────────────────────────────── */
+
+/* Hide GF's honeypot ("LinkedIn") + the validation hidden-input stub.
+   GF labels the honeypot with `gfield_visibility_hidden`; the validation
+   container ships visible by default ("This field is hidden when viewing
+   the form") and is purely a back-end concern. */
+.ibv-gform .gfield_visibility_hidden,
+.ibv-gform .gform_validation_container,
+.ibv-gform .gfield--type-honeypot {
+	display: none !important;
+}
+
+/* ─── Labels ─────────────────────────────────────────────────────── */
+
+.ibv-gform .gfield_label {
+	display: block;
+	margin: 0 0 var(--ibv-space-2xs);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	color: var(--ibv-color-text);
+	line-height: var(--ibv-lh-cozy);
+}
+
+.ibv-gform .gfield_required {
+	color: var(--ibv-color-error-200);
+	margin-inline-start: 2px;
+	font-weight: var(--ibv-font-weight-medium);
+}
+
+.ibv-gform .gfield_description {
+	margin: var(--ibv-space-2xs) 0 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	line-height: var(--ibv-lh-cozy);
+}
+
+/* ─── Inputs / textarea / select ─────────────────────────────────── */
+
+.ibv-gform .ginput_container {
+	width: 100%;
+}
+
+.ibv-gform input[type="text"],
+.ibv-gform input[type="email"],
+.ibv-gform input[type="tel"],
+.ibv-gform input[type="url"],
+.ibv-gform input[type="number"],
+.ibv-gform input[type="date"],
+.ibv-gform input[type="time"],
+.ibv-gform select,
+.ibv-gform textarea {
+	width: 100%;
+	background: var(--ibv-color-white);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text);
+	transition: border-color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-gform input::placeholder,
+.ibv-gform textarea::placeholder {
+	color: var(--ibv-color-text-muted);
+	opacity: 1;
+}
+
+.ibv-gform input:focus,
+.ibv-gform select:focus,
+.ibv-gform textarea:focus {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: -2px;
+	border-color: transparent;
+}
+
+.ibv-gform textarea {
+	min-height: 10rem;
+	resize: vertical;
+}
+
+.ibv-gform select {
+	appearance: none;
+	-webkit-appearance: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23343434' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+	background-position: right var(--ibv-space-sm) center;
+	background-repeat: no-repeat;
+	background-size: 1rem 1rem;
+	padding-inline-end: calc(var(--ibv-space-md) + 1.5rem);
+}
+
+/* ─── Submit ─────────────────────────────────────────────────────── */
+
+.ibv-gform .gform_footer {
+	margin: var(--ibv-space-lg) 0 0;
+	padding: 0;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.ibv-gform input[type="submit"],
+.ibv-gform button[type="submit"] {
+	appearance: none;
+	-webkit-appearance: none;
+	background: var(--ibv-color-sage-500);
+	color: var(--ibv-color-text-on-dark);
+	border: 0;
+	border-radius: var(--ibv-radius-md);
+	padding: var(--ibv-space-sm) var(--ibv-space-lg);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: var(--ibv-lh-cozy);
+	cursor: pointer;
+	transition: filter var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-gform input[type="submit"]:hover,
+.ibv-gform button[type="submit"]:hover,
+.ibv-gform input[type="submit"]:focus-visible,
+.ibv-gform button[type="submit"]:focus-visible {
+	filter: brightness(0.92);
+}
+
+/* ─── Validation + confirmation ──────────────────────────────────── */
+
+.ibv-gform .gfield_validation_message,
+.ibv-gform .validation_error {
+	color: var(--ibv-color-error-300);
+	font-size: var(--ibv-fs-small);
+	margin-block-start: var(--ibv-space-2xs);
+}
+
+.ibv-gform .gfield_error input[type="text"],
+.ibv-gform .gfield_error input[type="email"],
+.ibv-gform .gfield_error input[type="tel"],
+.ibv-gform .gfield_error select,
+.ibv-gform .gfield_error textarea {
+	border-color: var(--ibv-color-error-200);
+}
+
+.ibv-gform .gform_confirmation_message {
+	margin: 0;
+	padding: var(--ibv-space-md);
+	background: var(--ibv-color-positive-100);
+	color: var(--ibv-color-positive-300);
+	border-radius: var(--ibv-radius-md);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-cozy);
+}
+
+/* ─── Variant: card ──────────────────────────────────────────────── */
+/* Adds white-card chrome around the whole form. Use when the form sits
+   directly on a page-bg surface and needs its own panel (e.g. concierge
+   enquiry on the off-white contact section). */
+.ibv-gform--card {
+	background: var(--ibv-color-surface);
+	border-radius: var(--ibv-radius-md);
+	padding: var(--ibv-space-xl);
+	box-shadow: var(--ibv-shadow-md);
+}
