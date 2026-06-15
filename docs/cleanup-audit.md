@@ -34,6 +34,7 @@ Items below are visible to end-users or content editors and are slated for REMOV
 | Slick sliders on property/feature rows | Homepage / similar properties | REPLACE with native gallery (pass 3) | Same |
 | Footer Comoyoti / admin “comoyoti.agency@gmail.com” | WP admin footer | Agency branding REMOVE | Neutral support line |
 | Yoast FAQ JSON-LDR hardcoded slug map (`add_faq_json_schema`) | Specific FAQ page head output | Depends on migrated FAQ UX | Yoast/block schema or repeal |
+| Boat Hire / Boat Charter marketing (boat tiles + links + copy) | Homepage service tiles, footer link to `/ibiza-boat-charter/`, front-page body copy | **Confirmed decommissioned** (Jun 2026) — service no longer offered; **delete, do not migrate** to `ibv`. Files: `full-width-nomads.php`, `templates/loop-property_boat.php`; strip boat tiles/links from `featured-boxes.php`, `featured-services.php`, `footer.php`, `front-page.php`. (Unrelated to deactivated BoatDealer plugin, which is also confirmed REMOVE.) | None |
 
 ---
 
