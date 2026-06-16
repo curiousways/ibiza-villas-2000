@@ -136,7 +136,16 @@ function ibv_register_page_concierge_fields() {
 					'name'         => 'concierge_enquiry_gravity_form_id',
 					'type'         => 'number',
 					'min'          => 0,
-					'instructions' => __( 'Gravity Form ID embedded in the contact section. Leave empty to hide the form.', 'ibv' ),
+					'instructions' => __(
+						'Gravity Form ID embedded in the contact section. Leave empty to hide the form.<br><br>'
+						. '<strong>Editorial setup in the GF admin (one-time):</strong><ol>'
+						. '<li><strong>Honeypot</strong> — Form Settings → "Enable anti-spam honeypot" → on.</li>'
+						. '<li><strong>Notifications</strong> — set the recipient to the Site Options "Contact email"; set <em>Reply-To</em> to the enquirer\'s email so the office can reply directly.</li>'
+						. '<li><strong>Date fields</strong> — set both Arrival and Departure "Date Format" to <code>yyyy-mm-dd</code> so the HTML5 date upgrade picks up pre-filled values. (The first two date fields in form order are treated as Arrival / Departure.)</li>'
+						. '<li><strong>Service dropdown</strong> — add the CSS class <code>ibv-gf-concierge-service</code> in the field\'s Appearance settings. Its options will be populated automatically from the Services tab on this page.</li>'
+						. '</ol>',
+						'ibv'
+					),
 				),
 				array(
 					'key'       => 'field_ibv_page_concierge_tab_image_text',

@@ -98,6 +98,7 @@ require_once IBV_CORE_PATH . 'includes/sections/listing-empty-state/listing-empt
 require_once IBV_CORE_PATH . 'includes/sections/concierge-cross-sell/concierge-cross-sell.php';
 require_once IBV_CORE_PATH . 'includes/sections/concierge-services/concierge-services.php';
 require_once IBV_CORE_PATH . 'includes/sections/concierge-contact/concierge-contact.php';
+require_once IBV_CORE_PATH . 'includes/sections/concierge-contact/concierge-service-dropdown.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.

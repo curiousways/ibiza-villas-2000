@@ -326,6 +326,17 @@ function ibv_register_styles() {
 	);
 
 	wp_register_script(
+		'ibv-section-concierge-contact',
+		IBV_CORE_URL . 'includes/sections/concierge-contact/concierge-contact.js',
+		[ 'ibv-intl-tel-input' ],
+		IBV_CORE_VERSION,
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
+	);
+
+	wp_register_script(
 		'ibv-villa-listing-search',
 		IBV_CORE_URL . 'includes/sections/villa-listing-grid/villa-listing-grid.js',
 		[],

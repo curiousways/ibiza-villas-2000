@@ -35,11 +35,31 @@ function ibv_core_section_concierge_contact() {
 
 	wp_enqueue_style( 'ibv-section-concierge-contact' );
 
+	// Form enhancements: HTML5 date coupling + intl-tel-input. Only when
+	// a form is actually rendered — date/phone scoping is harmless without
+	// inputs to find, but the intl-tel-input bundle is heavy enough to be
+	// worth gating.
+	$iti_utils_url = '';
+	if ( $form_id ) {
+		wp_enqueue_style( 'ibv-intl-tel-input' );
+		wp_enqueue_script( 'ibv-section-concierge-contact' );
+		$iti_utils_url = add_query_arg(
+			'ver',
+			rawurlencode( IBV_CORE_VERSION ),
+			IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/js/utils.js'
+		);
+	}
+
 	// Normalise tel: href (strip spaces; keep the leading +).
 	$phone_href = $phone ? 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) : '';
 	$wa_href    = $whatsapp ? 'https://wa.me/' . preg_replace( '/[^\d]/', '', $whatsapp ) : '';
 	?>
-	<section class="ibv-section-concierge-contact ibv-section ibv-section--surface-bg">
+	<section
+		class="ibv-section-concierge-contact ibv-section ibv-section--surface-bg"
+		<?php if ( $iti_utils_url ) : ?>
+			data-iti-utils-url="<?php echo esc_url( $iti_utils_url ); ?>"
+		<?php endif; ?>
+	>
 		<div class="ibv-container">
 
 			<?php if ( $title || $subtitle ) : ?>
