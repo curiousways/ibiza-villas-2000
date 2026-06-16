@@ -88,7 +88,7 @@ function ibv_register_page_concierge_fields() {
 							'name'         => 'icon',
 							'type'         => 'text',
 							'required'     => 1,
-							'instructions' => __( 'Lucide glyph name (e.g. <code>shopping-bag</code>, <code>plane</code>, <code>wine</code>). See assets/icons/lucide/ for available glyphs.', 'ibv' ),
+							'instructions' => __( 'Lucide glyph name (e.g. <code>shopping-bag</code>, <code>plane</code>, <code>wine</code>). Browse all icons at <a href="https://lucide.dev/icons/" target="_blank" rel="noopener noreferrer">lucide.dev/icons</a>. New picks may need to be vendored before they render.', 'ibv' ),
 						),
 						array(
 							'key'      => 'field_ibv_concierge_service_title',
