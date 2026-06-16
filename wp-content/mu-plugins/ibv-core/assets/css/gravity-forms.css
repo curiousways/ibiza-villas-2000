@@ -252,20 +252,12 @@
 	background: var(--ibv-color-bg);
 }
 
-/* HTML5 date inputs (upgraded from GF text inputs by the section JS).
-   The browser's calendar picker handles the popover; we just keep the
-   input chrome consistent with the rest of the form. */
-.ibv-gform input[type="date"] {
-	font-family: var(--ibv-font-body);
-	color: var(--ibv-color-text);
-}
-
 /* GF emits a screen-reader format hint ("DD slash MM slash YYYY")
-   beneath each date input. The `dd/mm/yyyy` placeholder already conveys
-   the format visually, so visually-hide the sublabel — kept offscreen
-   for screen readers rather than removed from the DOM. */
-.ibv-gform .gfield--type-date .gfield_sub_label,
-.ibv-gform .gfield--type-date .ginput_container_date label {
+   beneath each date input. The placeholder already conveys the format
+   visually, so visually-hide the sublabel — kept offscreen for screen
+   readers, not removed from the DOM. Targets GF's public sublabel
+   class only, no internal-markup assumptions. */
+.ibv-gform .gfield--type-date .gfield_sub_label {
 	position: absolute;
 	width: 1px;
 	height: 1px;
@@ -275,16 +267,4 @@
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
-}
-
-/* Webkit hides the calendar icon by default unless the input has a
-   value or is focused — surface it so the affordance is always visible. */
-.ibv-gform input[type="date"]::-webkit-calendar-picker-indicator {
-	opacity: 0.6;
-	cursor: pointer;
-}
-
-.ibv-gform input[type="date"]:hover::-webkit-calendar-picker-indicator,
-.ibv-gform input[type="date"]:focus::-webkit-calendar-picker-indicator {
-	opacity: 1;
 }

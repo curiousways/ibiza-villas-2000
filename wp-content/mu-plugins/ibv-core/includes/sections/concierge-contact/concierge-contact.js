@@ -1,84 +1,24 @@
 /**
- * Concierge contact form — progressive JS enhancements over the
- * Gravity Forms embed.
+ * Concierge contact form — phone-field enhancement.
  *
  * Submission, validation, sanitisation, spam, email notifications, and
  * the no-JS fallback are all Gravity Forms' responsibility. This file
- * only layers two things GF doesn't do out of the box:
+ * only layers intl-tel-input on the phone field, giving international
+ * visitors a country selector + dial code, and writes the full E.164
+ * number into the input on submit so GF (and the office notification)
+ * receive a complete, unambiguous number.
  *
- *   1. **Coupled date range** on the Arrival / Departure date fields —
- *      upgrades each text input to `type="date"` (native HTML5 picker,
- *      consistent across desktop, touch, and screen readers), then
- *      couples them so Departure can't precede Arrival and neither can
- *      sit in the past.
- *   2. **intl-tel-input** on the phone field — country selector + dial
- *      code. On submit, writes the full international number into the
- *      input value so GF (and the office notification) receive a
- *      complete number, not just whatever the user typed.
+ * Date-field enhancements were trialled and rolled back — fighting GF's
+ * per-field-type markup added more maintenance burden than the coupling
+ * was worth. Date fields stay configured purely through GF; if a
+ * "departure ≥ arrival" rule is needed, the editor can enforce it via
+ * GF's own field validation / conditional logic.
  *
- * Editorial pairing (one-time GF admin step) noted in
- * register-page-concierge.php:
- *   - Date field "Date Format" must be `yyyy-mm-dd` so HTML5 inputs
- *     accept the pre-filled values GF emits.
- *   - Service dropdown should carry CSS class `ibv-gf-concierge-service`
- *     for the dynamic-population filter to find it.
- *
- * Field selection is scoped via the standard GF type classes — no
- * editor-assigned CSS class required on the date/phone fields.
+ * The phone field needs no editorial config beyond using a Phone-type
+ * field — scoped via the standard `.gfield--type-phone` class.
  */
 ( function () {
 	'use strict';
-
-	function pad( n ) {
-		return ( n < 10 ? '0' : '' ) + n;
-	}
-
-	function todayYMD() {
-		var d = new Date();
-		return d.getFullYear() + '-' + pad( d.getMonth() + 1 ) + '-' + pad( d.getDate() );
-	}
-
-	function initDateRange( form ) {
-		var dateInputs = form.querySelectorAll( '.gfield--type-date input' );
-		if ( dateInputs.length < 2 ) {
-			return;
-		}
-
-		// Arrival = first date field in form order, Departure = second.
-		// Editors who reorder fields will reorder behaviour to match.
-		var arrival   = dateInputs[ 0 ];
-		var departure = dateInputs[ 1 ];
-
-		var today = todayYMD();
-		[ arrival, departure ].forEach( function ( el ) {
-			if ( el.getAttribute( 'type' ) !== 'date' ) {
-				el.setAttribute( 'type', 'date' );
-			}
-			if ( ! el.hasAttribute( 'min' ) ) {
-				el.setAttribute( 'min', today );
-			}
-		} );
-
-		// Coupling — keep the range internally consistent.
-		arrival.addEventListener( 'change', function () {
-			if ( ! arrival.value ) {
-				departure.setAttribute( 'min', today );
-				return;
-			}
-			departure.setAttribute( 'min', arrival.value );
-			if ( departure.value && departure.value < arrival.value ) {
-				departure.value = arrival.value;
-			}
-		} );
-
-		departure.addEventListener( 'change', function () {
-			if ( departure.value ) {
-				arrival.setAttribute( 'max', departure.value );
-			} else {
-				arrival.removeAttribute( 'max' );
-			}
-		} );
-	}
 
 	function initPhone( section, form ) {
 		var phoneInput = form.querySelector( '.gfield--type-phone input[type="tel"]' );
@@ -132,7 +72,6 @@
 			return;
 		}
 
-		initDateRange( form );
 		initPhone( section, form );
 	}
 
