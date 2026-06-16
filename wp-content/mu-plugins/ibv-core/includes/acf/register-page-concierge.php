@@ -141,7 +141,7 @@ function ibv_register_page_concierge_fields() {
 						. '<strong>Editorial setup in the GF admin (one-time):</strong><ol>'
 						. '<li><strong>Honeypot</strong> — Form Settings → "Enable anti-spam honeypot" → on.</li>'
 						. '<li><strong>Notifications</strong> — set the recipient to the Site Options "Contact email"; set <em>Reply-To</em> to the enquirer\'s email so the office can reply directly.</li>'
-						. '<li><strong>Date fields</strong> — configure however you need (single date or separate Arrival / Departure). If a "departure ≥ arrival" rule matters, use GF\'s own field validation / conditional logic; we don\'t override GF\'s date markup.</li>'
+						. '<li><strong>Date fields</strong> — set Field Type to <strong>Date Drop Down</strong> in the field\'s General settings. Renders as three native selects (day / month / year), styled by our base form rules — no jQuery UI Datepicker popover quirks, fully maintained by GF. Configure however you need (single date or separate Arrival / Departure); for a "departure ≥ arrival" rule, use GF\'s own field validation / conditional logic.</li>'
 						. '<li><strong>Service dropdown</strong> — add the CSS class <code>ibv-gf-concierge-service</code> in the field\'s Appearance settings. Its options will be populated automatically from the Services tab on this page.</li>'
 						. '</ol>',
 						'ibv'

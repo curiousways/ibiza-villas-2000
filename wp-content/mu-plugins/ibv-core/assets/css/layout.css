@@ -69,7 +69,13 @@
 	box-shadow: var(--ibv-shadow-md);
 }
 
-.ibv-u-visually-hidden {
+/* `.screen-reader-text` is the WordPress / plugin convention for
+   accessibility-only text (GF date sublabels, post navigation labels,
+   etc). Most themes ship this rule via `wp_body_open` styles — alias
+   it onto the project's `.ibv-u-visually-hidden` so any plugin that
+   emits it is hidden visually without per-plugin scoping. */
+.ibv-u-visually-hidden,
+.screen-reader-text {
 	position: absolute;
 	width: 1px;
 	height: 1px;

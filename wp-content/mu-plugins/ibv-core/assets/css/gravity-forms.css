@@ -252,19 +252,6 @@
 	background: var(--ibv-color-bg);
 }
 
-/* GF emits a screen-reader format hint ("DD slash MM slash YYYY")
-   beneath each date input. The placeholder already conveys the format
-   visually, so visually-hide the sublabel — kept offscreen for screen
-   readers, not removed from the DOM. Targets GF's public sublabel
-   class only, no internal-markup assumptions. */
-.ibv-gform .gfield--type-date .gfield_sub_label {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
-	white-space: nowrap;
-	border: 0;
-}
+/* GF date sublabels ("MM slash DD slash YYYY") use the WP standard
+   `.screen-reader-text` class, hidden globally via layout.css — no
+   form-scoped rule needed. */
