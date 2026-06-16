@@ -1,18 +1,14 @@
 /**
- * Concierge contact form — phone-field enhancement.
+ * Contact enquiry form — phone-field enhancement.
  *
- * Submission, validation, sanitisation, spam, email notifications, and
- * the no-JS fallback are all Gravity Forms' responsibility. This file
- * only layers intl-tel-input on the phone field, giving international
- * visitors a country selector + dial code, and writes the full E.164
- * number into the input on submit so GF (and the office notification)
- * receive a complete, unambiguous number.
- *
- * Date-field enhancements were trialled and rolled back — fighting GF's
- * per-field-type markup added more maintenance burden than the coupling
- * was worth. Date fields stay configured purely through GF; if a
- * "departure ≥ arrival" rule is needed, the editor can enforce it via
- * GF's own field validation / conditional logic.
+ * Shared across the concierge and contact pages (both consume
+ * `ibv_core_section_contact_enquiry()`). Submission, validation,
+ * sanitisation, spam, email notifications, and the no-JS fallback are
+ * all Gravity Forms' responsibility. This file only layers
+ * intl-tel-input on the phone field — country selector + dial code —
+ * and writes the full E.164 number into the input on submit so GF
+ * (and the office notification) receive a complete, unambiguous
+ * number.
  *
  * The phone field needs no editorial config beyond using a Phone-type
  * field — scoped via the standard `.gfield--type-phone` class.
@@ -26,8 +22,6 @@
 			return;
 		}
 
-		// Already initialised — guard against re-init when GF re-renders
-		// the form via AJAX after a validation error.
 		if ( phoneInput.__ibvItiBound ) {
 			return;
 		}
@@ -62,17 +56,13 @@
 	}
 
 	function init() {
-		var section = document.querySelector( '.ibv-section-concierge-contact' );
-		if ( ! section ) {
-			return;
-		}
-
-		var form = section.querySelector( '.ibv-gform form[id^="gform_"]' );
-		if ( ! form ) {
-			return;
-		}
-
-		initPhone( section, form );
+		var sections = document.querySelectorAll( '.ibv-section-contact-enquiry' );
+		sections.forEach( function ( section ) {
+			var form = section.querySelector( '.ibv-gform form[id^="gform_"]' );
+			if ( form ) {
+				initPhone( section, form );
+			}
+		} );
 	}
 
 	if ( document.readyState === 'loading' ) {

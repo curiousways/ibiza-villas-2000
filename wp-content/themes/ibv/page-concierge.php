@@ -23,7 +23,15 @@ while ( have_posts() ) :
 	?>
 
 	<?php
-	ibv_core_section_concierge_contact();
+	ibv_core_section_contact_enquiry(
+		[
+			'heading'       => (string) get_field( 'contact_title' ),
+			'subheading'    => (string) get_field( 'contact_subtitle' ),
+			'heading_level' => 'h2',
+			'heading_size'  => 'large',
+			'form_id'       => (int) get_field( 'concierge_enquiry_gravity_form_id' ),
+		]
+	);
 
 	ibv_core_image_text_section(
 		[

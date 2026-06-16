@@ -222,7 +222,7 @@ function ibv_register_styles() {
 		'ibv-section-special-offers-grid'           => 'includes/sections/special-offers-grid/special-offers-grid.css',
 		'ibv-section-special-offers-empty-state'    => 'includes/sections/special-offers-empty-state/special-offers-empty-state.css',
 		'ibv-section-concierge-services'            => 'includes/sections/concierge-services/concierge-services.css',
-		'ibv-section-concierge-contact'             => 'includes/sections/concierge-contact/concierge-contact.css',
+		'ibv-section-contact-enquiry'               => 'includes/sections/contact-enquiry/contact-enquiry.css',
 	];
 
 	foreach ( $section_handles as $handle => $rel ) {
@@ -326,8 +326,8 @@ function ibv_register_styles() {
 	);
 
 	wp_register_script(
-		'ibv-section-concierge-contact',
-		IBV_CORE_URL . 'includes/sections/concierge-contact/concierge-contact.js',
+		'ibv-section-contact-enquiry',
+		IBV_CORE_URL . 'includes/sections/contact-enquiry/contact-enquiry.js',
 		[ 'ibv-intl-tel-input' ],
 		IBV_CORE_VERSION,
 		[
