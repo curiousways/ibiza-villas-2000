@@ -38,6 +38,14 @@
 			utilsScript:        utilsUrl
 		} );
 
+		// Skip the country/flag button in the keyboard tab order — Tab goes
+		// straight from the email field to the number input. Still mouse-clickable.
+		var itiWrap    = phoneInput.closest( '.iti' );
+		var countryBtn = itiWrap ? itiWrap.querySelector( '.iti__selected-country' ) : null;
+		if ( countryBtn ) {
+			countryBtn.setAttribute( 'tabindex', '-1' );
+		}
+
 		// Write the full international number into the input before the
 		// form serialises. Capture phase runs before bubble listeners
 		// (including GF's jQuery AJAX serialiser).
