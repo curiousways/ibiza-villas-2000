@@ -3,9 +3,10 @@
  * Component: Property gallery — inline viewer (Figma node 1:6019).
  *
  * On-page: serif "Gallery" heading + sage "View all photos" button +
- * wide-cropped main image with prev/next chevrons + 6-up thumb strip.
- * Prev/next page the main image in place (wrapping across all images);
- * thumbs jump to their image; ArrowLeft/Right page while the gallery has
+ * wide-cropped main image with prev/next chevrons + a scrollable thumb
+ * carousel holding every image. Prev/next page the main image in place
+ * (wrapping across all images); thumbs jump to their image; the active
+ * thumb auto-scrolls into view; ArrowLeft/Right page while the gallery has
  * focus. No pop-up/lightbox — the main image is the viewer.
  *
  * Single-image villas render just the hero — no thumbs/nav.
@@ -53,12 +54,18 @@ function ibv_core_gallery( $villa_id ) {
 		if ( '' === $alt ) {
 			$alt = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
 		}
-		// Inline viewer swaps the main image src on prev/next. Thumbs render
-		// server-side from the `id`, so we don't need a thumb URL in the JSON.
+		// Inline viewer swaps the main image on prev/next. Carry the `large`
+		// srcset/sizes so paged images stay responsive (matching the server-
+		// rendered hero) instead of dropping to a single resolution. Thumbs
+		// render server-side from the `id`, so no thumb URL is needed.
+		$srcset = wp_get_attachment_image_srcset( $id, 'large' );
+		$sizes  = wp_get_attachment_image_sizes( $id, 'large' );
 		$images[] = [
-			'id'  => $id,
-			'src' => $src[0],
-			'alt' => $alt,
+			'id'     => $id,
+			'src'    => $src[0],
+			'srcset' => is_string( $srcset ) ? $srcset : '',
+			'sizes'  => is_string( $sizes ) ? $sizes : '',
+			'alt'    => $alt,
 		];
 	}
 
@@ -75,14 +82,15 @@ function ibv_core_gallery( $villa_id ) {
 	if ( $multiples ) {
 		wp_enqueue_script( 'ibv-gallery-script' );
 
-		$inline = 'document.addEventListener("DOMContentLoaded",function(){var root=document.getElementById("' . esc_js( $uid ) . '");if(!root)return;var data=JSON.parse(root.getAttribute("data-images"));var mainImg=root.querySelector(".ibv-gallery__main-image");if(!mainImg)return;var thumbs=root.querySelectorAll(".ibv-gallery__thumb[data-ibv-gallery-show]");var ix=0;function show(i){ix=(i+data.length)%data.length;var cur=data[ix];mainImg.removeAttribute("srcset");mainImg.removeAttribute("sizes");mainImg.src=cur.src;mainImg.alt=cur.alt||"";thumbs.forEach(function(t){t.classList.toggle("is-active",parseInt(t.getAttribute("data-ibv-gallery-show"),10)===ix);});}root.querySelectorAll("[data-ibv-gallery-show]").forEach(function(btn){btn.addEventListener("click",function(){show(parseInt(btn.getAttribute("data-ibv-gallery-show"),10)||0);});});var prev=root.querySelector("[data-ibv-gallery-prev]");if(prev){prev.addEventListener("click",function(){show(ix-1);});}var next=root.querySelector("[data-ibv-gallery-next]");if(next){next.addEventListener("click",function(){show(ix+1);});}root.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){show(ix+1);}else if(e.key==="ArrowLeft"){show(ix-1);}});});';
+		$inline = 'document.addEventListener("DOMContentLoaded",function(){var root=document.getElementById("' . esc_js( $uid ) . '");if(!root)return;var data=JSON.parse(root.getAttribute("data-images"));var mainImg=root.querySelector(".ibv-gallery__main-image");if(!mainImg)return;var thumbs=root.querySelectorAll(".ibv-gallery__thumb[data-ibv-gallery-show]");var ix=0;function show(i){ix=(i+data.length)%data.length;var cur=data[ix];if(cur.srcset){mainImg.srcset=cur.srcset;mainImg.sizes=cur.sizes||"";}else{mainImg.removeAttribute("srcset");mainImg.removeAttribute("sizes");}mainImg.src=cur.src;mainImg.alt=cur.alt||"";var active=null;thumbs.forEach(function(t){var on=parseInt(t.getAttribute("data-ibv-gallery-show"),10)===ix;t.classList.toggle("is-active",on);if(on){active=t;}});if(active&&active.scrollIntoView){active.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}}root.querySelectorAll("[data-ibv-gallery-show]").forEach(function(btn){btn.addEventListener("click",function(){show(parseInt(btn.getAttribute("data-ibv-gallery-show"),10)||0);});});var prev=root.querySelector("[data-ibv-gallery-prev]");if(prev){prev.addEventListener("click",function(){show(ix-1);});}var next=root.querySelector("[data-ibv-gallery-next]");if(next){next.addEventListener("click",function(){show(ix+1);});}root.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){show(ix+1);}else if(e.key==="ArrowLeft"){show(ix-1);}});});';
 
 		wp_add_inline_script( 'ibv-gallery-script', $inline );
 	}
 
 	$hero   = $images[0];
-	// Hero + images 1..6 → 6 thumbs, no duplication of the hero.
-	$thumbs = array_slice( $images, 1, 6 );
+	// Every image gets a thumb (incl. the hero) so the scrollable thumb
+	// carousel always has an active tile to highlight + scroll into view.
+	$thumbs = $images;
 	?>
 	<div class="ibv-gallery" id="<?php echo esc_attr( $uid ); ?>"<?php echo $multiples ? ' data-images="' . $escaped_json . '"' : ''; ?>>
 		<div class="ibv-gallery__header">
@@ -152,12 +160,11 @@ function ibv_core_gallery( $villa_id ) {
 			</div>
 		<?php endif; ?>
 
-		<?php if ( count( $thumbs ) ) : ?>
+		<?php if ( $multiples ) : ?>
 			<ul class="ibv-gallery__thumbs">
 				<?php foreach ( $thumbs as $i => $item ) : ?>
-					<?php $global_index = $i + 1; ?>
 					<li class="ibv-gallery__thumb-item">
-						<button type="button" class="ibv-gallery__thumb" data-ibv-gallery-show="<?php echo esc_attr( (string) $global_index ); ?>">
+						<button type="button" class="ibv-gallery__thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" data-ibv-gallery-show="<?php echo esc_attr( (string) $i ); ?>">
 							<?php
 							ibv_core_image(
 								$item['id'],

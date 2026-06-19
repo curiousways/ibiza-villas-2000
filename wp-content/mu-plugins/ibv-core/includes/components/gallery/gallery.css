@@ -64,14 +64,35 @@
 	right: var(--ibv-space-sm);
 }
 
-/* Thumb strip — 6-up grid, same 3:2 crop. */
+/* Thumb carousel — horizontally scrollable; ~6 visible, rest scroll/swipe.
+   JS scrolls the active thumb into view (scrollIntoView) when the main
+   prev/next, arrow keys, or a thumb click change the photo. */
 .ibv-gallery__thumbs {
-	display: grid;
-	grid-template-columns: repeat(6, minmax(0, 1fr));
+	display: flex;
 	gap: var(--ibv-space-xs);
+	overflow-x: auto;
+	scroll-snap-type: x proximity;
+	/* `scroll-snap-align: start` snaps a thumb's edge to the scrollport
+	   edge, which would scroll `padding-inline` out of view and clip the
+	   active thumb's offset outline at the start/end. `scroll-padding-inline`
+	   insets the snapport so snapping stops short and keeps the gutter (and
+	   the outline) on screen. Must match `padding-inline`. */
+	scroll-padding-inline: var(--ibv-space-xs);
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: thin;
 	list-style: none;
 	margin: 0;
-	padding: 0;
+	/* Padding gives the active thumb's offset outline room: overflow clips
+	   at the padding box, so the outline (2px width + 2px offset = 4px
+	   reach) needs > 4px clearance or it's shaved. 8px leaves a clean 4px
+	   gap top/bottom and at the start/end thumbs. */
+	padding: var(--ibv-space-xs);
+}
+
+/* Keep ~6 thumbs visible (the teaser look); the rest scroll. */
+.ibv-gallery__thumb-item {
+	flex: 0 0 calc((100% - 5 * var(--ibv-space-xs)) / 6);
+	scroll-snap-align: start;
 }
 
 .ibv-gallery__thumb {
