@@ -100,13 +100,18 @@ function ibv_gf_pax_placeholder_not_selectable( $content, $field ) {
 		return $content;
 	}
 
-	// Only the first empty-value <option> is the placeholder (guest counts are
-	// 1–12). Limit the replacement to that one option.
+	// Inject `selected disabled hidden` into the placeholder <option> — the only
+	// empty-value option, since guest counts are 1–12. The lookahead matches the
+	// empty `value` attribute wherever GF places it in the tag, so a future GF
+	// markup change that emits other attributes before `value=` won't silently
+	// no-op (the old anchored pattern assumed `value` came first). `?? $content`
+	// keeps the field intact if PCRE ever fails — preg_replace returns null on
+	// error, which would otherwise blank the whole select.
 	return preg_replace(
-		'/<option\s+value=([\'"])\1/',
-		'<option selected disabled hidden value=${1}${1}',
+		'/<option\b(?=[^>]*\svalue=([\'"])\1)/',
+		'<option selected disabled hidden',
 		$content,
 		1
-	);
+	) ?? $content;
 }
 add_filter( 'gform_field_content', 'ibv_gf_pax_placeholder_not_selectable', 10, 2 );
