@@ -23,8 +23,11 @@
  *   - Hidden Property Name #1 + Active Offers #9 — SERVER-SET in enquiry-panel.php
  *     via gform_pre_submission (not user input), so they're authoritative.
  *
- * Redirect confirmation → /booking-confirmation/ with the villa / arrival /
- * departure / guests / offer query string the booking-confirmation page reads.
+ * "Page" confirmation → the booking-confirmation page, built by
+ * ibv_build_gf_booking_confirmation() (resolves the page by the
+ * page-booking-confirmation.php template — currently /booking-request-received/),
+ * passing the villa / arrival / departure / guests / offer query string it reads.
+ * GF redirects by page id at submit time, so it survives slug + domain changes.
  *
  * Idempotent UPSERT: updates the existing form (id in `ibv_villa_enquiry_form_id`,
  * else title match) in place so re-running on staging syncs the structure; there
@@ -154,13 +157,9 @@ $form = array(
 		array( 'id' => 9,  'type' => 'hidden', 'label' => 'Active Offers' ), // server-set (gform_pre_submission)
 	),
 	'confirmations'  => array(
-		'ibv_villa_redirect' => array(
-			'id'          => 'ibv_villa_redirect',
-			'name'        => 'Redirect to booking confirmation',
-			'isDefault'   => true,
-			'type'        => 'redirect',
-			'url'         => home_url( '/booking-confirmation/' ),
-			'queryString' => 'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}',
+		'ibv_villa_redirect' => ibv_build_gf_booking_confirmation(
+			'ibv_villa_redirect',
+			'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}'
 		),
 	),
 	'notifications'  => array(

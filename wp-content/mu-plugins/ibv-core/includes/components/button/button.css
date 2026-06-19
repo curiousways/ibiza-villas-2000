@@ -97,10 +97,30 @@
 	border-color: var(--ibv-color-white);
 }
 
-/* Arrow icon — currentColor inherits from button variant */
+/* Arrow icon — currentColor inherits from button variant by default.
+   `stroke`/`fill` are enforced in CSS (not left to the SVG's
+   `stroke="currentColor"` presentation attribute, which loses to any cascade
+   rule) so the arrow reliably follows the button's text colour. */
 .ibv-button__arrow {
 	flex-shrink: 0;
+	stroke: currentColor;
+	fill: none;
 	transition: transform var(--ibv-duration-normal) var(--ibv-ease-standard);
+}
+
+/* Primary (sage) button — forest-green arrow per Figma (node 347-3763),
+   a deliberate dark accent distinct from the off-white label. Other variants
+   keep currentColor (arrow follows the label colour). */
+.ibv-button--primary .ibv-button__arrow {
+	stroke: var(--ibv-color-forest-green-deep);
+}
+
+/* On hover/focus the primary button darkens to forest-green-deep — the same
+   colour as the resting arrow — so flip the arrow to the label colour (white)
+   to keep it visible. */
+.ibv-button--primary:hover .ibv-button__arrow,
+.ibv-button--primary:focus-visible .ibv-button__arrow {
+	stroke: currentColor;
 }
 
 .ibv-button:hover .ibv-button__arrow,

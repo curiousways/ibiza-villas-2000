@@ -34,6 +34,23 @@
 	display: none;
 }
 
+/* ── Field labels — hidden per design ───────────────────────────────── */
+
+/* Placeholders carry the affordance; labels stay in the DOM for screen
+   readers. 3-class scope beats the foundation `.ibv-gform .gfield_label`
+   (display:block) without relying on stylesheet load order. Mirrors the
+   newsletter-form / global `.screen-reader-text` clip pattern. */
+.ibv-accommodation-enquiry .ibv-gform .gfield_label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+
 .ibv-accommodation-enquiry__when {
 	position: relative;
 }
@@ -46,7 +63,7 @@
 	padding: var(--ibv-space-sm) calc(var(--ibv-space-md) + 1.5rem) var(--ibv-space-sm) var(--ibv-space-md);
 	border: 1px solid var(--ibv-color-border);
 	border-radius: var(--ibv-radius-field);
-	background: var(--ibv-color-white);
+	background: transparent;
 	color: var(--ibv-color-text);
 	font: inherit;
 	font-size: var(--ibv-fs-body);

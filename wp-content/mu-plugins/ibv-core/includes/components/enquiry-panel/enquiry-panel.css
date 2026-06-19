@@ -32,6 +32,20 @@
 	gap: var(--ibv-space-md);
 }
 
+/* Field labels hidden per design — placeholders carry the affordance. Kept in
+   the DOM (clip) for screen readers; 3-class scope beats the foundation
+   `.ibv-gform .gfield_label` (display:block). Mirrors accommodation-enquiry. */
+.ibv-enquiry-panel .ibv-gform .gfield_label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+
 /* ── Single-field "When" picker (GF HTML field markup) ──────────────── */
 
 /* The two real GF date fields are hidden; the HTML "When" field is the
@@ -78,6 +92,23 @@
 
 .ibv-enquiry-panel__when-value.is-empty {
 	color: var(--ibv-color-text-muted);
+}
+
+/* "Guests" select — muted placeholder styling until a real choice is picked,
+   matching the empty "When" trigger. GF renders the placeholder as a selected
+   empty-value <option>; choosing a guest count reverts the text to default. */
+.ibv-enquiry-panel .ibv-gform select:has(option[value=""]:checked) {
+	color: var(--ibv-color-text-muted);
+}
+
+/* Match the GF "Guests" select to the custom "When" trigger's height +
+   padding so the two controls line up (When is the reference). The extra
+   inline-end room keeps the value clear of the dropdown chevron. */
+.ibv-enquiry-panel .ibv-gform select {
+	min-height: 3.375rem;
+	padding-block: var(--ibv-space-md);
+	padding-inline-start: var(--ibv-space-lg);
+	padding-inline-end: calc(var(--ibv-space-lg) + 1.5rem);
 }
 
 .ibv-enquiry-panel__when-clear {
@@ -205,7 +236,7 @@
 /* ── Submit (GF button) — prominent full-width primary CTA, gated ───── */
 
 .ibv-enquiry-panel .ibv-gform .gform_footer {
-	margin: 0;
+	margin: var(--ibv-space-lg) 0 0;
 	display: block;
 }
 

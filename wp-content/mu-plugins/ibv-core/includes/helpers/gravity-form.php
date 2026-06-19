@@ -76,3 +76,37 @@ function ibv_core_gravity_form( $form_id, $args = [] ) {
 	</div>
 	<?php
 }
+
+/**
+ * Make the `ibv-pax` guest-count select's GF placeholder a true placeholder.
+ *
+ * GF renders a field placeholder as a normal empty-value <option>, so "Guests"
+ * shows up as a selectable row in the open dropdown. Adding `disabled hidden`
+ * drops it from the list (modern browsers) and blocks re-selection, while
+ * `selected` keeps it as the collapsed-state label. A real preserved value
+ * still wins (single-select honours the last `selected` option in source
+ * order), so error re-renders show the chosen guest count, not the placeholder.
+ *
+ * @param string   $content Rendered field HTML.
+ * @param GF_Field $field   Field object.
+ * @return string Field HTML.
+ */
+function ibv_gf_pax_placeholder_not_selectable( $content, $field ) {
+	if ( ! is_object( $field ) || 'select' !== (string) $field->type ) {
+		return $content;
+	}
+	$classes = preg_split( '/\s+/', (string) $field->cssClass, -1, PREG_SPLIT_NO_EMPTY );
+	if ( ! in_array( 'ibv-pax', (array) $classes, true ) ) {
+		return $content;
+	}
+
+	// Only the first empty-value <option> is the placeholder (guest counts are
+	// 1–12). Limit the replacement to that one option.
+	return preg_replace(
+		'/<option\s+value=([\'"])\1/',
+		'<option selected disabled hidden value=${1}${1}',
+		$content,
+		1
+	);
+}
+add_filter( 'gform_field_content', 'ibv_gf_pax_placeholder_not_selectable', 10, 2 );

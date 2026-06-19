@@ -109,15 +109,16 @@ function ibv_get_contact_page_url() {
 }
 
 /**
- * Booking confirmation page URL.
+ * Booking confirmation page ID.
  *
- * The full query string (villa, arrival, departure, guests, offer) is
- * assembled by the enquiry-panel JS at submit time — see the contract in
- * page-booking-confirmation.php.
+ * Resolves the page using the page-booking-confirmation.php template. Returns 0
+ * if no such published page exists on this environment yet. Resolving by
+ * template (not a hardcoded slug) keeps the destination correct regardless of
+ * the page's slug.
  *
- * @return string Escaped URL.
+ * @return int Page ID, or 0.
  */
-function ibv_get_booking_confirmation_url() {
+function ibv_get_booking_confirmation_page_id() {
 	$pages = get_posts(
 		array(
 			'post_type'      => 'page',
@@ -129,8 +130,58 @@ function ibv_get_booking_confirmation_url() {
 			'meta_value'     => 'page-booking-confirmation.php',
 		)
 	);
-	$base = ! empty( $pages ) ? get_permalink( $pages[0] ) : home_url( '/booking-confirmation/' );
+	return ! empty( $pages ) ? (int) $pages[0] : 0;
+}
+
+/**
+ * Booking confirmation page URL.
+ *
+ * Permalink of the page resolved by ibv_get_booking_confirmation_page_id(),
+ * falling back to /booking-confirmation/ only if that page does not exist yet.
+ *
+ * @return string Escaped URL.
+ */
+function ibv_get_booking_confirmation_url() {
+	$page_id = ibv_get_booking_confirmation_page_id();
+	$base    = $page_id ? get_permalink( $page_id ) : home_url( '/booking-confirmation/' );
 	return esc_url( $base );
+}
+
+/**
+ * Build the Gravity Forms confirmation that sends an enquiry to the booking
+ * confirmation page. Shared by the Villa Enquiry and Accommodation Enquiry
+ * seeders (the single source of truth for those forms) so both stay in step —
+ * only the merge-tag query string differs.
+ *
+ * Produces a "Page" confirmation: GF redirects by page id, resolving the
+ * permalink at submit time, so it survives slug + domain changes (no stored
+ * URL). Falls back to a URL redirect only if the confirmation page has not been
+ * created on this environment yet.
+ *
+ * @param string $id           Stable confirmation id/key for the form.
+ * @param string $query_string GF merge-tag query string (no leading '?').
+ * @return array GF confirmation definition.
+ */
+function ibv_build_gf_booking_confirmation( $id, $query_string = '' ) {
+	$page_id = ibv_get_booking_confirmation_page_id();
+
+	$confirmation = array(
+		'id'          => $id,
+		'name'        => 'Redirect to booking confirmation',
+		'isDefault'   => true,
+		'queryString' => $query_string,
+	);
+
+	if ( $page_id ) {
+		$confirmation['type']   = 'page';
+		$confirmation['page']   = $page_id;
+		$confirmation['pageId'] = $page_id;
+	} else {
+		$confirmation['type'] = 'redirect';
+		$confirmation['url']  = ibv_get_booking_confirmation_url();
+	}
+
+	return $confirmation;
 }
 
 /**

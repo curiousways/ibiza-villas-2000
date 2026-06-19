@@ -3,14 +3,18 @@
  * One-off seeder — "Accommodation Enquiry" Gravity Form (Hotel + Airstream).
  *
  * This form IS rendered (embedded via `ibv_core_gravity_form()`), so GF owns
- * submit / validation / notification. The accommodation-enquiry section grafts
+ * submit / validation / notification / confirmation redirect. The
+ * accommodation-enquiry section grafts
  * our single-field "When" date-range picker onto it: the form carries an HTML
  * field (the visible "When" pill) plus two CSS-classed date fields
  * (`ibv-drp-from` / `ibv-drp-to`) which are visually hidden and written to by
  * `accommodation-enquiry.js`. No PHP gform_* filters needed — the JS keys off
  * those classes.
  *
- * Field ids are explicit + stable. Idempotent (skips if the title exists).
+ * Field ids are explicit + stable. Idempotent UPSERT: updates the existing form
+ * (id in `ibv_accommodation_enquiry_form_id`, else title match) in place so
+ * re-running syncs the structure — this seeder is the single source of truth for
+ * the form config (don't hand-edit it in the GF admin; edit here and re-run).
  * Stores the id in `ibv_accommodation_enquiry_form_id` (convenience default;
  * the page ACF `accommodation_enquiry_gravity_form_id` is the per-page source).
  *
@@ -30,19 +34,11 @@ if ( ! class_exists( 'GFAPI' ) ) {
 
 $title = 'Accommodation Enquiry';
 
-foreach ( GFAPI::get_forms() as $existing ) {
-	if ( isset( $existing['title'] ) && $existing['title'] === $title ) {
-		update_option( 'ibv_accommodation_enquiry_form_id', (int) $existing['id'] );
-		echo 'Already exists — Accommodation Enquiry form id: ' . (int) $existing['id'] . "\n";
-		return;
-	}
-}
-
 // Visible "When" pill markup (single-field range trigger). Hidden GF date
 // fields below hold the actual values; accommodation-enquiry.js wires them.
 $when_html = '<div class="ibv-accommodation-enquiry__when" data-bob-date-range-anchor>'
 	. '<button type="button" class="ibv-accommodation-enquiry__when-trigger" data-bob-date-range-trigger>'
-	. '<span class="ibv-accommodation-enquiry__when-value is-empty" data-bob-date-range-display data-placeholder="When">When</span>'
+	. '<span class="ibv-accommodation-enquiry__when-value is-empty" data-bob-date-range-display data-placeholder="When (optional)">When (optional)</span>'
 	. '</button>'
 	. '<button type="button" class="ibv-accommodation-enquiry__when-clear" data-bob-date-range-clear hidden aria-label="Clear dates"><span aria-hidden="true">&times;</span></button>'
 	. '</div>';
@@ -52,6 +48,9 @@ $form = array(
 	'description'    => '',
 	'labelPlacement' => 'hidden_label',
 	'enableHoneypot' => true,
+	// GFAPI::update_form() rewrites is_active from this key on every run —
+	// omitting it deactivates the form (and it stops rendering). Keep it set.
+	'is_active'      => 1,
 	'button'         => array(
 		'type' => 'text',
 		'text' => 'Send Enquiry',
@@ -72,6 +71,19 @@ $form = array(
 		array( 'id' => 7, 'type' => 'textarea',  'label' => 'Message', 'placeholder' => 'Message' ),
 		array( 'id' => 9, 'type' => 'hidden',    'label' => 'Accommodation', 'allowsPrepopulate' => true, 'inputName' => 'ibv_accommodation' ),
 	),
+	// "Page" confirmation → the booking-confirmation page, built by
+	// ibv_build_gf_booking_confirmation() (resolves the page by template; see
+	// helpers.php). Mirrors the Villa Enquiry flow. Carries arrival / departure /
+	// guests (field ids 4 / 5 / 6) so the page's booking-details panel shows the
+	// requested dates and party size. No `villa` param (an accommodation enquiry
+	// has no villa post id) and no `offer`; the page renders only the rows whose
+	// params validate, so empty/optional fields simply drop their row.
+	'confirmations'  => array(
+		'ibv_accommodation_redirect' => ibv_build_gf_booking_confirmation(
+			'ibv_accommodation_redirect',
+			'arrival={Arrival:4}&departure={Departure:5}&guests={Number of guests:6}'
+		),
+	),
 	'notifications'  => array(
 		uniqid( 'ibv', true ) => array(
 			'id'       => uniqid( 'ibv', true ),
@@ -86,6 +98,30 @@ $form = array(
 		),
 	),
 );
+
+// Resolve an existing form id: option first, then a title match (legacy create).
+$existing_id = (int) get_option( 'ibv_accommodation_enquiry_form_id' );
+if ( ! $existing_id || ! GFAPI::get_form( $existing_id ) ) {
+	$existing_id = 0;
+	foreach ( GFAPI::get_forms() as $candidate ) {
+		if ( isset( $candidate['title'] ) && $candidate['title'] === $title ) {
+			$existing_id = (int) $candidate['id'];
+			break;
+		}
+	}
+}
+
+if ( $existing_id ) {
+	$form['id'] = $existing_id;
+	$result     = GFAPI::update_form( $form, $existing_id );
+	if ( is_wp_error( $result ) ) {
+		echo 'Error updating Accommodation Enquiry form: ' . $result->get_error_message() . "\n";
+		return;
+	}
+	update_option( 'ibv_accommodation_enquiry_form_id', $existing_id );
+	echo 'Updated Accommodation Enquiry form id: ' . $existing_id . "\n";
+	return;
+}
 
 $result = GFAPI::add_form( $form );
 

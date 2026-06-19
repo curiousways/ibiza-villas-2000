@@ -58,7 +58,13 @@
    the form") and is purely a back-end concern. */
 .ibv-gform .gfield_visibility_hidden,
 .ibv-gform .gform_validation_container,
-.ibv-gform .gfield--type-honeypot {
+.ibv-gform .gfield--type-honeypot,
+.ibv-gform .gfield--type-hidden,
+.ibv-gform .gform_hidden,
+.ibv-gform .ibv-drp-hidden {
+	/* display:none removes the <li> from the grid entirely, so hidden fields
+	   (GF hidden-type + our visually-hidden date-range inputs) don't occupy a
+	   cell and add `gap` whitespace. The inputs still submit their values. */
 	display: none !important;
 }
 
@@ -103,7 +109,7 @@
 .ibv-gform select,
 .ibv-gform textarea {
 	width: 100%;
-	background: var(--ibv-color-white);
+	background: transparent;
 	border: 1px solid var(--ibv-color-border);
 	border-radius: var(--ibv-radius-field);
 	padding: var(--ibv-space-sm) var(--ibv-space-md);
@@ -129,6 +135,7 @@
 }
 
 .ibv-gform textarea {
+	display: block;
 	min-height: 10rem;
 	resize: vertical;
 }

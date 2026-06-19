@@ -183,7 +183,9 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	         - the submit gate (GF submit disabled until dates + pax filled
 	           and the villa is available) + the contact-field reveal
 	         - phone E.164 normalisation (intl-tel-input)
-	       Redirect to /booking-confirmation/ is a GF redirect confirmation
+	       Redirect to the booking-confirmation page (resolved by template; see
+	       ibv_build_gf_booking_confirmation() / ibv_get_booking_confirmation_page_id())
+	       is a GF "Page" confirmation
 	       (villa / arrival / departure / guests / offer merge tags).
 	       Endpoint reference: https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl
 	       Spec: Notion → IBZ002 → API Integration Spec

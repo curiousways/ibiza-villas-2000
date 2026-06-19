@@ -287,6 +287,7 @@ function ibv_register_styles() {
 
 	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
 	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );
+	wp_register_script( 'ibv-accommodation-overview', '', [], IBV_CORE_VERSION, true );
 	wp_register_script( 'ibv-gallery-script', '', [], IBV_CORE_VERSION, true );
 
 	wp_register_script(

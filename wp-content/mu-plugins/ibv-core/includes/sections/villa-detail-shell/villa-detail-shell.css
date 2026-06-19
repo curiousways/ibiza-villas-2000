@@ -6,12 +6,11 @@
 
 .ibv-villa-detail__grid {
 	display: grid;
-	gap: var(--ibv-space-xl);
 }
 
 @media (min-width: 64rem) {
 	.ibv-villa-detail__grid {
-		grid-template-columns: minmax(0, 1fr) min(22rem, 34%);
+		grid-template-columns: minmax(0, 1fr) min(20.625rem, 34%);
 		align-items: start;
 	}
 }

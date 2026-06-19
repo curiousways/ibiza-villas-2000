@@ -33,10 +33,26 @@
 	color: var(--ibv-color-text);
 }
 
+/* "Read more" slides the clamped summary open to its natural height and back.
+   `interpolate-size: allow-keywords` lets `max-height` interpolate to/from the
+   `max-content` keyword, so the block animates to whatever height the prose
+   needs without measuring it in JS. Where the property is unsupported the
+   toggle simply snaps (today's behaviour) — progressive enhancement. */
+.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp {
+	interpolate-size: allow-keywords;
+	overflow: hidden;
+	max-height: max-content;
+	/* Opening is the moment the reader leans in, so it takes the slow duration
+	   with a strong ease-out (a decisive, settled arrival). Closing is the
+	   system tidying up — quicker, gentler easing (set in the collapsed rule). */
+	transition: max-height var(--ibv-duration-slow) var(--ibv-ease-out);
+}
+
 .ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open) {
 	max-height: 10rem;
-	overflow: hidden;
 	position: relative;
+	transition-duration: var(--ibv-duration-normal);
+	transition-timing-function: var(--ibv-ease-standard);
 }
 
 .ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open)::after {
@@ -47,19 +63,76 @@
 	height: 3rem;
 	background: linear-gradient(to bottom, transparent, var(--ibv-color-bg));
 	pointer-events: none;
+	opacity: 1;
+	transition: opacity var(--ibv-duration-normal) var(--ibv-ease-out);
+}
+
+/* The teaser-fade `::after` only exists while collapsed, so on close it is
+   generated fresh and would snap in. `@starting-style` gives it a "from" frame
+   to fade up from — the same idiom the date-range-picker uses for its popover
+   backdrop. (It also runs once on first paint: a sub-perceptible fade of an
+   already-faint gradient.) */
+@starting-style {
+	.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open)::after {
+		opacity: 0;
+	}
 }
 
 .ibv-villa-overview__read-more {
 	margin-top: var(--ibv-space-sm);
+	/* Inline-flex + vertical padding give the toggle a more comfortable touch
+	   target without reaching into the prose above (whose links must keep their
+	   own hit area). */
+	display: inline-flex;
+	align-items: center;
+	padding-block: var(--ibv-space-2xs);
+	padding-inline: 0;
 	font: inherit;
 	font-size: var(--ibv-fs-small);
 	font-weight: var(--ibv-font-weight-regular);
 	background: none;
 	border: 0;
-	padding: 0;
 	cursor: pointer;
 	color: var(--ibv-color-text);
 	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	/* Specific properties only — never `transition: all`. */
+	transition:
+		color var(--ibv-duration-fast) var(--ibv-ease-standard),
+		scale var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-villa-overview__read-more:hover {
+	color: var(--ibv-color-link-hover);
+}
+
+.ibv-villa-overview__read-more:focus-visible {
+	outline: 2px solid var(--ibv-color-link);
+	outline-offset: 2px;
+	border-radius: var(--ibv-radius-sm);
+}
+
+/* Tactile press feedback — 0.96 is the design-eng baseline; anything smaller
+   reads as exaggerated. */
+.ibv-villa-overview__read-more:active {
+	scale: 0.96;
+}
+
+/* Reduced motion: drop the large height slide and the press scale; keep the
+   gentle gradient opacity fade for comprehension (fewer/gentler, not zero). */
+@media (prefers-reduced-motion: reduce) {
+	.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp,
+	.ibv-villa-overview__summary.ibv-villa-overview__summary--clamp:not(.ibv-villa-overview__summary--open) {
+		transition: none;
+	}
+
+	.ibv-villa-overview__read-more {
+		transition-property: color;
+	}
+
+	.ibv-villa-overview__read-more:active {
+		scale: 1;
+	}
 }
 
 /* Amenities --------------------------------------------------------- */
