@@ -1,3 +1,11 @@
+/* Villa enquiry panel — embedded Gravity Form (#33) + grafted pricing / picker.
+ *
+ * GF field chrome comes from gravity-forms.css (scoped to .ibv-gform). This file
+ * adds: the panel shell, the single-field "When" trigger, the live price block,
+ * the gate's pending-state hiding (price + contact fields), and the prominent
+ * full-width submit. The two real GF date fields are hidden; the picker writes
+ * the range into them. */
+
 .ibv-enquiry-panel {
 	padding: var(--ibv-space-2xl) var(--ibv-space-lg) var(--ibv-space-lg);
 	background: var(--ibv-color-bg);
@@ -19,44 +27,20 @@
 	letter-spacing: 0;
 }
 
-.ibv-enquiry-panel__form {
-	display: flex;
-	flex-direction: column;
+/* Tighten the embedded GF field stack to match the old hand-built spacing. */
+.ibv-enquiry-panel .ibv-gform .gform_fields {
 	gap: var(--ibv-space-md);
 }
 
-/* Fields: no labels — inputs are self-describing (Figma pattern) */
-.ibv-enquiry-panel__field label {
-	display: block;
-	font-size: var(--ibv-fs-micro);
-	font-weight: var(--ibv-font-weight-bold);
-	margin-bottom: var(--ibv-space-2xs);
-	color: var(--ibv-color-text);
+/* ── Single-field "When" picker (GF HTML field markup) ──────────────── */
+
+/* The two real GF date fields are hidden; the HTML "When" field is the
+   visible control (enquiry-panel.js writes the range into the hidden inputs). */
+.ibv-enquiry-panel .ibv-drp-from,
+.ibv-enquiry-panel .ibv-drp-to {
+	display: none;
 }
 
-/* :not(.iti__search-input) keeps the field chrome off the search input
-   that intl-tel-input renders inside the phone field's dropdown. */
-.ibv-enquiry-panel__field input:not(.iti__search-input),
-.ibv-enquiry-panel__field textarea {
-	width: 100%;
-	font: inherit;
-	font-size: var(--ibv-fs-body);
-	padding: var(--ibv-space-md) var(--ibv-space-lg);
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-field);
-	background: var(--ibv-color-bg);
-	color: var(--ibv-color-text);
-	appearance: none;
-	-webkit-appearance: none;
-}
-
-.ibv-enquiry-panel__field input[type="date"] {
-	min-height: 3.375rem; /* 54px — matches Figma */
-}
-
-/* "When" trigger — single button replacing the two visible date inputs.
- * Matches the existing input chrome (border, radius, padding, height).
- * Hidden inputs still hold date_from / date_to for the form contract. */
 .ibv-enquiry-panel__field--when {
 	position: relative;
 }
@@ -81,8 +65,9 @@
 
 .ibv-enquiry-panel__when-trigger:focus,
 .ibv-enquiry-panel__when-trigger:focus-visible {
-	outline: none;
-	border-color: var(--ibv-color-focus-ring);
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: -2px;
+	border-color: transparent;
 }
 
 .ibv-enquiry-panel__when-value {
@@ -127,128 +112,39 @@
 	outline: none;
 }
 
-.ibv-enquiry-panel__field input[type="date"]::-webkit-calendar-picker-indicator {
+/* ── Pending state — gate the price + contact fields ───────────────── */
+
+/* Price field (GF HTML field) is hidden until JS removes .is-pricing-pending
+   after a successful paint(). Hiding the whole .gfield avoids an empty grid gap. */
+.ibv-enquiry-panel.is-pricing-pending .ibv-enquiry-panel__price-field {
 	display: none;
 }
 
-/* Pax field: the label carries the box chrome; the select inside fills it
-   so the whole box is the dropdown's click target. Option labels carry the
-   "Guests" wording; option values stay bare integers for the pax contract. */
-.ibv-enquiry-panel__field--pax label {
-	position: relative;
-	display: flex;
-	align-items: center;
-	min-height: 3.375rem;
-	padding: 0;
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-field);
-	background: var(--ibv-color-bg);
-	font-weight: var(--ibv-font-weight-normal);
-}
-
-.ibv-enquiry-panel__field--pax label select {
-	width: 100%;
-	min-width: 0;
-	padding: var(--ibv-space-md) calc(var(--ibv-space-lg) + 1.5rem) var(--ibv-space-md) var(--ibv-space-lg);
-	border: 0;
-	background: transparent;
-	font: inherit;
-	font-size: var(--ibv-fs-body);
-	color: var(--ibv-color-text);
-	appearance: none;
-	-webkit-appearance: none;
-	cursor: pointer;
-}
-
-.ibv-enquiry-panel__field--pax label select:focus {
-	outline: none;
-}
-
-.ibv-enquiry-panel__field--pax:has(select:focus-visible) label {
-	outline: 2px solid var(--ibv-color-focus-ring);
-	outline-offset: 2px;
-}
-
-/* Reads as muted (placeholder-style) while the empty option is selected. */
-.ibv-enquiry-panel__field--pax label select:invalid {
-	color: var(--ibv-color-text-muted);
-}
-
-.ibv-enquiry-panel__select-icon {
-	position: absolute;
-	inset-inline-end: var(--ibv-space-lg);
-	inset-block-start: 50%;
-	translate: 0 -50%;
-	width: 1rem;
-	height: 1rem;
-	color: var(--ibv-color-text-muted);
-	pointer-events: none;
-}
-
-.ibv-enquiry-panel__field textarea {
-	min-height: 7.5rem; /* 120px — shortened so contact fields fit above the fold */
-	resize: vertical;
-}
-
-.ibv-enquiry-panel__field input::placeholder,
-.ibv-enquiry-panel__field textarea::placeholder {
-	color: var(--ibv-color-text-muted);
-}
-
-/* Contact fields — hidden (and disabled in markup/JS) until availability
-   is confirmed or pricing fails (enquiry still possible). Same collapse +
-   fade-in mechanics as the price block below. */
-.ibv-enquiry-panel__field--name,
-.ibv-enquiry-panel__field--email,
-.ibv-enquiry-panel__field--phone,
-.ibv-enquiry-panel__field--message {
-	transition: opacity 200ms ease-out, display 200ms allow-discrete;
-}
-
-.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--name,
-.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--email,
-.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--phone,
-.ibv-enquiry-panel.is-contact-pending .ibv-enquiry-panel__field--message {
+/* Contact fields are hidden until availability resolves. The submit gate
+   guarantees the form can only be sent once they're revealed. */
+.ibv-enquiry-panel.is-contact-pending .ibv-contact-field {
 	display: none;
-	opacity: 0;
 }
 
-@starting-style {
-	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--name,
-	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--email,
-	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--phone,
-	.ibv-enquiry-panel:not(.is-contact-pending) .ibv-enquiry-panel__field--message {
-		opacity: 0;
-	}
-}
-
-/* Pending state — the price block is hidden until JS removes the
-   .is-pricing-pending class after paint() succeeds. Uses transition-
-   behavior: allow-discrete + @starting-style so the block collapses out
-   of layout while hidden but still fades in on reveal. */
-.ibv-enquiry-panel__price-block {
-	transition: opacity 200ms ease-out, display 200ms allow-discrete;
-}
-
-.ibv-enquiry-panel.is-pricing-pending .ibv-enquiry-panel__price-block {
+/* The notice field collapses out of the grid whenever no notice is shown. */
+.ibv-enquiry-panel__notice-field:has([data-bob-error][hidden]) {
 	display: none;
-	opacity: 0;
 }
 
-@starting-style {
-	.ibv-enquiry-panel:not(.is-pricing-pending) .ibv-enquiry-panel__price-block {
-		opacity: 0;
-	}
-}
+/* ── Live price block (inside the GF HTML price field) ──────────────── */
 
-/* Price block — no card chrome, flows inline with form */
 .ibv-enquiry-panel__price-block {
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem; /* 12px — matches Figma gap between label/price and breakdown */
-	padding: 0;
-	background: transparent;
-	border: 0;
+	gap: 0.75rem;
+}
+
+.ibv-enquiry-panel__price-label {
+	margin: 0;
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-bold);
+	line-height: 1.4;
+	color: var(--ibv-color-text);
 }
 
 .ibv-enquiry-panel__price-list {
@@ -261,27 +157,10 @@
 	margin: 0;
 }
 
-.ibv-enquiry-panel__price-label {
-	margin: 0;
-	font-size: var(--ibv-fs-micro);
-	font-weight: var(--ibv-font-weight-bold);
-	line-height: 1.4;
-	color: var(--ibv-color-text);
-}
-
 .ibv-enquiry-panel__price-eur {
 	margin: 0;
 	font-family: var(--ibv-font-display);
-	font-size: 2rem; /* 32px — Figma Desktop/H3 */
-	font-weight: var(--ibv-font-weight-regular);
-	line-height: 1.2;
-	color: var(--ibv-color-brand-teal);
-}
-
-.ibv-enquiry-panel__price-gbp {
-	margin: 0;
-	font-family: var(--ibv-font-display);
-	font-size: 1.25rem; /* 20px — Figma Desktop/H5 */
+	font-size: 2rem;
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: 1.2;
 	color: var(--ibv-color-brand-teal);
@@ -291,7 +170,7 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	font-size: var(--ibv-fs-small); /* 14px — Figma Paragraph/Small */
+	font-size: var(--ibv-fs-small);
 	line-height: 1.2;
 	color: var(--ibv-color-brand-teal);
 }
@@ -302,10 +181,12 @@
 
 .ibv-enquiry-panel__eco-note {
 	margin: 0;
-	font-size: var(--ibv-fs-micro); /* 10px */
+	font-size: var(--ibv-fs-micro);
 	color: var(--ibv-color-text);
 	line-height: var(--ibv-lh-normal);
 }
+
+/* ── Availability / pricing notice ─────────────────────────────────── */
 
 .ibv-enquiry-panel__error {
 	font-size: var(--ibv-fs-small);
@@ -317,8 +198,47 @@
 	line-height: var(--ibv-lh-normal);
 }
 
-.ibv-enquiry-panel__response-note {
+.ibv-enquiry-panel__error[hidden] {
+	display: none;
+}
+
+/* ── Submit (GF button) — prominent full-width primary CTA, gated ───── */
+
+.ibv-enquiry-panel .ibv-gform .gform_footer {
 	margin: 0;
+	display: block;
+}
+
+.ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"],
+.ibv-enquiry-panel .ibv-gform .gform_footer button[type="submit"] {
+	width: 100%;
+	border-radius: var(--ibv-radius-md);
+	padding: var(--ibv-space-md) var(--ibv-space-xl);
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-medium);
+	background: var(--ibv-color-accent);
+	color: var(--ibv-color-accent-contrast);
+}
+
+.ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"]:hover,
+.ibv-enquiry-panel .ibv-gform .gform_footer button[type="submit"]:hover,
+.ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"]:focus-visible,
+.ibv-enquiry-panel .ibv-gform .gform_footer button[type="submit"]:focus-visible {
+	background: var(--ibv-color-link);
+	color: var(--ibv-color-accent-contrast);
+	filter: none;
+}
+
+.ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"][disabled],
+.ibv-enquiry-panel .ibv-gform .gform_footer button[type="submit"][disabled] {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ── Chrome: response note + chat block ────────────────────────────── */
+
+.ibv-enquiry-panel__response-note {
+	margin: var(--ibv-space-md) 0 0;
 	font-size: var(--ibv-fs-micro);
 	color: var(--ibv-color-text);
 	line-height: var(--ibv-lh-normal);
@@ -328,10 +248,9 @@
 	border: 0;
 	border-top: 1px solid var(--ibv-color-accent-gold);
 	margin: var(--ibv-space-md) 0;
-	width: 3.125rem; /* 50px narrow rule — matches Figma separator */
+	width: 3.125rem;
 }
 
-/* Chat block — "Prefer to chat? WhatsApp us" on one line */
 .ibv-enquiry-panel__chat-label {
 	margin: 0 0 var(--ibv-space-xs);
 	font-size: var(--ibv-fs-small);
@@ -361,72 +280,8 @@
 	text-decoration: underline;
 }
 
-.ibv-enquiry-panel .ibv-enquiry-panel__submit[disabled] {
-	opacity: 0.5;
-	cursor: not-allowed;
-}
+/* ── Phone error (intl-tel-input strict validation) ────────────────── */
 
-/* ── intl-tel-input (phone field) ─────────────────────────────────── */
-
-/* Map vendor theme vars to tokens on :root so they reach the mobile
-   fullscreen country selector, which is detached from the .iti wrapper. */
-:root {
-	--iti-border-color:        var(--ibv-color-border);
-	--iti-country-selector-bg: var(--ibv-color-bg);
-	--iti-icon-color:          var(--ibv-color-text-muted);
-	--iti-hover-color:         var(--ibv-color-tint-teal);
-	--iti-spacer-horizontal:   var(--ibv-space-md);
-}
-
-/* The widget wraps the input in .iti (inline-block by default) —
-   make it fill the field div like every other input in the form. */
-.ibv-enquiry-panel__field--phone .iti {
-	display: block;
-	width: 100%;
-}
-
-/* Country dropdown panel. Vendor-class selectors are deliberately
-   unscoped below this point so they also reach the fullscreen popup
-   variant on mobile, which is detached from the phone field. */
-.iti__country-selector {
-	overflow: hidden;
-	border-radius: var(--ibv-radius-field);
-	box-shadow: var(--ibv-shadow-md);
-}
-
-/* Search input — flat bar with the wrapper's bottom border as its only
-   chrome; the global :focus-visible ring doesn't fit inside the panel,
-   so focus is signalled on the wrapper border instead. */
-.iti__search-input {
-	font: inherit;
-	font-size: var(--ibv-fs-body);
-	padding-top: var(--ibv-space-sm);
-	padding-bottom: var(--ibv-space-sm);
-	background: transparent;
-	color: var(--ibv-color-text);
-}
-
-.iti__search-input:focus,
-.iti__search-input:focus-visible {
-	outline: none;
-}
-
-.iti__search-input::placeholder {
-	color: var(--ibv-color-text-muted);
-}
-
-.iti__search-input-wrapper:focus-within {
-	border-bottom-color: var(--ibv-color-focus-ring);
-}
-
-/* Focus ring on the flag/dial-code button, matching the pax select pattern */
-.ibv-enquiry-panel__field--phone .iti__selected-country:focus-visible {
-	outline: 2px solid var(--ibv-color-focus-ring);
-	outline-offset: -2px;
-	border-radius: var(--ibv-radius-field) 0 0 var(--ibv-radius-field);
-}
-
-/* Inline validation error message */
 .ibv-enquiry-panel__phone-error {
 	margin: var(--ibv-space-2xs) 0 0;
 	font-size: var(--ibv-fs-small);
@@ -438,6 +293,16 @@
 	display: none;
 }
 
-.ibv-enquiry-panel__field--phone.has-error input {
+.ibv-enquiry-panel .gfield.has-error input[type="tel"] {
 	border-color: var(--ibv-color-error-200);
+}
+
+/* ── intl-tel-input theme vars (global mapping; reaches the mobile
+   fullscreen country selector, which is detached from the .iti wrapper) ── */
+:root {
+	--iti-border-color:        var(--ibv-color-border);
+	--iti-country-selector-bg: var(--ibv-color-bg);
+	--iti-icon-color:          var(--ibv-color-text-muted);
+	--iti-hover-color:         var(--ibv-color-tint-teal);
+	--iti-spacer-horizontal:   var(--ibv-space-md);
 }

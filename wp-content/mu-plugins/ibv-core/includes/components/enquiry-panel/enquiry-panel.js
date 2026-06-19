@@ -1,49 +1,274 @@
 /**
- * Enquiry panel — Bob API detail-mode pricing fetch.
+ * Villa enquiry panel — live pricing / availability gate grafted onto the
+ * embedded Gravity Form (#33).
  *
- * Reads property_id + URL state from data-* attributes on the wrapper,
- * gates the Request to Book button on dates + pax being filled and the
- * villa not being confirmed-unavailable, and fetches live pricing from
- * Steve's PMS endpoint to update the price block. When the villa is unavailable for the chosen range, or the
- * fetch fails, the price block stays collapsed and a notice is shown
- * in [data-bob-error] (copy comes from data-bob-msg-* attributes so
- * the strings stay translatable in PHP).
+ * GF owns submit / validation / notification / redirect. This script grafts on
+ * the villa-specific behaviour the same way accommodation-enquiry.js grafts the
+ * picker + phone — and re-binds on `gform_post_render` so everything survives
+ * GF's AJAX re-render (validation errors):
  *
- * Response shape (per AGENTS.md):
+ *   - the single-field "When" date-range picker (self-contained VanillaCalendarPro
+ *     binding, reusing the ibv-date-range-picker brand CSS) writing the YYYY-MM-DD
+ *     range into the .ibv-drp-from / .ibv-drp-to date inputs;
+ *   - live pricing from Steve's PMS (detail mode), painted into the [data-bob-*]
+ *     targets in the GF HTML price field;
+ *   - the submit gate (GF submit button disabled until dates + pax are filled and
+ *     the villa is available) + the contact-field reveal (is-contact-pending);
+ *   - intl-tel-input phone with strict validation + E.164 normalisation before GF
+ *     serialises.
+ *
+ * The shared date-range-picker.js (header/hero search) boots once on
+ * DOMContentLoaded with no re-init API and must stay untouched, so the picker
+ * binding is duplicated here (the accommodation pattern).
+ *
+ * Pricing response shape (per AGENTS.md):
  *   { success, count, query, villas: [ { eur_total_price, eur_base_rental,
- *     eur_adw_amount, eur_extra_cleaning, gbp_total_price, available, ... } ] }
+ *     eur_adw_amount, eur_extra_cleaning, available, ... } ] }
  */
 ( function () {
 	'use strict';
 
-	function init( panel ) {
-		var endpoint   = panel.getAttribute( 'data-bob-endpoint' ) || '';
-		var propertyId = panel.getAttribute( 'data-bob-property-id' ) || '';
-		var confirmUrl = panel.getAttribute( 'data-bob-confirm-url' ) || '';
-		var villaId    = panel.getAttribute( 'data-villa-id' ) || '';
+	var instanceCount = 0;
 
-		var form = panel.querySelector( '.ibv-enquiry-panel__form' );
-		if ( ! form ) {
+	/* ── Date helpers ───────────────────────────────────────────────── */
+
+	function pad( n ) {
+		return ( n < 10 ? '0' : '' ) + n;
+	}
+
+	function formatYMD( d ) {
+		return d.getFullYear() + '-' + pad( d.getMonth() + 1 ) + '-' + pad( d.getDate() );
+	}
+
+	function todayYMD() {
+		return formatYMD( new Date() );
+	}
+
+	function isValidYMD( s ) {
+		return /^\d{4}-\d{2}-\d{2}$/.test( s || '' );
+	}
+
+	function setInputValue( input, value ) {
+		if ( ! input ) {
+			return;
+		}
+		input.value = value;
+		input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		input.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+	}
+
+	function formatRangeForDisplay( fromYMD, toYMD ) {
+		var from = new Date( fromYMD + 'T00:00:00' );
+		var to   = new Date( toYMD + 'T00:00:00' );
+		if ( isNaN( from.getTime() ) || isNaN( to.getTime() ) ) {
+			return '';
+		}
+		var sameYear  = from.getFullYear() === to.getFullYear();
+		var sameMonth = sameYear && from.getMonth() === to.getMonth();
+		var monthDay  = new Intl.DateTimeFormat( 'en-GB', { month: 'short', day: 'numeric' } );
+		var dayOnly   = new Intl.DateTimeFormat( 'en-GB', { day: 'numeric' } );
+		var withYear  = new Intl.DateTimeFormat( 'en-GB', { month: 'short', day: 'numeric', year: 'numeric' } );
+		if ( sameMonth ) {
+			return monthDay.format( from ) + ' – ' + dayOnly.format( to );
+		}
+		if ( sameYear ) {
+			return monthDay.format( from ) + ' – ' + monthDay.format( to );
+		}
+		return monthDay.format( from ) + ' – ' + withYear.format( to );
+	}
+
+	function injectAnchorRules( instanceId ) {
+		var anchorName = '--ibv-drp-anchor-' + instanceId;
+		var styleEl = document.createElement( 'style' );
+		styleEl.setAttribute( 'data-ibv-drp-anchor-styles', String( instanceId ) );
+		styleEl.textContent =
+			'[data-ibv-drp-anchor-source="' + instanceId + '"] {' +
+				'anchor-name: ' + anchorName + ';' +
+			'}' +
+			'[data-ibv-drp-anchor-target="' + instanceId + '"] {' +
+				'position-anchor: ' + anchorName + ';' +
+			'}';
+		document.head.appendChild( styleEl );
+	}
+
+	/* ── Date-range picker (one per form) ───────────────────────────── */
+
+	function bindPicker( panel, form ) {
+		if ( form.__ibvVillaDrpBound ) {
 			return;
 		}
 
-		var fromEl   = form.querySelector( '[name="date_from"]' );
-		var toEl     = form.querySelector( '[name="date_to"]' );
-		var paxEl    = form.querySelector( '[name="pax"]' );
-		var submitEl = panel.querySelector( '[data-bob-submit]' );
+		var fromWrap = form.querySelector( '.ibv-drp-from' );
+		var toWrap   = form.querySelector( '.ibv-drp-to' );
+		var fromInput = fromWrap ? fromWrap.querySelector( 'input' ) : null;
+		var toInput   = toWrap ? toWrap.querySelector( 'input' ) : null;
+		var trigger   = form.querySelector( '[data-bob-date-range-trigger]' );
+		var display   = form.querySelector( '[data-bob-date-range-display]' );
+		var clearBtn  = form.querySelector( '[data-bob-date-range-clear]' );
+		if ( ! fromInput || ! toInput || ! trigger ) {
+			return;
+		}
+		form.__ibvVillaDrpBound = true;
 
-		var contactEls = [
-			form.querySelector( '[name="enquiry_name"]' ),
-			form.querySelector( '[name="enquiry_email"]' ),
-			form.querySelector( '[name="enquiry_phone"]' ),
-			form.querySelector( '[name="message"]' ),
-		];
+		// Tear down any popover from a previous render of this panel.
+		if ( panel.__ibvPopover && panel.__ibvPopover.parentNode ) {
+			panel.__ibvPopover.parentNode.removeChild( panel.__ibvPopover );
+		}
 
-		var phoneEl      = form.querySelector( '[name="enquiry_phone"]' );
-		var phoneFieldEl = panel.querySelector( '.ibv-enquiry-panel__field--phone' );
-		var phoneErrorEl = panel.querySelector( '[data-bob-phone-error]' );
+		var displayPlaceholder = display ? ( display.dataset.placeholder || display.textContent || 'Add dates' ) : '';
+		var instanceId = ++instanceCount;
+
+		var popover = document.createElement( 'div' );
+		popover.className = 'ibv-drp__popover';
+		popover.setAttribute( 'popover', 'auto' );
+		popover.setAttribute( 'data-ibv-drp-anchor-target', String( instanceId ) );
+
+		var calendarHost = document.createElement( 'div' );
+		calendarHost.className = 'ibv-drp__calendar';
+		popover.appendChild( calendarHost );
+		document.body.appendChild( popover );
+		panel.__ibvPopover = popover;
+
+		var anchorEl = form.querySelector( '[data-bob-date-range-anchor]' ) || trigger;
+		anchorEl.setAttribute( 'data-ibv-drp-anchor-source', String( instanceId ) );
+		injectAnchorRules( instanceId );
+
+		var calendar = null;
+
+		function buildCalendar() {
+			if ( calendar ) {
+				return;
+			}
+			var Calendar = window.VanillaCalendarPro && window.VanillaCalendarPro.Calendar;
+			if ( ! Calendar ) {
+				return;
+			}
+			var seedFrom = isValidYMD( fromInput.value ) ? fromInput.value : '';
+			var seedTo   = isValidYMD( toInput.value )   ? toInput.value   : '';
+			var today    = todayYMD();
+
+			calendar = new Calendar( calendarHost, {
+				type: 'multiple',
+				displayMonthsCount: 2,
+				monthsToSwitch: 1,
+				selectionDatesMode: 'multiple-ranged',
+				enableEdgeDatesOnly: true,
+				disableDatesPast: true,
+				selectedTheme: 'light',
+				themeAttrDetect: false,
+				locale: 'en-GB',
+				dateMin: today,
+				displayDateMin: today,
+				selectedDates: ( seedFrom && seedTo ) ? [ seedFrom, seedTo ] : [],
+				firstWeekday: 1,
+				onClickDate: function ( self ) {
+					var dates = self.context.selectedDates || [];
+					if ( dates.length === 2 ) {
+						var sorted = dates.slice().sort();
+						setInputValue( fromInput, sorted[ 0 ] );
+						setInputValue( toInput, sorted[ 1 ] );
+					} else if ( dates.length === 0 ) {
+						setInputValue( fromInput, '' );
+						setInputValue( toInput, '' );
+					}
+				},
+			} );
+			calendar.init();
+		}
+
+		function open() {
+			if ( popover.matches( ':popover-open' ) ) {
+				return;
+			}
+			buildCalendar();
+			popover.showPopover();
+		}
+
+		function syncDisplay() {
+			if ( ! display ) {
+				return;
+			}
+			var f = fromInput.value;
+			var t = toInput.value;
+			var formatted = ( isValidYMD( f ) && isValidYMD( t ) ) ? formatRangeForDisplay( f, t ) : '';
+			if ( formatted ) {
+				display.textContent = formatted;
+				display.classList.remove( 'is-empty' );
+			} else {
+				display.textContent = displayPlaceholder;
+				display.classList.add( 'is-empty' );
+			}
+			if ( clearBtn ) {
+				clearBtn.hidden = ! formatted;
+			}
+		}
+
+		trigger.addEventListener( 'click', function ( ev ) {
+			ev.preventDefault();
+			open();
+		} );
+
+		[ fromInput, toInput ].forEach( function ( input ) {
+			input.addEventListener( 'change', syncDisplay );
+		} );
+
+		if ( clearBtn ) {
+			clearBtn.addEventListener( 'click', function ( ev ) {
+				ev.preventDefault();
+				ev.stopPropagation();
+				setInputValue( fromInput, '' );
+				setInputValue( toInput, '' );
+				if ( calendar ) {
+					calendar.set( { selectedDates: [] }, { year: false, month: false, time: false } );
+				}
+				syncDisplay();
+			} );
+		}
+
+		syncDisplay();
+	}
+
+	/* ── Pricing / gate / phone graft ───────────────────────────────── */
+
+	function bindEnquiry( panel, form ) {
+		if ( form.__ibvVillaBound ) {
+			return;
+		}
+		form.__ibvVillaBound = true;
+
+		var endpoint   = panel.getAttribute( 'data-bob-endpoint' ) || '';
+		var propertyId = panel.getAttribute( 'data-bob-property-id' ) || '';
+
+		var fromEl   = ( form.querySelector( '.ibv-drp-from' ) || form ).querySelector( 'input' );
+		var toEl     = ( form.querySelector( '.ibv-drp-to' ) || form ).querySelector( 'input' );
+		var paxWrap  = form.querySelector( '.ibv-pax' );
+		var paxEl    = paxWrap ? ( paxWrap.querySelector( 'select' ) || paxWrap.querySelector( 'input' ) ) : null;
+		var submitEl = form.querySelector( 'button[type="submit"], input[type="submit"]' );
+
+		// Re-resolve the .ibv-drp inputs precisely (the fallback above is only a guard).
+		var fromWrap = form.querySelector( '.ibv-drp-from' );
+		var toWrap   = form.querySelector( '.ibv-drp-to' );
+		fromEl = fromWrap ? fromWrap.querySelector( 'input' ) : fromEl;
+		toEl   = toWrap ? toWrap.querySelector( 'input' ) : toEl;
+
+		var phoneEl      = form.querySelector( '.gfield--type-phone input[type="tel"]' );
+		var phoneFieldEl = phoneEl ? phoneEl.closest( '.gfield' ) : null;
 		var utilsUrl     = panel.getAttribute( 'data-iti-utils-url' ) || '';
 		var msgInvalidPhone = panel.getAttribute( 'data-bob-msg-invalid-phone' ) || '';
+
+		// Phone error element — created in the phone field (re-created each render).
+		var phoneErrorEl = null;
+		if ( phoneFieldEl ) {
+			phoneErrorEl = phoneFieldEl.querySelector( '[data-bob-phone-error]' );
+			if ( ! phoneErrorEl ) {
+				phoneErrorEl = document.createElement( 'p' );
+				phoneErrorEl.className = 'ibv-enquiry-panel__phone-error';
+				phoneErrorEl.setAttribute( 'data-bob-phone-error', '' );
+				phoneErrorEl.setAttribute( 'role', 'alert' );
+				phoneErrorEl.setAttribute( 'hidden', '' );
+				phoneFieldEl.appendChild( phoneErrorEl );
+			}
+		}
 
 		var iti = null;
 		if ( phoneEl && typeof window.intlTelInput === 'function' ) {
@@ -51,16 +276,11 @@
 				initialCountry:   'gb',
 				separateDialCode: true,
 				strictMode:       true,
-				// Replace the static "Phone" placeholder with an example number
-				// for the selected country once utils.js loads (e.g. "7400 123456").
-				// AGGRESSIVE because POLITE defers to the existing placeholder attr.
 				placeholderNumberPolicy: 'AGGRESSIVE',
 				loadUtils:        utilsUrl ? function () { return import( utilsUrl ); } : null,
 			} );
 
-			// Skip the country/flag button in the keyboard tab order — Tab goes
-			// straight from the previous field to the number input. Still mouse-
-			// clickable; setDisabled() only toggles the disabled attr, so this persists.
+			// Skip the flag button in the keyboard tab order (still mouse-clickable).
 			var itiWrap    = phoneEl.closest( '.iti' );
 			var countryBtn = itiWrap ? itiWrap.querySelector( '.iti__selected-country' ) : null;
 			if ( countryBtn ) {
@@ -93,27 +313,20 @@
 			phoneEl.addEventListener( 'countrychange', clearPhoneError );
 		}
 
-		var errorEl        = panel.querySelector( '[data-bob-error]' );
+		var errorEl        = form.querySelector( '[data-bob-error]' );
 		var msgUnavailable = panel.getAttribute( 'data-bob-msg-unavailable' ) || '';
 		var msgPriceError  = panel.getAttribute( 'data-bob-msg-price-error' ) || '';
 
-		var totalEl    = panel.querySelector( '[data-bob-total-eur]' );
-		var totalGbpEl = panel.querySelector( '[data-bob-total-gbp]' );
-		var rentalEl   = panel.querySelector( '[data-bob-base-rental]' );
-		var adwEl      = panel.querySelector( '[data-bob-adw]' );
-		var cleaningEl = panel.querySelector( '[data-bob-cleaning]' );
+		var totalEl    = form.querySelector( '[data-bob-total-eur]' );
+		var rentalEl   = form.querySelector( '[data-bob-base-rental]' );
+		var adwEl      = form.querySelector( '[data-bob-adw]' );
+		var cleaningEl = form.querySelector( '[data-bob-cleaning]' );
 
-		function money( currency ) {
-			return new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: currency, maximumFractionDigits: 0 } );
-		}
-		var EUR = money( 'EUR' );
-		var GBP = money( 'GBP' );
+		var EUR = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 } );
 
-		// Villa-overview indicative price ("From €X / wk"). While a priced
-		// search is active we swap in the average weekly rate for the selected
-		// dates and toggle the surrounding copy; the captured static state is
-		// restored when dates clear, the villa is unavailable, or the fetch
-		// fails.
+		// Villa-overview indicative price ("From €X / wk") — swapped to the
+		// average weekly rate for the selected dates while a priced search is
+		// active; restored when dates clear / unavailable / fetch fails.
 		var ovPrice  = document.querySelector( '.ibv-villa-overview__price' );
 		var ovAmount = ovPrice ? ovPrice.querySelector( '[data-bob-from-price]' ) : null;
 		var ovFrom   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-from' ) : null;
@@ -124,10 +337,6 @@
 			text:       ovAmount ? ovAmount.textContent : '',
 			onRequest:  ovAmount ? ovAmount.classList.contains( 'ibv-villa-overview__price-amount--on-request' ) : false,
 			unitHidden: ovUnit ? ovUnit.hidden : false,
-			// The on-request prompt is a <label for="ibv-ep-when"> so clicking
-			// it opens the date picker. The for attribute is removed while a
-			// price is shown — a label overrides the labelled button's
-			// accessible name, and "€5,976" is no name for a date trigger.
 			forAttr:    ovAmount ? ovAmount.getAttribute( 'for' ) : null,
 		};
 
@@ -193,8 +402,8 @@
 			return isValidDate( s.date_from ) && isValidDate( s.date_to ) && s.pax > 0;
 		}
 
-		// Confirmed-unavailable from the API blocks Request to Book; a failed
-		// fetch leaves it enabled (availability unknown — enquiry still valid).
+		// Confirmed-unavailable blocks the gate; a failed fetch leaves it open
+		// (availability unknown — the enquiry is still valid).
 		var isUnavailable = false;
 
 		function updateGate() {
@@ -222,40 +431,16 @@
 			panel.classList.add( 'is-pricing-pending' );
 		}
 
-		// Contact fields stay hidden + disabled until an enquiry is actually
-		// possible (availability confirmed, or pricing fetch failed so we
-		// invite the enquiry anyway). Disabling keeps the hidden required
-		// inputs out of constraint validation — an invalid, non-focusable
-		// control would otherwise silently block form submission.
-		function setContactDisabled( el, disabled ) {
-			if ( ! el ) {
-				return;
-			}
-			// intl-tel-input wraps the phone input and also disables its flag button;
-			// use iti.setDisabled() so both the input and the country selector toggle.
-			if ( iti && el === phoneEl ) {
-				iti.setDisabled( disabled );
-				return;
-			}
-			if ( disabled ) {
-				el.setAttribute( 'disabled', 'disabled' );
-			} else {
-				el.removeAttribute( 'disabled' );
-			}
-		}
-
+		// Contact fields are hidden by CSS (.is-contact-pending .ibv-contact-field)
+		// until an enquiry is possible. The submit gate guarantees the form can
+		// only be submitted once they are revealed, so no field-disabling is
+		// needed (which keeps GF's required validation clean).
 		function revealContactFields() {
 			panel.classList.remove( 'is-contact-pending' );
-			contactEls.forEach( function ( el ) {
-				setContactDisabled( el, false );
-			} );
 		}
 
 		function hideContactFields() {
 			panel.classList.add( 'is-contact-pending' );
-			contactEls.forEach( function ( el ) {
-				setContactDisabled( el, true );
-			} );
 			clearPhoneError();
 		}
 
@@ -275,7 +460,6 @@
 
 		function resetPrices() {
 			setText( totalEl, '—' );
-			setText( totalGbpEl, '—' );
 			setText( rentalEl, '—' );
 			setText( adwEl, '—' );
 			setText( cleaningEl, '—' );
@@ -298,7 +482,6 @@
 		function paint( data ) {
 			var node = null;
 			if ( data && Array.isArray( data.villas ) ) {
-				// Empty villas array = no availability for the range.
 				node = data.villas.length ? data.villas[ 0 ] : null;
 			} else if ( data && data.villa ) {
 				node = data.villa;
@@ -310,26 +493,20 @@
 				return false;
 			}
 
-			var total    = pickNumber( node, [ 'eur_total_price' ] );
-			var totalGbp = pickNumber( node, [ 'gbp_total_price' ] );
-			var rent     = pickNumber( node, [ 'eur_base_rental' ] );
-			var adw      = pickNumber( node, [ 'eur_adw_amount' ] );
-			var clean    = pickNumber( node, [ 'eur_extra_cleaning' ] );
+			var total = pickNumber( node, [ 'eur_total_price' ] );
+			var rent  = pickNumber( node, [ 'eur_base_rental' ] );
+			var adw   = pickNumber( node, [ 'eur_adw_amount' ] );
+			var clean = pickNumber( node, [ 'eur_extra_cleaning' ] );
 
-			// No total = nothing worth revealing; treat as unavailable.
 			if ( total === null ) {
 				return false;
 			}
 
-			setText( totalEl,    total    !== null ? EUR.format( total )    : '—' );
-			setText( totalGbpEl, totalGbp !== null ? GBP.format( totalGbp ) : '—' );
-			setText( rentalEl,   rent     !== null ? EUR.format( rent )     : '—' );
-			setText( adwEl,      adw      !== null ? EUR.format( adw )      : '—' );
-			setText( cleaningEl, clean    !== null ? EUR.format( clean )    : '—' );
+			setText( totalEl,    EUR.format( total ) );
+			setText( rentalEl,   rent  !== null ? EUR.format( rent )  : '—' );
+			setText( adwEl,      adw   !== null ? EUR.format( adw )   : '—' );
+			setText( cleaningEl, clean !== null ? EUR.format( clean ) : '—' );
 
-			// eur_base_rental covers the whole stay; normalise to an average
-			// per-week rate for the overview's "/ wk" display. rent of 0 (no
-			// rate card loaded) keeps the static indicative price instead.
 			var nights = data && data.query ? pickNumber( data.query, [ 'nights' ] ) : null;
 			if ( rent !== null && rent > 0 ) {
 				showDatedOverviewPrice( nights > 0 ? ( rent * 7 ) / nights : rent );
@@ -348,6 +525,7 @@
 			if ( ! gateReady( s ) ) {
 				resetPrices();
 				clearNotice();
+				hidePriceBlock();
 				hideContactFields();
 				isUnavailable = false;
 				updateGate();
@@ -422,52 +600,33 @@
 			el.addEventListener( 'input', schedule );
 		} );
 
+		// Strict phone validation + E.164 write before GF serialises. Capture
+		// phase so we can block GF's AJAX submit on an invalid number; fail-open
+		// if utils.js hasn't loaded so an enquiry is never lost to a missing script.
 		form.addEventListener( 'submit', function ( ev ) {
-			ev.preventDefault();
-			var s = readState();
-			if ( ! gateReady( s ) || isUnavailable ) {
-				updateGate();
+			if ( ! iti || ! phoneEl || panel.classList.contains( 'is-contact-pending' ) ) {
 				return;
 			}
-
-			// Phone validation — only once contact fields are active.
-			// Fail-open if utils.js hasn't loaded (isValidNumber/getNumber throw
-			// without utils); an enquiry must never be lost to a missing script.
-			if ( iti && phoneEl && ! panel.classList.contains( 'is-contact-pending' ) ) {
-				var phoneValid = true;
+			var valid = true;
+			try {
+				valid = iti.isValidNumber() === true;
+			} catch ( e ) {
+				valid = true;
+			}
+			if ( ! valid ) {
+				ev.preventDefault();
+				ev.stopImmediatePropagation();
+				showPhoneError();
 				try {
-					phoneValid = iti.isValidNumber() === true;
-				} catch ( e ) {
-					phoneValid = true;
-				}
-				if ( ! phoneValid ) {
-					showPhoneError();
 					phoneEl.focus();
-					return;
-				}
-				clearPhoneError();
-				try {
-					phoneEl.value = iti.getNumber();
-				} catch ( e ) {}
+				} catch ( e2 ) {}
+				return;
 			}
-
-			// TODO: POST to enquiry endpoint when Steve confirms URL — redirect-only for now.
-			var params = new URLSearchParams();
-			if ( villaId ) {
-				params.set( 'villa', villaId );
-			}
-			if ( s.date_from ) {
-				params.set( 'arrival', s.date_from );
-			}
-			if ( s.date_to ) {
-				params.set( 'departure', s.date_to );
-			}
-			if ( s.pax ) {
-				params.set( 'guests', String( s.pax ) );
-			}
-			var sep = confirmUrl.indexOf( '?' ) === -1 ? '?' : '&';
-			window.location.assign( confirmUrl + sep + params.toString() );
-		} );
+			clearPhoneError();
+			try {
+				phoneEl.value = iti.getNumber();
+			} catch ( e3 ) {}
+		}, true );
 
 		updateGate();
 		if ( gateReady( readState() ) ) {
@@ -475,10 +634,18 @@
 		}
 	}
 
+	/* ── Boot + GF re-render ─────────────────────────────────────────── */
+
 	function boot() {
 		var panels = document.querySelectorAll( '[data-bob-enquiry-panel]' );
 		for ( var i = 0; i < panels.length; i++ ) {
-			init( panels[ i ] );
+			var panel = panels[ i ];
+			var form  = panel.querySelector( '.ibv-gform form[id^="gform_"]' );
+			if ( ! form ) {
+				continue;
+			}
+			bindPicker( panel, form );
+			bindEnquiry( panel, form );
 		}
 	}
 
@@ -486,5 +653,17 @@
 		document.addEventListener( 'DOMContentLoaded', boot );
 	} else {
 		boot();
+	}
+
+	// GF re-renders the form on AJAX (validation errors). Re-bind on the fresh
+	// DOM. This GF build fires `gform_post_render` via the jQuery event, NOT the
+	// gform JS-API action, so bind the jQuery event (the one that actually fires)
+	// and ALSO the JS API for builds where only it fires. boot() is idempotent
+	// (per-form __ibvVilla* guards), so a double-fire is harmless.
+	if ( window.jQuery ) {
+		window.jQuery( document ).on( 'gform_post_render', boot );
+	}
+	if ( window.gform && typeof window.gform.addAction === 'function' ) {
+		window.gform.addAction( 'gform_post_render', boot );
 	}
 }() );

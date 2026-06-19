@@ -100,6 +100,8 @@ require_once IBV_CORE_PATH . 'includes/sections/concierge-services/concierge-ser
 require_once IBV_CORE_PATH . 'includes/sections/contact-enquiry/contact-enquiry.php';
 require_once IBV_CORE_PATH . 'includes/sections/concierge-services/concierge-service-dropdown.php';
 require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.php';
+require_once IBV_CORE_PATH . 'includes/sections/accommodation-overview/accommodation-overview.php';
+require_once IBV_CORE_PATH . 'includes/sections/accommodation-enquiry/accommodation-enquiry.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/register-options.php';
@@ -113,6 +115,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-contact.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-booking-confirmation.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-accommodation.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-post-fields.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

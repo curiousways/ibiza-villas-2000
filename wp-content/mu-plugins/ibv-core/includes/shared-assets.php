@@ -223,6 +223,8 @@ function ibv_register_styles() {
 		'ibv-section-special-offers-empty-state'    => 'includes/sections/special-offers-empty-state/special-offers-empty-state.css',
 		'ibv-section-concierge-services'            => 'includes/sections/concierge-services/concierge-services.css',
 		'ibv-section-contact-enquiry'               => 'includes/sections/contact-enquiry/contact-enquiry.css',
+		'ibv-section-accommodation-overview'        => 'includes/sections/accommodation-overview/accommodation-overview.css',
+		'ibv-section-accommodation-enquiry'         => 'includes/sections/accommodation-enquiry/accommodation-enquiry.css',
 	];
 
 	foreach ( $section_handles as $handle => $rel ) {
@@ -314,10 +316,13 @@ function ibv_register_styles() {
 		]
 	);
 
+	// Villa enquiry panel — pricing/gate grafted onto the embedded Gravity Form.
+	// Drives its own VanillaCalendarPro picker + intl-tel-input phone and
+	// re-binds on gform_post_render (handled in the script).
 	wp_register_script(
 		'ibv-enquiry-panel',
 		IBV_CORE_URL . 'includes/components/enquiry-panel/enquiry-panel.js',
-		[ 'ibv-intl-tel-input' ],
+		[ 'ibv-vanilla-calendar-pro', 'ibv-intl-tel-input' ],
 		IBV_CORE_VERSION,
 		[
 			'in_footer' => true,
@@ -343,6 +348,17 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION,
 		[ 'in_footer' => true ]
 	);
+
+	// Accommodation enquiry — single-field date-range picker + phone, grafted
+	// onto the embedded Gravity Form. Depends on the vendored calendar lib and
+	// intl-tel-input; re-binds on gform_post_render (handled in the script).
+	wp_register_script(
+		'ibv-section-accommodation-enquiry',
+		IBV_CORE_URL . 'includes/sections/accommodation-enquiry/accommodation-enquiry.js',
+		[ 'ibv-vanilla-calendar-pro', 'ibv-intl-tel-input' ],
+		IBV_CORE_VERSION,
+		[ 'in_footer' => true ]
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'ibv_enqueue_template_styles', 20 );
@@ -353,5 +369,11 @@ function ibv_enqueue_template_styles() {
 
 	if ( is_page_template( 'page-booking-confirmation.php' ) && wp_style_is( 'ibv-booking-confirmation', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-booking-confirmation' );
+	}
+
+	// Accommodation pages (Hotel / Airstream) reuse the villa-detail two-column
+	// shell grid for their main + sidebar layout.
+	if ( is_page_template( 'page-accommodation.php' ) && wp_style_is( 'ibv-villa-detail', 'registered' ) ) {
+		wp_enqueue_style( 'ibv-villa-detail' );
 	}
 }

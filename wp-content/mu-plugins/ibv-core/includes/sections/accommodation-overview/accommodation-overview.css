@@ -1,0 +1,86 @@
+/* Accommodation overview — Hotel / Airstream main column.
+ * Heading + body prose + free-text fact pills + static "from" price.
+ * Lives inside .ibv-villa-detail__main (shell owns outer rhythm). */
+
+.ibv-accommodation-overview {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+}
+
+.ibv-accommodation-overview__body {
+	color: var(--ibv-color-text);
+	line-height: var(--ibv-lh-relaxed);
+}
+
+/* Fact pills — free-text chips (location / sleeps / availability). */
+.ibv-accommodation-overview__pills {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-xs);
+}
+
+.ibv-accommodation-overview__pill {
+	display: inline-flex;
+	align-items: center;
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	border-radius: var(--ibv-radius-pill);
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-forest-green-deep);
+	background: var(--ibv-color-tint-teal);
+}
+
+.ibv-accommodation-overview__pill--location {
+	background: var(--ibv-color-tint-gold);
+}
+
+.ibv-accommodation-overview__pill--sleeps {
+	background: var(--ibv-color-tint-teal);
+}
+
+.ibv-accommodation-overview__pill--availability {
+	background: var(--ibv-color-tint-blue);
+}
+
+/* "From €X,XXX / wk" + season note. */
+.ibv-accommodation-overview__price {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
+}
+
+.ibv-accommodation-overview__price-row {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+	gap: var(--ibv-space-2xs);
+	margin: 0;
+}
+
+.ibv-accommodation-overview__price-from {
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-accommodation-overview__price-amount {
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	color: var(--ibv-color-forest-green-deep);
+}
+
+.ibv-accommodation-overview__price-unit {
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-accommodation-overview__price-note {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+}

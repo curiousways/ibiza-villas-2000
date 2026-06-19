@@ -1,6 +1,24 @@
 <?php
 /**
- * Component: Enquiry / RTB panel (Bob shell).
+ * Component: Villa enquiry / RTB panel — embedded Gravity Form.
+ *
+ * The villa enquiry form is an EMBEDDED Gravity Form (#33, seeded by
+ * seed-villa-enquiry-form.php), exactly like the accommodation enquiry form — GF
+ * is the single source of truth (fields, validation, notification, entry, and the
+ * booking-confirmation redirect). The villa-specific live pricing / availability
+ * gate is grafted on top by enquiry-panel.js, the same way the date-range picker
+ * and phone widget are grafted onto the accommodation form.
+ *
+ * This file wires the server side of that graft:
+ *   - gform_field_value_* prepopulation (render time): the villa post id, plus the
+ *     search params (date_from / date_to / pax) so an arrival-via-search pre-fills
+ *     the form and auto-fetches pricing.
+ *   - gform_pre_submission (submit time): Property Name + Active Offers are set
+ *     server-side from the validated villa id, so attribution is authoritative
+ *     (not user-editable) — the same trust model the old REST handler had.
+ *
+ * Filters are registered at file load (not inside the render fn) so they are
+ * present when GF processes the AJAX submission early on the `wp` hook.
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,7 +28,116 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @param int $villa_id Post ID.
+ * Return a strict YYYY-MM-DD search param from $_GET, or '' if absent/invalid.
+ *
+ * @param string $key Query var name.
+ * @return string
+ */
+function ibv_enquiry_panel_get_date_param( $key ) {
+	if ( ! isset( $_GET[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only prefill.
+		return '';
+	}
+	$raw = sanitize_text_field( wp_unslash( $_GET[ $key ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	return preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ? $raw : '';
+}
+
+// ── Prepopulation (render time, single villa pages only) ────────────────────
+
+add_filter(
+	'gform_field_value_ibv_villa_id',
+	static function ( $value ) {
+		if ( ! is_singular( 'villas' ) ) {
+			return $value;
+		}
+		$id = get_queried_object_id();
+		return $id ? (string) $id : $value;
+	}
+);
+
+add_filter(
+	'gform_field_value_ibv_arrival',
+	static function ( $value ) {
+		if ( ! is_singular( 'villas' ) ) {
+			return $value;
+		}
+		$d = ibv_enquiry_panel_get_date_param( 'date_from' );
+		return '' !== $d ? $d : $value;
+	}
+);
+
+add_filter(
+	'gform_field_value_ibv_departure',
+	static function ( $value ) {
+		if ( ! is_singular( 'villas' ) ) {
+			return $value;
+		}
+		$d = ibv_enquiry_panel_get_date_param( 'date_to' );
+		return '' !== $d ? $d : $value;
+	}
+);
+
+add_filter(
+	'gform_field_value_ibv_pax',
+	static function ( $value ) {
+		if ( ! is_singular( 'villas' ) ) {
+			return $value;
+		}
+		if ( ! isset( $_GET['pax'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only prefill.
+			return $value;
+		}
+		$pax = absint( wp_unslash( $_GET['pax'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return ( $pax >= 1 && $pax <= 12 ) ? (string) $pax : $value;
+	}
+);
+
+// ── Server-authoritative attribution (submit time) ──────────────────────────
+
+/**
+ * Set Property Name (field 1) + Active Offers (field 9) from the validated villa
+ * id (hidden field 12) before the entry is saved / notified / redirected. This is
+ * the authoritative source — the prepopulated hidden id is client-supplied but
+ * re-validated here, exactly as the old REST handler did.
+ */
+add_action(
+	'gform_pre_submission',
+	static function ( $form ) {
+		$villa_form_id = (int) get_option( 'ibv_villa_enquiry_form_id' );
+		if ( ! $villa_form_id || (int) $form['id'] !== $villa_form_id ) {
+			return;
+		}
+
+		$villa_id    = isset( $_POST['input_12'] ) ? absint( wp_unslash( $_POST['input_12'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- GF owns nonce/honeypot for this form.
+		$villa_name  = '';
+		$offer_names = '';
+
+		if ( $villa_id ) {
+			$villa = get_post( $villa_id );
+			if ( $villa && 'villas' === $villa->post_type && 'publish' === $villa->post_status ) {
+				$pretty     = (string) get_field( 'villa_pretty_name', $villa_id );
+				$villa_name = sanitize_text_field( $pretty ? $pretty : get_the_title( $villa_id ) );
+
+				if ( function_exists( 'ibv_villa_get_active_offers' ) ) {
+					$names = array();
+					foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
+						$name = sanitize_text_field( (string) ( $offer['offer_name'] ?? '' ) );
+						if ( '' !== $name ) {
+							$names[] = $name;
+						}
+					}
+					$offer_names = implode( ', ', $names );
+				}
+			}
+		}
+
+		$_POST['input_1'] = $villa_name;  // Property Name.
+		$_POST['input_9'] = $offer_names; // Active Offers.
+	}
+);
+
+/**
+ * Render the villa enquiry panel (embedded GF + grafted pricing/gate + chrome).
+ *
+ * @param int $villa_id Villa post ID.
  */
 function ibv_core_enquiry_panel( $villa_id ) {
 	$villa_id = (int) $villa_id;
@@ -18,188 +145,72 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		return;
 	}
 
-	wp_enqueue_style( 'ibv-enquiry-panel' );
-	wp_enqueue_style( 'ibv-button' );
-	ibv_core_date_range_picker_enqueue();
-
+	$form_id      = (int) get_option( 'ibv_villa_enquiry_form_id' );
 	$property_id  = (string) get_field( 'property_id', $villa_id );
-	$confirm_url  = ibv_get_booking_confirmation_url();
 	$endpoint_url = 'https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl';
 
-	$prefill_from = '';
-	$prefill_to   = '';
-	$prefill_pax  = '';
-	if ( isset( $_GET['date_from'] ) ) {
-		$raw = sanitize_text_field( wp_unslash( $_GET['date_from'] ) );
-		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
-			$prefill_from = $raw;
-		}
-	}
-	if ( isset( $_GET['date_to'] ) ) {
-		$raw = sanitize_text_field( wp_unslash( $_GET['date_to'] ) );
-		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
-			$prefill_to = $raw;
-		}
-	}
-	if ( isset( $_GET['pax'] ) ) {
-		$pax = absint( wp_unslash( $_GET['pax'] ) );
-		if ( $pax > 0 ) {
-			$prefill_pax = (string) $pax;
-		}
+	wp_enqueue_style( 'ibv-enquiry-panel' );
+
+	$iti_utils_url = '';
+	if ( $form_id ) {
+		// Picker popover CSS + phone widget; the JS handle pulls in the calendar
+		// lib + intl-tel-input via its registered deps.
+		wp_enqueue_style( 'ibv-date-range-picker' );
+		wp_enqueue_style( 'ibv-intl-tel-input' );
+		wp_enqueue_script( 'ibv-enquiry-panel' );
+		$iti_utils_url = add_query_arg(
+			'ver',
+			rawurlencode( IBV_CORE_VERSION ),
+			IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/js/utils.js'
+		);
 	}
 
+	$whatsapp = get_field( 'whatsapp_number', 'option' );
+	$digits   = $whatsapp ? preg_replace( '/[^0-9]/', '', (string) $whatsapp ) : '';
+	$wa_url   = $digits ? 'https://wa.me/' . $digits : '';
 	?>
 	<?php /* ─────────────────────────────────────────────────────────────
-	       BOB API INTEGRATION SHELL — enquiry panel
+	       BOB API INTEGRATION SHELL — villa enquiry panel
 	       ─────────────────────────────────────────────────────────────
-	       Form fields:
-	         - villa_id       (hidden, from current post)
-	         - date_from      (required, YYYY-MM-DD)
-	         - date_to        (required, YYYY-MM-DD)
-	         - pax            (required, integer)
-	         - enquiry_name   (required, text — browser-validated on submit)
-	         - enquiry_email  (required, email — browser-validated on submit)
-	         - enquiry_phone  (required, tel — browser-validated on submit)
-	           ^ contact fields start hidden + disabled (is-contact-pending);
-	             JS reveals them once the API confirms availability, or on
-	             fetch failure (enquiry still possible — price by email)
-	         - message        (optional, text — hidden/revealed with the
-	                           contact fields above)
-
-	       On date/pax change:
-	         - Fetch in detail mode:
-	           {endpoint}?villa={property_id}&date_from=...&date_to=...&pax=...
-	         - Update [data-bob-total-eur], [data-bob-base-rental],
-	           [data-bob-adw], [data-bob-cleaning]
-	         - Enable/disable .ibv-enquiry-panel__submit based on dates+pax filled
-
-	       On submit:
-	         - TODO: POST to API enquiry endpoint when Steve confirms URL
-	         - Currently: redirect to /booking-confirmation/?villa={post_id}&arrival=...&departure=...&guests=...
-
+	       Embedded Gravity Form (#33) = single source of truth (submit /
+	       validate / notify / redirect). enquiry-panel.js grafts on:
+	         - the single-field "When" date-range picker (writes the
+	           YYYY-MM-DD range into the .ibv-drp-from / .ibv-drp-to inputs)
+	         - live pricing from Steve's PMS (detail mode):
+	           {endpoint}?villa={property_id}&date_from=&date_to=&pax=
+	           painted into [data-bob-total-eur] / [data-bob-base-rental] /
+	           [data-bob-adw] / [data-bob-cleaning]
+	         - the submit gate (GF submit disabled until dates + pax filled
+	           and the villa is available) + the contact-field reveal
+	         - phone E.164 normalisation (intl-tel-input)
+	       Redirect to /booking-confirmation/ is a GF redirect confirmation
+	       (villa / arrival / departure / guests / offer merge tags).
 	       Endpoint reference: https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl
 	       Spec: Notion → IBZ002 → API Integration Spec
 	       ──────────────────────────────────────────────────────────── */ ?>
-
-	<?php
-	// Hide the price block until JS calls revealPriceBlock() after paint().
-	// Both arrival flows (direct + search) start hidden — search arrival
-	// fires the fetch on init and reveals once the response lands; direct
-	// arrival fires the fetch when the visitor finishes the form.
-	?>
 	<div
 		class="ibv-enquiry-panel is-pricing-pending is-contact-pending"
 		data-bob-enquiry-panel
-		data-villa-id="<?php echo esc_attr( (string) $villa_id ); ?>"
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
 		data-bob-endpoint="<?php echo esc_url( $endpoint_url ); ?>"
-		data-bob-confirm-url="<?php echo esc_url( $confirm_url ); ?>"
+		data-iti-utils-url="<?php echo esc_url( $iti_utils_url ); ?>"
 		data-bob-msg-unavailable="<?php echo esc_attr__( 'This villa isn’t available for your selected dates. Try different dates, or send us your enquiry and we’ll suggest great alternatives.', 'ibv' ); ?>"
 		data-bob-msg-price-error="<?php echo esc_attr__( 'We couldn’t fetch live pricing just now. You can still send your enquiry and we’ll confirm the price by email.', 'ibv' ); ?>"
-		data-iti-utils-url="<?php echo esc_url( add_query_arg( 'ver', rawurlencode( IBV_CORE_VERSION ), IBV_CORE_URL . 'includes/components/enquiry-panel/vendor/intl-tel-input/js/utils.js' ) ); ?>"
 		data-bob-msg-invalid-phone="<?php echo esc_attr__( 'Please enter a valid phone number.', 'ibv' ); ?>"
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
-		<form class="ibv-enquiry-panel__form" method="get" action="<?php echo esc_url( $confirm_url ); ?>" data-bob-date-range="enquiry">
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--when" data-bob-date-range-anchor>
-				<button type="button" class="ibv-enquiry-panel__when-trigger" id="ibv-ep-when" data-bob-date-range-trigger>
-					<span class="ibv-u-visually-hidden"><?php esc_html_e( 'When', 'ibv' ); ?></span>
-					<span class="ibv-enquiry-panel__when-value" data-bob-date-range-display data-placeholder="<?php esc_attr_e( 'When', 'ibv' ); ?>"><?php esc_html_e( 'When', 'ibv' ); ?></span>
-				</button>
-				<button type="button" class="ibv-enquiry-panel__when-clear" data-bob-date-range-clear hidden aria-label="<?php esc_attr_e( 'Clear dates', 'ibv' ); ?>">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<input type="hidden" name="date_from" value="<?php echo esc_attr( $prefill_from ); ?>" required data-bob-date-from>
-				<input type="hidden" name="date_to" value="<?php echo esc_attr( $prefill_to ); ?>" required data-bob-date-to>
+		<?php if ( $form_id ) : ?>
+			<div class="ibv-enquiry-panel__form-embed">
+				<?php ibv_core_gravity_form( $form_id, [ 'ajax' => true ] ); ?>
 			</div>
-
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--pax">
-				<label for="ibv-ep-pax">
-					<span class="ibv-u-visually-hidden"><?php esc_html_e( 'Number of guests', 'ibv' ); ?></span>
-					<select id="ibv-ep-pax" name="pax" required>
-						<option value="" disabled hidden<?php selected( $prefill_pax, '' ); ?>><?php esc_html_e( 'Guests', 'ibv' ); ?></option>
-						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
-							<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $prefill_pax, (string) $i ); ?>><?php echo esc_html( $i ); ?></option>
-						<?php endfor; ?>
-					</select>
-					<?php
-					echo ibv_core_icon(
-						'chevron-down',
-						[
-							'class' => 'ibv-enquiry-panel__select-icon',
-							'size'  => 16,
-						]
-					); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					?>
-				</label>
-			</div>
-
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--name">
-				<label for="ibv-ep-name" class="ibv-u-visually-hidden"><?php esc_html_e( 'Name', 'ibv' ); ?></label>
-				<input type="text" id="ibv-ep-name" name="enquiry_name" autocomplete="name" required disabled placeholder="<?php esc_attr_e( 'Name', 'ibv' ); ?>">
-			</div>
-
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--email">
-				<label for="ibv-ep-email" class="ibv-u-visually-hidden"><?php esc_html_e( 'Email', 'ibv' ); ?></label>
-				<input type="email" id="ibv-ep-email" name="enquiry_email" autocomplete="email" required disabled placeholder="<?php esc_attr_e( 'Email', 'ibv' ); ?>">
-			</div>
-
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--phone">
-				<label for="ibv-ep-phone" class="ibv-u-visually-hidden"><?php esc_html_e( 'Phone', 'ibv' ); ?></label>
-				<input type="tel" id="ibv-ep-phone" name="enquiry_phone" autocomplete="tel" required disabled placeholder="<?php esc_attr_e( 'Phone', 'ibv' ); ?>">
-				<p class="ibv-enquiry-panel__phone-error" data-bob-phone-error role="alert" hidden></p>
-			</div>
-
-			<div class="ibv-enquiry-panel__field ibv-enquiry-panel__field--message">
-				<label for="ibv-ep-message" class="ibv-u-visually-hidden"><?php esc_html_e( 'Message', 'ibv' ); ?></label>
-				<textarea id="ibv-ep-message" name="message" rows="4" disabled placeholder="<?php esc_attr_e( 'Message (Optional)', 'ibv' ); ?>"></textarea>
-			</div>
-
-			<div class="ibv-enquiry-panel__price-block">
-				<p class="ibv-enquiry-panel__price-label"><?php esc_html_e( 'Total price', 'ibv' ); ?></p>
-				<ul class="ibv-enquiry-panel__price-list">
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-eur" data-bob-total-eur></li>
-					<li class="ibv-enquiry-panel__price-list-item ibv-enquiry-panel__price-gbp" data-bob-total-gbp></li>
-				</ul>
-				<ul class="ibv-enquiry-panel__breakdown">
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-base-rental></span> <?php esc_html_e( 'base rental', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-adw></span> <?php esc_html_e( 'ADW (damage waiver)', 'ibv' ); ?></li>
-					<li class="ibv-enquiry-panel__breakdown-item"><span data-bob-cleaning></span> <?php esc_html_e( 'cleaning fee', 'ibv' ); ?></li>
-				</ul>
-				<p class="ibv-enquiry-panel__eco-note"><?php esc_html_e( 'Total does not include the government Eco Tax of €2.20 per person, per night, payable in resort.', 'ibv' ); ?></p>
-			</div>
-
-			<div class="ibv-enquiry-panel__error" data-bob-error role="status" aria-live="polite" hidden></div>
-
-			<?php
-			ibv_core_button(
-				[
-					'tag'         => 'button',
-					'type'        => 'submit',
-					'label'       => __( 'Request to book', 'ibv' ),
-					'variant'     => 'primary',
-					'size'        => 'large',
-					'class'       => 'ibv-enquiry-panel__submit',
-					'attributes'  => [
-						'data-bob-submit' => '1',
-						'disabled'        => 'disabled',
-					],
-				]
-			);
-			?>
 
 			<p class="ibv-enquiry-panel__response-note"><?php esc_html_e( '✓ We respond within 20 minutes during our business hours', 'ibv' ); ?></p>
-		</form>
+		<?php endif; ?>
 
 		<hr class="ibv-enquiry-panel__divider">
 
 		<div class="ibv-enquiry-panel__chat">
-			<?php
-			$whatsapp = get_field( 'whatsapp_number', 'option' );
-			$digits   = $whatsapp ? preg_replace( '/[^0-9]/', '', (string) $whatsapp ) : '';
-			$wa_url   = $digits ? 'https://wa.me/' . $digits : '';
-			?>
 			<p class="ibv-enquiry-panel__chat-label">
 				<?php esc_html_e( 'Prefer to chat?', 'ibv' ); ?>
 				<?php if ( $wa_url ) : ?>
@@ -238,9 +249,6 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			?>
 		</div>
 	</div>
-
 	<?php /* ─────────── END BOB SHELL ─────────── */ ?>
 	<?php
-
-	wp_enqueue_script( 'ibv-enquiry-panel' );
 }

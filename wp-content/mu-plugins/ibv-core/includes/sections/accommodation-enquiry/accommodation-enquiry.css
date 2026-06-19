@@ -1,0 +1,151 @@
+/* Accommodation enquiry sidebar — Hotel / Airstream right rail.
+ * Embedded Gravity Form (styled by gravity-forms.css) + grafted single-field
+ * "When" picker + "Prefer to chat" chrome. Mirrors the villa enquiry-panel
+ * slot styling. Lives inside .ibv-villa-detail__sidebar. */
+
+.ibv-accommodation-enquiry {
+	padding: var(--ibv-space-2xl) var(--ibv-space-lg) var(--ibv-space-lg);
+	background: var(--ibv-color-bg);
+}
+
+@media (min-width: 64rem) {
+	.ibv-accommodation-enquiry {
+		position: sticky;
+		top: var(--ibv-sticky-offset);
+	}
+}
+
+.ibv-accommodation-enquiry__title {
+	margin: 0 0 var(--ibv-space-lg);
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: 1.2;
+}
+
+/* ── Grafted single-field "When" picker ─────────────────────────────── */
+
+/* The two real GF date fields are hidden; the HTML "When" field is the
+   visible control (accommodation-enquiry.js writes the range into the
+   hidden inputs). Hidden by the binding classes directly so a custom form
+   only needs ibv-drp-from / ibv-drp-to (not a separate hidden class). */
+.ibv-accommodation-enquiry .ibv-drp-from,
+.ibv-accommodation-enquiry .ibv-drp-to {
+	display: none;
+}
+
+.ibv-accommodation-enquiry__when {
+	position: relative;
+}
+
+.ibv-accommodation-enquiry__when-trigger {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 3.25rem;
+	padding: var(--ibv-space-sm) calc(var(--ibv-space-md) + 1.5rem) var(--ibv-space-sm) var(--ibv-space-md);
+	border: 1px solid var(--ibv-color-border);
+	border-radius: var(--ibv-radius-field);
+	background: var(--ibv-color-white);
+	color: var(--ibv-color-text);
+	font: inherit;
+	font-size: var(--ibv-fs-body);
+	text-align: start;
+	cursor: pointer;
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+.ibv-accommodation-enquiry__when-trigger:focus,
+.ibv-accommodation-enquiry__when-trigger:focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: -2px;
+	border-color: transparent;
+}
+
+.ibv-accommodation-enquiry__when-value {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ibv-accommodation-enquiry__when-value.is-empty {
+	color: var(--ibv-color-text-muted);
+}
+
+.ibv-accommodation-enquiry__when-clear {
+	position: absolute;
+	inset-inline-end: var(--ibv-space-sm);
+	inset-block-start: 50%;
+	translate: 0 -50%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background-color: transparent;
+	color: var(--ibv-color-text-muted);
+	font-size: 1.25rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-accommodation-enquiry__when-clear[hidden] {
+	display: none;
+}
+
+.ibv-accommodation-enquiry__when-clear:hover,
+.ibv-accommodation-enquiry__when-clear:focus-visible {
+	background-color: var(--ibv-color-tint-teal);
+	color: var(--ibv-color-text);
+	outline: none;
+}
+
+/* ── Chrome: response note + chat block (mirrors enquiry-panel) ─────── */
+
+.ibv-accommodation-enquiry__response-note {
+	margin: var(--ibv-space-md) 0 0;
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text);
+	line-height: var(--ibv-lh-normal);
+}
+
+.ibv-accommodation-enquiry__divider {
+	border: 0;
+	border-top: 1px solid var(--ibv-color-accent-gold);
+	margin: var(--ibv-space-md) 0;
+	width: 3.125rem;
+}
+
+.ibv-accommodation-enquiry__chat-label {
+	margin: 0 0 var(--ibv-space-xs);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
+}
+
+.ibv-accommodation-enquiry__chat-label a {
+	font-weight: var(--ibv-font-weight-bold);
+	color: var(--ibv-color-text);
+	text-decoration: underline;
+}
+
+.ibv-accommodation-enquiry__chat-number {
+	display: block;
+	font-size: var(--ibv-fs-micro);
+	font-weight: var(--ibv-font-weight-regular);
+	color: var(--ibv-color-text);
+	margin-top: var(--ibv-space-2xs);
+}
+
+.ibv-accommodation-enquiry__chat-link {
+	display: block;
+	font-size: var(--ibv-fs-micro);
+	margin-top: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
+	text-decoration: underline;
+}
