@@ -230,7 +230,8 @@
 		var iti = window.intlTelInput( phoneInput, {
 			initialCountry:   'gb',
 			countryOrder:     [ 'gb', 'es', 'fr', 'de', 'us' ],
-			separateDialCode: false,
+			separateDialCode: true,
+			placeholderNumberPolicy: 'AGGRESSIVE',
 			loadUtils:        utilsUrl ? function () { return import( utilsUrl ); } : null,
 		} );
 
