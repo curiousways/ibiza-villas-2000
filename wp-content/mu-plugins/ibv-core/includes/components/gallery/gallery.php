@@ -82,7 +82,7 @@ function ibv_core_gallery( $villa_id ) {
 	if ( $multiples ) {
 		wp_enqueue_script( 'ibv-gallery-script' );
 
-		$inline = 'document.addEventListener("DOMContentLoaded",function(){var root=document.getElementById("' . esc_js( $uid ) . '");if(!root)return;var data=JSON.parse(root.getAttribute("data-images"));var mainImg=root.querySelector(".ibv-gallery__main-image");if(!mainImg)return;var thumbs=root.querySelectorAll(".ibv-gallery__thumb[data-ibv-gallery-show]");var ix=0;function show(i){ix=(i+data.length)%data.length;var cur=data[ix];if(cur.srcset){mainImg.srcset=cur.srcset;mainImg.sizes=cur.sizes||"";}else{mainImg.removeAttribute("srcset");mainImg.removeAttribute("sizes");}mainImg.src=cur.src;mainImg.alt=cur.alt||"";var active=null;thumbs.forEach(function(t){var on=parseInt(t.getAttribute("data-ibv-gallery-show"),10)===ix;t.classList.toggle("is-active",on);if(on){active=t;}});if(active&&active.scrollIntoView){active.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});}}root.querySelectorAll("[data-ibv-gallery-show]").forEach(function(btn){btn.addEventListener("click",function(){show(parseInt(btn.getAttribute("data-ibv-gallery-show"),10)||0);});});var prev=root.querySelector("[data-ibv-gallery-prev]");if(prev){prev.addEventListener("click",function(){show(ix-1);});}var next=root.querySelector("[data-ibv-gallery-next]");if(next){next.addEventListener("click",function(){show(ix+1);});}root.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){show(ix+1);}else if(e.key==="ArrowLeft"){show(ix-1);}});});';
+		$inline = 'document.addEventListener("DOMContentLoaded",function(){var root=document.getElementById("' . esc_js( $uid ) . '");if(!root)return;var data=JSON.parse(root.getAttribute("data-images"));var mainImg=root.querySelector(".ibv-gallery__main-image");if(!mainImg)return;var thumbsWrap=root.querySelector(".ibv-gallery__thumbs");var thumbs=root.querySelectorAll(".ibv-gallery__thumb[data-ibv-gallery-show]");var ix=0;function show(i){ix=(i+data.length)%data.length;var cur=data[ix];if(cur.srcset){mainImg.srcset=cur.srcset;mainImg.sizes=cur.sizes||"";}else{mainImg.removeAttribute("srcset");mainImg.removeAttribute("sizes");}mainImg.src=cur.src;mainImg.alt=cur.alt||"";var active=null;thumbs.forEach(function(t){var on=parseInt(t.getAttribute("data-ibv-gallery-show"),10)===ix;t.classList.toggle("is-active",on);if(on){active=t;}});if(active&&thumbsWrap){var cr=thumbsWrap.getBoundingClientRect();var ar=active.getBoundingClientRect();thumbsWrap.scrollTo({left:thumbsWrap.scrollLeft+(ar.left-cr.left)-(thumbsWrap.clientWidth-ar.width)/2,behavior:"smooth"});}}root.querySelectorAll("[data-ibv-gallery-show]").forEach(function(btn){btn.addEventListener("click",function(){show(parseInt(btn.getAttribute("data-ibv-gallery-show"),10)||0);});});var prev=root.querySelector("[data-ibv-gallery-prev]");if(prev){prev.addEventListener("click",function(){show(ix-1);});}var next=root.querySelector("[data-ibv-gallery-next]");if(next){next.addEventListener("click",function(){show(ix+1);});}root.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){show(ix+1);}else if(e.key==="ArrowLeft"){show(ix-1);}});});';
 
 		wp_add_inline_script( 'ibv-gallery-script', $inline );
 	}
@@ -161,9 +161,9 @@ function ibv_core_gallery( $villa_id ) {
 		<?php endif; ?>
 
 		<?php if ( $multiples ) : ?>
-			<ul class="ibv-gallery__thumbs">
+			<div class="ibv-gallery__thumbs">
 				<?php foreach ( $thumbs as $i => $item ) : ?>
-					<li class="ibv-gallery__thumb-item">
+					<div class="ibv-gallery__thumb-item">
 						<button type="button" class="ibv-gallery__thumb<?php echo 0 === $i ? ' is-active' : ''; ?>" data-ibv-gallery-show="<?php echo esc_attr( (string) $i ); ?>">
 							<?php
 							ibv_core_image(
@@ -178,9 +178,9 @@ function ibv_core_gallery( $villa_id ) {
 							?>
 							<span class="ibv-u-visually-hidden"><?php esc_html_e( 'Show photo', 'ibv' ); ?></span>
 						</button>
-					</li>
+					</div>
 				<?php endforeach; ?>
-			</ul>
+			</div>
 		<?php endif; ?>
 	</div>
 	<?php

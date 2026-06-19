@@ -65,12 +65,24 @@
 }
 
 /* Thumb carousel — horizontally scrollable; ~6 visible, rest scroll/swipe.
-   JS scrolls the active thumb into view (scrollIntoView) when the main
-   prev/next, arrow keys, or a thumb click change the photo. */
+   A grid scroller (`grid-auto-flow: column` + `grid-auto-columns`) is used
+   instead of a flex row: the grid's column width is definite, so the track
+   stays bound to its container instead of growing to the thumbs' content
+   width and blowing out the page. JS scrolls the active thumb into view when
+   the main prev/next, arrow keys, or a thumb click change the photo. */
 .ibv-gallery__thumbs {
-	display: flex;
+	display: grid;
+	grid-auto-flow: column;
+	/* ~6 thumbs visible (the teaser look); implicit columns beyond scroll. */
+	grid-auto-columns: calc((100% - 5 * var(--ibv-space-xs)) / 6);
 	gap: var(--ibv-space-xs);
 	overflow-x: auto;
+	/* Paint containment. A horizontal scroll container that is a flex item
+	   still leaks its scroll content into the document's scrollable width in
+	   Chromium (`overflow: hidden`/`auto` clips visually but the page still
+	   gains a phantom horizontal scrollbar). `contain: paint` stops the
+	   thumbs' overflow contributing to the page width. */
+	contain: paint;
 	scroll-snap-type: x proximity;
 	/* `scroll-snap-align: start` snaps a thumb's edge to the scrollport
 	   edge, which would scroll `padding-inline` out of view and clip the
@@ -80,18 +92,17 @@
 	scroll-padding-inline: var(--ibv-space-xs);
 	-webkit-overflow-scrolling: touch;
 	scrollbar-width: thin;
-	list-style: none;
 	margin: 0;
 	/* Padding gives the active thumb's offset outline room: overflow clips
 	   at the padding box, so the outline (2px width + 2px offset = 4px
 	   reach) needs > 4px clearance or it's shaved. 8px leaves a clean 4px
-	   gap top/bottom and at the start/end thumbs. */
-	padding: var(--ibv-space-xs);
+	   gap top and at the start/end thumbs; the larger bottom keeps the
+	   horizontal scrollbar off the thumbnails. (Inline padding must stay at
+	   `--ibv-space-xs` to match `scroll-padding-inline`.) */
+	padding: var(--ibv-space-xs) var(--ibv-space-xs) var(--ibv-space-md);
 }
 
-/* Keep ~6 thumbs visible (the teaser look); the rest scroll. */
 .ibv-gallery__thumb-item {
-	flex: 0 0 calc((100% - 5 * var(--ibv-space-xs)) / 6);
 	scroll-snap-align: start;
 }
 
