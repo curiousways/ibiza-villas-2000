@@ -137,6 +137,11 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 				),
 
 				// ── Guests (drives pricing; gate enforces it client-side) ──────
+				// CONTRACT for ibv_gf_pax_placeholder_not_selectable() (helpers/
+				// gravity-form.php): keep type=select + the `ibv-pax` class + a
+				// non-empty placeholder, and never add an empty-value choice. That
+				// filter makes the sole empty <option> (the placeholder) disabled/
+				// hidden; break any of those and "Guests" becomes selectable again.
 				array(
 					'id'                => 7,
 					'type'              => 'select',
