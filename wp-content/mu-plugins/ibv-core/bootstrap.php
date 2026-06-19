@@ -41,6 +41,21 @@ require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
 // WP-CLI commands (no-op when WP-CLI is not running).
 require_once IBV_CORE_PATH . 'includes/cli/migrate-newsletter-to-options.php';
 
+// Scaffolding seeders — define the ibv_seed_*() functions (code is the single
+// source of truth for the fixed pages + GF form config). The orchestrator
+// exposes `wp ibv seed`; nothing runs on include.
+require_once IBV_CORE_PATH . 'includes/cli/seed-pages.php';
+require_once IBV_CORE_PATH . 'includes/cli/seed-villa-enquiry-form.php';
+require_once IBV_CORE_PATH . 'includes/cli/seed-accommodation-form.php';
+require_once IBV_CORE_PATH . 'includes/cli/seed.php';
+
+// TEMPORARY one-shot form sync for no-SSH deploys — runs the seeders once on the
+// server, then is deleted on the next push. The file_exists() guard makes that
+// removal clean (no edit here required). See the file header for the workflow.
+if ( file_exists( IBV_CORE_PATH . 'includes/cli/seed-forms-once.php' ) ) {
+	require_once IBV_CORE_PATH . 'includes/cli/seed-forms-once.php';
+}
+
 // 4. Components — each registers its own CSS handle and exposes a `ibv_core_*` helper.
 require_once IBV_CORE_PATH . 'includes/components/button/button.php';
 require_once IBV_CORE_PATH . 'includes/components/section-heading/section-heading.php';

@@ -136,14 +136,16 @@ function ibv_get_booking_confirmation_page_id() {
 /**
  * Booking confirmation page URL.
  *
- * Permalink of the page resolved by ibv_get_booking_confirmation_page_id(),
- * falling back to /booking-confirmation/ only if that page does not exist yet.
+ * Permalink of the page resolved by ibv_get_booking_confirmation_page_id().
+ * Falls back to the canonical slug of the page-booking-confirmation.php template
+ * page (/booking-request-received/) only if that page does not exist yet — using
+ * the real slug, not a guess, so the fallback doesn't 404.
  *
  * @return string Escaped URL.
  */
 function ibv_get_booking_confirmation_url() {
 	$page_id = ibv_get_booking_confirmation_page_id();
-	$base    = $page_id ? get_permalink( $page_id ) : home_url( '/booking-confirmation/' );
+	$base    = $page_id ? get_permalink( $page_id ) : home_url( '/booking-request-received/' );
 	return esc_url( $base );
 }
 
