@@ -69,6 +69,16 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	// Shared "Read more" collapsible styling — enqueued by any section that
+	// clamps a body (villa-overview, accommodation-overview). Pairs with the
+	// `ibv-readmore` script below.
+	wp_register_style(
+		'ibv-readmore',
+		IBV_CORE_URL . 'assets/css/readmore.css',
+		[ 'ibv-base' ],
+		IBV_CORE_VERSION
+	);
+
 	// Components — each registered with `ibv-base` as a dependency.
 	wp_register_style(
 		'ibv-button',
@@ -285,10 +295,19 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
-	// Inline-only script targets (wp_add_inline_script) for Pass 3c-detail components.
-	wp_register_script( 'ibv-villa-overview', '', [], IBV_CORE_VERSION, true );
-	wp_register_script( 'ibv-accommodation-overview', '', [], IBV_CORE_VERSION, true );
+	// Inline-only script target (wp_add_inline_script) for the gallery viewer.
 	wp_register_script( 'ibv-gallery-script', '', [], IBV_CORE_VERSION, true );
+
+	// Shared "Read more" toggle — villa-overview + accommodation-overview (and any
+	// future clamped block). One file + one idempotent listener set, enqueued only
+	// when a section actually clamps a body. Pairs with the `ibv-readmore` style.
+	wp_register_script(
+		'ibv-readmore',
+		IBV_CORE_URL . 'assets/js/readmore.js',
+		[],
+		IBV_CORE_VERSION,
+		[ 'in_footer' => true ]
+	);
 
 	wp_register_script(
 		'ibv-vanilla-calendar-pro',

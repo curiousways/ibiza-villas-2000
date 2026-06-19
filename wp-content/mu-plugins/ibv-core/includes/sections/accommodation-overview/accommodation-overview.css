@@ -30,105 +30,14 @@
 	line-height: var(--ibv-lh-relaxed);
 }
 
-/* Collapsible body — clamp + "Read more" link (mirrors villa-overview). */
 .ibv-accommodation-overview__body-block {
 	margin: 0;
 }
 
-/* Slide open/close — mirrors villa-overview. `interpolate-size: allow-keywords`
-   lets `max-height` animate to/from the `max-content` keyword (the block's
-   natural height) without JS measurement; unsupported browsers snap. */
-.ibv-accommodation-overview__body--clamp {
-	interpolate-size: allow-keywords;
-	overflow: hidden;
-	max-height: max-content;
-	/* Open = slow + strong ease-out (the reader leans in); close = quicker and
-	   gentler (set in the collapsed rule below). */
-	transition: max-height var(--ibv-duration-slow) var(--ibv-ease-out);
-}
-
-.ibv-accommodation-overview__body--clamp:not(.ibv-accommodation-overview__body--open) {
-	max-height: 10rem;
-	position: relative;
-	transition-duration: var(--ibv-duration-normal);
-	transition-timing-function: var(--ibv-ease-standard);
-}
-
-.ibv-accommodation-overview__body--clamp:not(.ibv-accommodation-overview__body--open)::after {
-	content: "";
-	position: absolute;
-	inset-inline: 0;
-	inset-block-end: 0;
-	height: 3rem;
-	background: linear-gradient(to bottom, transparent, var(--ibv-color-bg));
-	pointer-events: none;
-	opacity: 1;
-	transition: opacity var(--ibv-duration-normal) var(--ibv-ease-out);
-}
-
-/* The teaser-fade only exists while collapsed, so on close it's generated
-   fresh; `@starting-style` gives it a "from" frame to fade up from (same idiom
-   as the date-range-picker popover backdrop). */
-@starting-style {
-	.ibv-accommodation-overview__body--clamp:not(.ibv-accommodation-overview__body--open)::after {
-		opacity: 0;
-	}
-}
-
-.ibv-accommodation-overview__read-more {
-	margin-top: var(--ibv-space-sm);
-	/* Inline-flex + vertical padding give a more comfortable touch target
-	   without reaching into the prose links above. */
-	display: inline-flex;
-	align-items: center;
-	padding-block: var(--ibv-space-2xs);
-	padding-inline: 0;
-	font: inherit;
-	font-size: var(--ibv-fs-small);
-	font-weight: var(--ibv-font-weight-regular);
-	background: none;
-	border: 0;
-	cursor: pointer;
-	color: var(--ibv-color-text);
-	text-decoration: underline;
-	text-underline-offset: 0.15em;
-	/* Specific properties only — never `transition: all`. */
-	transition:
-		color var(--ibv-duration-fast) var(--ibv-ease-standard),
-		scale var(--ibv-duration-fast) var(--ibv-ease-standard);
-}
-
-.ibv-accommodation-overview__read-more:hover {
-	color: var(--ibv-color-link-hover);
-}
-
-.ibv-accommodation-overview__read-more:focus-visible {
-	outline: 2px solid var(--ibv-color-link);
-	outline-offset: 2px;
-	border-radius: var(--ibv-radius-sm);
-}
-
-/* Tactile press feedback — 0.96 baseline. */
-.ibv-accommodation-overview__read-more:active {
-	scale: 0.96;
-}
-
-/* Reduced motion: drop the height slide and press scale; keep the gentle
-   gradient fade. */
-@media (prefers-reduced-motion: reduce) {
-	.ibv-accommodation-overview__body--clamp,
-	.ibv-accommodation-overview__body--clamp:not(.ibv-accommodation-overview__body--open) {
-		transition: none;
-	}
-
-	.ibv-accommodation-overview__read-more {
-		transition-property: color;
-	}
-
-	.ibv-accommodation-overview__read-more:active {
-		scale: 1;
-	}
-}
+/* The collapsible "Read more" behaviour (clamp, teaser fade, toggle button,
+   reduced-motion) is shared — see assets/css/readmore.css (.ibv-readmore__*).
+   The body div carries .ibv-readmore__content--clamp when over the length
+   threshold; readmore.js toggles .is-open. */
 
 /* Fact pills — free-text chips (location / sleeps / availability).
    Figma node 347-3680: saturated 100-ramp fills, 10px Uncut Sans, 1.4 lh.

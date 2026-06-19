@@ -59,27 +59,27 @@ function ibv_core_section_accommodation_overview() {
 					<div class="ibv-accommodation-overview__body-block">
 						<div
 							id="<?php echo esc_attr( $body_id ); ?>"
-							class="ibv-accommodation-overview__body ibv-prose<?php echo $use_clamp ? ' ibv-accommodation-overview__body--clamp' : ''; ?>"
+							class="ibv-accommodation-overview__body ibv-prose<?php echo $use_clamp ? ' ibv-readmore__content ibv-readmore__content--clamp' : ''; ?>"
 						>
 							<?php echo wp_kses_post( $body ); ?>
 						</div>
 						<?php if ( $use_clamp ) : ?>
+							<?php
+							// Shared "Read more" toggle (assets/js|css/readmore.*): the button
+							// names the open-class it toggles on the controlled element.
+							wp_enqueue_style( 'ibv-readmore' );
+							wp_enqueue_script( 'ibv-readmore' );
+							?>
 							<button
 								type="button"
-								class="ibv-accommodation-overview__read-more"
-								data-ibv-readmore
+								class="ibv-readmore__toggle"
+								data-ibv-readmore="is-open"
+								data-ibv-readmore-less="<?php esc_attr_e( 'Read less', 'ibv' ); ?>"
 								aria-expanded="false"
 								aria-controls="<?php echo esc_attr( $body_id ); ?>"
 							>
 								<?php esc_html_e( 'Read more', 'ibv' ); ?>
 							</button>
-							<?php
-							wp_enqueue_script( 'ibv-accommodation-overview' );
-							$read_less = esc_js( __( 'Read less', 'ibv' ) );
-							$read_more = esc_js( __( 'Read more', 'ibv' ) );
-							$inline    = 'document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll("[data-ibv-readmore]").forEach(function(btn){var id=btn.getAttribute("aria-controls");var el=id?document.getElementById(id):null;if(!el)return;btn.addEventListener("click",function(){var open=el.classList.toggle("ibv-accommodation-overview__body--open");btn.setAttribute("aria-expanded",open?"true":"false");btn.textContent=open?"' . $read_less . '":"' . $read_more . '";});});});';
-							wp_add_inline_script( 'ibv-accommodation-overview', $inline );
-							?>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>

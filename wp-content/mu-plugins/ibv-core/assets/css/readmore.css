@@ -1,0 +1,103 @@
+/* Read-more / collapsible block — shared by villa-overview, accommodation-
+   overview, and any future clamped prose (single source of truth; was duplicated
+   per section). A `.ibv-readmore__content--clamp` element collapses to a fixed
+   height with a teaser fade; `.is-open` (toggled by readmore.js) slides it to its
+   natural height. `.ibv-readmore__toggle` is the trigger button.
+
+   `interpolate-size: allow-keywords` lets `max-height` interpolate to/from the
+   `max-content` keyword, so the block animates to whatever height the prose needs
+   without measuring it in JS. Where unsupported the toggle simply snaps —
+   progressive enhancement. */
+.ibv-readmore__content--clamp {
+	interpolate-size: allow-keywords;
+	overflow: hidden;
+	max-height: max-content;
+	/* Opening is the moment the reader leans in: slow duration, strong ease-out
+	   (a decisive, settled arrival). Closing is the system tidying up — quicker,
+	   gentler easing (set in the collapsed rule below). */
+	transition: max-height var(--ibv-duration-slow) var(--ibv-ease-out);
+}
+
+.ibv-readmore__content--clamp:not(.is-open) {
+	max-height: 10rem;
+	position: relative;
+	transition-duration: var(--ibv-duration-normal);
+	transition-timing-function: var(--ibv-ease-standard);
+}
+
+.ibv-readmore__content--clamp:not(.is-open)::after {
+	content: "";
+	position: absolute;
+	inset-inline: 0;
+	inset-block-end: 0;
+	height: 3rem;
+	background: linear-gradient(to bottom, transparent, var(--ibv-color-bg));
+	pointer-events: none;
+	opacity: 1;
+	transition: opacity var(--ibv-duration-normal) var(--ibv-ease-out);
+}
+
+/* The teaser-fade `::after` only exists while collapsed, so on close it is
+   generated fresh and would snap in. `@starting-style` gives it a "from" frame to
+   fade up from — the same idiom the date-range-picker uses for its popover
+   backdrop. */
+@starting-style {
+	.ibv-readmore__content--clamp:not(.is-open)::after {
+		opacity: 0;
+	}
+}
+
+.ibv-readmore__toggle {
+	margin-top: var(--ibv-space-sm);
+	/* Inline-flex + vertical padding give the toggle a comfortable touch target
+	   without reaching into the prose above (whose links keep their own area). */
+	display: inline-flex;
+	align-items: center;
+	padding-block: var(--ibv-space-2xs);
+	padding-inline: 0;
+	font: inherit;
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-regular);
+	background: none;
+	border: 0;
+	cursor: pointer;
+	color: var(--ibv-color-text);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	/* Specific properties only — never `transition: all`. */
+	transition:
+		color var(--ibv-duration-fast) var(--ibv-ease-standard),
+		scale var(--ibv-duration-fast) var(--ibv-ease-standard);
+}
+
+.ibv-readmore__toggle:hover {
+	color: var(--ibv-color-link-hover);
+}
+
+.ibv-readmore__toggle:focus-visible {
+	outline: 2px solid var(--ibv-color-link);
+	outline-offset: 2px;
+	border-radius: var(--ibv-radius-sm);
+}
+
+/* Tactile press feedback — 0.96 is the design-eng baseline. */
+.ibv-readmore__toggle:active {
+	scale: 0.96;
+}
+
+/* Reduced motion: drop the height slide + press scale; keep the gentle gradient
+   fade for comprehension (fewer/gentler, not zero). */
+@media (prefers-reduced-motion: reduce) {
+	.ibv-readmore__content--clamp,
+	.ibv-readmore__content--clamp:not(.is-open) {
+		transition: none;
+	}
+
+	.ibv-readmore__toggle {
+		transition-property: color;
+	}
+
+	.ibv-readmore__toggle:active {
+		scale: 1;
+	}
+}
