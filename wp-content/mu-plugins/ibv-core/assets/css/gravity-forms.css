@@ -185,6 +185,23 @@
 
 /* ─── Validation + confirmation ──────────────────────────────────── */
 
+/* GF 2.5+ renders the top-of-form error summary as an <h2.gform_submission_error>,
+   so without a reset it inherits the theme's display-heading scale and renders
+   gigantic. Bring it back to a calm error banner. */
+.ibv-gform .gform_submission_error {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--ibv-space-2xs);
+	margin: 0 0 var(--ibv-space-md);
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	background: var(--ibv-color-error-100);
+	border-radius: var(--ibv-radius-md);
+	color: var(--ibv-color-error-300);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-cozy);
+}
+
 .ibv-gform .gfield_validation_message,
 .ibv-gform .validation_error {
 	color: var(--ibv-color-error-300);

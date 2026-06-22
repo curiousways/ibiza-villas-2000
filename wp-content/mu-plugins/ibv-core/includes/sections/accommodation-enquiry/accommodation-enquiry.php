@@ -78,6 +78,55 @@ function ibv_core_section_accommodation_enquiry() {
 		);
 	}
 
+	// Render GF's submit as a <button> so it can carry the design's arrow icon
+	// next to the label (an <input type="submit"> can't hold inline SVG). We
+	// rewrite the tag rather than rebuild it, preserving GF's id / class /
+	// onclick attributes so AJAX submission keeps working. Scoped to this form
+	// id; full-width + teal styling lives in accommodation-enquiry.css.
+	if ( $form_id ) {
+		add_filter(
+			"gform_submit_button_{$form_id}",
+			static function ( $button, $form ) {
+				if ( ! is_string( $button ) || '' === $button ) {
+					return $button;
+				}
+
+				// Label: GF's button text (the field's `value`), with a fallback.
+				$label = isset( $form['button']['text'] ) && '' !== $form['button']['text']
+					? (string) $form['button']['text']
+					: __( 'Send Enquiry', 'ibv' );
+
+				$arrow = ibv_core_icon(
+					'arrow-right',
+					[
+						'class' => 'ibv-button__arrow',
+						'size'  => 18,
+					]
+				);
+
+				$inner = '<span class="ibv-accommodation-enquiry__submit-label">' . esc_html( $label ) . '</span>' . $arrow;
+
+				// input → button, drop the now-redundant `value`, then close the
+				// self-closing tag around the inner content. Limited to 1 match so
+				// a stray `value=` inside an onclick handler can't be clobbered.
+				$out = preg_replace( '/^<input\b/', '<button', $button, 1 );
+				$out = preg_replace( '/\svalue=("|\').*?\1/', '', $out, 1 );
+				// Add the design-system button classes alongside GF's own.
+				$out = preg_replace(
+					'/\sclass=("|\')/',
+					' class=$1ibv-button ibv-button--primary ibv-button--medium ',
+					$out,
+					1
+				);
+				$out = preg_replace( '#\s*/?>\s*$#', '>' . $inner . '</button>', $out, 1 );
+
+				return $out ?? $button;
+			},
+			10,
+			2
+		);
+	}
+
 	$wa_url = $whatsapp ? 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $whatsapp ) : '';
 	?>
 	<div

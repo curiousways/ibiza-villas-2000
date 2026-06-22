@@ -122,6 +122,41 @@
 	outline: none;
 }
 
+/* ── Submit (GF button) — full-width teal CTA with arrow ───────────── */
+
+/* Override the base `.ibv-gform .gform_footer` flex/flex-end so the button
+   spans the rail. The button is a <button> (see accommodation-enquiry.php)
+   so it can carry the arrow icon beside the label. Mirrors enquiry-panel. */
+.ibv-accommodation-enquiry .ibv-gform .gform_footer {
+	margin: var(--ibv-space-lg) 0 0;
+	display: block;
+}
+
+.ibv-accommodation-enquiry .ibv-gform .gform_footer button[type="submit"] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-xs);
+	width: 100%;
+	border-radius: var(--ibv-radius-md);
+	padding: var(--ibv-space-md) var(--ibv-space-xl);
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-medium);
+	background: var(--ibv-color-accent);
+	color: var(--ibv-color-accent-contrast);
+}
+
+.ibv-accommodation-enquiry .ibv-gform .gform_footer button[type="submit"]:hover,
+.ibv-accommodation-enquiry .ibv-gform .gform_footer button[type="submit"]:focus-visible {
+	background: var(--ibv-color-link);
+	color: var(--ibv-color-accent-contrast);
+	filter: none;
+}
+
+.ibv-accommodation-enquiry__submit-arrow {
+	flex: none;
+}
+
 /* ── Chrome: response note + chat block (mirrors enquiry-panel) ─────── */
 
 .ibv-accommodation-enquiry__response-note {
