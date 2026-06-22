@@ -153,10 +153,6 @@
 	filter: none;
 }
 
-.ibv-accommodation-enquiry__submit-arrow {
-	flex: none;
-}
-
 /* ── Chrome: response note + chat block (mirrors enquiry-panel) ─────── */
 
 .ibv-accommodation-enquiry__response-note {
