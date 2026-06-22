@@ -12,8 +12,9 @@
  * Deploy workflow:
  *   1. Bump IBV_SEED_ONCE_TOKEN below when a form's config has changed.
  *   2. Push this file with your form changes.
- *   3. Load wp-admin on the server (as an admin) → the sync runs once and an
- *      admin notice confirms it ("IBV forms synced …").
+ *   3. Load wp-admin on the server (as an admin) → the sync runs once; a notice
+ *      shown only to IBV_SEED_ONCE_NOTICE_EMAIL confirms it ("IBV pages + forms
+ *      synced …").
  *   4. Push again with this file DELETED. Nothing else needs editing — bootstrap
  *      requires it behind a file_exists() guard, so removal is clean.
  *
@@ -33,6 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 // a form). A new value forces exactly one more run on each environment.
 if ( ! defined( 'IBV_SEED_ONCE_TOKEN' ) ) {
 	define( 'IBV_SEED_ONCE_TOKEN', '2026-06-19-page-confirmations' );
+}
+
+// The confirmation notice is shown ONLY to this WP user (matched by email), so
+// other admins never see deploy-debug output. The RUN below stays on
+// manage_options so the seeding fires reliably regardless of who logs in first
+// (gating the run to an exact email would silently no-op if it didn't match).
+if ( ! defined( 'IBV_SEED_ONCE_NOTICE_EMAIL' ) ) {
+	define( 'IBV_SEED_ONCE_NOTICE_EMAIL', 'bob@taggetig.be' );
 }
 
 /**
@@ -64,7 +73,8 @@ add_action(
 add_action(
 	'admin_notices',
 	static function () {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		$user = wp_get_current_user();
+		if ( ! $user || ! $user->exists() || $user->user_email !== IBV_SEED_ONCE_NOTICE_EMAIL ) {
 			return;
 		}
 		if ( get_option( 'ibv_forms_seed_once_token' ) !== IBV_SEED_ONCE_TOKEN ) {
