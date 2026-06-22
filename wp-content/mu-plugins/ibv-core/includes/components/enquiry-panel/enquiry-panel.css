@@ -242,6 +242,10 @@
 
 .ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"],
 .ibv-enquiry-panel .ibv-gform .gform_footer button[type="submit"] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-xs);
 	width: 100%;
 	border-radius: var(--ibv-radius-md);
 	padding: var(--ibv-space-md) var(--ibv-space-xl);
@@ -249,6 +253,14 @@
 	font-weight: var(--ibv-font-weight-medium);
 	background: var(--ibv-color-accent);
 	color: var(--ibv-color-accent-contrast);
+}
+
+.ibv-enquiry-panel__submit-label {
+	flex: 0 1 auto;
+}
+
+.ibv-enquiry-panel .ibv-gform .gform_footer .ibv-button__arrow {
+	flex: none;
 }
 
 .ibv-enquiry-panel .ibv-gform .gform_footer input[type="submit"]:hover,

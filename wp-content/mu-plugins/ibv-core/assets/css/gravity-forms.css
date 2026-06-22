@@ -199,6 +199,7 @@
 	color: var(--ibv-color-error-300);
 	font-family: var(--ibv-font-body);
 	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-cozy);
 }
 
