@@ -1,4 +1,4 @@
-/* Villa gallery — inline viewer. Figma 1:6019. */
+/* Villa gallery — static teaser + pop-up viewer. Figma 1:6019. */
 
 .ibv-gallery {
 	display: flex;
@@ -20,13 +20,23 @@
 	margin-bottom: 0;
 }
 
-/* Main viewer — uniform 3:2 cosmetic crop; prev/next overlay the image. */
+/* Hero teaser — uniform 3:2 cosmetic crop; the whole tile is a button that
+   opens the pop-up viewer. */
 .ibv-gallery__main {
-	position: relative;
+	display: block;
 	width: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
 	aspect-ratio: 3 / 2;
 	border-radius: var(--ibv-radius-md);
 	overflow: hidden;
+}
+
+/* Single-image villas: the hero isn't interactive (no pop-up). */
+.ibv-gallery__main--static {
+	cursor: default;
 }
 
 .ibv-gallery__main-image {
@@ -36,40 +46,12 @@
 	display: block;
 }
 
-/* Prev / next — overlay the main image. 32×32, off-white square, dark-teal
-   chevron (Figma node 1:6019 → "Icons wrapper - arrow"). The chevron is
-   `stroke="currentColor"`, so `color` drives it. */
-.ibv-gallery__nav {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
-	border: 0;
-	cursor: pointer;
-	background: var(--ibv-color-off-white);
-	border-radius: var(--ibv-radius-sm);
-	color: var(--ibv-color-forest-green-deep);
-}
-
-.ibv-gallery__nav--prev {
-	left: var(--ibv-space-sm);
-}
-
-.ibv-gallery__nav--next {
-	right: var(--ibv-space-sm);
-}
-
 /* Thumb carousel — horizontally scrollable; ~6 visible, rest scroll/swipe.
-   A grid scroller (`grid-auto-flow: column` + `grid-auto-columns`) is used
-   instead of a flex row: the grid's column width is definite, so the track
-   stays bound to its container instead of growing to the thumbs' content
-   width and blowing out the page. JS scrolls the active thumb into view when
-   the main prev/next, arrow keys, or a thumb click change the photo. */
+   Every thumb opens the pop-up at its image. A grid scroller
+   (`grid-auto-flow: column` + `grid-auto-columns`) is used instead of a flex
+   row: the grid's column width is definite, so the track stays bound to its
+   container instead of growing to the thumbs' content width and blowing out
+   the page. */
 .ibv-gallery__thumbs {
 	display: grid;
 	grid-auto-flow: column;
@@ -86,19 +68,18 @@
 	scroll-snap-type: x proximity;
 	/* `scroll-snap-align: start` snaps a thumb's edge to the scrollport
 	   edge, which would scroll `padding-inline` out of view and clip the
-	   active thumb's offset outline at the start/end. `scroll-padding-inline`
+	   thumb's focus outline at the start/end. `scroll-padding-inline`
 	   insets the snapport so snapping stops short and keeps the gutter (and
 	   the outline) on screen. Must match `padding-inline`. */
 	scroll-padding-inline: var(--ibv-space-xs);
 	-webkit-overflow-scrolling: touch;
 	scrollbar-width: thin;
+	list-style: none;
 	margin: 0;
-	/* Padding gives the active thumb's offset outline room: overflow clips
-	   at the padding box, so the outline (2px width + 2px offset = 4px
-	   reach) needs > 4px clearance or it's shaved. 8px leaves a clean 4px
-	   gap top and at the start/end thumbs; the larger bottom keeps the
-	   horizontal scrollbar off the thumbnails. (Inline padding must stay at
-	   `--ibv-space-xs` to match `scroll-padding-inline`.) */
+	/* Padding gives the focus outline room: overflow clips at the padding
+	   box, so the outline needs clearance or it's shaved. The larger bottom
+	   keeps the horizontal scrollbar off the thumbnails. (Inline padding must
+	   stay at `--ibv-space-xs` to match `scroll-padding-inline`.) */
 	padding: var(--ibv-space-xs) var(--ibv-space-xs) var(--ibv-space-md);
 }
 
@@ -125,16 +106,95 @@
 	opacity: 1;
 }
 
-/* Active thumb — the image currently shown in the main viewer. */
-.ibv-gallery__thumb.is-active {
-	opacity: 1;
-	outline: 2px solid var(--ibv-color-accent);
-	outline-offset: 2px;
-}
-
 .ibv-gallery__thumb-image {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 	display: block;
+}
+
+/* Pop-up viewer — source-shape image held at a fixed height (no jump). */
+.ibv-gallery__dialog {
+	padding: 0;
+	border: 0;
+	width: auto;
+	max-width: 94vw;
+	background: var(--ibv-color-bg);
+	border-radius: var(--ibv-radius-md);
+	/* Center on the viewport. UA stylesheets vary on dialog vertical
+	   positioning; `inset: 0` + `margin: auto` is the reliable pattern. */
+	inset: 0;
+	margin: auto;
+}
+
+.ibv-gallery__dialog::backdrop {
+	background: rgb(0 0 0 / 0.7);
+}
+
+.ibv-gallery__dialog-inner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ibv-gallery__lightbox-img {
+	display: block;
+	height: min(80vh, 44rem);
+	width: auto;
+	max-width: 92vw;
+	object-fit: contain;
+}
+
+.ibv-gallery__close {
+	position: absolute;
+	top: var(--ibv-space-sm);
+	right: var(--ibv-space-sm);
+	z-index: 1;
+	display: flex;
+	border: 0;
+	cursor: pointer;
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-sm);
+	padding: var(--ibv-space-2xs);
+	color: var(--ibv-color-text);
+}
+
+/* Pop-up prev/next — off-white square, dark chevron (stroke=currentColor). */
+.ibv-gallery__lb-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 0;
+	cursor: pointer;
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-sm);
+	color: var(--ibv-color-text);
+}
+
+.ibv-gallery__lb-arrow--prev {
+	left: var(--ibv-space-sm);
+}
+
+.ibv-gallery__lb-arrow--next {
+	right: var(--ibv-space-sm);
+}
+
+.ibv-gallery__counter {
+	position: absolute;
+	bottom: var(--ibv-space-sm);
+	left: 50%;
+	transform: translateX(-50%);
+	margin: 0;
+	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	background: var(--ibv-color-off-white);
+	border-radius: var(--ibv-radius-pill);
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text);
 }
