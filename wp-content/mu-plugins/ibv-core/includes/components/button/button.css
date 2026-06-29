@@ -108,21 +108,6 @@
 	transition: transform var(--ibv-duration-normal) var(--ibv-ease-standard);
 }
 
-/* Primary (sage) button — forest-green arrow per Figma (node 347-3763),
-   a deliberate dark accent distinct from the off-white label. Other variants
-   keep currentColor (arrow follows the label colour). */
-.ibv-button--primary .ibv-button__arrow {
-	stroke: var(--ibv-color-forest-green-deep);
-}
-
-/* On hover/focus the primary button darkens to forest-green-deep — the same
-   colour as the resting arrow — so flip the arrow to the label colour (white)
-   to keep it visible. */
-.ibv-button--primary:hover .ibv-button__arrow,
-.ibv-button--primary:focus-visible .ibv-button__arrow {
-	stroke: currentColor;
-}
-
 .ibv-button:hover .ibv-button__arrow,
 .ibv-button:focus-visible .ibv-button__arrow {
 	transform: translateX(2px);
