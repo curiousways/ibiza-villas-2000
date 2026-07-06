@@ -16,7 +16,13 @@ while ( have_posts() ) :
 
 	ibv_core_section_hero( [ 'compact' => true ] );
 	ibv_core_section_about_stats();
-	ibv_core_section_about_story();
+	ibv_core_image_entries_section(
+		[
+			'title'   => get_field( 'about_story_title' ),
+			'entries' => get_field( 'about_story_entries' ),
+			'image'   => get_field( 'about_story_image' ),
+		]
+	);
 	ibv_core_section_three_step();
 	ibv_core_section_testimonials();
 

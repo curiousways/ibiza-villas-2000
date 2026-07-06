@@ -221,7 +221,7 @@ function ibv_register_styles() {
 		'ibv-section-why-iv2000'           => 'includes/sections/why-iv2000/why-iv2000.css',
 		'ibv-section-three-step'          => 'includes/sections/three-step/three-step.css',
 		'ibv-section-about-stats'         => 'includes/sections/about-stats/about-stats.css',
-		'ibv-section-about-story'         => 'includes/sections/about-story/about-story.css',
+		'ibv-image-entries-section'       => 'includes/sections/image-entries-section/image-entries-section.css',
 		'ibv-section-about-faq'           => 'includes/sections/about-faq/about-faq.css',
 		'ibv-section-about-team'          => 'includes/sections/about-team/about-team.css',
 		'ibv-section-ibiza-guide-preview' => 'includes/sections/ibiza-guide-preview/ibiza-guide-preview.css',

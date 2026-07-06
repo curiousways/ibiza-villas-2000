@@ -82,7 +82,7 @@ require_once IBV_CORE_PATH . 'includes/components/newsletter-form/newsletter-for
 
 require_once IBV_CORE_PATH . 'includes/sections/hero/hero.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-stats/about-stats.php';
-require_once IBV_CORE_PATH . 'includes/sections/about-story/about-story.php';
+require_once IBV_CORE_PATH . 'includes/sections/image-entries-section/image-entries-section.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-faq/about-faq.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-team/about-team.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';

@@ -1,28 +1,40 @@
-.ibv-section-about-story__inner {
+/* Image + labelled entries — heading + gold rule + a <dl> of label/body rows
+   beside an image (About "Our Story", IPS "What we do"). Rhythm/surface come
+   from .ibv-section + modifiers; the accent rule from `.ibv-rule.ibv-rule--gold`
+   in layout.css (per-instance override via the `rule_color` PHP arg). */
+
+.ibv-image-entries-section__inner {
 	display: grid;
 	gap: var(--ibv-space-2xl);
 	align-items: start;
 }
 
 @media (min-width: 64rem) {
-	.ibv-section-about-story__inner {
+	.ibv-image-entries-section__inner {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+
+	/* Image-left flips the media ahead of the copy at the two-column
+	   breakpoint only; below it both variants stack copy-then-image,
+	   mirroring image-text-section's "flip at desktop" behaviour. */
+	.ibv-image-entries-section--image-left .ibv-image-entries-section__media {
+		order: -1;
 	}
 }
 
-.ibv-section-about-story__copy {
+.ibv-image-entries-section__copy {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-xl);
 }
 
-.ibv-section-about-story__header {
+.ibv-image-entries-section__header {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-sm);
 }
 
-.ibv-section-about-story__title {
+.ibv-image-entries-section__title {
 	margin: 0;
 	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h2);
@@ -32,45 +44,45 @@
 }
 
 
-.ibv-section-about-story__entries {
+.ibv-image-entries-section__entries {
 	margin: 0;
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-lg);
 }
 
-.ibv-section-about-story__entry {
+.ibv-image-entries-section__entry {
 	display: grid;
 	gap: var(--ibv-space-xs);
 }
 
 @media (min-width: 48rem) {
-	.ibv-section-about-story__entry {
+	.ibv-image-entries-section__entry {
 		grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
 		gap: var(--ibv-space-lg);
 	}
 }
 
-.ibv-section-about-story__label {
+.ibv-image-entries-section__label {
 	margin: 0;
 	font-size: var(--ibv-fs-body);
 	font-weight: var(--ibv-font-weight-bold);
 	color: var(--ibv-color-text);
 }
 
-.ibv-section-about-story__body {
+.ibv-image-entries-section__body {
 	margin: 0;
 	font-size: var(--ibv-fs-body);
 	line-height: var(--ibv-lh-snug);
 	color: var(--ibv-color-text);
 }
 
-.ibv-section-about-story__media {
+.ibv-image-entries-section__media {
 	border-radius: var(--ibv-radius-lg);
 	overflow: hidden;
 }
 
-.ibv-section-about-story__image {
+.ibv-image-entries-section__image {
 	width: 100%;
 	height: auto;
 	display: block;
