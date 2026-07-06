@@ -1,0 +1,21 @@
+/* Legal content column — a single centred reading column. Vertical
+   rhythm/background come from .ibv-section + surface modifiers; body
+   typography comes from the shared `.ibv-prose` ruleset (typography.css).
+   This file owns the column constraint and the document title only. */
+
+.ibv-legal-content__inner {
+	max-width: 38.625rem; /* 618px reading column */
+	margin-inline: auto;
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-lg);
+}
+
+.ibv-legal-content__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+}

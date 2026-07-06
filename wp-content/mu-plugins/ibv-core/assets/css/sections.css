@@ -74,3 +74,23 @@
 .ibv-section--surface-blue + .ibv-section--surface-blue {
 	padding-block-start: 0;
 }
+
+/* Legals composition exception — band + tabs + content read as one header
+ * unit. All three are surface-bg; per the Legals design (node 301:9442) the
+ * band keeps its own 48px internal padding, the tabs sit flush beneath it, and
+ * the content column starts ~24px under the tabs (rather than a full rhythm gap
+ * at each junction). Scoped to the legal template's body class so the rhythm
+ * system stays untouched elsewhere; normal rhythm resumes below the content
+ * column, before the footer. Placed after the adjacency collapse so it wins on
+ * source order for the content column's top padding. */
+.page-template-page-legal-php .ibv-title-band {
+	padding-block: var(--ibv-section-pad-y-sm); /* 48px top + bottom */
+}
+
+.page-template-page-legal-php .ibv-legal-tabs {
+	padding-block: 0;
+}
+
+.page-template-page-legal-php .ibv-legal-content {
+	padding-block-start: var(--ibv-space-lg); /* ~24px offset beneath the tabs */
+}

@@ -1,0 +1,26 @@
+/* Title band — text-only page header (label + optional meta line). Vertical
+   rhythm and background come from .ibv-section + surface modifiers; this file
+   owns only the internal layout and type. */
+
+.ibv-title-band__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-md); /* 16px between label and meta */
+}
+
+.ibv-title-band__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-h2);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-snug);
+	color: var(--ibv-color-text);
+}
+
+.ibv-title-band__meta {
+	margin: 0;
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-micro); /* 10px — Paragraph/XXSmall */
+	line-height: var(--ibv-lh-normal);
+	color: var(--ibv-color-text);
+}
