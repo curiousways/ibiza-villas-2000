@@ -188,9 +188,10 @@ function ibv_register_page_home_fields() {
 				),
 				array(
 					'key'   => 'field_ibv_page_home_ips_cta_url',
-					'label' => __( 'IPS CTA URL', 'ibv' ),
+					'label' => __( 'IPS CTA page', 'ibv' ),
 					'name'  => 'ips_cta_url',
-					'type'  => 'url',
+					'type'  => 'page_link',
+					'instructions' => __( 'Pick the page the button links to (the Ibiza Preservation Society page).', 'ibv' ),
 				),
 				array(
 					'key'       => 'field_ibv_page_home_tab_guide',
