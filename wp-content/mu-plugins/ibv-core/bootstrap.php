@@ -127,6 +127,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-about.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-concierge.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-ips.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-contact.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-booking-confirmation.php';
