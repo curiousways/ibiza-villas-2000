@@ -184,3 +184,39 @@ stack re-registers each key and keeps rendering):
   video is stored but never displayed; wire-up-or-retire is a future call.
 
 **Go-live:** these DB field removals must be repeated on whichever DB goes live.
+
+---
+
+## Correction (2026-07-21, from batch 2)
+
+**The reversibility claim in this brief is wrong.** Two statements above —
+*"keep it as trash rather than force-delete so it's reversible"* and *"The
+legacy groups are trashed, not force-deleted, so this is reversible from
+ACF → Field Groups → Trash"* — cannot be honoured for individual fields.
+
+ACF registers the `acf-field` post type **without trash support**. Verified
+while running batch 2 (`done/admin-tidy-property-info-fields.md`):
+
+```
+$ wp post delete 534 404 1106
+Warning: Posts of type 'acf-field' do not support being sent to trash.
+Please use the --force flag to skip trash and delete them permanently.
+
+$ wp eval 'var_export( post_type_supports( "acf-field", "trash" ) );'
+false
+```
+
+Removing a field is permanent whether done with `wp post delete --force` or by
+removing it in the ACF UI and saving the group. There is no field-level Trash to
+restore from.
+
+**What this changes in practice:** the *safety* argument this brief makes still
+holds — the postmeta is never touched and the canonical PHP registrations keep
+rendering it, so no villa content is at risk. What's lost on deletion is only
+the legacy *field definition*. But the recovery route is a **DB backup**, not
+ACF's Trash, so back up before running this on any DB that matters.
+
+**Still outstanding on the server** — this brief was audit-only; fields 403 and
+1128 have never actually been removed anywhere. See the combined runbook at the
+end of `done/admin-tidy-property-info-fields.md`, which sequences batch 1's
+portrait-merge decision ahead of both batches' deletions.

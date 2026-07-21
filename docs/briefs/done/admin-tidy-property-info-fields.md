@@ -81,10 +81,22 @@ Via WP-CLI, on the target DB:
 
 ## The change
 
-1. Trash DB fields **534**, **404**, **1106** — `wp post delete <id>` (default
-   trash, **not** `--force`, so it's reversible from ACF → Field Groups → Trash).
-   Alternatively remove them via the ACF UI on group "Property Information" —
-   same outcome, and the route David uses on the server.
+1. Delete DB fields **534**, **404**, **1106** — either `wp post delete <id> --force`
+   or by removing them in the ACF UI on group "Property Information" and saving
+   (the route David uses on the server). **Both are permanent.**
+
+   > **Corrected 2026-07-21.** An earlier draft of this brief (and batch 1's
+   > outcome note) claimed the fields could be trashed reversibly. They cannot:
+   > ACF registers the `acf-field` post type without trash support, so
+   > `wp post delete` without `--force` refuses outright and
+   > `post_type_supports( 'acf-field', 'trash' )` is `false`. There is no
+   > field-level Trash to restore from — **take a DB backup (or export group 402
+   > first) before running this on any DB you care about.**
+   >
+   > What is actually at risk is only the three legacy *field definitions*
+   > (duplicate admin boxes). The postmeta is never touched, and the canonical
+   > PHP registrations keep rendering it — so the realistic worst case is
+   > recreating a small PHP field array, not recovering data.
 2. **No postmeta deletion.** All three values stay in the DB and keep rendering
    via the PHP-registered fields. Non-destructive, consistent with batch 1.
 3. **No PHP changes.** If the audit reveals anything that *does* need a code
@@ -132,8 +144,83 @@ Restate these in your summary; do **not** action them:
 ## Notes
 
 - **Scope discipline:** these three fields only.
-- Trashed, not force-deleted — reversible from ACF → Field Groups → Trash.
+- **Deletion is permanent** — see the corrected note under "The change".
+  Reversibility comes from a DB backup, not from ACF's Trash.
 - **Go-live:** as with batch 1, these DB field removals must be repeated on
   whichever DB goes live. Local is throwaway; if the work is done here it does
   **not** propagate. Add to the go-live checklist alongside the batch-1 items
   (fields 403/1128 + the 9 villas' portrait merge).
+
+---
+
+## Outcome / record (2026-07-21)
+
+**Executed on local** (unlike batch 1, which was audit-only) so the Verify
+section could actually be run against a changed DB. Local is throwaway — this
+does **not** propagate; the server runbook below is the real deliverable.
+
+**Step 0 audit — all clean.**
+
+| Check | Result |
+|---|---|
+| Active theme | `ibv` — legacy-theme consumers dormant, risk assessment holds |
+| Group 402 contents | 9 fields; 534/404/1106 names + keys matched the brief exactly |
+| Key check (villa-scoped) | **PASS** — all 76 villas on the canonical key for all three, one key each. No fix branch needed |
+| Non-empty values | `property_map` 74/76 · `property_summary` 55/76 · `property_video` 5/76 |
+
+**Premise correction — no field-level trash.** `wp post delete 534 404 1106`
+refused all three: *"Posts of type 'acf-field' do not support being sent to
+trash."* Confirmed via `post_type_supports( 'acf-field', 'trash' ) === false`.
+Both this brief and batch 1's outcome note have been corrected. Proceeded with
+`--force` on David's go-ahead.
+
+**Verification — passed.**
+
+1. **Front end byte-identical.** The `.ibv-villa-location` section for villas
+   **18125** and **16699** diffed clean before vs after (`diff` → IDENTICAL).
+2. **Formatting held.** `get_field( 'property_map', 18125 )` still returns a
+   formatted array (`lat 38.9035162 / lng 1.4067963`) — the failure mode the key
+   check guards against would have returned a raw serialized string.
+3. **Card excerpt still sourced correctly.** `ibv_villa_excerpt_plain( 18125 )`
+   returns the `property_summary` prose ("3 min drive to Playa Den Bossa…"), not
+   the `post_content` fallback ("Villa Marta is a stunning villa…") — the silent
+   regression this brief was watching for did not occur.
+4. **Admin occurrences now exactly one each**, all resolved from the PHP-registered
+   "Villa" group:
+
+   ```
+   property_summary   x1  Villa [field_5579a38eaa707]
+   property_video     x1  Villa [field_5581b076c15be]
+   property_map       x1  Villa [field_558065ef4f993]
+   property_images    x2  Property Information [field_55799b13e3584] | Villa [...]
+   ```
+
+   `property_images` still showing **x2** is the control: batch 1 has not been
+   run on this DB, so the duplicate it targets is still present — which is what
+   makes the x1 results above meaningful rather than a measurement artefact.
+
+**Deferred, unchanged.** `property_video` wire-up-or-retire (5 villas carry a
+value — e.g. villa 3186 → a self-hosted `.mp4` in uploads — and nothing renders
+it); freetext distances → `villa_distances`; the remaining group 402 fields
+(1135, 1131, 1129, 1130 + batch 1's 403, 1128).
+
+## Server runbook (batch 1 + batch 2 combined)
+
+Run on whichever DB goes live. Batch 1 was never executed anywhere, so both
+batches are outstanding on the server.
+
+1. **Back up the DB.** Non-negotiable — field deletion is permanent (above).
+   Optionally also export group 402 first as a safety net.
+2. **Re-run the Step 0 audit on that DB before deleting anything.** The counts
+   and key check above describe the local copy; the live DB may have moved.
+   Abort on any non-canonical key reference and fix it first.
+3. **Batch 1 content decision:** eyeball the 9 villas carrying portrait images
+   (46 attachments not in the main gallery) and add the keepers to the canonical
+   Villa → Media gallery. This must happen **before** deleting field 1128, since
+   removing it takes away the only UI for reviewing those sets. The postmeta
+   survives regardless, but blind is worse than sighted.
+4. **Delete the fields** — ACF → Field Groups → "Property Information", remove
+   and save: **403**, **1128** (batch 1), **534**, **404**, **1106** (batch 2).
+5. **Verify** using the four checks above: a villa's Location section unchanged,
+   the map still rendering, a listing card's excerpt still from `property_summary`,
+   and each field appearing once on the edit screen.
