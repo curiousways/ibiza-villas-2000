@@ -12,28 +12,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Render hero section.
  *
+ * Content defaults to the queried post's `hero_*` ACF fields. Each piece can be
+ * overridden via args for contexts with no post to read from (e.g. the 404
+ * template, which sources its copy from Site Options).
+ *
  * @param array $args {
  *     @type callable|null $after_copy Optional. Invoked with no arguments; output appears below the copy block.
  *     @type bool          $compact    Optional. When true, the hero uses a reduced min-height (480px instead of 720px). All other styling unchanged. Default false.
+ *     @type int|array|null $image     Optional. Attachment ID or ACF image array. Overrides the `hero_image` ACF lookup. Pass 0 to suppress the lookup and render the fallback background.
+ *     @type string|null   $title      Optional. Overrides the `hero_title` ACF lookup.
+ *     @type string|null   $subtitle   Optional. Overrides the `hero_subtitle` ACF lookup.
+ *     @type array|null    $cta        Optional. Args array passed to ibv_core_button(); rendered inside the copy block, after the subtitle.
  * }
  */
 function ibv_core_section_hero( $args = [] ) {
 	$defaults = [
 		'after_copy' => null,
 		'compact'    => false,
+		'image'      => null,
+		'title'      => null,
+		'subtitle'   => null,
+		'cta'        => null,
 	];
 	$args = wp_parse_args( $args, $defaults );
 
 	wp_enqueue_style( 'ibv-section-hero' );
 
-	$image    = get_field( 'hero_image' );
-	$title    = get_field( 'hero_title' );
-	$subtitle = get_field( 'hero_subtitle' );
+	// `null` means "not overridden" — only then do we touch the post context.
+	$image    = null !== $args['image'] ? $args['image'] : get_field( 'hero_image' );
+	$title    = null !== $args['title'] ? $args['title'] : get_field( 'hero_title' );
+	$subtitle = null !== $args['subtitle'] ? $args['subtitle'] : get_field( 'hero_subtitle' );
 
-	$bg = '';
+	// Accepts an ACF image array or a bare attachment ID (mirrors ibv_core_image()).
+	$image_id = 0;
 	if ( is_array( $image ) && ! empty( $image['ID'] ) ) {
-		$bg = wp_get_attachment_image_url( (int) $image['ID'], 'ibv-hero' );
+		$image_id = (int) $image['ID'];
+	} elseif ( is_numeric( $image ) ) {
+		$image_id = (int) $image;
 	}
+
+	$bg = $image_id ? wp_get_attachment_image_url( $image_id, 'ibv-hero' ) : '';
 
 	$style_attr = '';
 	if ( $bg ) {
@@ -54,6 +72,9 @@ function ibv_core_section_hero( $args = [] ) {
 				<span class="ibv-rule ibv-rule--gold" aria-hidden="true"></span>
 				<?php if ( $subtitle ) : ?>
 					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
+				<?php endif; ?>
+				<?php if ( ! empty( $args['cta'] ) && is_array( $args['cta'] ) ) : ?>
+					<?php ibv_core_button( $args['cta'] ); ?>
 				<?php endif; ?>
 			</div>
 			<?php if ( is_callable( $args['after_copy'] ) ) : ?>

@@ -169,6 +169,48 @@ function ibv_register_globals_content_fields() {
 			'show_in_rest'          => false,
 		)
 	);
+
+	// Field names use the `error404_` prefix (matching WP's `error404` body
+	// class) rather than a leading digit. No CTA fields — the "Go back" button
+	// is fixed chrome, not editorial.
+	acf_add_local_field_group(
+		array(
+			'key'                   => 'group_ibv_global_error404',
+			'title'                 => __( '404 page (shared)', 'ibv' ),
+			'fields'                => array(
+				array(
+					'key'           => 'field_ibv_global_error404_image',
+					'label'         => __( 'Background image', 'ibv' ),
+					'name'          => 'error404_image',
+					'type'          => 'image',
+					'return_format' => 'array',
+					'instructions'  => __( 'Full-bleed photo behind the 404 message. Landscape, ideally 2560px+ wide.', 'ibv' ),
+				),
+				array(
+					'key'          => 'field_ibv_global_error404_title',
+					'label'        => __( 'Title', 'ibv' ),
+					'name'         => 'error404_title',
+					'type'         => 'text',
+					'instructions' => __( 'Falls back to "It appears this page has gone off-season" when empty.', 'ibv' ),
+				),
+				array(
+					'key'          => 'field_ibv_global_error404_subtitle',
+					'label'        => __( 'Sub-line', 'ibv' ),
+					'name'         => 'error404_subtitle',
+					'type'         => 'text',
+					'instructions' => __( 'Falls back to "We\'re afraid something has gone wrong with this link." when empty.', 'ibv' ),
+				),
+			),
+			'location'              => $loc_option,
+			'menu_order'            => 6,
+			'position'              => 'normal',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'active'                => true,
+			'show_in_rest'          => false,
+		)
+	);
 }
 
 add_action( 'acf/init', 'ibv_register_globals_content_fields', 16 );
