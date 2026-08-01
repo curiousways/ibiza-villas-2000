@@ -85,6 +85,7 @@ require_once IBV_CORE_PATH . 'includes/sections/image-entries-section/image-entr
 require_once IBV_CORE_PATH . 'includes/sections/about-faq/about-faq.php';
 require_once IBV_CORE_PATH . 'includes/sections/about-team/about-team.php';
 require_once IBV_CORE_PATH . 'includes/sections/title-band/title-band.php';
+require_once IBV_CORE_PATH . 'includes/sections/prose-section/prose-section.php';
 require_once IBV_CORE_PATH . 'includes/sections/legal-tabs/legal-tabs.php';
 require_once IBV_CORE_PATH . 'includes/sections/legal-content/legal-content.php';
 require_once IBV_CORE_PATH . 'includes/sections/featured-villas/featured-villas.php';
@@ -135,6 +136,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-contact.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-booking-confirmation.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-accommodation.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-builder.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-post-fields.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-villa-fields.php';

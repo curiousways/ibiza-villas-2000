@@ -254,3 +254,119 @@ Frontend (build one test page using **every layout at least once**):
 - Deliberately deferred: layout preview images, per-layout max
   instances, any "spacer" or raw-HTML layout (the answer to those
   requests is no).
+
+## Outcome / record (2026-08-01)
+
+Implemented as composition plumbing, no new section designs and **no new
+CSS at all** (see "Prose layout" below). Not yet smoke-tested in a
+browser — the work was done in a git worktree with no WP core, so every
+item under "Verification" above is still outstanding.
+
+**Files**
+
+| File | Action |
+|---|---|
+| `themes/ibv/page-builder.php` | Created — Template Name "Page Builder"; compact hero + 15-case dispatch switch |
+| `mu-plugins/ibv-core/includes/acf/register-page-builder.php` | Created — `group_ibv_page_builder`, hero tab + `builder_sections` flexible content (15 layouts), plus the collapsed-label filter |
+| `mu-plugins/ibv-core/includes/sections/prose-section/prose-section.php` | Created — `ibv_core_prose_section()`, no stylesheet |
+| `mu-plugins/ibv-core/bootstrap.php` | Edited — two `require_once` lines |
+| `mu-plugins/ibv-core/ibv-core.php` | Edited — `IBV_CORE_VERSION` 0.1.49 → 0.1.50 |
+
+All 15 layouts are registered and all 15 `get_row_layout()` names have a
+matching `case`. Every section function is called with its documented
+signature; none was modified.
+
+### Deviation 1 — the hero field group
+
+Change 3 asked to extend "the existing hero field group's" location
+rules. **There is no shared hero group.** Every page-template group
+(`group_ibv_page_about`, `…_ips`, `…_concierge`, `…_home`,
+`…_ibiza_guide`, `…_accommodation`, `…_special_offers`) declares its own
+`hero_image` / `hero_title` / `hero_subtitle` fields under a "Hero" tab,
+with per-group field keys; `ibv_core_section_hero()` then reads them by
+*name* from the current post. Adding `page-builder.php` to any existing
+group's location would have dragged that page's content fields onto
+builder pages.
+
+So the Page Builder group carries its own Hero tab with the same three
+field **names** and new `field_ibv_page_builder_hero_*` keys — i.e. it
+follows the established convention rather than the brief's wording. If a
+shared hero group is wanted, that's a separate refactor across all eight
+templates.
+
+### Deviation 2 — file name
+
+`register-page-builder.php`, not `register-builder-fields.php` — the
+brief said "name per existing convention", and `includes/acf/README.md`
+specifies `register-page-{slug}.php` for a page-template group.
+
+### Deviation 3 — "no surface" on Image + text
+
+`ibv_core_image_text_section()`'s real default is `surface => ''` (no
+surface class, inherits the page background), unlike every other
+surface-aware section which defaults to `bg`. Rather than an empty-string
+ACF choice key, the select offers `none` → "None (inherits the page
+background)" as its default, and the template maps `none` back to `''`.
+That one ternary is the only mapping logic in the dispatch switch.
+
+### Prose layout — zero new CSS
+
+`ibv_core_prose_section()` emits
+`<section class="ibv-prose-section ibv-section ibv-section--surface-X">`
+→ `.ibv-container.ibv-container--narrow` → `.ibv-prose`. Every one of
+those classes already ships in the globally-enqueued `ibv-base` bundle
+(`layout.css`, `sections.css`, `typography.css`), so the section has no
+stylesheet and no handle in `shared-assets.php`. This is the same
+composition the default `page.php` and `single.php` already use.
+
+Note the reading column is `--ibv-container-narrow` (704px), whereas
+`legal-content` uses its own 618px column. Typography is identical;
+measure is slightly wider. Flagged rather than adding CSS — say the word
+if the legal 618px is preferred and it becomes a one-line rule.
+
+### Correction to the brief — six "global bands" do NOT read Site Options
+
+The Background section states the zero-arg bands "read Site Options".
+Verified against the code, that is true of only three of them. Six read
+`get_field( … )` against the **current post**, and those fields are
+registered on `group_ibv_page_home` only:
+
+| Layout | Real source | On a Page Builder page |
+|---|---|---|
+| Testimonials | `'option'` | renders |
+| Newsletter sign-up | `'option'` | renders |
+| Three-step process | `'option'` | renders |
+| Short breaks | `'option'` | renders |
+| Concierge cross-sell | `'option'` | renders |
+| Fancy something different | tiles `'option'`, heading post | renders, default heading |
+| Featured villas | post `featured_villas` | renders — falls back to the 4 newest villas |
+| Ibiza Guide preview | post `guide_*` | renders — falls back to the 3 newest articles, no "View all" button |
+| **Trust logos strip** | post `trust_strip` | **renders nothing** |
+| **Why IV2000** | post `why_pillars` | **renders nothing** |
+| **Meet the team teaser** | post `meet_team_*` | **renders nothing** |
+
+All 15 layouts were registered as briefed, because modifying a section's
+signature was explicitly out of scope. The three no-op layouts carry a
+"Heads up" instruction in the ACF picker telling the editor the band will
+render nothing until its fields move to Site Options; the two
+fallback-driven ones (Featured villas, Ibiza Guide preview) say exactly
+what they will show. **A follow-up brief should either promote
+`trust_strip` / `why_pillars` / `meet_team_*` to Site Options (mirroring
+what `01-globalize-three-step.md` did for the three-step band) or drop
+those three layouts.** Until then they are three traps in the menu.
+
+### Editor UX delivered
+
+Plain-English labels, `display => block`, `button_label` "Add section",
+per-layout `message` fields where the behaviour isn't obvious, and an
+`acf/fields/flexible_content/layout_title/name=builder_sections` filter
+that appends the row's `title` (or `heading_override`) to the collapsed
+label. `message` is a new ACF field type for this codebase — first use.
+
+### Still to do
+
+Everything under "Verification" — nothing has been opened in a browser.
+Priorities: (1) the template appears in the dropdown and the group swaps
+in with no notices; (2) build one page using every layout and compare
+against IPS / the homepage; (3) confirm the three no-op bands and act on
+the correction above; (4) confirm the `page_link` CTA resolves.
