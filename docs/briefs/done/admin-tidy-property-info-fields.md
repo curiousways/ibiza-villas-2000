@@ -206,6 +206,18 @@ it); freetext distances → `villa_distances`; the remaining group 402 fields
 
 ## Server runbook (batch 1 + batch 2 combined)
 
+> **SUPERSEDED 2026-08-01 — do not follow this runbook.** It was written from
+> the *local* database on the assumption that staging matched it. It did not:
+> batch 1 had in fact been executed on **staging** on 2026-07-06 and never
+> propagated back, leaving local six weeks stale. Every particular below is
+> therefore wrong for staging — the field IDs listed were already deleted, and
+> the portrait table (9 villas / 46 images) was really 3 villas / 9 images.
+> The claim that batch 1 "was never executed anywhere" is the specific error.
+>
+> See `staging-villa-admin-field-tidy.md` for what was actually there, the
+> audit method that found it (import a fresh dump to a scratch local DB), and
+> the completed work. Staging is the source of truth for this project.
+
 Run on whichever DB goes live. Batch 1 was never executed anywhere, so both
 batches are outstanding on the server.
 
