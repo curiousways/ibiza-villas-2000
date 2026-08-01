@@ -367,3 +367,89 @@ Frontend (private window, logged out):
   event tracking, and any cookie work for GTranslate (`googtrans`
   cookie) unless the audit shows it firing on the new stack — in which
   case flag it, don't improvise.
+
+## Outcome / record (2026-08-01)
+
+**Shipped (code).** Steps 1–5 are implemented; Step 6 (Complianz removal) and
+the runtime verification list are *not* — they are environment work, not code.
+
+- `mu-plugins/ibv-core/assets/vendor/cookieconsent/cookieconsent.css` +
+  `cookieconsent.umd.js` — downloaded from the pinned v3.1.0 jsDelivr URLs in
+  the brief, unmodified (header comment confirms `CookieConsent 3.1.0`).
+- `assets/js/cookieconsent-init.js` — config exactly as briefed (two
+  categories, `box inline` / `bottom right`, IV2000 copy, cookie tables) plus
+  the delegated `[data-ibv-cc-preferences]` reopen listener.
+- `assets/js/ga4.js` — as briefed; `127.0.0.1` added to the blocklist beside
+  `localhost`.
+- `includes/integrations/cookie-consent.php` — enqueues the two handles on
+  every front-end view and prints the gated GA4 pair on `wp_head` at 20
+  (`type="text/plain"` + `data-category="analytics"`, `esc_url()` on both
+  srcs). The GA4 ID lives in one local variable with a "keep in sync" comment.
+- `includes/shared-assets.php` — registers `ibv-cookieconsent` (style +
+  script, version `3.1.0`) and `ibv-cookieconsent-init` (`IBV_CORE_VERSION`),
+  both `in_footer` + `defer`, modelled on `ibv-intl-tel-input`.
+- `bootstrap.php` — new require next to `integrations/facetwp.php`.
+- `ibv-core.php` — `IBV_CORE_VERSION` 0.1.49 → **0.1.50**.
+- `includes/layout/site-chrome.css` — `#cc-main` `--cc-*` → `--ibv-*` mapping
+  (palette, radii, toggle, focus ring) and `.ibv-site-footer__cc-link`.
+- `themes/ibv/footer.php` — "Cookie preferences" anchor inside
+  `.ibv-site-footer__legal`, after the `footer_legal_html` output.
+
+`php -l` clean on all five PHP files; `node --check` clean on both JS files.
+
+**Deviations from the brief.**
+
+1. *Registration split.* The brief's §2 code block enqueues with inline URLs;
+   the Standards section says scripts are registered in `shared-assets.php`.
+   Followed the Standards (and the rest of the codebase): handles registered
+   in `shared-assets.php`, enqueued by name from the integration file.
+2. *Require location.* The brief says new includes are required from
+   `ibv-core.php`; in this codebase that file only defines constants and the
+   require list lives in `bootstrap.php`. Added there instead.
+3. *Banner CSS home.* Put in `includes/layout/site-chrome.css` (handle
+   `ibv-site-chrome`, enqueued globally by the theme, and where every
+   `.ibv-site-footer` rule lives) rather than `assets/css/base.css` — the
+   brief explicitly allowed this call.
+4. *`cc_cookie` expiry.* Brief said "1 year"; v3.1.0 ships
+   `expiresAfterDays: 182`, so the cookie table says **6 months**. Table is
+   now accurate rather than aspirational.
+5. *Focus ring.* Added `#cc-main :focus-visible` using
+   `--ibv-color-focus-ring` — the library's reset sets `outline: revert`,
+   which is not reliably visible on the banner's surfaces.
+6. *Primary button tokens.* Used the brief's mapping verbatim
+   (`--ibv-color-forest-green` → hover `-deep`). Note this differs from
+   `.ibv-button--primary`, which is `--ibv-color-accent` (sage) → hover
+   forest-green-deep. Worth an eyeball against the design; a one-line change
+   if David prefers the site's own primary.
+
+**Flags — need a human.**
+
+- **`/cookie-policy/` does not exist.** Local pages are `privacy-policy`
+  (exists, published), `contact` (exists) and legacy `cookies-policy`
+  ("Cookies Policy for Ibiza Villas 2000"). No page yet uses the
+  `page-legal.php` template on local, so the new Legal-template cookie page
+  is still to be created. The config links `/cookie-policy/` as briefed — it
+  404s until that page lands. Either create the page at that slug or change
+  the one link in `cookieconsent-init.js`.
+- **Step 6 not executed, and cannot be from here.** It needs DB writes
+  (`wp plugin deactivate`) and touches `wp-content/plugins/`, which is
+  *gitignored* — plugins are not tracked in this repo, so there is nothing to
+  remove from version control; the removal is purely per-environment. Status
+  checked read-only: **`complianz-gdpr-premium` is present but NOT active on
+  local** (confirmed via `wp plugin list --status=active`), so there is no
+  double-banner risk locally. Staging and production still need checking,
+  deactivating, deleting and cache-purging by hand.
+- **`gravity-forms-google-analytics-event-tracking` is active on local.** Per
+  the brief's own note, it may print its own gtag calls once GA4 is live —
+  ungated, which would defeat this work. Audit its front-end output (or
+  retire it) before GA goes live.
+- **WP Rocket is not active on local**, so Delay-JS / minification exclusions
+  for `cookieconsent.umd.js`, `cookieconsent-init.js` and `ga4.js` could not
+  be checked or set. Do this on staging/production.
+- **Cookie tables are the briefed starting set, not an audit result.** The
+  Step 5 audit (villa detail page / Google Maps embed, Google reviews and
+  Elfsight testimonials widgets, GTranslate) still has to be run in a browser
+  and the two tables updated to match.
+- No browser smoke test was possible: this work was done in a git worktree,
+  not the served checkout, so nothing was rendered. Everything on the brief's
+  Verification list is outstanding.

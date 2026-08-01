@@ -288,6 +288,53 @@
 	margin-bottom: 0;
 }
 
+/* "Cookie preferences" — reopens the consent modal (JS-bound, see
+   assets/js/cookieconsent-init.js). Sits with the legal links and inherits
+   their micro type + muted colour from `.ibv-site-footer__legal` and
+   `.ibv-site-footer a`; align-self stops the flex item stretching the click
+   target across the full row. */
+.ibv-site-footer__cc-link {
+	align-self: flex-start;
+}
+
 .ibv-site-main {
 	min-height: 50vh;
+}
+
+/* Cookie consent banner — map the library's `--cc-*` variables onto IV2000
+   tokens. The vendor stylesheet (assets/vendor/cookieconsent) supplies
+   structure; only palette, type and radii are overridden here. Full variable
+   list: cookieconsent/src/scss/abstracts/_light-color-scheme.scss */
+#cc-main {
+	--cc-font-family: var(--ibv-font-body);
+	--cc-bg: var(--ibv-color-surface);
+	--cc-primary-color: var(--ibv-color-text);
+	--cc-secondary-color: var(--ibv-color-text-muted);
+	--cc-link-color: var(--ibv-color-link);
+
+	--cc-btn-border-radius: var(--ibv-radius-md);
+	--cc-modal-border-radius: var(--ibv-radius-lg);
+
+	--cc-btn-primary-bg: var(--ibv-color-forest-green);
+	--cc-btn-primary-color: var(--ibv-color-text-inverse);
+	--cc-btn-primary-border-color: var(--ibv-color-forest-green);
+	--cc-btn-primary-hover-bg: var(--ibv-color-forest-green-deep);
+	--cc-btn-primary-hover-color: var(--ibv-color-text-inverse);
+	--cc-btn-primary-hover-border-color: var(--ibv-color-forest-green-deep);
+
+	--cc-btn-secondary-bg: transparent;
+	--cc-btn-secondary-color: var(--ibv-color-link);
+	--cc-btn-secondary-border-color: var(--ibv-color-link);
+	--cc-btn-secondary-hover-bg: var(--ibv-color-tint-teal);
+	--cc-btn-secondary-hover-color: var(--ibv-color-link);
+	--cc-btn-secondary-hover-border-color: var(--ibv-color-link);
+
+	--cc-toggle-on-bg: var(--ibv-color-forest-green-deep);
+	--cc-separator-border-color: var(--ibv-color-border);
+	--cc-cookie-category-block-border: var(--ibv-color-border);
+}
+
+#cc-main :focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: 2px;
 }
