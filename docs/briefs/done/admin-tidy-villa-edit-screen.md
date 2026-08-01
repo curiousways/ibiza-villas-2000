@@ -387,3 +387,44 @@ outstanding portrait merge — villas 12511, 4473 and 11056 hold 9 images that
 exist only as attachment IDs in that meta. Merge them first or accept the loss.
 `property_video`'s 5 URLs are safe to delete; they are recorded permanently in
 `retire-property-video-field.md`.
+
+### Orphan sweep — done (2026-08-01, same session)
+
+**All eight keys deleted, portrait merge deliberately abandoned.** David's
+call: *"clean the portrait images — remove them, the editors will be revisiting
+all property images anyway."* The 9 attachment IDs remain recorded in the
+tables above should anyone want them; the images themselves are untouched in
+the media library.
+
+**11,584 rows deleted** across the 8 keys and their `_` twins, on villas and
+villa revisions.
+
+> **Scope trap, caught before deleting.** These keys are **not** villa-only —
+> `boats` carry **194 rows** of them (batch 1 recorded `property_images_portrait`
+> as "816 rows, mostly boats"). A naive `DELETE ... WHERE meta_key IN (...)`
+> would have taken boat data with it. The delete was joined to `wp_posts` and
+> restricted to `post_type = 'villas'` plus revisions whose parent is a villa.
+> **Boat rows verified intact afterwards: 194.** Any future sweep on this
+> project must scope the same way.
+
+Pushed to staging via `wp migratedb push --include-tables=wp_postmeta`.
+
+### Villa edit screen — final state
+
+One field group (**Villa**, 31 fields, PHP-registered), plus Property Location
+(taxonomy, 12 terms / 126 assignments) and standard WordPress furniture. The
+`villa_poi` native metabox was additionally suppressed with
+`meta_box_cb => false` — POIs are attached through the Distance ticks repeater,
+and the sidebar box let editors tick a term that would never render.
+
+### Content gaps surfaced (not code problems)
+
+- **Distance ticks are empty on all 76 villas** while `villa-location.php:32`
+  and `villa-header.php:42` both render them, and the design calls for them
+  ("3 mins from beach", "10 mins from Ibiza Town", "20 mins from airport").
+  Confirmed by David as a real feature needing content. Batch 2's brief notes
+  the source material sits in `property_summary` prose that was to be migrated
+  into this repeater and never was.
+- **Villa 16699** was flagged for sale without the matching taxonomy term, and
+  is a near-duplicate of villa 4473 — near-identical titles, shared
+  attachments, both published. Worth a content decision.
