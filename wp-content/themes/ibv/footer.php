@@ -165,6 +165,8 @@ $socials = get_field( 'socials', 'option' );
 					<?php echo wp_kses_post( $legal ); ?>
 				</div>
 			<?php endif; ?>
+			<?php // Reopens the cookie consent modal — code, not content, so it lives here rather than in the legal WYSIWYG. ?>
+			<a href="#" class="ibv-site-footer__cc-link" data-ibv-cc-preferences><?php esc_html_e( 'Cookie preferences', 'ibv' ); ?></a>
 		</div>
 
 	</div>

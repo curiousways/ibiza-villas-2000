@@ -178,6 +178,17 @@ function ibv_register_styles() {
 		IBV_CORE_VERSION
 	);
 
+	// Cookie consent (orestbida vanilla-cookieconsent) — self-hosted vendor
+	// stylesheet, version-pinned to the library release rather than
+	// IBV_CORE_VERSION so the file busts cache only when the library moves.
+	// Banner theming (`--cc-*` → `--ibv-*`) lives in layout/site-chrome.css.
+	wp_register_style(
+		'ibv-cookieconsent',
+		IBV_CORE_URL . 'assets/vendor/cookieconsent/cookieconsent.css',
+		[],
+		'3.1.0'
+	);
+
 	wp_register_style(
 		'ibv-facetwp',
 		IBV_CORE_URL . 'includes/integrations/facetwp.css',
@@ -310,6 +321,32 @@ function ibv_register_styles() {
 		[],
 		IBV_CORE_VERSION,
 		[ 'in_footer' => true ]
+	);
+
+	// Cookie consent — vendor UMD build (exposes the global `CookieConsent`)
+	// then our config. Both deferred and in the footer: the banner is
+	// client-side chrome, nothing above it depends on it, and defer preserves
+	// execution order so `CookieConsent.run()` never runs before the library.
+	wp_register_script(
+		'ibv-cookieconsent',
+		IBV_CORE_URL . 'assets/vendor/cookieconsent/cookieconsent.umd.js',
+		[],
+		'3.1.0',
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
+	);
+
+	wp_register_script(
+		'ibv-cookieconsent-init',
+		IBV_CORE_URL . 'assets/js/cookieconsent-init.js',
+		[ 'ibv-cookieconsent' ],
+		IBV_CORE_VERSION,
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
 	);
 
 	wp_register_script(
