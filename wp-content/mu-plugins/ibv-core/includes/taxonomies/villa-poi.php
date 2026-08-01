@@ -37,6 +37,12 @@ function ibv_register_taxonomy_villa_poi() {
 			'show_in_nav_menus'  => false,
 			'show_in_rest'       => false,
 			'show_admin_column'  => true,
+			// No native metabox: POIs are attached via the "Distance ticks"
+			// repeater (field_ibv_villa_distance_poi) on the Villa → Location
+			// tab, and the front end reads those rows — villa-location.php and
+			// villa-header.php — not the bare term assignment. The sidebar box
+			// let editors tick a POI that would never render.
+			'meta_box_cb'        => false,
 			'rewrite'            => false,
 			'hierarchical'       => false,
 		)
