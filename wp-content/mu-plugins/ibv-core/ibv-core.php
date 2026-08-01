@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'IBV_CORE_VERSION', '0.1.50' );
+define( 'IBV_CORE_VERSION', '0.1.51' );
 define( 'IBV_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'IBV_CORE_URL', plugin_dir_url( __FILE__ ) );
 
