@@ -485,30 +485,6 @@ function ibv_register_villa_acf_fields() {
 				'return_format'        => 'array',
 				'insert'               => 'append',
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_5581b076c15be',
-				'label'                => 'Property Video',
-				'name'                 => 'property_video',
-				'aria-label'           => '',
-				'type'                 => 'url',
-				'instructions'         => 'Enter your vimeo or youtube url here',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => '',
-				'placeholder'          => 'https://vimeo.com/28817659',
-			),
 
 			// ─── Tab: Location ──────────────────────────────────────────
 			array(

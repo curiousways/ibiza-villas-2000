@@ -22,7 +22,7 @@ boxes. Batch 1 removed the two gallery ones (403, 1128); these three remain:
 |---|---|---|---|
 | **534** Property Map | `property_map` / `field_558065ef4f993` | Villa → **Location** tab, `register-villa-fields.php:528` (`google_map`) | `villa-location.php:26` (presence check), `villa-map.php:23` (renders it) |
 | **404** Property Location | `property_summary` / `field_5579a38eaa707` | Villa → **Content** tab, `register-villa-fields.php:317` (`wysiwyg`, label "Property Location") | `villa-location.php:38` (detail prose), `villa-card.php:32` (`ibv_villa_excerpt_plain`, first fallback) |
-| **1106** Property Video | `property_video` / `field_5581b076c15be` | Villa → **Content** tab, `register-villa-fields.php:496` (`url`) | **none in the new stack** — see "Video" below |
+| **1106** Property Video | `property_video` / `field_5581b076c15be` | Villa → **Media** tab, `register-villa-fields.php:496` (`url`) *(corrected 2026-07-21 — this table originally said Content; the audit matched by key, not tab, so the outcome was unaffected)* | **none in the new stack** — see "Video" below |
 
 Because the PHP registration owns each key, trashing the DB field is a non-event:
 the field keeps rendering (once, in its canonical tab) and the postmeta is
