@@ -31,7 +31,8 @@ if ( ! function_exists( 'ibv_register_villa_post_type' ) ) {
 			'not_found'             => __( 'No villas found', 'ibv' ),
 			'not_found_in_trash'    => __( 'No villas found in trash', 'ibv' ),
 			'archives'              => __( 'Villa archives', 'ibv' ),
-			'attributes'            => __( 'Villa attributes', 'ibv' ),
+			// Names the Order metabox: menu_order drives the villa listing sequence.
+			'attributes'            => __( 'Villa display order', 'ibv' ),
 			'insert_into_item'      => __( 'Insert into villa', 'ibv' ),
 			'uploaded_to_this_item' => __( 'Uploaded to this villa', 'ibv' ),
 			'filter_items_list'     => __( 'Filter villas list', 'ibv' ),
@@ -43,7 +44,7 @@ if ( ! function_exists( 'ibv_register_villa_post_type' ) ) {
 			'label'               => __( 'Villa', 'ibv' ),
 			'description'         => __( 'Villa properties', 'ibv' ),
 			'labels'              => $labels,
-			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'custom-fields', 'page-attributes', 'post-formats' ),
+			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'revisions', 'page-attributes' ),
 			'taxonomies'          => array( 'property_location' ),
 			'hierarchical'        => false,
 			'public'              => true,
