@@ -95,6 +95,14 @@ returns formatted values via the PHP registration.
 
 ## Deliberately NOT deleted — content the rebuild dropped
 
+> **SUPERSEDED later the same day.** Everything in this section was
+> subsequently removed — fields, groups *and* postmeta — on David's call once
+> it was established that none of it renders on any front end, old or new.
+> Live is a separate untouched database and retains the data for reference.
+> See the "Final pass" section of `admin-tidy-villa-edit-screen.md`. The
+> analysis below is kept because it is *why* the decision was safe, and it
+> records what the data contained.
+
 Three groups remain, holding 8 fields. These are **not** legacy noise: the
 active stack has zero references to any of them (grepped for `spanish`,
 `pounds`, `GBP`, and every field name), yet they are heavily populated.

@@ -318,3 +318,72 @@ Villa edit screen: 3 groups, no for-sale checkbox, no Custom Fields box,
 "Villa display order" replacing "Villa attributes", Order still saving. Villa
 group and offers repeater intact. Front end unchanged. Confirmed on local and
 on staging after the push.
+
+---
+
+## Final pass (2026-08-01, later) — everything legacy removed, including data
+
+**This reverses the two "kept" decisions above.** David's call once the
+evidence was in: *"if they are not being used they shouldn't be there — I want
+this staging copy very tidy."* Rationale for also deleting the data: **live is
+a separate, untouched database and still holds all of it**, so it remains
+available for reference.
+
+> **Caveat recorded at the time:** that reference disappears if live is ever
+> replaced by the new build. Anyone planning launch should export the licensed
+> occupancy figures first if the business still needs them.
+
+**Villa edit screen is now ONE group** — `group_ibv_villa` (Villa, 31 fields).
+No legacy field group renders on villas at all.
+
+| Removed | Detail |
+|---|---|
+| Property Spanish Law (6306) | + fields 6307, 6308, 6312, 14191, 6309 |
+| Property Prices (3990) | + fields 4325, 4326 |
+| Postmeta | **9,492 rows** — the 7 keys and their `_` twins, across villas and revisions |
+| `villa_type` | 2 terms (For Sale 23 / For Rent 53) + all 76 relationships |
+| `includes/taxonomies/villa-type.php` | deleted; require dropped from `bootstrap.php`; `IBV_CORE_VERSION` → `0.1.48` |
+
+Scope was verified before deleting: only `villas` and `revision` carried those
+meta keys — **no boats**, so no cross-CPT impact.
+
+**Note the villa_type reversal specifically.** The gate above concluded "keep
+the taxonomy, retire the checkbox" on the grounds that it was the better
+record. That held while the question was *which* of two duplicate records to
+keep; it did not survive the decision to keep neither. Both are now gone, and
+the sale/rent classification exists only on live.
+
+**Still live on the legacy theme** — matters only if live ever moves to the new
+stack, at which point both would need rebuilding from scratch:
+
+- `property_for_sale` — `page-all-villas.php`, `front-page.php`,
+  `similar-properties.php`, `related-properties-widget.php`,
+  `templates/single-property-price.php`
+- `villa_type` — `templates/single-property-more-info.php:4`
+  (`is_object_in_term( $post->ID, 'villa_type', 'sale' )`)
+
+**On database size:** deleting 9,492 rows moved the DB from 237 MB to
+236.7 MB. Villa metadata is not where the weight is — `wp_gf_entry_meta` is
+66 MB, `wp_wsal_metadata` 15 MB, `wp_check_email_log` 14 MB. Any real
+size reduction is a log/form-entry prune, not a field tidy.
+
+### Remaining orphaned postmeta (not actioned)
+
+Fields already gone, data still present — 5,793 rows, ~11,600 with `_` twins:
+
+| meta_key | Villas w/ value |
+|---|---|
+| `property_more_info_title` | 71 |
+| `property_features` | 65 |
+| `property_for_sale` | 24 |
+| `property_more_info_content` | 10 |
+| `property_more_info_intro` | 8 |
+| `property_video` | 5 |
+| `property_images_portrait` | 3 |
+| `property_sleeps_extra` | 1 |
+
+**Blocker on one of them:** deleting `property_images_portrait` ends the
+outstanding portrait merge — villas 12511, 4473 and 11056 hold 9 images that
+exist only as attachment IDs in that meta. Merge them first or accept the loss.
+`property_video`'s 5 URLs are safe to delete; they are recorded permanently in
+`retire-property-video-field.md`.
