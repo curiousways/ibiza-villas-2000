@@ -216,3 +216,36 @@ out of scope for this run) and to walk Tina through what changed.
 - Deliberately deferred: Notion log updates (David/Claude session),
   `property_summary` location-field pass, Ibiza Guide article
   candidates noted in the drafts, and any SEO meta work.
+
+---
+
+## Outcome / record (2026-08-01)
+
+**Executed on local only, as briefed.** Seven villas updated; full detail in
+`villa-content/RUN-REPORT.md`.
+
+| | |
+|---|---|
+| Villas updated | 6998, 2894, 2818, 9082, 4435, 3155, 3524 |
+| Rows changed | exactly 7 — verified by `post_modified` snapshot before/after |
+| Held villas | untouched, all retain prior `post_modified` |
+| Content integrity | SHA match file vs DB on all seven |
+| Payload | `villa-content/final/{slug}.html` — replay these, do not redraft |
+| Backups | `villa-content/backups/{slug}-pre-tina.html` |
+
+**ID-matching trap worth recording:** villa **3524 "Villa Can Vincente"** (in
+scope) and villa **3174 "Villa Alexa (Can Vincent)"** (held) differ by one
+letter. Their slugs differ too — `villa-can-vicente` (one `n`, and note it
+does *not* match its own content filename `villa-can-vincente-description.md`)
+versus `villa-alexa`. Anyone replaying this must match on **ID**, not name.
+
+**Found during the run, not anticipated by the brief:** Can Vincente's
+`property_summary` still asserts "20 min walk to San Antonio Bay" — the exact
+claim Tina struck from the description. The correction landed in
+`post_content`, but `property_summary` feeds the villa cards, so the walking
+claim is still live on listing pages. This promotes the deferred
+`property_summary` pass from tidy-up to correction.
+
+**Side effect:** the replaced copy carried `style="text-align: justify;"`
+inline styles. Those are gone on these seven, which now render differently
+from the untouched villas until the rest are migrated.
