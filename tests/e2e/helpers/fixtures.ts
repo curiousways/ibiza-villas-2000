@@ -1,0 +1,70 @@
+import { test as base, expect } from '@playwright/test';
+
+/**
+ * "Zero console errors is a pass criterion on every single test" —
+ * docs/testing/bob-e2e-test-suite.md, section 0. This auto-fixture
+ * collects console errors and uncaught page errors on every page and
+ * fails the test at the end if any were seen.
+ *
+ * Exclusions must be deliberate: add a regex with a comment explaining
+ * why the noise is acceptable (and on which environment).
+ */
+const IGNORED_CONSOLE_PATTERNS: RegExp[] = [];
+
+/**
+ * Local runs only: card price hydration calls the live Bob API
+ * (ibizavillas2000.co.uk/cgi-bin/api) cross-origin from the .test site,
+ * which the browser blocks with CORS errors. On staging the request is
+ * expected to succeed, so these patterns are NOT ignored there — the
+ * guard stays strict where the suite's sign-off happens.
+ */
+const LOCAL_ONLY_IGNORED_PATTERNS: RegExp[] = [
+	/ibizavillas2000\.co\.uk\/cgi-bin\/api/,
+	/Failed to load resource: net::ERR_FAILED/,
+];
+
+export const test = base.extend< { _consoleGuard: void } >( {
+	_consoleGuard: [
+		async ( { page, baseURL }, use ) => {
+			// The theme's scroll-behavior: smooth makes Playwright's
+			// scroll-into-view animate, so elements report "not stable" and
+			// clicks time out. The site's own reduced-motion query flips it
+			// to auto. The config-level `reducedMotion` option is not
+			// honoured by this Playwright version, hence the explicit call.
+			await page.emulateMedia( { reducedMotion: 'reduce' } );
+
+			const isLocal = /\.test(\/|$)/.test( baseURL || '' );
+			const errors: string[] = [];
+			page.on( 'console', ( msg ) => {
+				if ( msg.type() !== 'error' ) {
+					return;
+				}
+				const text = msg.text();
+				const haystack = `${ text } ${ msg.location()?.url || '' }`;
+				if ( IGNORED_CONSOLE_PATTERNS.some( ( re ) => re.test( haystack ) ) ) {
+					return;
+				}
+				if (
+					isLocal &&
+					LOCAL_ONLY_IGNORED_PATTERNS.some( ( re ) => re.test( haystack ) )
+				) {
+					return;
+				}
+				errors.push( text );
+			} );
+			page.on( 'pageerror', ( err ) => {
+				errors.push( `pageerror: ${ err.message }` );
+			} );
+
+			await use();
+
+			expect(
+				errors,
+				'zero console errors is a pass criterion (suite section 0)'
+			).toEqual( [] );
+		},
+		{ auto: true },
+	],
+} );
+
+export { expect };

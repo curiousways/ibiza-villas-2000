@@ -1,0 +1,14 @@
+{
+	"name": "ibv-e2e",
+	"private": true,
+	"description": "Playwright end-to-end suite for the Bob API integration (docs/testing/bob-e2e-test-suite.md)",
+	"scripts": {
+		"test": "playwright test",
+		"test:chromium": "playwright test --project=chromium",
+		"test:desktop": "playwright test --project=chromium --project=firefox --project=webkit",
+		"report": "playwright show-report"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.54.0"
+	}
+}
