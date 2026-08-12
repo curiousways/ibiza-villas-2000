@@ -3,7 +3,17 @@
 Automates `docs/testing/bob-e2e-test-suite.md`. First tranche covers
 suite **section 1** (hero search + date-range picker) and the
 URL-driven parts of **section 4** (booking-confirmation param handling
-and tampering).
+and tampering). Second tranche covers **section 2** (listing grid) and
+**section 3** (enquiry panel) with a mocked Bob API.
+
+> **Tranche 2 status:** `tests/villa-listing-grid.spec.ts` and
+> `tests/enquiry-panel.spec.ts` were written from the component source
+> (selectors and API shapes verified against `villa-listing-grid.php`/
+> `.js`, `villa-card.php`, `enquiry-panel.php`/`.js`,
+> `seed-villa-enquiry-form.php`) but have **not yet been executed** —
+> they were authored without access to a running WordPress site. Run
+> them locally (`npm run test:chromium`) and fix any drift before
+> trusting them.
 
 ## Running
 
@@ -44,8 +54,16 @@ BASE_URL=https://<staging-host> npm test
   (suite sections 3–6), gate them behind an env flag and use
   identifiable test values, per the suite's forms-safety step.
 
+- Tranche 2 mocks the Bob API endpoint with `page.route()`
+  (`helpers/bob-api.ts`), so those specs never hit the live PMS and
+  pass criteria are deterministic. The mocked responses mirror the
+  shape both scripts parse: `{ success, count, query: { nights },
+  villas: [ { villa, available, eur_base_rental, eur_total_price,
+  eur_adw_amount, eur_extra_cleaning } ] }`.
+
 ## Not yet automated
 
-Sections 2 (listing grid), 3 (enquiry panel, incl. mocked Bob API
-responses for unavailable/error/race cases), 5 (accommodation forms),
-and the live-API smoke tests. Planned as the next tranches.
+Section 5 (accommodation forms), the form-submitting parts of
+sections 3–4 (RTB submit → confirmation redirect), the cross-page
+card-price-vs-panel-quote consistency checks, and the live-API smoke
+tests. Planned as the next tranches.
