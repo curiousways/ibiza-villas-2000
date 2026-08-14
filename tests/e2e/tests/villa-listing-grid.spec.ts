@@ -44,7 +44,11 @@ interface CardInfo {
  * API fetch (preloaded from <head>), not the document, so the card
  * markup streams in regardless of whether the mock has responded yet.
  * Cards without a property_id can never match an API row, so they are
- * excluded up front.
+ * excluded up front. So are cards whose property_id appears on MORE
+ * THAN ONE card: villas 16699 and 4473 (a known probable-duplicate
+ * listing) both carry pid "peppe", which breaks strict-mode locators
+ * and makes visible-card counts ambiguous — a returned pid hydrates
+ * and un-hides every card that carries it.
  */
 async function scrapeCards( page: Page ): Promise< CardInfo[] > {
 	await page.locator( CARD ).first().waitFor( { state: 'attached' } );
@@ -55,7 +59,11 @@ async function scrapeCards( page: Page ): Promise< CardInfo[] > {
 			hasOffer: el.hasAttribute( 'data-bob-has-offer' ),
 		} ) )
 	);
-	return all.filter( ( c ) => c.pid !== '' );
+	const pidCounts = new Map< string, number >();
+	for ( const c of all ) {
+		pidCounts.set( c.pid, ( pidCounts.get( c.pid ) || 0 ) + 1 );
+	}
+	return all.filter( ( c ) => c.pid !== '' && pidCounts.get( c.pid ) === 1 );
 }
 
 function listingResponse( rows: Array< Record< string, unknown > > ) {

@@ -6,14 +6,15 @@ URL-driven parts of **section 4** (booking-confirmation param handling
 and tampering). Second tranche covers **section 2** (listing grid) and
 **section 3** (enquiry panel) with a mocked Bob API.
 
-> **Tranche 2 status:** `tests/villa-listing-grid.spec.ts` and
-> `tests/enquiry-panel.spec.ts` were written from the component source
-> (selectors and API shapes verified against `villa-listing-grid.php`/
-> `.js`, `villa-card.php`, `enquiry-panel.php`/`.js`,
-> `seed-villa-enquiry-form.php`) but have **not yet been executed** —
-> they were authored without access to a running WordPress site. Run
-> them locally (`npm run test:chromium`) and fix any drift before
-> trusting them.
+> **Tranche 2 status:** written from the component source by a cloud
+> agent, then validated and fixed against the local site — the full
+> five-project matrix passes (150 passed / 5 intentional skips).
+> Drift found during validation, for the record: the fixture villa had
+> to change (see `helpers/test-data.ts` — Villa Daniel's bare permalink
+> carries a legacy redirect), villas 16699/4473 share the Bob property
+> id `peppe` so duplicate-pid cards are excluded from grid fixtures,
+> and WebKit needs `Alt+Tab` plus extra local-only console-noise
+> patterns (prefetch-over-HTTP denial, CORS wording).
 
 ## Running
 
@@ -37,8 +38,8 @@ BASE_URL=https://<staging-host> npm test
 
 ## Environment assumptions
 
-- Post IDs in `helpers/test-data.ts` (Villa Daniel 2782, listing page
-  18540) match both local and staging, because staging's
+- Post IDs in `helpers/test-data.ts` (villa 18125, listing page 18540)
+  match both local and staging, because staging's
   `wp_posts`/`wp_postmeta` were pushed from this local DB. Override via
   `E2E_VILLA_ID` etc. if they diverge.
 - `mobile-safari` is emulated WebKit, not a real device — the manual

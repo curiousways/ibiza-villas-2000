@@ -209,12 +209,15 @@ test.describe( 'hero search — guests + submit', () => {
 		// Date buttons inside the calendar are reachable by Tab. The
 		// popover element lives at the end of <body>, so the tab distance
 		// from the trigger is itself a UX signal — recorded below.
+		// WebKit mirrors real Safari: plain Tab skips buttons, Option+Tab
+		// walks every focusable — use the same key a Safari user would.
+		const tabKey = testInfo.project.name === 'webkit' ? 'Alt+Tab' : 'Tab';
 		const isOnDateBtn = () =>
 			page.evaluate( () => document.activeElement?.hasAttribute( 'data-vc-date-btn' ) );
 		let tabs = 0;
 		let reachedDate = false;
 		for ( ; tabs < 150 && ! reachedDate; tabs++ ) {
-			await page.keyboard.press( 'Tab' );
+			await page.keyboard.press( tabKey );
 			reachedDate = ( await isOnDateBtn() ) === true;
 		}
 		testInfo.annotations.push( {

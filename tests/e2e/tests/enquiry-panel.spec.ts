@@ -235,16 +235,22 @@ test.describe( 'enquiry panel — live pricing', () => {
 		// First range delays 1200ms, second answers immediately.
 		// enquiry-panel.js aborts the in-flight AbortController before
 		// each new fetch, so the browser cancels request A the moment
-		// range B is fetched — the stale response is discarded at the
-		// network layer and its route.fulfill() throws (hence try/catch).
-		let staleFulfilled = false;
+		// range B is fetched. The abort is observable client-side as a
+		// failed request; route.fulfill() on the cancelled request may
+		// still resolve without throwing, so the network layer is NOT a
+		// reliable place to assert — the UI assertions below are.
+		let requestAFailed = false;
+		page.on( 'requestfailed', ( req ) => {
+			if ( req.url().includes( `date_from=${ RANGE_A.from }` ) ) {
+				requestAFailed = true;
+			}
+		} );
 		await page.route( BOB_API_GLOB, async ( route ) => {
 			const from = new URL( route.request().url() ).searchParams.get( 'date_from' );
 			if ( from === RANGE_A.from ) {
 				await new Promise( ( res ) => setTimeout( res, 1200 ) );
 				try {
 					await bobJson( route, pricingResponse( PARTS_A ) );
-					staleFulfilled = true;
 				} catch ( e ) {
 					// Request already aborted by the panel — expected.
 				}
@@ -275,7 +281,7 @@ test.describe( 'enquiry panel — live pricing', () => {
 		await expect( gform( page ).locator( '[data-bob-total-eur]' ) ).toHaveText(
 			EUR.format( totalOf( PARTS_B ) )
 		);
-		expect( staleFulfilled, 'stale response was not aborted by the panel' ).toBe( false );
+		expect( requestAFailed, 'request A was never aborted by the panel' ).toBe( true );
 	} );
 } );
 
@@ -351,10 +357,14 @@ test.describe( 'enquiry panel — failure modes', () => {
 	} );
 
 	test( 'offline mid-flow: panel degrades to the notice with no unhandled promise errors', async ( { page, context } ) => {
-		// Phase 1: dates chosen online, price painted.
+		// Phase 1: dates chosen online, price painted. Wait for the page
+		// to go network-idle before pulling the plug — otherwise going
+		// offline kills still-loading subresources (images, fonts) and
+		// their load-failure console lines fail the guard.
 		await page.route( BOB_API_GLOB, ( route ) => bobJson( route, pricingResponse( PARTS_A ) ) );
 		await page.goto( villaUrl( RANGE_A ) );
 		await expect( priceField( page ) ).toBeVisible();
+		await page.waitForLoadState( 'networkidle' );
 
 		// Phase 2: go offline. Routed requests can bypass network-level
 		// offline emulation, so the mock is also swapped for a hard
