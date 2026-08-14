@@ -30,7 +30,6 @@ function ibv_core_section_short_breaks( $args = [] ) {
 	$img   = get_field( 'short_breaks_image', 'option' );
 	$title = get_field( 'short_breaks_title', 'option' );
 	$text  = get_field( 'short_breaks_text', 'option' );
-	$cta   = get_field( 'short_breaks_cta_url', 'option' );
 
 	if ( ! $title && ! $text && ! $img ) {
 		return;
@@ -40,8 +39,9 @@ function ibv_core_section_short_breaks( $args = [] ) {
 		[
 			'title'       => $title ? (string) $title : '',
 			'description' => $text ? (string) $text : '',
-			'cta_url'     => $cta ? esc_url( $cta ) : '',
-			'cta_label'   => __( 'Search Short Breaks', 'ibv' ),
+			// CTA is fixed by design: always the villa listing page.
+			'cta_url'     => ibv_get_search_villas_url(),
+			'cta_label'   => __( 'Search short breaks', 'ibv' ),
 			'image'       => $img,
 			'image_side'  => 'right',
 			'surface'     => $surface,

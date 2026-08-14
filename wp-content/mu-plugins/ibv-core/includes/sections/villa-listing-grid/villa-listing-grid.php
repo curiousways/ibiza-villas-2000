@@ -80,11 +80,6 @@ function ibv_core_section_villa_listing_grid() {
 							>&times;</a>
 						</span>
 					</li>
-					<li class="ibv-listing-grid-section__filter ibv-listing-grid-section__filter--link">
-						<a href="<?php echo esc_url( $listing_root ); ?>" class="ibv-listing-grid-section__filter-link">
-							<?php esc_html_e( 'Short breaks', 'ibv' ); ?>
-						</a>
-					</li>
 					<li class="ibv-listing-grid-section__filter">
 						<label class="ibv-listing-grid-section__checkbox">
 							<input type="checkbox" data-bob-filter-offers>

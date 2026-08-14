@@ -127,6 +127,20 @@
 	color: var(--ibv-color-link-hover);
 }
 
+/* Current-page "on" state. WordPress marks the active link with
+   aria-current="page" and the li with current-menu-* classes; the ancestor
+   variants keep the parent item lit on child pages. */
+.ibv-site-header__nav a[aria-current="page"],
+.ibv-site-header__nav .current-menu-item > a,
+.ibv-site-header__nav .current-menu-ancestor > a,
+.ibv-site-header__nav .current_page_ancestor > a {
+	font-weight: var(--ibv-font-weight-medium);
+	text-decoration: underline;
+	text-decoration-color: var(--ibv-color-gold-500);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 0.4em;
+}
+
 .ibv-site-header__actions {
 	display: flex;
 	flex-wrap: wrap;

@@ -80,13 +80,6 @@
 	display: none;
 }
 
-.ibv-listing-grid-section__filter-link {
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-brand-teal);
-	text-decoration: underline;
-	text-underline-offset: 0.2em;
-}
-
 .ibv-listing-grid-section__checkbox {
 	display: inline-flex;
 	align-items: center;

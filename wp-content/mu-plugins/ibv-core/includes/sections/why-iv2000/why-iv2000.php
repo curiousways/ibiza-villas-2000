@@ -29,7 +29,7 @@ function ibv_core_section_why_iv2000() {
 				</h2>
 				<hr class="ibv-rule ibv-rule--gold" aria-hidden="true">
 				<p class="ibv-section-why-iv2000__lead">
-					<?php esc_html_e( 'Two decades of experience providing the most authentic island stays.', 'ibv' ); ?>
+					<?php esc_html_e( 'Quality villas, fair prices, and a team who live here. Since 2002.', 'ibv' ); ?>
 				</p>
 			</header>
 

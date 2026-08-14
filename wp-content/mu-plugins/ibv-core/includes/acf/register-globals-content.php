@@ -126,13 +126,6 @@ function ibv_register_globals_content_fields() {
 					'type'  => 'textarea',
 					'rows'  => 4,
 				),
-				array(
-					'key'   => 'field_ibv_global_short_breaks_cta_url',
-					'label' => __( 'CTA URL', 'ibv' ),
-					'name'  => 'short_breaks_cta_url',
-					'type'  => 'page_link',
-					'instructions' => __( 'Pick the page the button links to.', 'ibv' ),
-				),
 			),
 			'location'              => $loc_option,
 			'menu_order'            => 4,

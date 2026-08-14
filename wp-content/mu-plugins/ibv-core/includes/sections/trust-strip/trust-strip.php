@@ -32,7 +32,7 @@ function ibv_core_section_trust_strip() {
 					}
 					?>
 					<?php if ( $url ) : ?>
-						<a class="ibv-trust-item ibv-trust-item--link" href="<?php echo esc_url( $url ); ?>">
+						<a class="ibv-trust-item ibv-trust-item--link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">
 					<?php else : ?>
 						<div class="ibv-trust-item">
 					<?php endif; ?>

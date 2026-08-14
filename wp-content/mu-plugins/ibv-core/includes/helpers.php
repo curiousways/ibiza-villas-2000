@@ -34,10 +34,30 @@ function ibv_url( $path = '' ) {
  * @return string Escaped URL.
  */
 function ibv_get_search_villas_url() {
+	$page_id = ibv_get_search_villas_page_id();
+
+	if ( $page_id ) {
+		return esc_url( get_permalink( $page_id ) );
+	}
+
+	return esc_url( home_url( '/villas/' ) );
+}
+
+/**
+ * ID of the villa listing / search page.
+ *
+ * Same resolution as ibv_get_search_villas_url() (ACF option override, then
+ * template lookup) but returns the page ID — used where the page itself must
+ * be identified, e.g. matching the menu item for nav on-state. Returns 0 when
+ * no page resolves.
+ *
+ * @return int Page ID, or 0.
+ */
+function ibv_get_search_villas_page_id() {
 	$page = get_field( 'search_villas_page', 'option' );
 
 	if ( $page instanceof WP_Post ) {
-		return esc_url( get_permalink( $page ) );
+		return (int) $page->ID;
 	}
 
 	$pages = get_posts(
@@ -53,11 +73,7 @@ function ibv_get_search_villas_url() {
 		]
 	);
 
-	if ( ! empty( $pages ) ) {
-		return esc_url( get_permalink( $pages[0] ) );
-	}
-
-	return esc_url( home_url( '/villas/' ) );
+	return ! empty( $pages ) ? (int) $pages[0] : 0;
 }
 
 /**
