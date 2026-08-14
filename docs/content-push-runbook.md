@@ -13,7 +13,7 @@ URL=$(wp eval '$p=get_option("wpmdb_saved_profiles");$v=json_decode(reset($p)["v
 KEY=$(wp eval '$p=get_option("wpmdb_saved_profiles");$v=json_decode(reset($p)["value"],true);echo $v["connection_info"]["connection_state"]["key"];' 2>/dev/null)
 
 wp migratedb push "$URL" "$KEY" \
-  --include-tables=wp_posts,wp_postmeta,wp_options,wp_terms,wp_termmeta,wp_term_taxonomy,wp_term_relationships \
+  --include-tables=wp_posts,wp_postmeta,wp_options,wp_terms,wp_termmeta,wp_term_taxonomy,wp_term_relationships,wp_redirection_items \
   --preserve-active-plugins \
   --backup=selected
 ```
@@ -30,6 +30,7 @@ For media (files in `wp-content/uploads`), add:
 | `wp_posts`, `wp_postmeta` | Posts, pages, villas, media library records, nav menu items, all ACF field values on posts |
 | `wp_options` | ACF options-page content (testimonials, shared content), theme mods incl. menu locations, widgets |
 | `wp_terms`, `wp_termmeta`, `wp_term_taxonomy`, `wp_term_relationships` | Property Location and other taxonomies, menu structure |
+| `wp_redirection_items` | Redirection plugin rules. Added 14 Aug 2026 after the batch-2 content pass fixed rules that hijacked live villa permalinks (see `docs/briefs/done/villa-content/RUN-REPORT-BATCH2.md`) — redirects are edited locally like all other content. The plugin's groups/404/log tables stay staging-side. |
 
 ## Deliberately excluded
 
