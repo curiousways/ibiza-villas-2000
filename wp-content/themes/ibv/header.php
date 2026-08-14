@@ -68,7 +68,7 @@ $villas_url   = ibv_get_search_villas_url();
 						ibv_core_button(
 							[
 								'url'     => esc_url( $bookings_url ),
-								'label'   => __( 'My Bookings', 'ibv' ),
+								'label'   => __( 'My Booking', 'ibv' ),
 								'variant' => 'secondary',
 								'size'    => 'small',
 							]
