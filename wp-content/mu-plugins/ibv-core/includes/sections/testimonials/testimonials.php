@@ -19,6 +19,23 @@ function ibv_core_section_testimonials() {
 	if ( ! is_array( $rows ) || ! count( $rows ) ) {
 		return;
 	}
+
+	// Show 3 random testimonials per render. With WP Rocket the pick is
+	// baked into the cached page, so in practice this rotates per cache
+	// cycle rather than per visit — accepted trade-off (no JS, no CLS).
+	$rows = array_values(
+		array_filter(
+			$rows,
+			static function ( $row ) {
+				return ! empty( $row['quote'] );
+			}
+		)
+	);
+	if ( ! count( $rows ) ) {
+		return;
+	}
+	shuffle( $rows );
+	$rows = array_slice( $rows, 0, 3 );
 	?>
 	<section class="ibv-section-testimonials ibv-section ibv-section--surface-tint-blue">
 		<div class="ibv-container">
@@ -33,9 +50,6 @@ function ibv_core_section_testimonials() {
 			<div class="ibv-section-testimonials__grid">
 				<?php
 				foreach ( $rows as $row ) {
-					if ( empty( $row['quote'] ) ) {
-						continue;
-					}
 					ibv_core_quote_card(
 						[
 							'quote'       => $row['quote'],
