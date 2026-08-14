@@ -3,7 +3,18 @@
 Automates `docs/testing/bob-e2e-test-suite.md`. First tranche covers
 suite **section 1** (hero search + date-range picker) and the
 URL-driven parts of **section 4** (booking-confirmation param handling
-and tampering).
+and tampering). Second tranche covers **section 2** (listing grid) and
+**section 3** (enquiry panel) with a mocked Bob API.
+
+> **Tranche 2 status:** written from the component source by a cloud
+> agent, then validated and fixed against the local site — the full
+> five-project matrix passes (150 passed / 5 intentional skips).
+> Drift found during validation, for the record: the fixture villa had
+> to change (see `helpers/test-data.ts` — Villa Daniel's bare permalink
+> carries a legacy redirect), villas 16699/4473 share the Bob property
+> id `peppe` so duplicate-pid cards are excluded from grid fixtures,
+> and WebKit needs `Alt+Tab` plus extra local-only console-noise
+> patterns (prefetch-over-HTTP denial, CORS wording).
 
 ## Running
 
@@ -27,8 +38,8 @@ BASE_URL=https://<staging-host> npm test
 
 ## Environment assumptions
 
-- Post IDs in `helpers/test-data.ts` (Villa Daniel 2782, listing page
-  18540) match both local and staging, because staging's
+- Post IDs in `helpers/test-data.ts` (villa 18125, listing page 18540)
+  match both local and staging, because staging's
   `wp_posts`/`wp_postmeta` were pushed from this local DB. Override via
   `E2E_VILLA_ID` etc. if they diverge.
 - `mobile-safari` is emulated WebKit, not a real device — the manual
@@ -44,8 +55,16 @@ BASE_URL=https://<staging-host> npm test
   (suite sections 3–6), gate them behind an env flag and use
   identifiable test values, per the suite's forms-safety step.
 
+- Tranche 2 mocks the Bob API endpoint with `page.route()`
+  (`helpers/bob-api.ts`), so those specs never hit the live PMS and
+  pass criteria are deterministic. The mocked responses mirror the
+  shape both scripts parse: `{ success, count, query: { nights },
+  villas: [ { villa, available, eur_base_rental, eur_total_price,
+  eur_adw_amount, eur_extra_cleaning } ] }`.
+
 ## Not yet automated
 
-Sections 2 (listing grid), 3 (enquiry panel, incl. mocked Bob API
-responses for unavailable/error/race cases), 5 (accommodation forms),
-and the live-API smoke tests. Planned as the next tranches.
+Section 5 (accommodation forms), the form-submitting parts of
+sections 3–4 (RTB submit → confirmation redirect), the cross-page
+card-price-vs-panel-quote consistency checks, and the live-API smoke
+tests. Planned as the next tranches.

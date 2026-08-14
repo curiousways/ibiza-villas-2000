@@ -21,6 +21,12 @@ const IGNORED_CONSOLE_PATTERNS: RegExp[] = [];
 const LOCAL_ONLY_IGNORED_PATTERNS: RegExp[] = [
 	/ibizavillas2000\.co\.uk\/cgi-bin\/api/,
 	/Failed to load resource: net::ERR_FAILED/,
+	// WebKit words the same CORS failure differently, without the URL.
+	/is not allowed by Access-Control-Allow-Origin/,
+	/due to access control checks/,
+	// WebKit denies speculative prefetch on plain-HTTP origins; the local
+	// site is http:// while staging is https://, so local-only.
+	/Prefetch request denied: URL must be secure/,
 ];
 
 export const test = base.extend< { _consoleGuard: void } >( {
@@ -35,25 +41,26 @@ export const test = base.extend< { _consoleGuard: void } >( {
 
 			const isLocal = /\.test(\/|$)/.test( baseURL || '' );
 			const errors: string[] = [];
+			const isIgnored = ( haystack: string ) =>
+				IGNORED_CONSOLE_PATTERNS.some( ( re ) => re.test( haystack ) ) ||
+				( isLocal &&
+					LOCAL_ONLY_IGNORED_PATTERNS.some( ( re ) => re.test( haystack ) ) );
+
 			page.on( 'console', ( msg ) => {
 				if ( msg.type() !== 'error' ) {
 					return;
 				}
-				const text = msg.text();
-				const haystack = `${ text } ${ msg.location()?.url || '' }`;
-				if ( IGNORED_CONSOLE_PATTERNS.some( ( re ) => re.test( haystack ) ) ) {
-					return;
+				const haystack = `${ msg.text() } ${ msg.location()?.url || '' }`;
+				if ( ! isIgnored( haystack ) ) {
+					errors.push( msg.text() );
 				}
-				if (
-					isLocal &&
-					LOCAL_ONLY_IGNORED_PATTERNS.some( ( re ) => re.test( haystack ) )
-				) {
-					return;
-				}
-				errors.push( text );
 			} );
+			// WebKit surfaces CORS failures as page errors too, so these
+			// go through the same filter.
 			page.on( 'pageerror', ( err ) => {
-				errors.push( `pageerror: ${ err.message }` );
+				if ( ! isIgnored( err.message ) ) {
+					errors.push( `pageerror: ${ err.message }` );
+				}
 			} );
 
 			await use();
