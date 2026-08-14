@@ -21,6 +21,16 @@
 	gap: var(--ibv-space-lg);
 }
 
+/* Villa singles get a roomier gap between the main-column sections.
+   Deliberately a modifier: accommodation pages (page-accommodation.php)
+   reuse this shell and their price-to-gallery spacing is calibrated
+   against the 24px base gap (see accommodation-overview.css).
+   NOTE: .ibv-villa-overview's padding-block-start must match this value —
+   it splits its top-divider gap equally (see villa-overview.css). */
+.ibv-villa-detail__main--villa {
+	gap: var(--ibv-space-2xl);
+}
+
 .ibv-villa-detail__sidebar {
 	min-width: 0;
 }

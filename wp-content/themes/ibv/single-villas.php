@@ -23,7 +23,8 @@ while ( have_posts() ) :
 		<div class="ibv-villa-detail__container ibv-container">
 			<div class="ibv-villa-detail__grid">
 
-				<div class="ibv-villa-detail__main">
+				<?php // --villa modifier: roomier section gap than the accommodation pages, which share this shell. ?>
+				<div class="ibv-villa-detail__main ibv-villa-detail__main--villa">
 					<?php
 					/*
 					 * TODO villa-detail-page-rebuild:

@@ -7,9 +7,10 @@
 	display: flex;
 	flex-direction: column;
 	border-block-start: 1px solid var(--ibv-color-border);
-	/* Match `.ibv-villa-detail__main`'s gap so the space above and below
-	   the divider is equal. */
-	padding-block-start: var(--ibv-space-lg);
+	/* Match `.ibv-villa-detail__main--villa`'s gap: the flex gap sits above
+	   the divider line, this padding sits below it, so the two must be the
+	   same value for the divider to bisect the gap equally. */
+	padding-block-start: var(--ibv-space-2xl);
 }
 
 .ibv-villa-overview__heading {

@@ -1,8 +1,14 @@
 /* Villa detail — location section. Matches Figma node 1:5998.
-   Section-heading carries its own bottom margin; this file only owns the
-   gap above the distance pills. Placed on the pills (not on the map)
-   so the gap holds whether the map renders, falls back to the API-key /
-   Map-ID message, or is missing entirely. */
+   This file owns the heading gap and the gap above the distance pills.
+   The pills gap sits on the pills (not on the map) so it holds whether
+   the map renders, falls back to the API-key / Map-ID message, or is
+   missing entirely. */
+
+/* Section-heading defaults to a 2xl bottom margin; tighten to the same
+   md gap the gallery header uses so the two titles read consistently. */
+.ibv-villa-location .ibv-section-heading {
+	margin-bottom: var(--ibv-space-md);
+}
 
 .ibv-villa-location .ibv-distance-ticks {
 	margin-block-start: var(--ibv-space-lg);
