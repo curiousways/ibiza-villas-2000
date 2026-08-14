@@ -19,15 +19,17 @@ function ibv_register_globals_content_fields() {
 		return;
 	}
 
-	$loc_option = array(
-		array(
+	$loc = static function ( $slug ) {
+		return array(
 			array(
-				'param'    => 'options_page',
-				'operator' => '==',
-				'value'    => 'ibv-site-options',
+				array(
+					'param'    => 'options_page',
+					'operator' => '==',
+					'value'    => $slug,
+				),
 			),
-		),
-	);
+		);
+	};
 
 	acf_add_local_field_group(
 		array(
@@ -91,7 +93,7 @@ function ibv_register_globals_content_fields() {
 					'instructions'   => __( 'Optional footnote below the panel (e.g. "There may be additional costs").', 'ibv' ),
 				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc( 'ibv-options-featured-offer' ),
 			'menu_order'            => 3,
 			'position'              => 'normal',
 			'style'                 => 'default',
@@ -128,7 +130,7 @@ function ibv_register_globals_content_fields() {
 					'rows'  => 4,
 				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc( 'ibv-options-short-breaks' ),
 			'menu_order'            => 4,
 			'position'              => 'normal',
 			'style'                 => 'default',
@@ -144,6 +146,24 @@ function ibv_register_globals_content_fields() {
 			'key'                   => 'group_ibv_global_newsletter',
 			'title'                 => __( 'Newsletter (global)', 'ibv' ),
 			'fields'                => array(
+				// Intro/body moved here from the Global group when the
+				// options were split into sub-pages — same field keys and
+				// names, so stored values carried over untouched.
+				array(
+					'key'            => 'field_ibv_global_newsletter_intro',
+					'label'          => __( 'Newsletter intro', 'ibv' ),
+					'name'           => 'newsletter_intro',
+					'type'           => 'text',
+					'instructions'   => __( 'Title above the newsletter form. Renders in the global footer.', 'ibv' ),
+				),
+				array(
+					'key'            => 'field_ibv_global_newsletter_body',
+					'label'          => __( 'Newsletter body', 'ibv' ),
+					'name'           => 'newsletter_body',
+					'type'           => 'textarea',
+					'rows'           => 2,
+					'instructions'   => __( 'Subtitle line beneath the newsletter title. Defaults to "Sign up to receive marketing from Ibiza Villas 2000" if empty.', 'ibv' ),
+				),
 				array(
 					'key'            => 'field_ibv_global_newsletter_gravity_form_id',
 					'label'          => __( 'Newsletter Gravity Form ID', 'ibv' ),
@@ -153,7 +173,7 @@ function ibv_register_globals_content_fields() {
 					'instructions'   => __( 'Gravity Form ID used by all newsletter forms across the site (footer, empty states, etc.). Set once here.', 'ibv' ),
 				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc( 'ibv-options-newsletter' ),
 			'menu_order'            => 5,
 			'position'              => 'normal',
 			'style'                 => 'default',
@@ -195,7 +215,7 @@ function ibv_register_globals_content_fields() {
 					'instructions' => __( 'Falls back to "We\'re afraid something has gone wrong with this link." when empty.', 'ibv' ),
 				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc( 'ibv-options-404' ),
 			'menu_order'            => 6,
 			'position'              => 'normal',
 			'style'                 => 'default',

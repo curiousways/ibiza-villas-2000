@@ -121,6 +121,7 @@ require_once IBV_CORE_PATH . 'includes/sections/concierge-services/concierge-ser
 require_once IBV_CORE_PATH . 'includes/sections/villa-testimonial-teaser/villa-testimonial-teaser.php';
 require_once IBV_CORE_PATH . 'includes/sections/accommodation-overview/accommodation-overview.php';
 require_once IBV_CORE_PATH . 'includes/sections/accommodation-enquiry/accommodation-enquiry.php';
+require_once IBV_CORE_PATH . 'includes/sections/my-booking/my-booking.php';
 
 // 5. ACF — hook to `acf/init`; load registration files last.
 require_once IBV_CORE_PATH . 'includes/acf/picker-exclude-media.php';

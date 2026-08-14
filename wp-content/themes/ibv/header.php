@@ -63,13 +63,14 @@ $villas_url   = ibv_get_search_villas_url();
 				<div class="ibv-site-header__actions">
 					<?php if ( $bookings_url ) : ?>
 						<?php
+						// Internal page (/my-booking/) since the modal was
+						// replaced — no new tab.
 						ibv_core_button(
 							[
 								'url'     => esc_url( $bookings_url ),
 								'label'   => __( 'My Bookings', 'ibv' ),
 								'variant' => 'secondary',
 								'size'    => 'small',
-								'target'  => '_blank',
 							]
 						);
 						?>

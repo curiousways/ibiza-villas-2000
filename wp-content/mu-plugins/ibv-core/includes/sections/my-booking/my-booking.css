@@ -1,0 +1,47 @@
+/* Section: My Booking — booking-reference lookup panel. Section rhythm and
+   surface come from `.ibv-section` + `.ibv-section--surface-bg`; this
+   stylesheet only owns inner layout. Input chrome comes from `.ibv-form`
+   (assets/css/forms.css). */
+
+.ibv-section-my-booking__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: var(--ibv-space-md);
+}
+
+.ibv-section-my-booking__title {
+	margin: 0;
+	font-family: var(--ibv-font-display);
+	font-optical-sizing: auto;
+	font-size: var(--ibv-fs-h1);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-tight);
+	letter-spacing: 0;
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-my-booking__lead {
+	margin: 0;
+	max-width: 36rem;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-section-my-booking__form {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: stretch;
+	gap: var(--ibv-space-sm);
+	width: 100%;
+	max-width: 28rem;
+	margin-block-start: var(--ibv-space-sm);
+}
+
+.ibv-section-my-booking__form .ibv-section-my-booking__input {
+	flex: 1 1 12rem;
+	min-width: 0;
+}

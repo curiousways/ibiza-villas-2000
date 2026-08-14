@@ -21,12 +21,21 @@ function ibv_register_site_options_content_fields() {
 		return;
 	}
 
-	$loc_option = array(
+	$loc_global = array(
 		array(
 			array(
 				'param'    => 'options_page',
 				'operator' => '==',
-				'value'    => 'ibv-site-options',
+				'value'    => 'ibv-options-global',
+			),
+		),
+	);
+	$loc_shared = array(
+		array(
+			array(
+				'param'    => 'options_page',
+				'operator' => '==',
+				'value'    => 'ibv-options-shared-content',
 			),
 		),
 	);
@@ -36,6 +45,12 @@ function ibv_register_site_options_content_fields() {
 			'key'                   => 'group_ibv_global',
 			'title'                 => __( 'Global (header / footer)', 'ibv' ),
 			'fields'                => array(
+				array(
+					'key'       => 'field_ibv_global_tab_contact',
+					'label'     => __( 'Contact', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
 				array(
 					'key'   => 'field_ibv_global_phone_uk',
 					'label' => __( 'Phone (UK)', 'ibv' ),
@@ -62,6 +77,12 @@ function ibv_register_site_options_content_fields() {
 					'type'  => 'email',
 				),
 				array(
+					'key'   => 'field_ibv_global_contact_page',
+					'label' => __( 'Contact page', 'ibv' ),
+					'name'  => 'contact_page',
+					'type'  => 'page_link',
+				),
+				array(
 					'key'   => 'field_ibv_global_my_bookings_url',
 					'label' => __( 'My Bookings URL', 'ibv' ),
 					'name'  => 'my_bookings_url',
@@ -80,6 +101,12 @@ function ibv_register_site_options_content_fields() {
 					'return_format' => 'object',
 					'ui'            => 1,
 					'required'      => 0,
+				),
+				array(
+					'key'       => 'field_ibv_global_tab_footer',
+					'label'     => __( 'Footer', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
 				),
 				array(
 					'key'        => 'field_ibv_global_socials',
@@ -152,6 +179,12 @@ function ibv_register_site_options_content_fields() {
 					'media_upload' => 0,
 				),
 				array(
+					'key'       => 'field_ibv_global_tab_integrations',
+					'label'     => __( 'Integrations', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
+				array(
 					'key'           => 'field_ibv_global_google_maps_api_key',
 					'label'         => __( 'Google Maps API key', 'ibv' ),
 					'name'          => 'google_maps_api_key',
@@ -165,29 +198,8 @@ function ibv_register_site_options_content_fields() {
 					'type'          => 'text',
 					'instructions'  => __( 'Required for the AdvancedMarkerElement marker. Create one in Google Cloud Console → Map Management. Configure map styles against the same Map ID via Cloud Map Styles.', 'ibv' ),
 				),
-				array(
-					'key'   => 'field_ibv_global_contact_page',
-					'label' => __( 'Contact page', 'ibv' ),
-					'name'  => 'contact_page',
-					'type'  => 'page_link',
-				),
-				array(
-					'key'            => 'field_ibv_global_newsletter_intro',
-					'label'          => __( 'Newsletter intro', 'ibv' ),
-					'name'           => 'newsletter_intro',
-					'type'           => 'text',
-					'instructions'   => __( 'Title above the newsletter form. Renders in the global footer.', 'ibv' ),
-				),
-				array(
-					'key'            => 'field_ibv_global_newsletter_body',
-					'label'          => __( 'Newsletter body', 'ibv' ),
-					'name'           => 'newsletter_body',
-					'type'           => 'textarea',
-					'rows'           => 2,
-					'instructions'   => __( 'Subtitle line beneath the newsletter title. Defaults to "Sign up to receive marketing from Ibiza Villas 2000" if empty.', 'ibv' ),
-				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc_global,
 			'menu_order'            => 1,
 			'position'              => 'normal',
 			'style'                 => 'default',
@@ -203,6 +215,12 @@ function ibv_register_site_options_content_fields() {
 			'key'                   => 'group_ibv_home',
 			'title'                 => __( 'Shared content (testimonials, cross-sell)', 'ibv' ),
 			'fields'                => array(
+				array(
+					'key'       => 'field_ibv_home_tab_cross_sell',
+					'label'     => __( 'Cross-sell', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
 				array(
 					'key'           => 'field_ibv_home_fancy_airstream_image',
 					'label'         => __( 'Airstreams image', 'ibv' ),
@@ -258,6 +276,12 @@ function ibv_register_site_options_content_fields() {
 					'type'  => 'page_link',
 				),
 				array(
+					'key'       => 'field_ibv_home_tab_three_step',
+					'label'     => __( '3-step process', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
+				array(
 					'key'           => 'field_ibv_globals_three_step_intro_eyebrow',
 					'label'         => __( '3-step eyebrow', 'ibv' ),
 					'name'          => 'three_step_intro_eyebrow',
@@ -296,6 +320,12 @@ function ibv_register_site_options_content_fields() {
 					),
 				),
 				array(
+					'key'       => 'field_ibv_home_tab_testimonials',
+					'label'     => __( 'Testimonials', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
+				array(
 					'key'        => 'field_ibv_home_testimonials',
 					'label'      => __( 'Testimonials', 'ibv' ),
 					'name'       => 'testimonials',
@@ -318,7 +348,7 @@ function ibv_register_site_options_content_fields() {
 					),
 				),
 			),
-			'location'              => $loc_option,
+			'location'              => $loc_shared,
 			'menu_order'            => 2,
 			'position'              => 'normal',
 			'style'                 => 'default',

@@ -215,6 +215,19 @@ function ibv_get_bob_endpoint_url() {
 }
 
 /**
+ * Absolute URL of Bob's guest booking form.
+ *
+ * Expects a `bookingRef` GET param; without one it tells the guest to use
+ * their confirmation-email link. The My Booking page collects the reference
+ * and submits it here (the old theme did the same from a jQuery modal).
+ *
+ * @return string
+ */
+function ibv_get_bob_booking_form_url() {
+	return 'https://ibizavillas2000.co.uk/cgi-bin/LIVE/bookingForm.pl';
+}
+
+/**
  * Format a single `villa_distances` repeater row for display.
  *
  * Joins the row's `distance_text` (editor-chosen qualifier, e.g. "5 mins

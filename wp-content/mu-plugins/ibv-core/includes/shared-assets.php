@@ -249,6 +249,7 @@ function ibv_register_styles() {
 		'ibv-section-contact-enquiry'               => 'includes/sections/contact-enquiry/contact-enquiry.css',
 		'ibv-section-accommodation-overview'        => 'includes/sections/accommodation-overview/accommodation-overview.css',
 		'ibv-section-accommodation-enquiry'         => 'includes/sections/accommodation-enquiry/accommodation-enquiry.css',
+		'ibv-section-my-booking'                    => 'includes/sections/my-booking/my-booking.css',
 	];
 
 	foreach ( $section_handles as $handle => $rel ) {
