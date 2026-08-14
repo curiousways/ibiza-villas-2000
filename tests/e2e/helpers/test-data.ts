@@ -11,18 +11,20 @@ export const CONFIRMATION_PATH =
 	process.env.E2E_CONFIRMATION_PATH || '/booking-request-received/';
 
 /**
- * A stable published villa with a Bob property_id ("martha").
+ * A stable published villa with a Bob property_id ("savines").
  *
  * NOT Villa Daniel (2782): its bare permalink carries a legacy redirect
  * to the old /villas/rental/{location}/{slug}/ URL shape, which then
  * falls through to the homepage — any test navigating to the detail
  * page without query params would land on the wrong page.
+ *
+ * NOT 18125 "Stunning Villa in Playa d'en Bossa" (the previous fixture):
+ * it is one of the six parked legacy listings from the villa-content
+ * migration and was set to draft in the 14 Aug content pass.
  */
-export const VILLA_ID = Number( process.env.E2E_VILLA_ID || 18125 );
-export const VILLA_NAME =
-	process.env.E2E_VILLA_NAME || 'Stunning Villa in Playa d’en Bossa';
-export const VILLA_SLUG =
-	process.env.E2E_VILLA_SLUG || 'stunning-villa-in-playa-den-bossa';
+export const VILLA_ID = Number( process.env.E2E_VILLA_ID || 6998 );
+export const VILLA_NAME = process.env.E2E_VILLA_NAME || 'Villa Savines';
+export const VILLA_SLUG = process.env.E2E_VILLA_SLUG || 'villa-savines';
 
 /**
  * Villa detail permalink. The `villas` CPT registers no custom `rewrite`

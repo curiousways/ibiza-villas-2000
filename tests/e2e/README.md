@@ -38,7 +38,7 @@ BASE_URL=https://<staging-host> npm test
 
 ## Environment assumptions
 
-- Post IDs in `helpers/test-data.ts` (villa 18125, listing page 18540)
+- Post IDs in `helpers/test-data.ts` (villa 6998, listing page 18540)
   match both local and staging, because staging's
   `wp_posts`/`wp_postmeta` were pushed from this local DB. Override via
   `E2E_VILLA_ID` etc. if they diverge.

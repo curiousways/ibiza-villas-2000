@@ -9,7 +9,15 @@ import { test as base, expect } from '@playwright/test';
  * Exclusions must be deliberate: add a regex with a comment explaining
  * why the noise is acceptable (and on which environment).
  */
-const IGNORED_CONSOLE_PATTERNS: RegExp[] = [];
+const IGNORED_CONSOLE_PATTERNS: RegExp[] = [
+	// The villa map uses a Cloud-styled (vector) Map ID. Headless test
+	// browsers have no WebGL, so Google Maps logs this error and falls
+	// back to raster — cosmetic in tests, on every environment.
+	/Attempted to load a Vector Map, but failed/,
+	// Same headless-maps noise, WebKit flavour: Google Maps loads worker
+	// scripts from blob: URLs, which headless WebKit refuses.
+	/WebKitBlobResource error 1/,
+];
 
 /**
  * Local runs only: card price hydration calls the live Bob API

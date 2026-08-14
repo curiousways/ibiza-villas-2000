@@ -1,0 +1,24 @@
+# Villa Daniel — merged description (Tina-reviewed, 14 Aug 2026)
+
+## HTML (paste into Classic editor, Text tab)
+
+```html
+<p>Villa Daniel is a 400-year-old Ibizan finca in Sa Carroca, just outside Ibiza Town and a five-minute drive from Playa d'en Bossa. One of the original farmhouses of the area, it blends its old finca bones with quirky Balinese touches the owner has added over the years — and it suits larger groups after somewhere with real character: <strong>seven bedrooms</strong> across the main house and two garden annexes, and a garden made for long, lazy lunches.</p>
+
+<h3>Inside the villa</h3>
+<p>A large sliding gate opens onto ample parking, and the finca's heavy old wooden doors bring you straight into the dining area. Off it are a modern kitchen-diner that keeps its Ibicenco feel — beamed ceiling, an ancient farm thresher imaginatively converted into the kitchen table — a snug seating corner for a pre-dinner drink, and the original stone staircase to the first floor, where three bedrooms sit around a central chill-out area, perfect for escaping the midday heat.</p>
+<ul>
+<li>Ground floor — two twin bedrooms and a Balinese tiled bathroom with a stone bath</li>
+<li>First floor — a rustic double with stripped floors and a sunken, glass-walled shower (with curtain) plus adjoining washroom; a twin on a mezzanine above its own little sitting room, with a stone bathroom and pebble-floored shower; and a four-poster double with a Balinese tiled bathroom and private balcony over the garden</li>
+<li>Annexes — one beside the kitchen with three single beds and an en-suite bathroom; one across the pool with two four-poster twin beds and a modern shower room</li>
+</ul>
+
+<h3>The pool and outside space</h3>
+<p>The garden is a proper social space: a large pool with sun loungers, a shaded bamboo-and-wood daybed, and a long table and benches under a Balinese canopy beside the brick-built barbecue — ideal for pool-side dining, day or night.</p>
+```
+
+## Review notes
+
+**Applied from Tina (11 Aug):** her comment on "seven bedrooms" — "If this was in the original text then Luke is happy to keep it." The original copy never states a number, but it enumerates exactly seven sleeping rooms (two ground-floor twins; three first-floor rooms; two annexes), and the draft's bullet list mirrors that enumeration one-for-one. The count is a faithful sum of the original's rooms, not an invention — kept, bolded.
+**Facts to verify:** sleeps figure still unconfirmed — **not asserted** anywhere in the copy.
+**Links:** internal area links omitted pending settled permalinks (old copy linked the legacy `/wp-ibiza/about-ibiza/playa-den-bossa/` page).

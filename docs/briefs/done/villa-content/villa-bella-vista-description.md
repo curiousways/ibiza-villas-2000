@@ -1,0 +1,24 @@
+# Villa Bella Vista (Ses Rotes) — merged description (Tina-reviewed, 14 Aug 2026)
+
+## HTML (paste into Classic editor, Text tab)
+
+```html
+<p>Villa Bella Vista (Ses Rotes) absolutely lives up to its name — a hilltop villa with sea and countryside views from almost every part of the property, and for years a favourite hideaway of the bands playing Ibiza's summer season. <strong>Five air-conditioned bedrooms</strong>, a gorgeous triangular pool and total privacy, yet the pretty drive down the camino brings you to the edge of Sa Carroca, just outside Playa d'en Bossa and Ibiza Town. A car is essential up here — that's the price of the view.</p>
+
+<h3>Inside the villa</h3>
+<p>Large iron gates open onto a driveway with parking for two or three cars. A tiled hallway leads round to the comfortable living and dining area, with a well-equipped adjoining kitchen (dishwasher included) and a pretty tiled staircase to the floors above. The interior is a relaxing space with stylish Mediterranean influences.</p>
+<ul>
+<li>Ground floor — a double and a twin, with an independent bathroom</li>
+<li>First floor — a double and a twin (one with a small terrace over the hillside) and an independent shower room</li>
+<li>Upper first floor — an en-suite double with double-aspect floor-to-ceiling windows, heat-reflective curtains for coolness and privacy, and its own private terrace with views across the island to Ibiza Town and the sea</li>
+</ul>
+
+<h3>The pool and outside space</h3>
+<p>The pool area is calm and generous: the triangular pool, sun loungers facing the vista, a covered terrace for outside dining, various seating corners and a brick-built barbecue. Up on the top level there's a second double-aspect sitting room and sun terrace with the same incredible views across the south-west coast — from here you really do feel on top of the world.</p>
+```
+
+## Review notes
+
+**Applied from Tina:** no comments on this draft — it goes in as she reviewed it. The dated DJMag/Carl Cox name-drops and embedded video were already removed at drafting (logged in the migration log); "favourite of touring bands" kept but evergreen.
+**Facts to verify:** sleeps figure still unconfirmed — **not asserted**. Bedroom count (five) is stated in the reviewed draft and reconciles with the floor split (2 + 2 + 1).
+**Links:** internal area links omitted pending settled permalinks.
