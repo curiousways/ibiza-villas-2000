@@ -323,6 +323,20 @@ function ibv_register_styles() {
 		[ 'in_footer' => true ]
 	);
 
+	// Mobile site-nav disclosure toggle (header hamburger). Enqueued globally
+	// by the theme alongside `ibv-site-chrome`; styles live in
+	// layout/site-chrome.css.
+	wp_register_script(
+		'ibv-site-nav',
+		IBV_CORE_URL . 'assets/js/site-nav.js',
+		[],
+		IBV_CORE_VERSION,
+		[
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		]
+	);
+
 	// Cookie consent — vendor UMD build (exposes the global `CookieConsent`)
 	// then our config. Both deferred and in the footer: the banner is
 	// client-side chrome, nothing above it depends on it, and defer preserves

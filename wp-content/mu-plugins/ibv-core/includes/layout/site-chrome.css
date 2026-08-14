@@ -17,18 +17,67 @@
 
 .ibv-site-header__inner {
 	display: flex;
-	flex-direction: column;
-	align-items: stretch;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
 	gap: var(--ibv-space-md);
 }
 
 @media (min-width: 64rem) {
 	.ibv-site-header__inner {
-		flex-direction: row;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: space-between;
 		gap: var(--ibv-space-lg);
+	}
+}
+
+/* Mobile menu toggle — hidden at desktop */
+.ibv-site-header__toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem; /* 44px tap target */
+	height: 2.75rem;
+	color: var(--ibv-color-text);
+}
+
+.ibv-site-header__toggle:focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: 2px;
+}
+
+/* Icon swap: burger when closed, x when open */
+.ibv-site-header__toggle-icon--close,
+.ibv-site-header__toggle[aria-expanded="true"] .ibv-site-header__toggle-icon--open {
+	display: none;
+}
+
+.ibv-site-header__toggle[aria-expanded="true"] .ibv-site-header__toggle-icon--close {
+	display: block;
+}
+
+/* Collapsible menu panel (nav + action buttons) — mobile only */
+.ibv-site-header__menu {
+	display: none;
+	flex-basis: 100%;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--ibv-space-md);
+	padding-block-start: var(--ibv-space-md);
+}
+
+.ibv-site-header__menu.is-open {
+	display: flex;
+}
+
+@media (min-width: 64rem) {
+	.ibv-site-header__toggle {
+		display: none;
+	}
+
+	/* The wrapper vanishes from layout so nav + actions sit directly in
+	   the __inner flex row, exactly as before the menu existed. */
+	.ibv-site-header__menu {
+		display: contents;
 	}
 }
 

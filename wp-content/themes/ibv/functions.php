@@ -69,6 +69,10 @@ function ibv_theme_enqueue() {
 	if ( wp_style_is( 'ibv-site-chrome', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-site-chrome' );
 	}
+	// Header mobile-menu toggle (registered in ibv-core's shared-assets.php).
+	if ( wp_script_is( 'ibv-site-nav', 'registered' ) ) {
+		wp_enqueue_script( 'ibv-site-nav' );
+	}
 }
 
 /**

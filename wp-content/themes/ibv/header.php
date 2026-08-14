@@ -29,46 +29,62 @@ $villas_url   = ibv_get_search_villas_url();
 		<div class="ibv-site-header__inner">
 			<?php ibv_the_theme_logo( [ 'link_class' => 'ibv-site-header__brand custom-logo-link' ] ); ?>
 
-			<?php if ( has_nav_menu( 'primary' ) ) : ?>
-				<nav class="ibv-site-header__nav" aria-label="<?php esc_attr_e( 'Primary', 'ibv' ); ?>">
-					<?php
-					wp_nav_menu(
-						[
-							'theme_location' => 'primary',
-							'container'      => false,
-							'menu_class'     => 'ibv-nav-list',
-							'depth'          => 1,
-							'fallback_cb'    => false,
-						]
-					);
-					?>
-				</nav>
-			<?php endif; ?>
+			<button
+				type="button"
+				class="ibv-site-header__toggle"
+				aria-expanded="false"
+				aria-controls="ibv-site-menu"
+				data-ibv-site-nav-toggle
+			>
+				<span class="ibv-u-visually-hidden"><?php esc_html_e( 'Menu', 'ibv' ); ?></span>
+				<?php
+				ibv_core_the_icon( 'menu', [ 'class' => 'ibv-site-header__toggle-icon ibv-site-header__toggle-icon--open' ] );
+				ibv_core_the_icon( 'x', [ 'class' => 'ibv-site-header__toggle-icon ibv-site-header__toggle-icon--close' ] );
+				?>
+			</button>
 
-			<div class="ibv-site-header__actions">
-				<?php if ( $bookings_url ) : ?>
+			<div id="ibv-site-menu" class="ibv-site-header__menu">
+				<?php if ( has_nav_menu( 'primary' ) ) : ?>
+					<nav class="ibv-site-header__nav" aria-label="<?php esc_attr_e( 'Primary', 'ibv' ); ?>">
+						<?php
+						wp_nav_menu(
+							[
+								'theme_location' => 'primary',
+								'container'      => false,
+								'menu_class'     => 'ibv-nav-list',
+								'depth'          => 1,
+								'fallback_cb'    => false,
+							]
+						);
+						?>
+					</nav>
+				<?php endif; ?>
+
+				<div class="ibv-site-header__actions">
+					<?php if ( $bookings_url ) : ?>
+						<?php
+						ibv_core_button(
+							[
+								'url'     => esc_url( $bookings_url ),
+								'label'   => __( 'My Bookings', 'ibv' ),
+								'variant' => 'secondary',
+								'size'    => 'small',
+								'target'  => '_blank',
+							]
+						);
+						?>
+					<?php endif; ?>
 					<?php
 					ibv_core_button(
 						[
-							'url'     => esc_url( $bookings_url ),
-							'label'   => __( 'My Bookings', 'ibv' ),
-							'variant' => 'secondary',
+							'url'     => esc_url( $villas_url ),
+							'label'   => __( 'Search Villas', 'ibv' ),
+							'variant' => 'primary',
 							'size'    => 'small',
-							'target'  => '_blank',
 						]
 					);
 					?>
-				<?php endif; ?>
-				<?php
-				ibv_core_button(
-					[
-						'url'     => esc_url( $villas_url ),
-						'label'   => __( 'Search Villas', 'ibv' ),
-						'variant' => 'primary',
-						'size'    => 'small',
-					]
-				);
-				?>
+				</div>
 			</div>
 		</div>
 	</div>
