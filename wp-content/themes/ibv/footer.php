@@ -161,7 +161,7 @@ $socials = get_field( 'socials', 'option' );
 				&copy; <?php echo esc_html( date_i18n( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name', 'display' ) ); ?>. <?php esc_html_e( 'All rights reserved.', 'ibv' ); ?>
 			</p>
 			<?php if ( $legal ) : ?>
-				<div class="ibv-site-footer__legal-detail ibv-prose">
+				<div class="ibv-site-footer__legal-detail ibv-prose ibv-prose--longform">
 					<?php echo wp_kses_post( $legal ); ?>
 				</div>
 			<?php endif; ?>

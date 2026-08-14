@@ -71,7 +71,7 @@ while ( have_posts() ) :
 			}
 			?>
 
-			<div class="ibv-prose ibv-article__body">
+			<div class="ibv-prose ibv-prose--longform ibv-article__body">
 				<?php the_content(); ?>
 			</div>
 

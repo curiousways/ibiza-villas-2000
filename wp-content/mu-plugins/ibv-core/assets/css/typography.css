@@ -102,6 +102,42 @@ small,
 	letter-spacing: var(--ibv-tracking-eyebrow);
 }
 
+/* Long-form variant — pair with .ibv-prose on reading columns (legal pages,
+   article bodies, free-text page sections). The page's own title language is
+   Newsreader regular, which carries less visual mass than the global sans
+   semibold h2 at the same token — so inside long-form content the heading
+   ladder steps down one size, keeping every content heading subordinate to
+   the template title. NOT for the villa/accommodation summaries: their h3s
+   follow the approved house style via the base class.
+   Spacing rhythm is unchanged — the h1–h4 top margins above already encode
+   hierarchy. */
+.ibv-prose--longform h2 {
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: var(--ibv-tracking-normal);
+}
+
+.ibv-prose--longform h3 {
+	font-size: var(--ibv-fs-h4);
+	font-weight: var(--ibv-font-weight-medium);
+}
+
+.ibv-prose--longform h4 {
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-semibold);
+}
+
+/* Editors shouldn't add h1s (the template owns the document h1); if one
+   slips through it renders at the h2 treatment, in the body face. */
+.ibv-prose--longform h1 {
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-h3);
+	font-weight: var(--ibv-font-weight-semibold);
+	line-height: var(--ibv-lh-snug);
+	letter-spacing: var(--ibv-tracking-normal);
+}
+
 .ibv-prose ul,
 .ibv-prose ol {
 	padding-left: var(--ibv-space-lg);

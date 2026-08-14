@@ -50,7 +50,7 @@ function ibv_core_prose_section( array $args = [] ) {
 	?>
 	<section class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
 		<div class="ibv-container ibv-container--narrow">
-			<div class="ibv-prose">
+			<div class="ibv-prose ibv-prose--longform">
 				<?php echo wp_kses_post( $content ); ?>
 			</div>
 		</div>

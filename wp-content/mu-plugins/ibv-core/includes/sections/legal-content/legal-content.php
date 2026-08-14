@@ -38,7 +38,7 @@ function ibv_core_legal_content( array $args = [] ) {
 	<section class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
 		<div class="ibv-container ibv-legal-content__inner">
 			<h1 class="ibv-legal-content__title ibv-font-display"><?php the_title(); ?></h1>
-			<div class="ibv-legal-content__body ibv-prose">
+			<div class="ibv-legal-content__body ibv-prose ibv-prose--longform">
 				<?php the_content(); ?>
 			</div>
 		</div>

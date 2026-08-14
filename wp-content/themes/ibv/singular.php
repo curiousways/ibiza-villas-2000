@@ -29,7 +29,7 @@ while ( have_posts() ) :
 				<?php ibv_core_image( get_post_thumbnail_id(), 'ibv-hero' ); ?>
 			<?php endif; ?>
 
-			<div class="ibv-prose">
+			<div class="ibv-prose ibv-prose--longform">
 				<?php the_content(); ?>
 			</div>
 		</div>

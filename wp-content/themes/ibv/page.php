@@ -22,7 +22,7 @@ while ( have_posts() ) :
 				]
 			);
 			?>
-			<div class="ibv-prose">
+			<div class="ibv-prose ibv-prose--longform">
 				<?php the_content(); ?>
 			</div>
 		</div>
