@@ -72,6 +72,7 @@ function ibv_register_globals_content_fields() {
 					'type'           => 'date_picker',
 					'display_format' => 'd/m/Y',
 					'return_format'  => 'Ymd',
+					'instructions'   => __( 'The featured offer block hides itself everywhere once this date has passed. Leave empty to keep it up indefinitely.', 'ibv' ),
 				),
 				array(
 					'key'           => 'field_ibv_global_featured_offer_show_now_asterisk',

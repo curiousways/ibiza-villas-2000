@@ -1,6 +1,11 @@
 <?php
 /**
- * Section: Fancy something different (Airstream + Hotel).
+ * Section: Fancy something different (apartments teaser).
+ *
+ * Thin wrapper around `ibv_core_image_text_section()` — 50/50 split, image
+ * right, standard bg surface. Image and destination page come from dedicated
+ * Site Options fields; the description is fixed copy. (The hotel/airstream
+ * option fields are untouched — they feed the villa-listing cross-sell.)
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,35 +15,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Two-column teaser via shared accommodation tiles.
+ * Apartments teaser.
  */
 function ibv_core_section_fancy_different() {
 	$intro = get_field( 'fancy_different_intro' );
 	if ( ! $intro ) {
-		$intro = __( 'Fancy something a bit different?', 'ibv' );
+		$intro = __( 'Travelling as a couple or a small group?', 'ibv' );
 	}
 
-	$ai_img = get_field( 'fancy_airstream_image', 'option' );
-	$ai_txt = get_field( 'fancy_airstream_text', 'option' );
-	$ho_img = get_field( 'fancy_hotel_image', 'option' );
-	$ho_txt = get_field( 'fancy_hotel_text', 'option' );
+	$img = get_field( 'fancy_apartments_image', 'option' );
+	$url = get_field( 'fancy_apartments_url', 'option' );
 
-	if ( ! $ai_txt && ! $ho_txt && empty( $ai_img['ID'] ) && empty( $ho_img['ID'] ) ) {
-		return;
-	}
-
-	wp_enqueue_style( 'ibv-section-fancy-different' );
-	?>
-	<section class="ibv-section-fancy-different ibv-section ibv-section--surface-bg">
-		<div class="ibv-container">
-			<header class="ibv-section-fancy-different__header">
-				<h2 class="ibv-section-fancy-different__title ibv-font-display">
-					<?php echo esc_html( $intro ); ?>
-				</h2>
-				<hr class="ibv-section-fancy-different__divider" aria-hidden="true">
-			</header>
-			<?php ibv_core_accommodation_tile_pair(); ?>
-		</div>
-	</section>
-	<?php
+	ibv_core_image_text_section(
+		[
+			'title'       => (string) $intro,
+			'description' => __( 'A whole villa isn\'t always the answer. Our apartments in San Antonio put you a short walk from the beach and the bars, at a fraction of the price.', 'ibv' ),
+			'cta_url'     => $url ? esc_url( $url ) : '',
+			'cta_label'   => __( 'View the apartments', 'ibv' ),
+			'image'       => $img,
+			'image_side'  => 'right',
+			'surface'     => 'bg',
+		]
+	);
 }

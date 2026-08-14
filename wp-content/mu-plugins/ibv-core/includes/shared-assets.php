@@ -260,13 +260,6 @@ function ibv_register_styles() {
 		);
 	}
 
-	wp_register_style(
-		'ibv-section-fancy-different',
-		IBV_CORE_URL . 'includes/sections/fancy-different/fancy-different.css',
-		[ 'ibv-base', 'ibv-accommodation-tile' ],
-		IBV_CORE_VERSION
-	);
-
 	$detail_handles = [
 		'ibv-facts-strip'                   => 'includes/components/facts-strip/facts-strip.css',
 		'ibv-amenity-ticks'                 => 'includes/components/amenity-ticks/amenity-ticks.css',

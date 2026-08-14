@@ -244,6 +244,20 @@ function ibv_register_site_options_content_fields() {
 					'type'  => 'page_link',
 				),
 				array(
+					'key'           => 'field_ibv_home_fancy_apartments_image',
+					'label'         => __( 'Apartments image', 'ibv' ),
+					'name'          => 'fancy_apartments_image',
+					'type'          => 'image',
+					'return_format' => 'array',
+					'instructions'  => __( 'Homepage / Page Builder apartments teaser ("Travelling as a couple…").', 'ibv' ),
+				),
+				array(
+					'key'   => 'field_ibv_home_fancy_apartments_url',
+					'label' => __( 'Apartments page', 'ibv' ),
+					'name'  => 'fancy_apartments_url',
+					'type'  => 'page_link',
+				),
+				array(
 					'key'           => 'field_ibv_globals_three_step_intro_eyebrow',
 					'label'         => __( '3-step eyebrow', 'ibv' ),
 					'name'          => 'three_step_intro_eyebrow',

@@ -11,6 +11,20 @@
 	margin-block-end: var(--ibv-space-xl);
 }
 
+.ibv-section-ibiza-guide-preview__heading {
+	display: flex;
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
+}
+
+/* Same type treatment as .ibv-image-text-section__description */
+.ibv-section-ibiza-guide-preview__descriptor {
+	margin: 0;
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
 .ibv-section-ibiza-guide-preview__title {
 	font-family: var(--ibv-font-display);
 	font-optical-sizing: auto;

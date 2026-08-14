@@ -38,6 +38,15 @@ function ibv_core_section_featured_offer( $args = [] ) {
 	$now   = get_field( 'featured_offer_now_price', 'option' );
 	$vfrom = get_field( 'featured_offer_valid_from', 'option' );
 	$vto   = get_field( 'featured_offer_valid_to', 'option' );
+
+	// Auto-expiry: once the Valid-to date has passed, the whole section
+	// disappears rather than advertising a dead offer. No end date = always
+	// on (manual control). Ymd strings compare lexically. With WP Rocket the
+	// check is baked into the cached page, so in practice the section drops
+	// on the first cache cycle after expiry.
+	if ( $vto && (string) $vto < current_time( 'Ymd' ) ) {
+		return;
+	}
 	$show_asterisk = (bool) get_field( 'featured_offer_show_now_asterisk', 'option' );
 	$footnote      = get_field( 'featured_offer_footnote', 'option' );
 	$footnote      = is_string( $footnote ) ? trim( $footnote ) : '';

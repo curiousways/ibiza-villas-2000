@@ -206,6 +206,13 @@ function ibv_register_page_home_fields() {
 					'type'  => 'text',
 				),
 				array(
+					'key'          => 'field_ibv_page_home_guide_descriptor',
+					'label'        => __( 'Ibiza guide descriptor', 'ibv' ),
+					'name'         => 'guide_descriptor',
+					'type'         => 'text',
+					'instructions' => __( 'Optional line under the section title.', 'ibv' ),
+				),
+				array(
 					'key'           => 'field_ibv_page_home_guide_articles',
 					'label'         => __( 'Guide articles', 'ibv' ),
 					'name'          => 'guide_articles',

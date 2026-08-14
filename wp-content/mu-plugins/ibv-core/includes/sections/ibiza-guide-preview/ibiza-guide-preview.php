@@ -15,9 +15,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ibv_core_section_ibiza_guide_preview() {
 	wp_enqueue_style( 'ibv-section-ibiza-guide-preview' );
 
-	$intro   = get_field( 'guide_intro' );
-	$ids     = get_field( 'guide_articles' );
-	$viewall = get_field( 'guide_view_all_url' );
+	$intro      = get_field( 'guide_intro' );
+	$descriptor = get_field( 'guide_descriptor' );
+	$ids        = get_field( 'guide_articles' );
+	$viewall    = get_field( 'guide_view_all_url' );
 
 	if ( ! is_array( $ids ) ) {
 		$ids = $ids ? [ $ids ] : [];
@@ -52,9 +53,16 @@ function ibv_core_section_ibiza_guide_preview() {
 		<div class="ibv-container">
 
 			<header class="ibv-section-ibiza-guide-preview__header">
-				<h2 class="ibv-section-ibiza-guide-preview__title ibv-font-display">
-					<?php echo esc_html( $intro ); ?>
-				</h2>
+				<div class="ibv-section-ibiza-guide-preview__heading">
+					<h2 class="ibv-section-ibiza-guide-preview__title ibv-font-display">
+						<?php echo esc_html( $intro ); ?>
+					</h2>
+					<?php if ( $descriptor ) : ?>
+						<p class="ibv-section-ibiza-guide-preview__descriptor">
+							<?php echo esc_html( $descriptor ); ?>
+						</p>
+					<?php endif; ?>
+				</div>
 				<?php
 				if ( $viewall ) {
 					ibv_core_button(
