@@ -1,15 +1,18 @@
 <?php
 /**
- * Component: Villa special offers accordion.
+ * Component: Villa special offers.
  *
- * Native <details>/<summary> accordion that lists active offers for
- * a villa. Reads the `villa_offers` ACF repeater. An offer is "active"
- * when its `offer_date_to` is today or later (site timezone). Active
- * offers are sorted ascending by `offer_date_from`. If there are no
- * active offers the component renders nothing.
+ * Open, list-led treatment (deliberate deviation from the signed-off
+ * Figma card — this brief is the design source): gold tag icon + label
+ * header over hairline-separated offer rows, sitting directly on the
+ * page surface. Reads the `villa_offers` ACF repeater. An offer is
+ * "active" when its `offer_date_to` is today or later (site timezone).
+ * Active offers are sorted ascending by `offer_date_from`. If there are
+ * no active offers the component renders nothing.
  *
- * Open-by-default rule: 1–2 active offers → expanded; 3+ → collapsed
- * (so multiple offers don't push villa pricing below the fold).
+ * One active offer → static block (nothing to collapse, no accordion).
+ * Two or more → native <details>/<summary>; open by default at 2,
+ * collapsed at 3+ (so multiple offers don't push pricing below the fold).
  *
  * @package Ibiza_Villas_2000
  */
@@ -95,7 +98,52 @@ function ibv_count_villas_with_active_offers() {
 }
 
 /**
- * Render the villa-offers accordion.
+ * Render the offer rows shared by both variants.
+ *
+ * Headline first, dates second — "20% off" is the message, the range is
+ * the qualifier — in DOM order (not CSS `order:`) so reading order
+ * matches visual order.
+ *
+ * @param array[] $offers Active repeater rows.
+ */
+function ibv_core_villa_offers_list( array $offers ) {
+	?>
+	<ul class="ibv-villa-offers__list">
+		<?php foreach ( $offers as $offer ) : ?>
+			<?php
+			$headline = trim( (string) ( $offer['offer_headline'] ?? '' ) );
+			if ( '' === $headline ) {
+				// An offer saved with a name but no headline would otherwise
+				// render as a dateline with no message.
+				$headline = trim( (string) ( $offer['offer_name'] ?? '' ) );
+			}
+			$description = trim( (string) ( $offer['offer_description'] ?? '' ) );
+			$dates       = ibv_core_villa_offers_format_range(
+				(string) $offer['offer_date_from'],
+				(string) $offer['offer_date_to']
+			);
+			?>
+			<li class="ibv-villa-offers__item">
+				<header class="ibv-villa-offers__item-header">
+					<?php if ( $headline ) : ?>
+						<p class="ibv-villa-offers__headline"><?php echo esc_html( $headline ); ?></p>
+					<?php endif; ?>
+					<?php if ( $dates ) : ?>
+						<p class="ibv-villa-offers__dates"><?php echo esc_html( $dates ); ?></p>
+					<?php endif; ?>
+				</header>
+
+				<?php if ( $description ) : ?>
+					<div class="ibv-villa-offers__desc"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
+				<?php endif; ?>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+	<?php
+}
+
+/**
+ * Render the villa-offers block.
  *
  * @param array $args {
  *     @type int $post_id Required. Villa post ID.
@@ -116,7 +164,32 @@ function ibv_core_villa_offers( $args = [] ) {
 	wp_enqueue_style( 'ibv-villa-offers' );
 
 	$count = count( $active );
-	$open  = $count <= 2;
+
+	$icon = ibv_core_icon(
+		'tag',
+		[
+			'size'  => 20,
+			'class' => 'ibv-villa-offers__icon',
+		]
+	);
+
+	if ( 1 === $count ) :
+		// Static variant: nothing to collapse, so no <details>, no chevron,
+		// no count. The label is a heading so the block sits in the document
+		// outline between the facts strip and "Villa Overview".
+		?>
+		<section class="ibv-villa-offers ibv-villa-offers--static">
+			<header class="ibv-villa-offers__header">
+				<?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ibv_core_icon() output. ?>
+				<h3 class="ibv-villa-offers__label"><?php esc_html_e( 'Special offer', 'ibv' ); ?></h3>
+			</header>
+			<?php ibv_core_villa_offers_list( $active ); ?>
+		</section>
+		<?php
+		return;
+	endif;
+
+	$open = $count <= 2;
 
 	$count_label = sprintf(
 		/* translators: %d: number of active offers */
@@ -126,38 +199,20 @@ function ibv_core_villa_offers( $args = [] ) {
 	?>
 	<details class="ibv-villa-offers"<?php echo $open ? ' open' : ''; ?>>
 		<summary class="ibv-villa-offers__summary">
-			<span class="ibv-villa-offers__label"><?php esc_html_e( 'Special offers available', 'ibv' ); ?></span>
+			<?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ibv_core_icon() output. ?>
+			<span class="ibv-villa-offers__label"><?php esc_html_e( 'Special offers', 'ibv' ); ?></span>
 			<span class="ibv-villa-offers__count"><?php echo $count_label; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in sprintf above. ?></span>
-			<span class="ibv-villa-offers__chevron" aria-hidden="true"></span>
+			<?php
+			echo ibv_core_icon( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ibv_core_icon() output.
+				'chevron-down',
+				[
+					'size'  => 20,
+					'class' => 'ibv-villa-offers__chevron',
+				]
+			);
+			?>
 		</summary>
-
-		<ul class="ibv-villa-offers__list">
-			<?php foreach ( $active as $offer ) : ?>
-				<?php
-				$headline    = trim( (string) ( $offer['offer_headline'] ?? '' ) );
-				$description = trim( (string) ( $offer['offer_description'] ?? '' ) );
-				$dates       = ibv_core_villa_offers_format_range(
-					(string) $offer['offer_date_from'],
-					(string) $offer['offer_date_to']
-				);
-				?>
-				<li class="ibv-villa-offers__item">
-					<header class="ibv-villa-offers__item-header">
-						<?php if ( $dates ) : ?>
-							<p class="ibv-villa-offers__dates"><?php echo esc_html( $dates ); ?></p>
-						<?php endif; ?>
-						<?php if ( $headline ) : ?>
-							<p class="ibv-villa-offers__headline"><?php echo esc_html( $headline ); ?></p>
-						<?php endif; ?>
-					</header>
-
-					<?php if ( $description ) : ?>
-						<div class="ibv-villa-offers__desc"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
-	
-					<?php endif; ?>
-				</li>
-			<?php endforeach; ?>
-		</ul>
+		<?php ibv_core_villa_offers_list( $active ); ?>
 	</details>
 	<?php
 }

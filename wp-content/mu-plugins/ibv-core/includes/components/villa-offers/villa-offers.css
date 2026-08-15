@@ -1,22 +1,29 @@
-/* Villa offers accordion — native <details>/<summary> with a tinted
-   bordered container; same mechanism as About FAQ but a different
-   visual treatment (filled card, not list rows). */
+/* Villa offers — open, list-led treatment sitting directly on the page
+   surface (no card: no fill, border, radius or horizontal padding, so the
+   block shares the villa title / Villa Overview left edge). Deliberate
+   deviation from the signed-off Figma card — the design-pass brief is the
+   design source; flag for design QA as intentional.
 
-.ibv-villa-offers {
-	background: var(--ibv-color-bg-alt);
-	border: 1px solid var(--ibv-color-border);
-	border-radius: var(--ibv-radius-lg);
-	overflow: hidden;
+   Structure: gold tag icon + label header over a hairline, offer rows
+   separated by hairlines, and a closing hairline under the last row so
+   the block reads as a bounded region without being a card. */
+
+/* Header row — <header> in the static single-offer variant, <summary> in
+   the multi-offer <details> variant. Same treatment. */
+.ibv-villa-offers__header,
+.ibv-villa-offers__summary {
+	display: flex;
+	align-items: center;
+	gap: var(--ibv-space-sm);
+	margin: 0;
+	padding-block: var(--ibv-space-sm);
+	border-block-end: 1px solid var(--ibv-color-border);
+	color: var(--ibv-color-text);
 }
 
 .ibv-villa-offers__summary {
 	list-style: none;
 	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: var(--ibv-space-md);
-	padding: var(--ibv-space-md) var(--ibv-space-lg);
-	color: var(--ibv-color-text);
 }
 
 .ibv-villa-offers__summary::-webkit-details-marker {
@@ -28,11 +35,20 @@
 	outline-offset: -2px;
 }
 
+.ibv-villa-offers__icon {
+	flex-shrink: 0;
+	color: var(--ibv-color-accent-gold);
+}
+
 .ibv-villa-offers__label {
+	flex-grow: 1;
+	margin: 0;
+	/* Same treatment whether it's the static variant's <h3> or the
+	   summary's <span>. */
+	font-family: var(--ibv-font-body);
 	font-weight: var(--ibv-font-weight-bold);
 	font-size: var(--ibv-fs-body);
 	line-height: var(--ibv-lh-snug);
-	flex-grow: 1;
 }
 
 .ibv-villa-offers__count {
@@ -40,60 +56,60 @@
 	color: var(--ibv-color-text-muted);
 }
 
-/* CSS-only chevron: rotated L-corner. 45° = down, 225° = up. */
+/* Vendored chevron-down icon, rotated when open (replaces the old
+   CSS-border chevron trick). */
 .ibv-villa-offers__chevron {
-	width: 0.5rem;
-	height: 0.5rem;
-	border-right: 2px solid currentColor;
-	border-bottom: 2px solid currentColor;
-	transform: rotate(45deg);
-	transition: transform var(--ibv-duration-fast) var(--ibv-ease-standard);
 	flex-shrink: 0;
-	/* Visual centring compensation for the rotation's diamond bounding box. */
-	margin-block-end: 0.25rem;
+	transition: transform var(--ibv-duration-fast) var(--ibv-ease-standard);
 }
 
 .ibv-villa-offers[open] > .ibv-villa-offers__summary .ibv-villa-offers__chevron {
-	transform: rotate(225deg);
-	margin-block-end: 0;
-	margin-block-start: 0.25rem;
+	transform: rotate(180deg);
 }
 
 .ibv-villa-offers__list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	/* Closing hairline: bounds the block without boxing it. */
+	border-block-end: 1px solid var(--ibv-color-border);
 }
 
 .ibv-villa-offers__item {
-	padding: var(--ibv-space-lg);
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-sm);
+	padding-block: var(--ibv-space-md);
+	padding-inline: 0;
+}
+
+.ibv-villa-offers__item + .ibv-villa-offers__item {
 	border-block-start: 1px solid var(--ibv-color-border);
 }
 
+/* Headline above dates: the message leads, the range qualifies (order is
+   in the DOM — see villa-offers.php). */
 .ibv-villa-offers__item-header {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: var(--ibv-space-2xs) var(--ibv-space-md);
-}
-
-.ibv-villa-offers__dates {
-	margin: 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
+	flex-direction: column;
+	gap: var(--ibv-space-2xs);
 }
 
 .ibv-villa-offers__headline {
 	margin: 0;
 	font-family: var(--ibv-font-display);
 	font-optical-sizing: auto;
+	/* Stays at h3 scale on mobile too — it is the message. */
 	font-size: var(--ibv-fs-h3);
 	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-snug);
 	color: var(--ibv-color-text);
+}
+
+.ibv-villa-offers__dates {
+	margin: 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
 }
 
 .ibv-villa-offers__desc {
