@@ -55,14 +55,12 @@ function ibv_core_section_contact_enquiry( array $args = [] ) {
 	$form_title    = (string) $args['form_title'];
 	$form_id       = (int) $args['form_id'];
 
-	$phone = trim( (string) get_field( 'phone_ibiza', 'option' ) );
-	if ( '' === $phone ) {
-		$phone = trim( (string) get_field( 'phone_uk', 'option' ) );
-	}
-	$email    = trim( (string) get_field( 'contact_email', 'option' ) );
-	$whatsapp = trim( (string) get_field( 'whatsapp_number', 'option' ) );
+	$phone_uk    = trim( (string) get_field( 'phone_uk', 'option' ) );
+	$phone_ibiza = trim( (string) get_field( 'phone_ibiza', 'option' ) );
+	$email       = trim( (string) get_field( 'contact_email', 'option' ) );
+	$whatsapp    = trim( (string) get_field( 'whatsapp_number', 'option' ) );
 
-	$has_details = ( '' !== $phone ) || ( '' !== $email ) || ( '' !== $whatsapp );
+	$has_details = ( '' !== $phone_uk ) || ( '' !== $phone_ibiza ) || ( '' !== $email ) || ( '' !== $whatsapp );
 	$has_banner  = ! empty( $banner_image );
 
 	if ( ! $heading && ! $subheading && ! $has_details && ! $form_id ) {
@@ -82,8 +80,24 @@ function ibv_core_section_contact_enquiry( array $args = [] ) {
 		);
 	}
 
-	$phone_href = $phone ? 'tel:' . preg_replace( '/[^\d+]/', '', $phone ) : '';
-	$wa_href    = $whatsapp ? 'https://wa.me/' . preg_replace( '/[^\d]/', '', $whatsapp ) : '';
+	// Both office numbers render as their own labelled row (matching the
+	// Site Options field labels); either can be left blank in admin.
+	$phones = [];
+	if ( '' !== $phone_uk ) {
+		$phones[] = [
+			'label' => __( 'Phone (UK)', 'ibv' ),
+			'value' => $phone_uk,
+			'href'  => 'tel:' . preg_replace( '/[^\d+]/', '', $phone_uk ),
+		];
+	}
+	if ( '' !== $phone_ibiza ) {
+		$phones[] = [
+			'label' => __( 'Phone (Ibiza)', 'ibv' ),
+			'value' => $phone_ibiza,
+			'href'  => 'tel:' . preg_replace( '/[^\d+]/', '', $phone_ibiza ),
+		];
+	}
+	$wa_href = $whatsapp ? 'https://wa.me/' . preg_replace( '/[^\d]/', '', $whatsapp ) : '';
 
 	$title_classes = [ 'ibv-section-contact-enquiry__title', 'ibv-font-display' ];
 	$title_classes[] = 'ibv-section-contact-enquiry__title--' . $heading_size;
@@ -113,12 +127,12 @@ function ibv_core_section_contact_enquiry( array $args = [] ) {
 				<aside class="ibv-section-contact-enquiry__sidebar">
 					<?php if ( $has_details ) : ?>
 						<ul class="ibv-section-contact-enquiry__details">
-							<?php if ( '' !== $phone ) : ?>
+							<?php foreach ( $phones as $phone_row ) : ?>
 								<li class="ibv-section-contact-enquiry__detail">
-									<span class="ibv-section-contact-enquiry__detail-label"><?php esc_html_e( 'Phone', 'ibv' ); ?></span>
-									<a class="ibv-section-contact-enquiry__detail-value" href="<?php echo esc_url( $phone_href ); ?>"><?php echo esc_html( $phone ); ?></a>
+									<span class="ibv-section-contact-enquiry__detail-label"><?php echo esc_html( $phone_row['label'] ); ?></span>
+									<a class="ibv-section-contact-enquiry__detail-value" href="<?php echo esc_url( $phone_row['href'] ); ?>"><?php echo esc_html( $phone_row['value'] ); ?></a>
 								</li>
-							<?php endif; ?>
+							<?php endforeach; ?>
 							<?php if ( '' !== $email ) : ?>
 								<li class="ibv-section-contact-enquiry__detail">
 									<span class="ibv-section-contact-enquiry__detail-label"><?php esc_html_e( 'Email', 'ibv' ); ?></span>
