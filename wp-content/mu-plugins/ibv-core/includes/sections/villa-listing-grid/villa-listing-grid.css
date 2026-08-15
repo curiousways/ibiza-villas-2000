@@ -165,19 +165,6 @@
 	color: var(--ibv-color-text-muted);
 }
 
-/* ─── Short-breaks statement ───────────────────────────────────────
-   A plain statement, deliberately not styled like a control. */
-
-.ibv-listing-grid-section__short-breaks {
-	margin: var(--ibv-space-xs) 0 0;
-	font-size: var(--ibv-fs-small);
-	color: var(--ibv-color-text-muted);
-}
-
-.ibv-listing-grid-section__short-breaks strong {
-	color: var(--ibv-color-text);
-	font-weight: var(--ibv-font-weight-medium);
-}
 
 .ibv-listing-grid-section__count {
 	margin: 0;

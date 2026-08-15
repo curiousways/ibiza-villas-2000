@@ -56,6 +56,12 @@ function ibv_core_section_villa_listing_hero() {
 				<div class="ibv-section-villa-listing-hero__search">
 					<?php ibv_core_hero_search(); ?>
 				</div>
+
+				<?php
+				// Directly under the date picker it references — the moment
+				// someone hesitates over "Add dates" for a short stay.
+				ibv_the_short_breaks_statement( 'ibv-section-villa-listing-hero__short-breaks' );
+				?>
 			</div>
 
 			<?php if ( ! empty( $hero_image['ID'] ) ) : ?>

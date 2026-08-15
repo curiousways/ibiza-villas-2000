@@ -116,7 +116,6 @@ function ibv_core_section_villa_listing_grid() {
 				</ul>
 				<p class="ibv-listing-grid-section__count" data-bob-results-count hidden></p>
 			</div>
-			<?php ibv_the_short_breaks_statement( 'ibv-listing-grid-section__short-breaks' ); ?>
 			<?php
 			// Without a dated search the probe fetch will overwrite the static
 			// ACF "from" prices with live rates — --price-pending masks the

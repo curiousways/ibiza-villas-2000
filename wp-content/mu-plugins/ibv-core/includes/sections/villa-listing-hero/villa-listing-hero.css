@@ -52,6 +52,20 @@
 	margin-top: var(--ibv-space-md);
 }
 
+/* Short-breaks statement: quiet caption under the search widget, body face
+   so it reads as a functional note rather than more display copy. */
+.ibv-section-villa-listing-hero__short-breaks {
+	margin: var(--ibv-space-sm) 0 0;
+	font-size: var(--ibv-fs-small);
+	color: var(--ibv-color-text-muted);
+	line-height: var(--ibv-lh-cozy);
+}
+
+.ibv-section-villa-listing-hero__short-breaks strong {
+	color: var(--ibv-color-text);
+	font-weight: var(--ibv-font-weight-medium);
+}
+
 .ibv-section-villa-listing-hero__media {
 	border-radius: var(--ibv-radius-lg);
 	overflow: hidden;
