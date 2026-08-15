@@ -13,12 +13,11 @@
 	padding-block-start: var(--ibv-space-2xl);
 }
 
+/* Type comes from the shared .ibv-h3 utility on the element — the same
+   treatment the prose description gives its h3s — so the section title
+   and the description's headings read as one family. */
 .ibv-villa-overview__heading {
 	margin: 0 0 var(--ibv-space-md);
-	font-family: var(--ibv-font-body);
-	font-size: var(--ibv-fs-h4);
-	font-weight: var(--ibv-font-weight-bold);
-	line-height: var(--ibv-lh-cozy);
 	color: var(--ibv-color-text);
 }
 

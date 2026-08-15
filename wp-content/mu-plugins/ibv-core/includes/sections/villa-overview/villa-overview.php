@@ -39,7 +39,8 @@ function ibv_core_section_villa_overview( $villa_id ) {
 	$heading_id     = wp_unique_id( 'ibv-vo-heading-' );
 	?>
 	<section class="ibv-villa-overview" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>">
-		<h2 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__heading">
+		<?php // .ibv-h3 utility: same treatment as the h3s inside the prose description below (semantically it stays the section's h2). ?>
+		<h2 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__heading ibv-h3">
 			<?php esc_html_e( 'Villa Overview', 'ibv' ); ?>
 		</h2>
 
