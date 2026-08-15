@@ -37,8 +37,6 @@ function ibv_core_section_villa_overview( $villa_id ) {
 
 	$description_id = wp_unique_id( 'ibv-vo-description-' );
 	$heading_id     = wp_unique_id( 'ibv-vo-heading-' );
-	$plain_len      = $description ? mb_strlen( wp_strip_all_tags( (string) $description ) ) : 0;
-	$use_clamp      = $plain_len > 200;
 	?>
 	<section class="ibv-villa-overview" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>">
 		<h2 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__heading">
@@ -50,31 +48,29 @@ function ibv_core_section_villa_overview( $villa_id ) {
 		<?php endif; ?>
 
 		<?php if ( $description ) : ?>
-			<div class="ibv-villa-overview__description-block">
-				<div
-					id="<?php echo esc_attr( $description_id ); ?>"
-					class="ibv-villa-overview__description ibv-prose<?php echo $use_clamp ? ' ibv-readmore__content ibv-readmore__content--clamp' : ''; ?>"
-				>
-					<?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content filter output, rendered as core does. ?>
-				</div>
-				<?php if ( $use_clamp ) : ?>
-					<?php
-					// Shared "Read more" toggle (assets/js|css/readmore.*): the button
-					// names the open-class it toggles on the controlled element.
-					wp_enqueue_style( 'ibv-readmore' );
-					wp_enqueue_script( 'ibv-readmore' );
-					?>
-					<button
-						type="button"
-						class="ibv-readmore__toggle"
-						data-ibv-readmore="is-open"
-						data-ibv-readmore-less="<?php esc_attr_e( 'Read less', 'ibv' ); ?>"
-						aria-expanded="false"
-						aria-controls="<?php echo esc_attr( $description_id ); ?>"
-					>
-						<?php esc_html_e( 'Read more', 'ibv' ); ?>
-					</button>
-				<?php endif; ?>
+			<?php
+			// Shared "Read more" toggle (assets/js|css/readmore.*): the button
+			// names the open-class it toggles on the controlled element. It
+			// sits directly under the summary; the full description below is
+			// completely hidden (--collapse variant, no teaser) until opened.
+			wp_enqueue_style( 'ibv-readmore' );
+			wp_enqueue_script( 'ibv-readmore' );
+			?>
+			<button
+				type="button"
+				class="ibv-readmore__toggle"
+				data-ibv-readmore="is-open"
+				data-ibv-readmore-less="<?php esc_attr_e( 'Read less', 'ibv' ); ?>"
+				aria-expanded="false"
+				aria-controls="<?php echo esc_attr( $description_id ); ?>"
+			>
+				<?php esc_html_e( 'Read more', 'ibv' ); ?>
+			</button>
+			<div
+				id="<?php echo esc_attr( $description_id ); ?>"
+				class="ibv-villa-overview__description ibv-prose ibv-readmore__content ibv-readmore__content--collapse"
+			>
+				<?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content filter output, rendered as core does. ?>
 			</div>
 		<?php endif; ?>
 

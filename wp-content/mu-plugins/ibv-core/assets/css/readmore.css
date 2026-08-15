@@ -47,6 +47,22 @@
 	}
 }
 
+/* Fully-hidden variant — the collapsed element shows nothing at all (no
+   teaser, no fade); the toggle sits above it, after whatever intro content
+   stays visible. Same height interpolation as the clamp variant. */
+.ibv-readmore__content--collapse {
+	interpolate-size: allow-keywords;
+	overflow: hidden;
+	max-height: max-content;
+	transition: max-height var(--ibv-duration-slow) var(--ibv-ease-out);
+}
+
+.ibv-readmore__content--collapse:not(.is-open) {
+	max-height: 0;
+	transition-duration: var(--ibv-duration-normal);
+	transition-timing-function: var(--ibv-ease-standard);
+}
+
 .ibv-readmore__toggle {
 	margin-top: var(--ibv-space-sm);
 	/* Inline-flex + vertical padding give the toggle a comfortable touch target
@@ -89,7 +105,9 @@
    fade for comprehension (fewer/gentler, not zero). */
 @media (prefers-reduced-motion: reduce) {
 	.ibv-readmore__content--clamp,
-	.ibv-readmore__content--clamp:not(.is-open) {
+	.ibv-readmore__content--clamp:not(.is-open),
+	.ibv-readmore__content--collapse,
+	.ibv-readmore__content--collapse:not(.is-open) {
 		transition: none;
 	}
 
