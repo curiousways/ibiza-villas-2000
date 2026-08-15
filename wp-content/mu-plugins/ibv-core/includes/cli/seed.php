@@ -39,6 +39,9 @@ if ( ! function_exists( 'ibv_seed_all_forms' ) ) {
 		if ( function_exists( 'ibv_seed_accommodation_form' ) ) {
 			$messages[] = ibv_seed_accommodation_form();
 		}
+		if ( function_exists( 'ibv_seed_contact_form' ) ) {
+			$messages[] = ibv_seed_contact_form();
+		}
 
 		return $messages;
 	}

@@ -1,0 +1,103 @@
+<?php
+/**
+ * TEMPORARY one-shot form sync for no-SSH environments. ⚠️ DELETE AFTER USE.
+ *
+ * Why this exists: staging / production have no WP-CLI, so `wp ibv seed` can't be
+ * run there. When present, this file runs ibv_seed_all() ONCE on the next
+ * wp-admin load — creating the scaffolding pages if missing, then syncing the
+ * forms — then shows the result as an admin notice so you can confirm it worked.
+ *
+ * Re-added Aug 2026 to seed the new captcha-free "Contact" form on staging
+ * (see seed-contact-form.php) — the legacy contact form's reCAPTCHA keys were
+ * registered to the old .co.uk domain and fail everywhere on the new site.
+ *
+ * Deploy workflow:
+ *   1. Bump IBV_SEED_ONCE_TOKEN below when a form's config has changed.
+ *   2. Push this file with your form changes.
+ *   3. Load wp-admin on the server (as an admin) → the sync runs once; a notice
+ *      shown only to IBV_SEED_ONCE_NOTICE_EMAIL confirms it ("IBV pages + forms
+ *      synced …").
+ *   4. Push again with this file DELETED. Nothing else needs editing — bootstrap
+ *      requires it behind a file_exists() guard, so removal is clean.
+ *
+ * Safe to leave temporarily: it runs at most once per token (gated by the
+ * `ibv_forms_seed_once_token` option) and never on the front end. The permanent
+ * pieces (the ibv_seed_*() functions + `wp ibv seed`) live in ibv-core and
+ * stay — this file is the ONLY throwaway part.
+ *
+ * @package Ibiza_Villas_2000
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+// Bump this string whenever you want the server to re-sync (e.g. after changing
+// a form). A new value forces exactly one more run on each environment.
+if ( ! defined( 'IBV_SEED_ONCE_TOKEN' ) ) {
+	define( 'IBV_SEED_ONCE_TOKEN', '2026-08-15-contact-form' );
+}
+
+// The confirmation notice is shown ONLY to this WP user (matched by email), so
+// other admins never see deploy-debug output. The RUN below stays on
+// manage_options so the seeding fires reliably regardless of who logs in first
+// (gating the run to an exact email would silently no-op if it didn't match).
+if ( ! defined( 'IBV_SEED_ONCE_NOTICE_EMAIL' ) ) {
+	define( 'IBV_SEED_ONCE_NOTICE_EMAIL', 'bob@taggetig.be' );
+}
+
+/**
+ * Run the sync once per token, in the admin only, for capable users.
+ */
+add_action(
+	'admin_init',
+	static function () {
+		if ( wp_doing_ajax() || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		if ( ! function_exists( 'ibv_seed_all' ) || ! class_exists( 'GFAPI' ) ) {
+			return;
+		}
+		// "Already run" needs a second check here: a content push copies
+		// wp_options (incl. the token) from local to staging, so the token can
+		// arrive looking done before this environment ever seeded. GF tables
+		// are never pushed — if the Contact form the options point at doesn't
+		// exist on THIS environment, run the sync regardless of the token.
+		$contact_id     = (int) get_option( 'ibv_contact_form_id' );
+		$contact_exists = $contact_id && GFAPI::get_form( $contact_id );
+		if ( get_option( 'ibv_forms_seed_once_token' ) === IBV_SEED_ONCE_TOKEN && $contact_exists ) {
+			return; // already run for this token on this environment
+		}
+
+		$messages = ibv_seed_all();
+
+		update_option( 'ibv_forms_seed_once_token', IBV_SEED_ONCE_TOKEN );
+		update_option( 'ibv_forms_seed_once_result', $messages );
+	}
+);
+
+/**
+ * Show what happened so a no-SSH admin can confirm before deleting this file.
+ */
+add_action(
+	'admin_notices',
+	static function () {
+		$user = wp_get_current_user();
+		if ( ! $user || ! $user->exists() || $user->user_email !== IBV_SEED_ONCE_NOTICE_EMAIL ) {
+			return;
+		}
+		if ( get_option( 'ibv_forms_seed_once_token' ) !== IBV_SEED_ONCE_TOKEN ) {
+			return;
+		}
+
+		$result = (array) get_option( 'ibv_forms_seed_once_result', array() );
+		if ( ! $result ) {
+			return;
+		}
+
+		echo '<div class="notice notice-success"><p><strong>IBV pages + forms synced</strong> (token '
+			. esc_html( IBV_SEED_ONCE_TOKEN ) . '):<br>'
+			. esc_html( implode( ' · ', $result ) )
+			. '.<br>You can now delete <code>includes/cli/seed-forms-once.php</code> on the next deploy.</p></div>';
+	}
+);

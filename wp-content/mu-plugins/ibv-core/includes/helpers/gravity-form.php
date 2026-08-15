@@ -44,16 +44,10 @@ function ibv_core_gravity_form( $form_id, $args = [] ) {
 
 	wp_enqueue_style( 'ibv-gravity-forms' );
 
-	// Force-load GF's legacy datepicker stylesheet — already registered by
-	// GF (gravityforms.php:3155) but GF only enqueues it on forms using
-	// legacy markup (form_display.php:3145). Modern-markup forms with a
-	// Date Picker field render the jQuery UI calendar with no styles
-	// otherwise. Cheap (~5KB) belt-and-braces; harmless if the form has
-	// no date field. Drop this line once GF ships a modern-markup
-	// datepicker theme of its own.
-	if ( wp_style_is( 'gforms_datepicker_css', 'registered' ) ) {
-		wp_enqueue_style( 'gforms_datepicker_css' );
-	}
+	// No GF datepicker stylesheet: the legacy one keys every rule on
+	// `.gform-legacy-datepicker` (never present on modern-markup forms), so
+	// it was dead weight. The jQuery UI calendar is skinned with theme
+	// tokens in gravity-forms.css instead.
 
 	$classes = [ 'ibv-gform' ];
 	if ( ! empty( $args['variant'] ) ) {

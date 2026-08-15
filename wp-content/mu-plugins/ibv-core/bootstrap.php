@@ -47,6 +47,7 @@ require_once IBV_CORE_PATH . 'includes/cli/migrate-newsletter-to-options.php';
 require_once IBV_CORE_PATH . 'includes/cli/seed-pages.php';
 require_once IBV_CORE_PATH . 'includes/cli/seed-villa-enquiry-form.php';
 require_once IBV_CORE_PATH . 'includes/cli/seed-accommodation-form.php';
+require_once IBV_CORE_PATH . 'includes/cli/seed-contact-form.php';
 require_once IBV_CORE_PATH . 'includes/cli/seed.php';
 
 // TEMPORARY one-shot form sync for no-SSH deploys — runs the seeders once on the
