@@ -207,10 +207,6 @@ function ibv_core_villa_card( $args = [] ) {
 				<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a>
 			</h3>
 
-			<?php if ( $preview ) : ?>
-				<p class="ibv-villa-card__preview"><?php echo esc_html( $preview ); ?></p>
-			<?php endif; ?>
-
 			<?php if ( $bedrooms || $baths || $sleeps ) : ?>
 				<ul class="ibv-villa-card__facts">
 					<?php if ( '' !== $bedrooms && null !== $bedrooms ) : ?>
@@ -260,6 +256,10 @@ function ibv_core_villa_card( $args = [] ) {
 
 			<?php if ( 'default' === $variant ) : ?>
 				<hr class="ibv-villa-card__rule" aria-hidden="true" />
+			<?php endif; ?>
+
+			<?php if ( $preview ) : ?>
+				<p class="ibv-villa-card__preview"><?php echo esc_html( $preview ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $show_offer_row ) : ?>
