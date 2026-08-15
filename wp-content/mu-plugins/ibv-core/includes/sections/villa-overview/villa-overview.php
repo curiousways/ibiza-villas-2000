@@ -25,17 +25,20 @@ function ibv_core_section_villa_overview( $villa_id ) {
 	wp_enqueue_style( 'ibv-section-villa-overview' );
 	wp_enqueue_style( 'ibv-section-heading' );
 
-	// Main villa description — the post content (keyword-rich, carries the
-	// internal links). Rendered through the_content filter so formatting,
-	// links, and embeds resolve exactly as core would output them.
+	// Two-part copy: villa_summary (plain-text ACF field, also the card
+	// description) always shows in full; the post content — the long
+	// description, keyword-rich, carries the internal links — collapses
+	// behind Read more below it. Rendered through the_content filter so
+	// formatting, links, and embeds resolve exactly as core would output.
+	$summary     = trim( (string) get_field( 'villa_summary', $villa_id ) );
 	$content_raw = get_the_content( null, false, $villa_id );
-	$summary     = ( '' !== trim( $content_raw ) ) ? apply_filters( 'the_content', $content_raw ) : '';
+	$description = ( '' !== trim( $content_raw ) ) ? apply_filters( 'the_content', $content_raw ) : '';
 	$indicative  = get_field( 'villa_indicative_from_price', $villa_id );
 
-	$summary_id = wp_unique_id( 'ibv-vo-summary-' );
-	$heading_id = wp_unique_id( 'ibv-vo-heading-' );
-	$plain_len  = $summary ? mb_strlen( wp_strip_all_tags( (string) $summary ) ) : 0;
-	$use_clamp  = $plain_len > 200;
+	$description_id = wp_unique_id( 'ibv-vo-description-' );
+	$heading_id     = wp_unique_id( 'ibv-vo-heading-' );
+	$plain_len      = $description ? mb_strlen( wp_strip_all_tags( (string) $description ) ) : 0;
+	$use_clamp      = $plain_len > 200;
 	?>
 	<section class="ibv-villa-overview" aria-labelledby="<?php echo esc_attr( $heading_id ); ?>">
 		<h2 id="<?php echo esc_attr( $heading_id ); ?>" class="ibv-villa-overview__heading">
@@ -43,12 +46,16 @@ function ibv_core_section_villa_overview( $villa_id ) {
 		</h2>
 
 		<?php if ( $summary ) : ?>
-			<div class="ibv-villa-overview__summary-block">
+			<p class="ibv-villa-overview__summary"><?php echo esc_html( $summary ); ?></p>
+		<?php endif; ?>
+
+		<?php if ( $description ) : ?>
+			<div class="ibv-villa-overview__description-block">
 				<div
-					id="<?php echo esc_attr( $summary_id ); ?>"
-					class="ibv-villa-overview__summary ibv-prose<?php echo $use_clamp ? ' ibv-readmore__content ibv-readmore__content--clamp' : ''; ?>"
+					id="<?php echo esc_attr( $description_id ); ?>"
+					class="ibv-villa-overview__description ibv-prose<?php echo $use_clamp ? ' ibv-readmore__content ibv-readmore__content--clamp' : ''; ?>"
 				>
-					<?php echo $summary; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content filter output, rendered as core does. ?>
+					<?php echo $description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content filter output, rendered as core does. ?>
 				</div>
 				<?php if ( $use_clamp ) : ?>
 					<?php
@@ -63,7 +70,7 @@ function ibv_core_section_villa_overview( $villa_id ) {
 						data-ibv-readmore="is-open"
 						data-ibv-readmore-less="<?php esc_attr_e( 'Read less', 'ibv' ); ?>"
 						aria-expanded="false"
-						aria-controls="<?php echo esc_attr( $summary_id ); ?>"
+						aria-controls="<?php echo esc_attr( $description_id ); ?>"
 					>
 						<?php esc_html_e( 'Read more', 'ibv' ); ?>
 					</button>

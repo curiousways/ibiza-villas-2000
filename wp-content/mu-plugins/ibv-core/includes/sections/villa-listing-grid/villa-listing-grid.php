@@ -137,6 +137,9 @@ function ibv_core_section_villa_listing_grid() {
 				$fallback = new WP_Query(
 					[
 						'post_type'           => 'villas',
+						// Explicit: without it WP_Query adds private posts
+						// for logged-in users who can read them.
+						'post_status'         => 'publish',
 						'posts_per_page'      => -1,
 						'orderby'             => 'menu_order',
 						'order'               => 'ASC',

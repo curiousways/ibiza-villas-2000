@@ -23,11 +23,21 @@
 }
 
 /* Description ------------------------------------------------------- */
-.ibv-villa-overview__summary-block {
+/* Always-visible one-paragraph summary (villa_summary field); the long
+   description collapses below it. */
+.ibv-villa-overview__summary {
+	margin: 0 0 var(--ibv-space-md);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text);
+}
+
+.ibv-villa-overview__description-block {
 	margin: 0;
 }
 
-.ibv-villa-overview__summary {
+.ibv-villa-overview__description {
 	font-family: var(--ibv-font-body);
 	font-size: var(--ibv-fs-small);
 	line-height: var(--ibv-lh-cozy);
@@ -36,8 +46,8 @@
 
 /* The collapsible "Read more" behaviour (clamp, teaser fade, toggle button,
    reduced-motion) is shared — see assets/css/readmore.css (.ibv-readmore__*).
-   The summary div carries .ibv-readmore__content--clamp when over the length
-   threshold; readmore.js toggles .is-open. */
+   The description div carries .ibv-readmore__content--clamp when over the
+   length threshold; readmore.js toggles .is-open. */
 
 /* Amenities --------------------------------------------------------- */
 .ibv-villa-overview .ibv-amenity-ticks {

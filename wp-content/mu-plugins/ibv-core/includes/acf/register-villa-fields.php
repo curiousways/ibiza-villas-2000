@@ -121,6 +121,15 @@ function ibv_register_villa_acf_fields() {
 				'append'               => '',
 				'maxlength'            => '',
 			),
+			array(
+				'key'          => 'field_ibv_villa_summary',
+				'label'        => __( 'Summary', 'ibv' ),
+				'name'         => 'villa_summary',
+				'type'         => 'textarea',
+				'instructions' => __( 'One-paragraph summary, plain text. Shown in full under "Villa Overview" on the villa page (above the collapsible description) and as the villa card description in listings.', 'ibv' ),
+				'rows'         => 4,
+				'new_lines'    => '',
+			),
 
 			// ─── Tab: Key facts ─────────────────────────────────────────
 			array(

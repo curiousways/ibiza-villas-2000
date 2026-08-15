@@ -31,10 +31,14 @@ function ibv_core_section_villa_similar( $villa_id ) {
 		}
 	}
 
+	// post_status explicit on both queries: hand-picked villa_similar IDs
+	// especially can point at villas since unpublished, and without it
+	// WP_Query adds private posts for logged-in users who can read them.
 	if ( count( $similar_ids ) ) {
 		$query = new WP_Query(
 			[
 				'post_type'           => 'villas',
+				'post_status'         => 'publish',
 				'post__in'            => $similar_ids,
 				'orderby'             => 'post__in',
 				'posts_per_page'      => 3,
@@ -47,6 +51,7 @@ function ibv_core_section_villa_similar( $villa_id ) {
 		$query  = new WP_Query(
 			[
 				'post_type'           => 'villas',
+				'post_status'         => 'publish',
 				'posts_per_page'      => 3,
 				'post__not_in'        => $not_in,
 				'orderby'             => 'date',

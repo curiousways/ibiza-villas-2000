@@ -25,11 +25,16 @@ function ibv_resolve_villa_id( $villa ) {
 /**
  * Plain-text excerpt for a villa (~30 words).
  *
+ * villa_summary is the editorial one-paragraph summary (also rendered in
+ * full under "Villa Overview" on the single); it replaced the legacy
+ * property_summary field, which held distance-ticks copy, as the card
+ * description source.
+ *
  * @param int $villa_id Post ID.
  * @return string
  */
 function ibv_villa_excerpt_plain( $villa_id ) {
-	$summary = get_field( 'property_summary', $villa_id );
+	$summary = get_field( 'villa_summary', $villa_id );
 	if ( $summary ) {
 		return wp_trim_words( wp_strip_all_tags( (string) $summary ), 30, '…' );
 	}
