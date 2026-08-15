@@ -12,9 +12,9 @@ import {
  * docs/testing/bob-e2e-test-suite.md
  *
  * URL contract (page-booking-confirmation.php):
- *   ?villa={id}&arrival=YYYY-MM-DD&departure=YYYY-MM-DD&guests={n}&offer={string}
+ *   ?villa={id}&arrival=YYYY-MM-DD&departure=YYYY-MM-DD&guests={n}&offer={string}&ref={entry_id}
  * All params optional and untrusted; the details panel renders only rows
- * whose params survive validation.
+ * whose params survive validation. `ref` is displayed as IV-{n}.
  */
 
 const DETAILS = '.ibv-booking-confirmation__details';
@@ -151,5 +151,42 @@ test.describe( 'booking confirmation — URL-driven details panel', () => {
 		const text = ( await offerRow.innerText() ).replace( 'Offer', '' ).trim();
 		expect( text.length ).toBeLessThanOrEqual( 80 );
 		expect( text ).toMatch( /^A+$/ );
+	} );
+
+	test( 'valid ref renders as a prefixed IV- reference', async ( { page } ) => {
+		await page.goto(
+			confirmationUrl( {
+				guests: '2',
+				ref: '1042',
+			} )
+		);
+
+		await expect( detailsRow( page, 'Reference' ) ).toContainText( 'IV-1042' );
+	} );
+
+	test( 'zero or garbage ref drops the reference row', async ( { page } ) => {
+		await page.goto( confirmationUrl( { guests: '2', ref: 'not-a-number' } ) );
+		await expect( detailsRow( page, 'Reference' ) ).toHaveCount( 0 );
+		await expect( detailsRow( page, 'Guests' ) ).toContainText( '2' );
+	} );
+} );
+
+test.describe( 'booking confirmation — page chrome', () => {
+	test( 'is noindexed via Yoast robots meta', async ( { page } ) => {
+		await page.goto( CONFIRMATION_PATH );
+		const robots = page.locator( 'meta[name="robots"]' );
+		await expect( robots ).toHaveAttribute( 'content', /noindex/ );
+		await expect( robots ).toHaveAttribute( 'content', /nofollow/ );
+	} );
+
+	test( 'contact strip exposes WhatsApp and tel links', async ( { page } ) => {
+		await page.goto( CONFIRMATION_PATH );
+		const strip = page.locator( '.ibv-booking-confirmation__contact-line' );
+		await expect( strip ).toBeVisible();
+		await expect( strip.locator( 'a[href^="https://wa.me/"]' ) ).toBeVisible();
+		await expect( strip.locator( 'a[href^="tel:"]' ) ).toHaveAttribute(
+			'href',
+			/tel:\+\d+/
+		);
 	} );
 } );

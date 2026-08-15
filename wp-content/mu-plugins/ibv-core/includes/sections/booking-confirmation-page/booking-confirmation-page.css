@@ -43,7 +43,7 @@
 
 /* Booking details panel — URL-driven; renders only when at least one
    sanitised query param survives validation. No header — the page
-   H1 ("Booking request received") already implies what this list is. */
+   H1 already implies what this list is. */
 .ibv-booking-confirmation__details-list {
 	list-style: none;
 	margin: 0 auto;
@@ -67,4 +67,14 @@
 
 .ibv-booking-confirmation__details-list strong {
 	font-weight: var(--ibv-font-weight-bold);
+}
+
+/* Quiet contact line under the three cards — reassurance, not a CTA band. */
+.ibv-booking-confirmation__contact-line {
+	margin: 0 auto;
+	max-width: 36rem;
+	text-align: center;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted);
 }

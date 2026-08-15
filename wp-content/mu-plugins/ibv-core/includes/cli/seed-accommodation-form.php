@@ -88,14 +88,15 @@ if ( ! function_exists( 'ibv_seed_accommodation_form' ) ) {
 			// "Page" confirmation → the booking-confirmation page, built by
 			// ibv_build_gf_booking_confirmation() (resolves the page by template; see
 			// helpers.php). Mirrors the Villa Enquiry flow. Carries arrival / departure /
-			// guests (field ids 4 / 5 / 6) so the page's booking-details panel shows the
-			// requested dates and party size. No `villa` param (an accommodation enquiry
-			// has no villa post id) and no `offer`; the page renders only the rows whose
+			// guests / ref (field ids 4 / 5 / 6 + {entry_id}) so the page's
+			// booking-details panel shows the requested dates, party size, and
+			// reference. No `villa` param (an accommodation enquiry has no villa
+			// post id) and no `offer`; the page renders only the rows whose
 			// params validate, so empty/optional fields simply drop their row.
 			'confirmations'  => array(
 				'ibv_accommodation_redirect' => ibv_build_gf_booking_confirmation(
 					'ibv_accommodation_redirect',
-					'arrival={Arrival:4}&departure={Departure:5}&guests={Number of guests:6}'
+					'arrival={Arrival:4}&departure={Departure:5}&guests={Number of guests:6}&ref={entry_id}'
 				),
 			),
 			'notifications'  => array(
@@ -109,6 +110,21 @@ if ( ! function_exists( 'ibv_seed_accommodation_form' ) ) {
 					'replyTo'  => '{Email:2}',
 					'subject'  => 'Accommodation Enquiry - {Name:1}',
 					'message'  => '{all_fields}',
+				),
+				'ibv_accommodation_guest' => array(
+					'id'       => 'ibv_accommodation_guest',
+					'isActive' => true,
+					'name'     => 'Guest confirmation',
+					'event'    => 'form_submission',
+					'toType'   => 'field',
+					'to'       => '2',
+					'toField'  => '2',
+					'type'     => 'user',
+					'from'     => '{admin_email}',
+					'fromName' => 'Ibiza Villas 2000',
+					'replyTo'  => 'bookings@ibizavillas2000.com',
+					'subject'  => "We've got your request — reference IV-{entry_id}",
+					'message'  => '<p>We\'ve got your request (reference IV-{entry_id}).</p><p>Someone from the team in Ibiza will come back to you personally.</p>{all_fields}',
 				),
 			),
 		);

@@ -4,8 +4,8 @@
  *
  * Page composition: confirmation panel (heading + optional subheading)
  * → optional URL-driven booking-details panel (rendered inline by the
- * template, no ACF) → three-step (page-scoped content) → concierge
- * image-text section. The three-step content is page-scoped here so
+ * template, no ACF) → three-step (page-scoped content) → contact strip
+ * → concierge image-text section. The three-step content is page-scoped here so
  * Tina can write copy specific to "after you've enquired" without
  * touching the homepage globals.
  *
@@ -52,14 +52,16 @@ function ibv_register_page_booking_confirmation_fields() {
 					'name'          => 'confirmation_heading',
 					'type'          => 'text',
 					'required'      => 1,
-					'default_value' => __( 'Booking request received', 'ibv' ),
+					'default_value' => __( "We've got your request", 'ibv' ),
 				),
 				array(
-					'key'          => 'field_ibv_page_bc_subheading',
-					'label'        => __( 'Subheading', 'ibv' ),
-					'name'         => 'confirmation_subheading',
-					'type'         => 'text',
-					'instructions' => __( 'Optional supporting line below the heading.', 'ibv' ),
+					'key'           => 'field_ibv_page_bc_subheading',
+					'label'         => __( 'Subheading', 'ibv' ),
+					'name'          => 'confirmation_subheading',
+					'type'          => 'textarea',
+					'rows'          => 2,
+					'instructions'  => __( 'Lead sentences only — the Site Options response-time note is appended on the page so the timing promise stays in one place.', 'ibv' ),
+					'default_value' => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally.', 'ibv' ),
 				),
 
 				// Three-step (page-scoped content).
@@ -84,16 +86,30 @@ function ibv_register_page_booking_confirmation_fields() {
 					'default_value' => __( 'Three steps to confirmation', 'ibv' ),
 				),
 				array(
-					'key'          => 'field_ibv_page_bc_three_step_steps',
-					'label'        => __( 'Steps', 'ibv' ),
-					'name'         => 'three_step_steps',
-					'type'         => 'repeater',
-					'layout'       => 'block',
-					'min'          => 3,
-					'max'          => 3,
-					'button_label' => __( 'Add step', 'ibv' ),
-					'instructions' => __( 'Three steps that describe the post-enquiry journey.', 'ibv' ),
-					'sub_fields'   => array(
+					'key'           => 'field_ibv_page_bc_three_step_steps',
+					'label'         => __( 'Steps', 'ibv' ),
+					'name'          => 'three_step_steps',
+					'type'          => 'repeater',
+					'layout'        => 'block',
+					'min'           => 3,
+					'max'           => 3,
+					'button_label'  => __( 'Add step', 'ibv' ),
+					'instructions'  => __( 'Three steps that describe the post-enquiry journey.', 'ibv' ),
+					'default_value' => array(
+						array(
+							'title' => __( 'We check the villa', 'ibv' ),
+							'text'  => __( 'Someone in the Ibiza office confirms the dates are free and the price is right for your party.', 'ibv' ),
+						),
+						array(
+							'title' => __( 'You get it in writing', 'ibv' ),
+							'text'  => __( 'Full price, and exactly what it covers — cleaning and damage waiver included. Nothing is committed until you say yes.', 'ibv' ),
+						),
+						array(
+							'title' => __( 'A 30% deposit secures it', 'ibv' ),
+							'text'  => __( "We don't hold dates until the deposit is paid, which is why we come back quickly. The balance is due before you travel.", 'ibv' ),
+						),
+					),
+					'sub_fields'    => array(
 						array(
 							'key'   => 'field_ibv_page_bc_three_step_card_title',
 							'label' => __( 'Title', 'ibv' ),
@@ -108,6 +124,22 @@ function ibv_register_page_booking_confirmation_fields() {
 							'rows'  => 3,
 						),
 					),
+				),
+
+				// Contact strip.
+				array(
+					'key'       => 'field_ibv_page_bc_tab_contact',
+					'label'     => __( 'Contact strip', 'ibv' ),
+					'type'      => 'tab',
+					'placement' => 'left',
+				),
+				array(
+					'key'           => 'field_ibv_page_bc_contact_intro',
+					'label'         => __( 'Contact strip intro', 'ibv' ),
+					'name'          => 'confirmation_contact_intro',
+					'type'          => 'text',
+					'instructions'  => __( 'Opening of the quiet contact line under the three cards. Phone and WhatsApp come from Site Options.', 'ibv' ),
+					'default_value' => __( 'Need to change something, or add a night?', 'ibv' ),
 				),
 
 				// Concierge.

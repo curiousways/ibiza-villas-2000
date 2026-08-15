@@ -26,7 +26,7 @@
  * "Page" confirmation → the booking-confirmation page, built by
  * ibv_build_gf_booking_confirmation() (resolves the page by the
  * page-booking-confirmation.php template — currently /booking-request-received/),
- * passing the villa / arrival / departure / guests / offer query string it reads.
+ * passing the villa / arrival / departure / guests / offer / ref query string it reads.
  * GF redirects by page id at submit time, so it survives slug + domain changes.
  *
  * Idempotent UPSERT: updates the existing form (id in `ibv_villa_enquiry_form_id`,
@@ -172,7 +172,7 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 			'confirmations'  => array(
 				'ibv_villa_redirect' => ibv_build_gf_booking_confirmation(
 					'ibv_villa_redirect',
-					'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}'
+					'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}&ref={entry_id}'
 				),
 			),
 			'notifications'  => array(
@@ -186,6 +186,21 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 					'replyTo'  => '{Email:3}',
 					'subject'  => 'Ibiza Villas 2000 Enquiry - {Name:2} - {Property Name:1}',
 					'message'  => '{all_fields}',
+				),
+				'ibv_villa_guest' => array(
+					'id'       => 'ibv_villa_guest',
+					'isActive' => true,
+					'name'     => 'Guest confirmation',
+					'event'    => 'form_submission',
+					'toType'   => 'field',
+					'to'       => '3',
+					'toField'  => '3',
+					'type'     => 'user',
+					'from'     => '{admin_email}',
+					'fromName' => 'Ibiza Villas 2000',
+					'replyTo'  => 'bookings@ibizavillas2000.com',
+					'subject'  => "We've got your request — reference IV-{entry_id}",
+					'message'  => '<p>We\'ve got your request (reference IV-{entry_id}).</p><p>Someone from the team in Ibiza will come back to you personally.</p>{all_fields}',
 				),
 			),
 		);
