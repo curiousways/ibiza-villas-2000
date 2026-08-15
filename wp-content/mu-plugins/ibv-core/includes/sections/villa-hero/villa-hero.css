@@ -1,6 +1,16 @@
 .ibv-villa-hero {
+	position: relative;
 	width: 100%;
 	background: var(--ibv-color-brand-teal);
+}
+
+/* Second way into the photo gallery — same trigger contract as the
+   gallery section's own buttons (data-ibv-gallery-open), just overlaid
+   on the hero. */
+.ibv-villa-hero__gallery-open {
+	position: absolute;
+	right: var(--ibv-space-lg);
+	bottom: var(--ibv-space-lg);
 }
 
 .ibv-villa-hero__image {

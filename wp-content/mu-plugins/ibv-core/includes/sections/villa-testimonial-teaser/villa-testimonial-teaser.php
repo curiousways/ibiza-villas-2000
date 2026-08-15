@@ -6,8 +6,11 @@
  * blue band with a serif heading + accent rule, holding an off-white
  * rounded card with 5 gold star icons, a quote, and an attribution.
  *
- * Data: Site Options `testimonials` repeater, first row (shared with the
- * homepage testimonials slider — same quote on every villa, by design).
+ * Data: Site Options `testimonials` repeater (shared with the homepage
+ * testimonials grid), one random row per render. As with the homepage
+ * pick, WP Rocket bakes the choice into the cached page, so it rotates
+ * per villa per cache cycle rather than per visit — accepted trade-off
+ * (no JS, no CLS).
  *
  * @package Ibiza_Villas_2000
  */
@@ -18,11 +21,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function ibv_core_section_villa_testimonial_teaser() {
 	$rows = get_field( 'testimonials', 'option' );
-	if ( ! is_array( $rows ) || ! count( $rows ) || empty( $rows[0]['quote'] ) ) {
+	if ( ! is_array( $rows ) ) {
 		return;
 	}
 
-	$row = $rows[0];
+	$rows = array_values(
+		array_filter(
+			$rows,
+			static function ( $row ) {
+				return ! empty( $row['quote'] );
+			}
+		)
+	);
+	if ( ! count( $rows ) ) {
+		return;
+	}
+
+	$row = $rows[ array_rand( $rows ) ];
 
 	wp_enqueue_style( 'ibv-section-villa-testimonial-teaser' );
 

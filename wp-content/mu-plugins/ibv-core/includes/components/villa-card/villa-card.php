@@ -38,10 +38,9 @@ function ibv_villa_excerpt_plain( $villa_id ) {
 	if ( $summary ) {
 		return wp_trim_words( wp_strip_all_tags( (string) $summary ), 30, '…' );
 	}
+	// No post_excerpt branch: the villas CPT dropped excerpt support, so a
+	// stale stored excerpt would be invisible and uneditable in admin.
 	$post = get_post( $villa_id );
-	if ( $post && $post->post_excerpt ) {
-		return wp_trim_words( wp_strip_all_tags( $post->post_excerpt ), 30, '…' );
-	}
 	if ( $post && $post->post_content ) {
 		return wp_trim_words( wp_strip_all_tags( $post->post_content ), 30, '…' );
 	}

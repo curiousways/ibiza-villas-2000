@@ -315,6 +315,30 @@ function ibv_register_villa_acf_fields() {
 				'type'      => 'tab',
 				'placement' => 'left',
 			),
+			// Slot the native post editor (the_content) renders into.
+			// includes/admin/villa-editor-slot.php moves #postdivrich in
+			// here before TinyMCE initialises, so the description is
+			// edited under this tab instead of dangling below the box.
+			array(
+				'key'     => 'field_ibv_villa_editor_slot',
+				'label'   => __( 'Description', 'ibv' ),
+				'type'    => 'message',
+				'message' => '',
+				'instructions' => __( 'The full villa description, shown under "Villa Overview" behind the Read more toggle. The always-visible one-paragraph summary lives on the Identity tab (Villa summary).', 'ibv' ),
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id'    => 'ibv-villa-editor-slot',
+				),
+			),
+
+			// ─── Tab: Property facts ────────────────────────────────────
+			array(
+				'key'       => 'field_ibv_villa_tab_property_facts',
+				'label'     => __( 'Property facts', 'ibv' ),
+				'type'      => 'tab',
+				'placement' => 'left',
+			),
 			// The old "Property Location" WYSIWYG (property_summary) is
 			// retired: its bullets were migrated into Location tags,
 			// Property Facts and Rental licence (see
@@ -344,7 +368,7 @@ function ibv_register_villa_acf_fields() {
 				'min'                  => 0,
 				'max'                  => 0,
 				'layout'               => 'table',
-				'button_label'         => 'Add Feature',
+				'button_label'         => 'Add fact',
 				// The old "Property Facts Icon" select subfield is gone: the
 				// front end always renders a uniform ✓ (amenity-ticks), so
 				// the icon choice never did anything.

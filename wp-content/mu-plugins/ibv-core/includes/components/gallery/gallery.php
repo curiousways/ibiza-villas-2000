@@ -101,7 +101,10 @@ function ibv_core_gallery( $villa_id ) {
 					'if(img){if(cur.srcset){img.srcset=cur.srcset;img.sizes=cur.sizes||"";}else{img.removeAttribute("srcset");img.removeAttribute("sizes");}img.src=cur.full;img.alt=cur.alt||"";}' .
 					'if(counter){counter.textContent=(ix+1)+" / "+data.length;}}' .
 				'function open(i){show(i);if(typeof dlg.showModal==="function"){dlg.showModal();}else{dlg.setAttribute("open","");}}' .
-				'root.querySelectorAll("[data-ibv-gallery-open]").forEach(function(btn){btn.addEventListener("click",function(){open(parseInt(btn.getAttribute("data-ibv-gallery-open"),10)||0);});});' .
+				/* Document-wide, not root-scoped: external triggers (the villa
+				   hero's overlay button) share the same data attribute. Safe
+				   while the page has a single gallery instance. */
+				'document.querySelectorAll("[data-ibv-gallery-open]").forEach(function(btn){btn.addEventListener("click",function(){open(parseInt(btn.getAttribute("data-ibv-gallery-open"),10)||0);});});' .
 				'var prev=dlg.querySelector("[data-ibv-gallery-prev]");if(prev){prev.addEventListener("click",function(){show(ix-1);});}' .
 				'var next=dlg.querySelector("[data-ibv-gallery-next]");if(next){next.addEventListener("click",function(){show(ix+1);});}' .
 				'var close=dlg.querySelector("[data-ibv-gallery-close]");if(close){close.addEventListener("click",function(){if(typeof dlg.close==="function"){dlg.close();}else{dlg.removeAttribute("open");}});}' .

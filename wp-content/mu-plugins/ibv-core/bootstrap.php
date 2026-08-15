@@ -35,6 +35,7 @@ require_once IBV_CORE_PATH . 'includes/editor.php';
 // 3b. Admin UX (list columns, comments off).
 require_once IBV_CORE_PATH . 'includes/admin/admin-columns-villa.php';
 require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
+require_once IBV_CORE_PATH . 'includes/admin/villa-editor-slot.php';
 
 // WP-CLI commands (no-op when WP-CLI is not running).
 require_once IBV_CORE_PATH . 'includes/cli/migrate-newsletter-to-options.php';
