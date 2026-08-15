@@ -211,8 +211,8 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	           {endpoint}?villa={property_id}&date_from=&date_to=&pax=
 	           painted into [data-bob-total-eur] / [data-bob-base-rental] /
 	           [data-bob-adw] / [data-bob-cleaning]
-	         - the submit gate (GF submit disabled until dates + pax filled
-	           and the villa is available) + the contact-field reveal
+	         - the submit gate (GF submit disabled until dates + pax filled)
+	           + the contact-field reveal (unavailable dates still show the form)
 	         - phone E.164 normalisation (intl-tel-input)
 	       Redirect to the booking-confirmation page (resolved by template; see
 	       ibv_build_gf_booking_confirmation() / ibv_get_booking_confirmation_page_id())

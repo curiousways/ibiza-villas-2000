@@ -55,7 +55,9 @@
 	display: block;
 }
 
-/* Collapsible menu panel (nav + action buttons) — mobile only */
+/* Collapsible menu panel (nav only) — below 64rem. My Booking and
+   Search Villas stay in the header bar from 40rem; below that they
+   drop into the open menu so the bar is just logo + hamburger. */
 .ibv-site-header__menu {
 	display: none;
 	flex-basis: 100%;
@@ -69,15 +71,46 @@
 	display: flex;
 }
 
+.ibv-site-header__actions {
+	display: none;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ibv-space-sm);
+}
+
+@media (max-width: 39.999rem) {
+	.ibv-site-header__inner:has( .ibv-site-header__menu.is-open ) .ibv-site-header__actions {
+		display: flex;
+		flex-basis: 100%;
+	}
+}
+
+@media (min-width: 40rem) {
+	.ibv-site-header__actions {
+		display: flex;
+		flex-basis: auto;
+		margin-inline-start: auto;
+	}
+
+	.ibv-site-header__toggle {
+		order: 1;
+	}
+}
+
 @media (min-width: 64rem) {
 	.ibv-site-header__toggle {
 		display: none;
+		order: 0;
 	}
 
 	/* The wrapper vanishes from layout so nav + actions sit directly in
 	   the __inner flex row, exactly as before the menu existed. */
 	.ibv-site-header__menu {
 		display: contents;
+	}
+
+	.ibv-site-header__actions {
+		margin-inline-start: 0;
 	}
 }
 
@@ -139,13 +172,6 @@
 	text-decoration-color: var(--ibv-color-gold-500);
 	text-decoration-thickness: 2px;
 	text-underline-offset: 0.4em;
-}
-
-.ibv-site-header__actions {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--ibv-space-sm);
 }
 
 /* Footer */

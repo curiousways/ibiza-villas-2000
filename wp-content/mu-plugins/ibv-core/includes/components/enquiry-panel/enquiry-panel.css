@@ -192,8 +192,8 @@
 	display: none;
 }
 
-/* Contact fields are hidden until availability resolves. The submit gate
-   guarantees the form can only be sent once they're revealed. */
+/* Contact fields are hidden until dates and guests are filled. Unavailable
+   dates still reveal them so the guest can enquire. */
 .ibv-enquiry-panel.is-contact-pending .ibv-contact-field {
 	display: none;
 }

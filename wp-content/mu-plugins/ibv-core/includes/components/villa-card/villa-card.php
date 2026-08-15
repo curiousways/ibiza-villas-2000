@@ -277,8 +277,14 @@ function ibv_core_villa_card( $args = [] ) {
 							<?php endif; ?>
 						</p>
 					<?php endif; ?>
-					<?php if ( $args['offer_description'] ) : ?>
-						<p class="ibv-villa-card__offer-desc"><?php echo esc_html( $args['offer_description'] ); ?></p>
+					<?php
+					// ACF textarea new_lines=wpautop, so get_field() may
+					// already wrap this in <p>. The card is a single
+					// paragraph — strip tags rather than print them.
+					$offer_desc = trim( wp_strip_all_tags( (string) $args['offer_description'] ) );
+					?>
+					<?php if ( $offer_desc ) : ?>
+						<p class="ibv-villa-card__offer-desc"><?php echo esc_html( $offer_desc ); ?></p>
 					<?php endif; ?>
 				</div>
 			<?php else : ?>

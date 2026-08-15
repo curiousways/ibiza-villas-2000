@@ -275,6 +275,15 @@ function ibv_register_page_home_fields() {
 			'style'                 => 'default',
 			'label_placement'       => 'top',
 			'instruction_placement' => 'label',
+			// front-page.php never calls the_content(); the 2015 editor
+			// body is leftover and must not look live in admin.
+			'hide_on_screen'        => array(
+				'the_content',
+				'excerpt',
+				'discussion',
+				'comments',
+				'send-trackbacks',
+			),
 			'active'                => true,
 		)
 	);

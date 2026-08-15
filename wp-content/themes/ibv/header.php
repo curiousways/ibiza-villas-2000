@@ -59,33 +59,33 @@ $villas_url   = ibv_get_search_villas_url();
 						?>
 					</nav>
 				<?php endif; ?>
+			</div>
 
-				<div class="ibv-site-header__actions">
-					<?php if ( $bookings_url ) : ?>
-						<?php
-						// Internal page (/my-booking/) since the modal was
-						// replaced — no new tab.
-						ibv_core_button(
-							[
-								'url'     => esc_url( $bookings_url ),
-								'label'   => __( 'My Booking', 'ibv' ),
-								'variant' => 'secondary',
-								'size'    => 'small',
-							]
-						);
-						?>
-					<?php endif; ?>
+			<div class="ibv-site-header__actions">
+				<?php if ( $bookings_url ) : ?>
 					<?php
+					// Internal page (/my-booking/) since the modal was
+					// replaced — no new tab.
 					ibv_core_button(
 						[
-							'url'     => esc_url( $villas_url ),
-							'label'   => __( 'Search Villas', 'ibv' ),
-							'variant' => 'primary',
+							'url'     => esc_url( $bookings_url ),
+							'label'   => __( 'My Booking', 'ibv' ),
+							'variant' => 'secondary',
 							'size'    => 'small',
 						]
 					);
 					?>
-				</div>
+				<?php endif; ?>
+				<?php
+				ibv_core_button(
+					[
+						'url'     => esc_url( $villas_url ),
+						'label'   => __( 'Search Villas', 'ibv' ),
+						'variant' => 'primary',
+						'size'    => 'small',
+					]
+				);
+				?>
 			</div>
 		</div>
 	</div>

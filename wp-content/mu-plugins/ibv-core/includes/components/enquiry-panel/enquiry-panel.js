@@ -12,8 +12,9 @@
  *     range into the .ibv-drp-from / .ibv-drp-to date inputs;
  *   - live pricing from Steve's PMS (detail mode), painted into the [data-bob-*]
  *     targets in the GF HTML price field;
- *   - the submit gate (GF submit button disabled until dates + pax are filled and
- *     the villa is available) + the contact-field reveal (is-contact-pending);
+ *   - the submit gate (GF submit button disabled until dates + pax are filled)
+ *     + the contact-field reveal (is-contact-pending); unavailable dates still
+ *     show the form so the guest can enquire;
  *   - intl-tel-input phone with strict validation + E.164 normalisation before GF
  *     serialises.
  *
@@ -402,15 +403,11 @@
 			return isValidDate( s.date_from ) && isValidDate( s.date_to ) && s.pax > 0;
 		}
 
-		// Confirmed-unavailable blocks the gate; a failed fetch leaves it open
-		// (availability unknown — the enquiry is still valid).
-		var isUnavailable = false;
-
 		function updateGate() {
 			if ( ! submitEl ) {
 				return;
 			}
-			if ( gateReady( readState() ) && ! isUnavailable ) {
+			if ( gateReady( readState() ) ) {
 				submitEl.removeAttribute( 'disabled' );
 			} else {
 				submitEl.setAttribute( 'disabled', 'disabled' );
@@ -432,9 +429,10 @@
 		}
 
 		// Contact fields are hidden by CSS (.is-contact-pending .ibv-contact-field)
-		// until an enquiry is possible. The submit gate guarantees the form can
-		// only be submitted once they are revealed, so no field-disabling is
-		// needed (which keeps GF's required validation clean).
+		// until dates and guests are filled. Unavailable dates still reveal them
+		// — the guest can enquire for alternatives. The submit gate only waits
+		// for dates + pax, so no field-disabling is needed (keeps GF required
+		// validation clean).
 		function revealContactFields() {
 			panel.classList.remove( 'is-contact-pending' );
 		}
@@ -527,7 +525,6 @@
 				clearNotice();
 				hidePriceBlock();
 				hideContactFields();
-				isUnavailable = false;
 				updateGate();
 				return;
 			}
@@ -556,15 +553,13 @@
 				} )
 				.then( function ( data ) {
 					if ( paint( data ) ) {
-						isUnavailable = false;
 						clearNotice();
 						revealPriceBlock();
 						revealContactFields();
 					} else {
-						isUnavailable = true;
 						resetPrices();
 						hidePriceBlock();
-						hideContactFields();
+						revealContactFields();
 						showNotice( msgUnavailable );
 					}
 					updateGate();
@@ -574,7 +569,6 @@
 						return;
 					}
 					console.warn( '[ibv-enquiry-panel] pricing fetch failed', err );
-					isUnavailable = false;
 					resetPrices();
 					hidePriceBlock();
 					revealContactFields();

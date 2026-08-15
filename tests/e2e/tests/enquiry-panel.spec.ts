@@ -20,11 +20,12 @@ import { VILLA_PATH } from '../helpers/test-data';
  * paint() takes villas[0] (a bare object or data.villa also parse),
  * requires available === 1 (or absent) AND a numeric eur_total_price,
  * and formats every figure with Intl en-GB EUR, 0 fraction digits.
- * Availability failure → the data-bob-msg-unavailable notice + submit
- * gated off; fetch failure → the data-bob-msg-price-error notice, prices
- * reset to '—', price block hidden, but the gate deliberately FAIL-OPENS
- * (availability unknown — the enquiry is still valid, per the source
- * comment). Re-fetches abort the in-flight request via AbortController,
+ * Availability failure → the data-bob-msg-unavailable notice, price
+ * block hidden, contact fields still revealed and submit still enabled
+ * so the guest can enquire for alternatives. Fetch failure → the
+ * data-bob-msg-price-error notice, prices reset to '—', price block
+ * hidden, same fail-open (availability unknown — the enquiry is still
+ * valid). Re-fetches abort the in-flight request via AbortController,
  * and the AbortError is swallowed in .catch().
  *
  * Arriving with ?date_from&date_to&pax prefills the embedded GF form
@@ -286,7 +287,7 @@ test.describe( 'enquiry panel — live pricing', () => {
 } );
 
 test.describe( 'enquiry panel — availability gating (RTB)', () => {
-	test( 'unavailable dates show the notice and gate request-to-book off (eb271a6)', async ( { page } ) => {
+	test( 'unavailable dates show the notice but keep the enquiry form open', async ( { page } ) => {
 		await page.route( BOB_API_GLOB, ( route ) => bobJson( route, UNAVAILABLE_RESPONSE ) );
 
 		await page.goto( villaUrl( RANGE_A ) );
@@ -297,10 +298,9 @@ test.describe( 'enquiry panel — availability gating (RTB)', () => {
 		await expect( notice( page ) ).toBeVisible();
 		await expect( notice( page ) ).toHaveText( msgUnavailable! );
 
-		await expect( submitBtn( page ) ).toBeDisabled();
 		await expect( priceField( page ) ).toBeHidden();
-		// Contact capture stays gated too (0cdd0ff).
-		await expect( panel( page ) ).toHaveClass( /is-contact-pending/ );
+		await expect( panel( page ) ).not.toHaveClass( /is-contact-pending/ );
+		await expect( submitBtn( page ) ).toBeEnabled();
 	} );
 
 	test( 'switching from unavailable to available dates re-enables cleanly', async ( { page } ) => {
@@ -314,11 +314,11 @@ test.describe( 'enquiry panel — availability gating (RTB)', () => {
 
 		await page.goto( villaUrl( RANGE_A ) );
 		await expect( notice( page ) ).toBeVisible();
-		await expect( submitBtn( page ) ).toBeDisabled();
+		await expect( submitBtn( page ) ).toBeEnabled();
 
 		await setPanelDates( page, RANGE_B.from, RANGE_B.to );
 
-		// No lingering notice or disabled button.
+		// No lingering notice. Submit stays enabled; pricing paints.
 		await expect( notice( page ) ).toBeHidden();
 		await expect( priceField( page ) ).toBeVisible();
 		await expect( gform( page ).locator( '[data-bob-total-eur]' ) ).toHaveText(

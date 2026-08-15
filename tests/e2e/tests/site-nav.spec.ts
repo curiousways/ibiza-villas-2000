@@ -3,9 +3,10 @@ import { test, expect } from '../helpers/fixtures';
 /**
  * Header mobile menu — disclosure toggle (site-nav.js + site-chrome.css).
  *
- * Below the 64rem breakpoint the nav + action buttons collapse behind a
- * hamburger; at desktop the toggle is hidden and the menu is always
- * visible via display: contents.
+ * Below the 64rem breakpoint the nav collapses behind a hamburger.
+ * My Booking and Search Villas stay in the header bar down to 40rem;
+ * below that they drop into the open menu. At desktop the toggle is
+ * hidden and the menu is always visible via display: contents.
  */
 
 const TOGGLE = '[data-ibv-site-nav-toggle]';
@@ -27,13 +28,16 @@ test.describe( 'site header — mobile menu', () => {
 		await expect( toggle ).toHaveAttribute( 'aria-expanded', 'false' );
 		await expect( menu ).toBeHidden();
 
-		// Open: panel shows nav links and the primary CTA.
+		// Open: panel shows nav links. On a phone-width project the
+		// header CTAs have dropped into the open-menu row.
 		await toggle.click();
 		await expect( toggle ).toHaveAttribute( 'aria-expanded', 'true' );
 		await expect( menu ).toBeVisible();
 		await expect( menu.locator( '.ibv-nav-list a' ).first() ).toBeVisible();
 		await expect(
-			menu.getByRole( 'link', { name: 'Search Villas' } )
+			page
+				.locator( '.ibv-site-header__actions' )
+				.getByRole( 'link', { name: 'Search Villas' } )
 		).toBeVisible();
 
 		// Close again via the toggle.
