@@ -34,9 +34,10 @@ function ibv_register_site_options_page() {
 
 	$subpages = [
 		[ __( 'Global (header / footer)', 'ibv' ), __( 'Global', 'ibv' ), 'ibv-options-global' ],
+		// Short breaks has no page of its own — its group renders on
+		// Shared content (see register-globals-content.php).
 		[ __( 'Shared content', 'ibv' ), __( 'Shared content', 'ibv' ), 'ibv-options-shared-content' ],
 		[ __( 'Featured offer', 'ibv' ), __( 'Featured offer', 'ibv' ), 'ibv-options-featured-offer' ],
-		[ __( 'Short breaks', 'ibv' ), __( 'Short breaks', 'ibv' ), 'ibv-options-short-breaks' ],
 		[ __( 'Newsletter', 'ibv' ), __( 'Newsletter', 'ibv' ), 'ibv-options-newsletter' ],
 		[ __( '404 page', 'ibv' ), __( '404 page', 'ibv' ), 'ibv-options-404' ],
 	];

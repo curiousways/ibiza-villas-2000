@@ -130,7 +130,10 @@ function ibv_register_globals_content_fields() {
 					'rows'  => 4,
 				),
 			),
-			'location'              => $loc( 'ibv-options-short-breaks' ),
+			// Lives on the Shared content page (own metabox below the
+			// testimonials/cross-sell group) — too small for its own page.
+			// Same 'options' post_id, so stored values are untouched.
+			'location'              => $loc( 'ibv-options-shared-content' ),
 			'menu_order'            => 4,
 			'position'              => 'normal',
 			'style'                 => 'default',
