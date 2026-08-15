@@ -173,6 +173,39 @@
 	margin-block-start: var(--ibv-space-2xs);
 }
 
+/* GF's top-of-form error summary is an <h2.gform_submission_error> and
+   inherits heading scale — wildly oversized for a one-field signup. Bring
+   it down to the same small text as the field messages (shared across
+   variants; colour follows each variant's validation colour below). */
+.ibv-newsletter-form__embed .gform_validation_errors {
+	margin: 0 0 var(--ibv-space-sm);
+	padding: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+}
+
+.ibv-newsletter-form__embed .gform_submission_error {
+	margin: 0;
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-regular);
+	line-height: var(--ibv-lh-relaxed);
+}
+
+.ibv-newsletter-form__embed .gform_submission_error .gform-icon {
+	display: none;
+}
+
+.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_submission_error,
+.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_submission_error {
+	color: var(--ibv-color-gold-500);
+}
+
+.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_submission_error {
+	color: var(--ibv-color-forest-green-deep);
+}
+
 
 /* Footer variant (global footer column). */
 .ibv-newsletter-form--footer {
