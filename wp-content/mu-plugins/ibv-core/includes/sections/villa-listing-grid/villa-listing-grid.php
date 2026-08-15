@@ -103,7 +103,6 @@ function ibv_core_section_villa_listing_grid() {
 							>
 							<label class="ibv-offers-toggle__label" for="ibv-filter-offers">
 								<span class="ibv-offers-toggle__switch" aria-hidden="true"></span>
-								<?php ibv_core_the_icon( 'tag', [ 'class' => 'ibv-offers-toggle__icon', 'size' => 16 ] ); ?>
 								<span class="ibv-offers-toggle__text">
 									<?php esc_html_e( 'Special offers only', 'ibv' ); ?>
 									<?php // Inside the <label>: part of the accessible name ("Special offers only (4)"). ?>

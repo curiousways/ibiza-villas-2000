@@ -156,11 +156,6 @@
 	outline-offset: 2px;
 }
 
-.ibv-offers-toggle__icon {
-	flex: 0 0 auto;
-	color: var(--ibv-color-accent-gold);
-}
-
 .ibv-offers-toggle__count {
 	color: var(--ibv-color-text-muted);
 }
