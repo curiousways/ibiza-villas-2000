@@ -21,6 +21,26 @@ function ibv_core_section_featured_villas() {
 	}
 	$ids = array_slice( array_filter( array_map( 'intval', $ids ) ), 0, 8 );
 
+	// post_status explicit: the ACF picker can store drafts/private, and
+	// without it WP_Query adds private posts for logged-in users who can
+	// read them. Same guard as villa-similar and the listing grid.
+	if ( count( $ids ) ) {
+		$q   = new WP_Query(
+			[
+				'post_type'           => 'villas',
+				'post_status'         => 'publish',
+				'post__in'            => $ids,
+				'orderby'             => 'post__in',
+				'posts_per_page'      => count( $ids ),
+				'fields'              => 'ids',
+				'no_found_rows'       => true,
+				'ignore_sticky_posts' => true,
+			]
+		);
+		$ids = $q->posts;
+		wp_reset_postdata();
+	}
+
 	if ( count( $ids ) < 1 ) {
 		$q = new WP_Query(
 			[

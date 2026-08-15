@@ -74,6 +74,7 @@ function ibv_register_page_home_fields() {
 					'name'          => 'featured_villas',
 					'type'          => 'post_object',
 					'post_type'     => array( 'villas' ),
+					'post_status'   => array( 'publish' ),
 					'multiple'      => true,
 					'min'           => 0,
 					'max'           => 8,
