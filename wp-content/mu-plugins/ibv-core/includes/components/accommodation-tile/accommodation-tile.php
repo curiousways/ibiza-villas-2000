@@ -1,9 +1,9 @@
 <?php
 /**
- * Component: Accommodation tile + pair.
+ * Component: Accommodation tile.
  *
- * Single tile: image + content split inside a bordered card. Pair helper
- * renders the listing cross-sell pair from shared Site Options fields.
+ * Image + content split inside a bordered card. The options helper renders
+ * the listing cross-sell from the shared fancy_apartments_* Site Options.
  *
  * @package Ibiza_Villas_2000
  */
@@ -90,60 +90,33 @@ function ibv_core_accommodation_tile( $args = [] ) {
 }
 
 /**
- * Render the listing cross-sell pair from shared ACF option fields.
+ * Render the listing apartments tile from shared ACF option fields.
  *
  * @param array $args {
- *     @type string $apartments_label Optional CTA label override.
- *     @type string $hotel_label      Optional CTA label override.
+ *     @type string $cta_label Optional CTA label override.
  * }
  */
-function ibv_core_accommodation_tile_pair( $args = [] ) {
+function ibv_core_accommodation_tile_from_options( $args = [] ) {
 	$defaults = [
-		'apartments_label' => __( 'View the apartments', 'ibv' ),
-		'hotel_label'      => __( 'View the apartments', 'ibv' ),
+		'cta_label' => __( 'View the apartments', 'ibv' ),
 	];
 	$args = wp_parse_args( $args, $defaults );
 
-	$ap_img = get_field( 'fancy_apartments_image', 'option' );
-	$ap_url = get_field( 'fancy_apartments_url', 'option' );
+	$img = get_field( 'fancy_apartments_image', 'option' );
+	$txt = get_field( 'fancy_apartments_text', 'option' );
+	$url = get_field( 'fancy_apartments_url', 'option' );
 
-	$ho_img = get_field( 'fancy_hotel_image', 'option' );
-	$ho_txt = get_field( 'fancy_hotel_text', 'option' );
-	$ho_url = get_field( 'fancy_hotel_url', 'option' );
-
-	if ( empty( $ap_img['ID'] ) && ! $ho_txt && empty( $ho_img['ID'] ) ) {
+	if ( empty( $img['ID'] ) && ! $txt ) {
 		return;
 	}
 
-	wp_enqueue_style( 'ibv-accommodation-tile' );
-	?>
-	<div class="ibv-accommodation-tile-pair">
-		<?php if ( ! empty( $ap_img['ID'] ) || $ap_url ) : ?>
-			<?php
-			ibv_core_accommodation_tile(
-				[
-					'title'       => __( 'Our apartments', 'ibv' ),
-					'description' => __( 'A short walk from the beach and the bars in San Antonio, at a fraction of the price of a villa.', 'ibv' ),
-					'cta_url'     => $ap_url ? esc_url( $ap_url ) : '',
-					'cta_label'   => $args['apartments_label'],
-					'image'       => $ap_img,
-				]
-			);
-			?>
-		<?php endif; ?>
-		<?php if ( $ho_txt || ! empty( $ho_img['ID'] ) ) : ?>
-			<?php
-			ibv_core_accommodation_tile(
-				[
-					'title'       => __( 'Apartments', 'ibv' ),
-					'description' => $ho_txt ? (string) $ho_txt : '',
-					'cta_url'     => $ho_url ? esc_url( $ho_url ) : '',
-					'cta_label'   => $args['hotel_label'],
-					'image'       => $ho_img,
-				]
-			);
-			?>
-		<?php endif; ?>
-	</div>
-	<?php
+	ibv_core_accommodation_tile(
+		[
+			'title'       => __( 'Our apartments', 'ibv' ),
+			'description' => $txt ? (string) $txt : '',
+			'cta_url'     => $url ? esc_url( $url ) : '',
+			'cta_label'   => $args['cta_label'],
+			'image'       => $img,
+		]
+	);
 }

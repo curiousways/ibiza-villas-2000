@@ -15,6 +15,47 @@
 	.ibv-enquiry-panel {
 		position: sticky;
 		top: var(--ibv-sticky-offset);
+		/* Taller than the viewport once dates + price + contact are open.
+		   Cap the rail and pin the submit so Request to Book stays reachable
+		   without scrolling the page until the aside unsticks. */
+		max-height: calc(100dvh - var(--ibv-sticky-offset) - var(--ibv-space-lg));
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	.ibv-enquiry-panel__title,
+	.ibv-enquiry-panel__response-note,
+	.ibv-enquiry-panel__divider,
+	.ibv-enquiry-panel__chat {
+		flex: 0 0 auto;
+	}
+
+	.ibv-enquiry-panel__form-embed {
+		flex: 1 1 auto;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.ibv-enquiry-panel__form-embed .ibv-gform,
+	.ibv-enquiry-panel__form-embed .gform_wrapper,
+	.ibv-enquiry-panel__form-embed form {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		min-height: 0;
+	}
+
+	.ibv-enquiry-panel__form-embed .gform_body {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.ibv-enquiry-panel__form-embed .gform_footer {
+		flex: 0 0 auto;
 	}
 }
 

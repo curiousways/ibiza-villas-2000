@@ -1,16 +1,4 @@
-/* Accommodation tile — image + content in a card; pair on home + listing. */
-
-.ibv-accommodation-tile-pair {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--ibv-space-lg);
-}
-
-@media (min-width: 56rem) {
-	.ibv-accommodation-tile-pair {
-		grid-template-columns: 1fr 1fr;
-	}
-}
+/* Accommodation tile — image + content in a card. */
 
 /* Background, radius, and shadow come from `.ibv-surface-card` in
    layout.css — composed in the markup. This file only owns layout. */

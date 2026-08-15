@@ -137,14 +137,12 @@ add_action(
 // ── Submit button: render as <button> with the design's arrow icon ──────────
 
 /**
- * Rewrite the villa enquiry form's GF submit from <input> to <button> so it can
- * carry an inline arrow icon beside the label (an <input type="submit"> can't
- * hold inline SVG). We rewrite the tag rather than rebuild it, preserving GF's
- * id / class / onclick attributes so AJAX submission and the JS gate keep
- * working. Registered on the generic `gform_submit_button` at file load (not
- * inside the render fn) and scoped to the villa form id, so the arrow survives
- * GF's AJAX re-render the same way the prepopulation/pre-submission filters do.
- * Full-width teal styling lives in enquiry-panel.css. Mirrors accommodation-enquiry.
+ * Rewrite the villa enquiry submit into a design-system button with an
+ * inline arrow. Handles both GF's legacy <input> and modern <button>
+ * markup (see ibv_core_gform_submit_button_with_arrow()). Registered on
+ * the generic `gform_submit_button` at file load and scoped to the villa
+ * form id so the arrow survives GF's AJAX re-render. Full-width teal
+ * styling lives in enquiry-panel.css.
  */
 add_filter(
 	'gform_submit_button',
@@ -153,40 +151,15 @@ add_filter(
 		if ( ! $villa_form_id || (int) $form['id'] !== $villa_form_id ) {
 			return $button;
 		}
-		if ( ! is_string( $button ) || '' === $button ) {
-			return $button;
-		}
-
-		// Label: GF's button text (the field's `value`), with a fallback.
 		$label = isset( $form['button']['text'] ) && '' !== $form['button']['text']
 			? (string) $form['button']['text']
 			: __( 'Request to Book', 'ibv' );
 
-		$arrow = ibv_core_icon(
-			'arrow-right',
-			[
-				'class' => 'ibv-button__arrow',
-				'size'  => 18,
-			]
+		return ibv_core_gform_submit_button_with_arrow(
+			$button,
+			$label,
+			'ibv-enquiry-panel__submit-label'
 		);
-
-		$inner = '<span class="ibv-enquiry-panel__submit-label">' . esc_html( $label ) . '</span>' . $arrow;
-
-		// input → button, drop the now-redundant `value`, then close the
-		// self-closing tag around the inner content. Limited to 1 match so a
-		// stray `value=` inside an onclick handler can't be clobbered.
-		$out = preg_replace( '/^<input\b/', '<button', $button, 1 );
-		$out = preg_replace( '/\svalue=("|\').*?\1/', '', $out, 1 );
-		// Add the design-system button classes alongside GF's own.
-		$out = preg_replace(
-			'/\sclass=("|\')/',
-			' class=$1ibv-button ibv-button--primary ibv-button--medium ',
-			$out,
-			1
-		);
-		$out = preg_replace( '#\s*/?>\s*$#', '>' . $inner . '</button>', $out, 1 );
-
-		return $out ?? $button;
 	},
 	10,
 	2

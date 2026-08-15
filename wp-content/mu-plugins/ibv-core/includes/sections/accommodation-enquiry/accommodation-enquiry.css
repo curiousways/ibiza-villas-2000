@@ -12,6 +12,44 @@
 	.ibv-accommodation-enquiry {
 		position: sticky;
 		top: var(--ibv-sticky-offset);
+		max-height: calc(100dvh - var(--ibv-sticky-offset) - var(--ibv-space-lg));
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	.ibv-accommodation-enquiry__title,
+	.ibv-accommodation-enquiry__response-note,
+	.ibv-accommodation-enquiry__divider,
+	.ibv-accommodation-enquiry__chat {
+		flex: 0 0 auto;
+	}
+
+	.ibv-accommodation-enquiry__form {
+		flex: 1 1 auto;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.ibv-accommodation-enquiry__form .ibv-gform,
+	.ibv-accommodation-enquiry__form .gform_wrapper,
+	.ibv-accommodation-enquiry__form form {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		min-height: 0;
+	}
+
+	.ibv-accommodation-enquiry__form .gform_body {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+
+	.ibv-accommodation-enquiry__form .gform_footer {
+		flex: 0 0 auto;
 	}
 }
 

@@ -228,43 +228,31 @@ function ibv_register_site_options_content_fields() {
 					'type'      => 'tab',
 					'placement' => 'left',
 				),
-				// fancy_airstream_* retired. fancy_apartments_* is the
-				// homepage teaser; fancy_hotel_* is the listing cross-sell.
-				// Both describe Aparthotel Marian — keys kept so stored
-				// option values are not orphaned.
-				array(
-					'key'           => 'field_ibv_home_fancy_hotel_image',
-					'label'         => __( 'Apartments image (listing cross-sell)', 'ibv' ),
-					'name'          => 'fancy_hotel_image',
-					'type'          => 'image',
-					'return_format' => 'array',
-				),
-				array(
-					'key'   => 'field_ibv_home_fancy_hotel_text',
-					'label' => __( 'Apartments text (listing cross-sell)', 'ibv' ),
-					'name'  => 'fancy_hotel_text',
-					'type'  => 'textarea',
-					'rows'  => 3,
-				),
-				array(
-					'key'   => 'field_ibv_home_fancy_hotel_url',
-					'label' => __( 'Apartments page (listing cross-sell)', 'ibv' ),
-					'name'  => 'fancy_hotel_url',
-					'type'  => 'page_link',
-				),
+				// fancy_airstream_* and fancy_hotel_* retired — one property,
+				// one field set. Hotel option rows backed up in
+				// docs/briefs/done/admin-tidy-backups/.
 				array(
 					'key'           => 'field_ibv_home_fancy_apartments_image',
-					'label'         => __( 'Apartments image (homepage teaser)', 'ibv' ),
+					'label'         => __( 'Apartments image', 'ibv' ),
 					'name'          => 'fancy_apartments_image',
 					'type'          => 'image',
 					'return_format' => 'array',
-					'instructions'  => __( 'Homepage / Page Builder apartments teaser ("Travelling as a couple…").', 'ibv' ),
+					'instructions'  => __( 'Used on the homepage teaser and the villa-listing cross-sell.', 'ibv' ),
 				),
 				array(
-					'key'   => 'field_ibv_home_fancy_apartments_url',
-					'label' => __( 'Apartments page (homepage teaser)', 'ibv' ),
-					'name'  => 'fancy_apartments_url',
-					'type'  => 'page_link',
+					'key'          => 'field_ibv_home_fancy_apartments_text',
+					'label'        => __( 'Apartments text', 'ibv' ),
+					'name'         => 'fancy_apartments_text',
+					'type'         => 'textarea',
+					'rows'         => 3,
+					'instructions' => __( 'Listing cross-sell tile. Homepage teaser copy is fixed in the template.', 'ibv' ),
+				),
+				array(
+					'key'          => 'field_ibv_home_fancy_apartments_url',
+					'label'        => __( 'Apartments page', 'ibv' ),
+					'name'         => 'fancy_apartments_url',
+					'type'         => 'page_link',
+					'instructions' => __( 'Destination for “View the apartments” on the homepage and listing.', 'ibv' ),
 				),
 				array(
 					'key'       => 'field_ibv_home_tab_three_step',

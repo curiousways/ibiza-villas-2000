@@ -11,14 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Listing-page block using the same Site Options as the homepage apartments
- * teaser and the listing cross-sell tile. Both describe Aparthotel Marian.
+ * teaser. One property: Aparthotel Marian.
  */
 function ibv_core_alternative_accommodation() {
-	$ap_img = get_field( 'fancy_apartments_image', 'option' );
-	$ho_img = get_field( 'fancy_hotel_image', 'option' );
-	$ho_txt = get_field( 'fancy_hotel_text', 'option' );
+	$img = get_field( 'fancy_apartments_image', 'option' );
+	$txt = get_field( 'fancy_apartments_text', 'option' );
 
-	if ( empty( $ap_img['ID'] ) && ! $ho_txt && empty( $ho_img['ID'] ) ) {
+	if ( empty( $img['ID'] ) && ! $txt ) {
 		return;
 	}
 
@@ -32,7 +31,7 @@ function ibv_core_alternative_accommodation() {
 			<p class="ibv-alternative-accommodation__subtitle">
 				<?php esc_html_e( 'A whole villa isn’t always the answer. We also have self-catering apartments in San Antonio.', 'ibv' ); ?>
 			</p>
-			<?php ibv_core_accommodation_tile_pair(); ?>
+			<?php ibv_core_accommodation_tile_from_options(); ?>
 		</div>
 	</section>
 	<?php

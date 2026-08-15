@@ -72,6 +72,69 @@ function ibv_core_gravity_form( $form_id, $args = [] ) {
 }
 
 /**
+ * Rewrite a Gravity Forms submit control into a design-system <button>
+ * with an inline arrow. GF 2.6+ may already emit <button> (or <a> for
+ * type=link); older / legacy markup emits <input type="submit">. The
+ * previous input-only rewrite appended a second label after </button>.
+ *
+ * Preserves GF id / class / onclick so AJAX submit and the JS gate keep
+ * working.
+ *
+ * @param string $button        Markup from gform_submit_button.
+ * @param string $label         Visible label.
+ * @param string $label_class   Class on the inner label span.
+ * @return string
+ */
+function ibv_core_gform_submit_button_with_arrow( $button, $label, $label_class ) {
+	if ( ! is_string( $button ) || '' === $button ) {
+		return $button;
+	}
+
+	$arrow = ibv_core_icon(
+		'arrow-right',
+		[
+			'class' => 'ibv-button__arrow',
+			'size'  => 18,
+		]
+	);
+	$inner = '<span class="' . esc_attr( $label_class ) . '">' . esc_html( $label ) . '</span>' . $arrow;
+
+	$out = $button;
+	if ( preg_match( '/\sclass=/', $out ) ) {
+		$out = preg_replace(
+			'/\sclass=("|\')/',
+			' class=$1ibv-button ibv-button--primary ibv-button--medium ',
+			$out,
+			1
+		);
+	} else {
+		$out = preg_replace(
+			'/^(<(?:input|button|a)\b)/i',
+			'$1 class="ibv-button ibv-button--primary ibv-button--medium"',
+			$out,
+			1
+		);
+	}
+
+	if ( preg_match( '/^<input\b/i', $out ) ) {
+		$out = preg_replace( '/^<input\b/i', '<button', $out, 1 );
+		$out = preg_replace( '/\svalue=("|\').*?\1/', '', $out, 1 );
+		$out = preg_replace( '#\s*/?>\s*$#', '>' . $inner . '</button>', $out, 1 );
+		return $out ?? $button;
+	}
+
+	$out = preg_replace( '/\svalue=("|\').*?\1/', '', $out, 1 );
+	$out = preg_replace(
+		'/^(<(?:button|a)\b[^>]*>).*?(<\/(?:button|a)>)\s*$/is',
+		'$1' . $inner . '$2',
+		$out,
+		1
+	);
+
+	return $out ?? $button;
+}
+
+/**
  * Make the `ibv-pax` guest-count select's GF placeholder a true placeholder.
  *
  * GF renders a field placeholder as a normal empty-value <option>, so "Guests"
