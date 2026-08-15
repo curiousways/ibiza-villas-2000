@@ -40,10 +40,12 @@
 	color: var(--ibv-color-text);
 }
 
-/* Breathing room above the revealed prose lives inside the collapsible
-   element, so it disappears with it when closed (overflow is hidden). */
-.ibv-villa-overview__description.ibv-readmore__content--collapse {
-	padding-block-start: var(--ibv-space-sm);
+/* Breathing room above the revealed prose: a margin on the first child,
+   not padding on the collapsible itself — with border-box sizing, padding
+   floors the element's height (12px showed through at max-height: 0).
+   The child margin is just content, clipped away when closed. */
+.ibv-villa-overview__description > :first-child {
+	margin-block-start: var(--ibv-space-sm);
 }
 
 /* The collapsible "Read more" behaviour (toggle button, height animation,
@@ -61,6 +63,14 @@
 	margin-block-start: var(--ibv-space-xl);
 	display: flex;
 	flex-direction: column;
+}
+
+/* Unpriced villas render an empty amount span (kept for the enquiry-panel
+   JS to hydrate a dated rate into) — while it's empty the block shows
+   nothing, so drop its margin too. The JS resets the amount to empty when
+   dates clear, which restores this state. */
+.ibv-villa-overview__price:has(.ibv-villa-overview__price-amount:empty) {
+	margin-block-start: 0;
 }
 
 .ibv-villa-overview__price-row {
