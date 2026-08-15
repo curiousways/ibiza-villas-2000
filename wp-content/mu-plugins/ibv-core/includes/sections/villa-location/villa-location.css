@@ -14,6 +14,9 @@
 	margin-block-start: var(--ibv-space-lg);
 }
 
-.ibv-villa-location__detail {
-	margin-block-start: var(--ibv-space-lg);
+/* Rental licence — quiet small print, legally present but not content. */
+.ibv-villa-location__licence {
+	margin: var(--ibv-space-md) 0 0;
+	font-size: var(--ibv-fs-micro);
+	color: var(--ibv-color-text-muted);
 }

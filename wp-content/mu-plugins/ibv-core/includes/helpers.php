@@ -228,28 +228,17 @@ function ibv_get_bob_booking_form_url() {
 }
 
 /**
- * Format a single `villa_distances` repeater row for display.
+ * Format a single `villa_distances` ("Location tags") repeater row.
  *
- * Joins the row's `distance_text` (editor-chosen qualifier, e.g. "5 mins
- * from") with the `poi` taxonomy term's name (the destination), trimming
- * empties.
- *
- * Known display-layer accommodation, not a permanent fix: two editorial
- * conventions live in the data today — newer rows split the phrase
- * (`distance_text` = qualifier, `poi` = destination), older rows put the
- * full sentence in `distance_text` with no `poi`. This helper does not
- * detect or dedupe; a villa with both a full-sentence `distance_text` and
- * a `poi` term will read with the destination repeated. The real fix is
- * content (qualifier-only convention in `distance_text`); flagged in
- * Tina's content guidelines.
+ * The row is a single free-text tag ("3 mins from beach"). The old POI
+ * taxonomy subfield is gone — it required terms nobody ever created, so
+ * every label now lives whole in `distance_text`.
  *
  * @param array $row One row of the `villa_distances` repeater.
- * @return string Joined label, trimmed; empty if both fields are blank.
+ * @return string Trimmed tag; empty if blank.
  */
 function ibv_villa_distance_label( array $row ) {
-	$text = isset( $row['distance_text'] ) ? trim( (string) $row['distance_text'] ) : '';
-	$poi  = ( isset( $row['poi'] ) && $row['poi'] instanceof WP_Term ) ? $row['poi']->name : '';
-	return trim( $text . ' ' . $poi );
+	return isset( $row['distance_text'] ) ? trim( (string) $row['distance_text'] ) : '';
 }
 
 /**

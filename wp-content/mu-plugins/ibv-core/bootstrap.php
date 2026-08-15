@@ -27,8 +27,6 @@ require_once IBV_CORE_PATH . 'includes/integrations/cookie-consent.php';
 // 2. Data layer — pass 3b: CPT first, taxonomies next (slug preservation).
 require_once IBV_CORE_PATH . 'includes/post-types/villa.php';
 require_once IBV_CORE_PATH . 'includes/taxonomies/property-location.php';
-require_once IBV_CORE_PATH . 'includes/taxonomies/villa-poi.php';
-
 // 3. Site chrome.
 require_once IBV_CORE_PATH . 'includes/nav-menus.php';
 require_once IBV_CORE_PATH . 'includes/image-sizes.php';
