@@ -95,11 +95,9 @@ function ibv_core_section_villa_overview( $villa_id ) {
 				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--season"><?php esc_html_e( 'Price varies by season', 'ibv' ); ?></p>
 				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--dated" hidden><?php esc_html_e( 'For your selected dates', 'ibv' ); ?></p>
 			<?php else : ?>
+				<?php /* No indicative price: show nothing rather than a date prompt (mirrors villa-card). The empty amount and hidden unit stay in the DOM so the enquiry-panel JS can still swap in a dated weekly rate while a priced search is active. No "From" prefix here — a dated rate is exact, and the JS reset would otherwise un-hide it next to an empty amount. */ ?>
 				<p class="ibv-villa-overview__price-row">
-					<?php /* <label for> the enquiry-panel date trigger — clicking the prompt opens the date picker. The panel JS drops the for attribute while a hydrated price is shown so the button keeps its own accessible name. */ ?>
-					<label class="ibv-villa-overview__price-amount ibv-villa-overview__price-amount--on-request" for="ibv-ep-when" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>">
-						<?php esc_html_e( 'Select your dates to see pricing', 'ibv' ); ?>
-					</label>
+					<span class="ibv-villa-overview__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>"></span>
 					<span class="ibv-villa-overview__price-unit" hidden><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
 				</p>
 				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--dated" hidden><?php esc_html_e( 'For your selected dates', 'ibv' ); ?></p>

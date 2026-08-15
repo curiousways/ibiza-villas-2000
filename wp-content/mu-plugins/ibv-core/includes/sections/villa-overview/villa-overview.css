@@ -93,18 +93,3 @@
 	color: var(--ibv-color-forest-green-deep);
 }
 
-/* Empty from-price state — a <label> for the enquiry-panel date trigger,
-   styled as a link: body type instead of the display-size price treatment. */
-.ibv-villa-overview__price-amount--on-request {
-	font-family: var(--ibv-font-body);
-	font-size: var(--ibv-fs-body);
-	color: var(--ibv-color-link);
-	text-decoration: underline;
-	cursor: pointer;
-	transition: color var(--ibv-duration-fast) var(--ibv-ease-standard);
-}
-
-.ibv-villa-overview__price-amount--on-request:hover,
-.ibv-villa-overview__price-amount--on-request:focus-visible {
-	color: var(--ibv-color-link-hover);
-}
