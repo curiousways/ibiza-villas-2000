@@ -23,6 +23,11 @@ function ibv_core_section_listing_empty_state() {
 		<div class="ibv-container">
 			<h2 class="ibv-listing-empty-state__title"><?php esc_html_e( 'Nothing matching your search?', 'ibv' ); ?></h2>
 			<p class="ibv-listing-empty-state__subtitle"><?php esc_html_e( 'Try adjusting your dates or group size.', 'ibv' ); ?></p>
+			<?php
+			// Someone who just searched a short range is exactly who needs to
+			// know every villa qualifies for short breaks.
+			ibv_the_short_breaks_statement( 'ibv-listing-empty-state__short-breaks' );
+			?>
 			<div class="ibv-listing-empty-state__actions">
 				<?php
 				ibv_core_button(

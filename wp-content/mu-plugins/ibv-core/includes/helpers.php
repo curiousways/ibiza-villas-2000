@@ -272,3 +272,44 @@ function ibv_get_villa_listing_search_params() {
 		'pax'       => isset( $_GET['pax'] ) ? sanitize_text_field( wp_unslash( $_GET['pax'] ) ) : '',
 	];
 }
+
+/**
+ * Echo the short-breaks statement (IBZ002 copy log, Entry 13 — verbatim).
+ *
+ * Replaces the specced Short Breaks filter checkbox: short breaks is not a
+ * flag on any villa (every villa qualifies; the team decides per enquiry),
+ * so a control that never narrows the grid was removed as a deliberate
+ * spec change. The fact survives as this plain statement — rendered on the
+ * listing near the filters and again in the no-results empty state. Keep
+ * the two in lockstep via this helper; it is a statement, never a control.
+ *
+ * @param string $class CSS class(es) for the wrapping <p>.
+ */
+/**
+ * The response-time reassurance line (single source of truth).
+ *
+ * Site Options → Global → "Response-time note", falling back to the current
+ * wording so the front end never goes blank while the exact promise is
+ * still an open client decision. Returned without the "✓ " prefix — the
+ * templates own that presentation.
+ *
+ * @return string
+ */
+function ibv_get_response_time_note() {
+	$note = function_exists( 'get_field' ) ? trim( (string) get_field( 'global_response_time_note', 'option' ) ) : '';
+
+	if ( '' !== $note ) {
+		return $note;
+	}
+
+	return __( 'We respond within 20 minutes during our business hours', 'ibv' );
+}
+
+function ibv_the_short_breaks_statement( $class ) {
+	printf(
+		'<p class="%s"><strong>%s</strong> %s</p>',
+		esc_attr( $class ),
+		esc_html__( 'Staying just a few nights?', 'ibv' ),
+		esc_html__( "Every villa is available for short breaks — put your dates in and we'll show you what's free.", 'ibv' )
+	);
+}

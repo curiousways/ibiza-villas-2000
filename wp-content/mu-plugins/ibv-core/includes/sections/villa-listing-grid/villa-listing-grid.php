@@ -80,15 +80,43 @@ function ibv_core_section_villa_listing_grid() {
 							>&times;</a>
 						</span>
 					</li>
+					<?php
+					// Zero active offers → no toggle at all: a filter that can
+					// only empty the grid looks broken and teaches visitors to
+					// distrust the other filters.
+					$offers_count = ibv_count_villas_with_active_offers();
+					if ( $offers_count > 0 ) :
+						?>
 					<li class="ibv-listing-grid-section__filter">
-						<label class="ibv-listing-grid-section__checkbox">
-							<input type="checkbox" data-bob-filter-offers>
-							<span><?php esc_html_e( 'Offers', 'ibv' ); ?></span>
-						</label>
+						<span class="ibv-offers-toggle">
+							<?php
+							// Styled NATIVE checkbox (not a div "switch"): keyboard,
+							// screen-reader semantics and form behaviour for free.
+							// data-bob-filter-offers stays — villa-listing-grid.js
+							// and the e2e specs bind to it.
+							?>
+							<input
+								type="checkbox"
+								id="ibv-filter-offers"
+								class="ibv-offers-toggle__input"
+								data-bob-filter-offers
+							>
+							<label class="ibv-offers-toggle__label" for="ibv-filter-offers">
+								<span class="ibv-offers-toggle__switch" aria-hidden="true"></span>
+								<?php ibv_core_the_icon( 'tag', [ 'class' => 'ibv-offers-toggle__icon', 'size' => 16 ] ); ?>
+								<span class="ibv-offers-toggle__text">
+									<?php esc_html_e( 'Special offers only', 'ibv' ); ?>
+									<?php // Inside the <label>: part of the accessible name ("Special offers only (4)"). ?>
+									<span class="ibv-offers-toggle__count">(<?php echo esc_html( (string) $offers_count ); ?>)</span>
+								</span>
+							</label>
+						</span>
 					</li>
+					<?php endif; ?>
 				</ul>
 				<p class="ibv-listing-grid-section__count" data-bob-results-count hidden></p>
 			</div>
+			<?php ibv_the_short_breaks_statement( 'ibv-listing-grid-section__short-breaks' ); ?>
 			<?php
 			// Without a dated search the probe fetch will overwrite the static
 			// ACF "from" prices with live rates — --price-pending masks the

@@ -265,7 +265,7 @@ function ibv_core_enquiry_panel( $villa_id ) {
 				<?php ibv_core_gravity_form( $form_id, [ 'ajax' => true ] ); ?>
 			</div>
 
-			<p class="ibv-enquiry-panel__response-note"><?php esc_html_e( '✓ We respond within 20 minutes during our business hours', 'ibv' ); ?></p>
+			<p class="ibv-enquiry-panel__response-note">✓ <?php echo esc_html( ibv_get_response_time_note() ); ?></p>
 		<?php endif; ?>
 
 		<hr class="ibv-enquiry-panel__divider">

@@ -319,8 +319,15 @@ test.describe( 'villa listing grid — search mode', () => {
 		const cards = await scrapeCards( page );
 		const offerPids = cards.filter( ( c ) => c.hasOffer ).map( ( c ) => c.pid );
 
+		// The offers control is a styled native checkbox: the input is
+		// visually hidden (clip pattern), so check()/uncheck() fail
+		// actionability. Toggle via the visible label and assert the
+		// input's state instead. Note the toggle is only server-rendered
+		// when at least one published villa has a currently-active offer.
 		const checkbox = page.locator( '[data-bob-filter-offers]' );
-		await checkbox.check();
+		const toggleLabel = page.locator( '.ibv-offers-toggle__label' );
+		await toggleLabel.click();
+		await expect( checkbox ).toBeChecked();
 		if ( offerPids.length === 0 ) {
 			await expect( page.locator( GRID ) ).toBeHidden();
 			await expect( page.locator( '[data-bob-empty-state]' ) ).toBeVisible();
@@ -336,7 +343,8 @@ test.describe( 'villa listing grid — search mode', () => {
 
 		// Un-check recovers browse mode fully (applyFilters() sets state
 		// both ways on every run).
-		await checkbox.uncheck();
+		await toggleLabel.click();
+		await expect( checkbox ).not.toBeChecked();
 		await expect( page.locator( `${ CARD }[hidden]` ) ).toHaveCount( 0 );
 		await expect( page.locator( '[data-bob-empty-state]' ) ).toBeHidden();
 
@@ -346,14 +354,16 @@ test.describe( 'villa listing grid — search mode', () => {
 
 		const matched = [ getCards()[ 0 ].pid, getCards()[ 1 ].pid ];
 		const intersection = matched.filter( ( pid ) => offerPids.includes( pid ) );
-		await page.locator( '[data-bob-filter-offers]' ).check();
+		await page.locator( '.ibv-offers-toggle__label' ).click();
+		await expect( page.locator( '[data-bob-filter-offers]' ) ).toBeChecked();
 		if ( intersection.length === 0 ) {
 			await expect( page.locator( GRID ) ).toBeHidden();
 			await expect( page.locator( '[data-bob-empty-state]' ) ).toBeVisible();
 		} else {
 			await expect( visibleCards( page ) ).toHaveCount( intersection.length );
 		}
-		await page.locator( '[data-bob-filter-offers]' ).uncheck();
+		await page.locator( '.ibv-offers-toggle__label' ).click();
+		await expect( page.locator( '[data-bob-filter-offers]' ) ).not.toBeChecked();
 		await expect( visibleCards( page ) ).toHaveCount( 2 );
 	} );
 } );

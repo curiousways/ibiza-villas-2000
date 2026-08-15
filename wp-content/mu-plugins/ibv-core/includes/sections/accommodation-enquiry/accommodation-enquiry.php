@@ -145,7 +145,8 @@ function ibv_core_section_accommodation_enquiry() {
 			</div>
 
 			<p class="ibv-accommodation-enquiry__response-note">
-				<?php esc_html_e( '✓ We respond within 20 minutes within our business hours', 'ibv' ); ?>
+				<?php // Shared note fixes this panel's old duplicated clause ("within … within"). ?>
+				✓ <?php echo esc_html( ibv_get_response_time_note() ); ?>
 			</p>
 		<?php endif; ?>
 

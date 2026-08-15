@@ -64,6 +64,37 @@ function ibv_villa_get_active_offers( $villa_id ) {
 }
 
 /**
+ * Count published villas with at least one currently-active offer.
+ *
+ * Drives the "Special offers only (N)" count on the listing filter toggle.
+ * Shares ibv_villa_get_active_offers() so the count, the detail accordion,
+ * the Special Offers grid and the villa-card `data-bob-has-offer` markers
+ * can never disagree. A dozen villas behind full-page caching — a direct
+ * loop per render beats managing a date-keyed transient.
+ *
+ * @return int
+ */
+function ibv_count_villas_with_active_offers() {
+	$villa_ids = get_posts(
+		[
+			'post_type'      => 'villas',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+		]
+	);
+
+	$count = 0;
+	foreach ( $villa_ids as $villa_id ) {
+		if ( count( ibv_villa_get_active_offers( $villa_id ) ) ) {
+			$count++;
+		}
+	}
+
+	return $count;
+}
+
+/**
  * Render the villa-offers accordion.
  *
  * @param array $args {

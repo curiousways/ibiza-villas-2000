@@ -27,8 +27,16 @@
 }
 
 .ibv-listing-empty-state__subtitle {
-	margin: 0 0 var(--ibv-space-lg);
+	margin: 0 0 var(--ibv-space-sm);
 	font-size: var(--ibv-fs-body);
+	max-width: 36rem;
+}
+
+/* Short-breaks statement inherits the band's teal; small and plain so it
+   never reads as a control. */
+.ibv-listing-empty-state__short-breaks {
+	margin: 0 0 var(--ibv-space-lg);
+	font-size: var(--ibv-fs-small);
 	max-width: 36rem;
 }
 

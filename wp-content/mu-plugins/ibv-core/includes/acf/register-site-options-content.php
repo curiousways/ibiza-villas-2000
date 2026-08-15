@@ -77,6 +77,13 @@ function ibv_register_site_options_content_fields() {
 					'type'  => 'email',
 				),
 				array(
+					'key'          => 'field_ibv_global_response_time_note',
+					'label'        => __( 'Response-time note', 'ibv' ),
+					'name'         => 'global_response_time_note',
+					'type'         => 'text',
+					'instructions' => __( 'The reassurance line shown beside enquiry forms (villa enquiry panel, hotel/airstream enquiry). One sentence, no tick — the templates add it. The exact wording is still an open client decision.', 'ibv' ),
+				),
+				array(
 					'key'   => 'field_ibv_global_contact_page',
 					'label' => __( 'Contact page', 'ibv' ),
 					'name'  => 'contact_page',
