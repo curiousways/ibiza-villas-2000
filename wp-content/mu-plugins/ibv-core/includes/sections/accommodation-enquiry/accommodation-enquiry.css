@@ -235,3 +235,18 @@
 	color: var(--ibv-color-text);
 	text-decoration: underline;
 }
+
+/* Message starts as a single row (matching Name / Email). JS adds
+   .is-expanded on focus so the guest can write. Overrides the global
+   .ibv-gform textarea { min-height: 10rem }. */
+.ibv-accommodation-enquiry .gfield--type-textarea textarea {
+	min-height: 0;
+	resize: none;
+	overflow: hidden;
+}
+
+.ibv-accommodation-enquiry .gfield--type-textarea textarea.is-expanded {
+	min-height: 8rem;
+	overflow: auto;
+	resize: vertical;
+}

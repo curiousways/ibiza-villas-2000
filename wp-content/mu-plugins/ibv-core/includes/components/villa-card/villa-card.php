@@ -23,12 +23,13 @@ function ibv_resolve_villa_id( $villa ) {
 }
 
 /**
- * Plain-text excerpt for a villa (~30 words).
+ * Plain-text card description for a villa.
  *
- * villa_summary is the editorial one-paragraph summary (also rendered in
- * full under "Villa Overview" on the single); it replaced the legacy
- * property_summary field, which held distance-ticks copy, as the card
- * description source.
+ * villa_summary is the editorial one-paragraph summary. It is shown in
+ * full on the card and again under "Villa Overview" on the single — the
+ * field contract is a short para, so the card must not ellipsis-clip it.
+ * The long post_content fallback is still trimmed; that body is not
+ * written for the card.
  *
  * @param int $villa_id Post ID.
  * @return string
@@ -36,7 +37,7 @@ function ibv_resolve_villa_id( $villa ) {
 function ibv_villa_excerpt_plain( $villa_id ) {
 	$summary = get_field( 'villa_summary', $villa_id );
 	if ( $summary ) {
-		return wp_trim_words( wp_strip_all_tags( (string) $summary ), 30, '…' );
+		return trim( wp_strip_all_tags( (string) $summary ) );
 	}
 	// No post_excerpt branch: the villas CPT dropped excerpt support, so a
 	// stale stored excerpt would be invisible and uneditable in admin.

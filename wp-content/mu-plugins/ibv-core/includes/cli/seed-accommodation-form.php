@@ -82,7 +82,7 @@ if ( ! function_exists( 'ibv_seed_accommodation_form' ) ) {
 				array( 'id' => 4, 'type' => 'date',      'label' => 'Arrival',   'dateType' => 'datepicker', 'dateFormat' => 'ymd_dash', 'isRequired' => false, 'cssClass' => 'ibv-drp-from ibv-drp-hidden' ),
 				array( 'id' => 5, 'type' => 'date',      'label' => 'Departure', 'dateType' => 'datepicker', 'dateFormat' => 'ymd_dash', 'isRequired' => false, 'cssClass' => 'ibv-drp-to ibv-drp-hidden' ),
 				array( 'id' => 6, 'type' => 'number',    'label' => 'Number of guests', 'placeholder' => 'Number of guests (optional)' ),
-				array( 'id' => 7, 'type' => 'textarea',  'label' => 'Message', 'placeholder' => 'Message' ),
+				array( 'id' => 7, 'type' => 'textarea',  'label' => 'Message', 'placeholder' => 'Message', 'rows' => 1 ),
 				array( 'id' => 9, 'type' => 'hidden',    'label' => 'Accommodation', 'allowsPrepopulate' => true, 'inputName' => 'ibv_accommodation' ),
 			),
 			// "Page" confirmation → the booking-confirmation page, built by

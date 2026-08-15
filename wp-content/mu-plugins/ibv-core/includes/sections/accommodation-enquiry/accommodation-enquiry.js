@@ -256,6 +256,38 @@
 		}, true );
 	}
 
+	/* ── Message: one row until the guest focuses it ────────────────── */
+
+	function bindMessage( form ) {
+		var textarea = form.querySelector( '.gfield--type-textarea textarea' );
+		if ( ! textarea || textarea.__ibvExpandBound ) {
+			return;
+		}
+		textarea.__ibvExpandBound = true;
+		textarea.setAttribute( 'rows', '1' );
+
+		function expand() {
+			textarea.setAttribute( 'rows', '5' );
+			textarea.classList.add( 'is-expanded' );
+		}
+
+		function collapseIfEmpty() {
+			if ( textarea.value.replace( /\s+/g, '' ) ) {
+				return;
+			}
+			textarea.setAttribute( 'rows', '1' );
+			textarea.classList.remove( 'is-expanded' );
+		}
+
+		textarea.addEventListener( 'focus', expand );
+		textarea.addEventListener( 'click', expand );
+		textarea.addEventListener( 'blur', collapseIfEmpty );
+
+		if ( textarea.value ) {
+			expand();
+		}
+	}
+
 	function boot() {
 		var sections = document.querySelectorAll( '.ibv-accommodation-enquiry' );
 		sections.forEach( function ( section ) {
@@ -265,6 +297,7 @@
 			}
 			bindPicker( section, form );
 			bindPhone( section, form );
+			bindMessage( form );
 		} );
 	}
 
