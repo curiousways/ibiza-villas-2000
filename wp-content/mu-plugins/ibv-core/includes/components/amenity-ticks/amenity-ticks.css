@@ -1,11 +1,13 @@
 /* Amenity ticks — Figma 1:5982–1:5988. Pills mirror the header tag pills
    (gold bg, forest-dark text). The ✓ stays as the leading glyph and
-   inherits the pill text colour. */
+   inherits the pill text colour.
+   Spacing comes from the shared --ibv-tick-* tokens (tokens.css), kept in
+   step with .ibv-distance-ticks — tweak there, both move. */
 
 .ibv-amenity-ticks {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--ibv-space-xs);
+	gap: var(--ibv-tick-pills-gap);
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -14,8 +16,8 @@
 .ibv-amenity-ticks__item {
 	display: flex;
 	align-items: center;
-	gap: var(--ibv-space-2xs);
-	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	gap: var(--ibv-tick-pill-gap);
+	padding: var(--ibv-tick-pill-padding);
 	background: var(--ibv-color-gold-100);
 	border-radius: var(--ibv-radius-pill);
 	font-family: var(--ibv-font-body);

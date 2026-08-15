@@ -170,6 +170,7 @@
 	--ibv-space-2xs: 0.25rem; /*  4px */
 	--ibv-space-xs:  0.5rem;  /*  8px */
 	--ibv-space-sm:  0.75rem; /* 12px */
+
 	--ibv-space-md:  1rem;    /* 16px */
 	--ibv-space-lg:  1.5rem;  /* 24px */
 	--ibv-space-xl:  2rem;    /* 32px */
@@ -177,6 +178,13 @@
 	--ibv-space-3xl: 4.5rem;  /* 72px */
 	--ibv-space-4xl: 6rem;    /* 96px */
 	--ibv-space-5xl: 8rem;    /*128px */
+
+	/* Tick pills — one set of spacing knobs shared by .ibv-amenity-ticks
+	   (gold ✓ chips) and .ibv-distance-ticks (mint map-pin pills), so a
+	   tweak here moves both in step. */
+	--ibv-tick-pills-gap:    var(--ibv-space-xs);  /* pill ↔ pill */
+	--ibv-tick-pill-gap:     var(--ibv-space-2xs); /* glyph ↔ text inside a pill */
+	--ibv-tick-pill-padding: var(--ibv-space-2xs) var(--ibv-space-sm);
 
 	/* ---------- Layout ---------- */
 	--ibv-container-max:    72rem;  /* 1152px */

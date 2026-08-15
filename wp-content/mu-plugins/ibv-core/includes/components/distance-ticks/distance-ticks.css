@@ -1,9 +1,11 @@
-/* Distance ticks — Figma 1:6006–1:6018. Mint pills with map-pin icon. */
+/* Distance ticks — Figma 1:6006–1:6018. Mint pills with map-pin icon.
+   Spacing comes from the shared --ibv-tick-* tokens (tokens.css), kept in
+   step with .ibv-amenity-ticks — tweak there, both move. */
 
 .ibv-distance-ticks {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--ibv-space-2xs);
+	gap: var(--ibv-tick-pills-gap);
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -12,8 +14,8 @@
 .ibv-distance-ticks__item {
 	display: flex;
 	align-items: center;
-	gap: var(--ibv-space-2xs);
-	padding: var(--ibv-space-2xs) var(--ibv-space-sm);
+	gap: var(--ibv-tick-pill-gap);
+	padding: var(--ibv-tick-pill-padding);
 	background: var(--ibv-color-mint-100);
 	border-radius: var(--ibv-radius-pill);
 	font-family: var(--ibv-font-body);
