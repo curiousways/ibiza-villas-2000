@@ -8,13 +8,13 @@
  *     "Page" confirmation target. The form seeder resolves its id by template,
  *     so this page must exist BEFORE the forms are seeded; the orchestrator
  *     (ibv_seed_all()) runs pages first for exactly this reason.
- *   - Airstream + Hotel (template page-accommodation.php) — the embedded
+ *   - Apartments (template page-accommodation.php, slug /hotel/) — the embedded
  *     accommodation form wires itself via the global form-id option fallback
  *     (see ibv_core_section_accommodation_enquiry()), so no per-page field is set.
  *
  * Creates structure (title, slug, template, published) plus the page-IDENTITY
- * text fields (hero title/subtitle, overview + enquiry headings, price note) so a
- * fresh Hotel page doesn't inherit the Airstream field defaults. Heavy editorial
+ * text fields (hero title/subtitle, overview + enquiry headings, price note).
+ * Heavy editorial
  * content — hero image, gallery, overview body, fact pills, "from" price — is NOT
  * seeded (images/attachment ids are environment-specific; that copy lives in
  * wp-admin). The identity text is written ON CREATE ONLY. Idempotent and
@@ -46,30 +46,15 @@ if ( ! function_exists( 'ibv_seed_pages' ) ) {
 				'match'    => 'template', // unique template; the slug is editorial
 			),
 			array(
-				'title'    => 'Airstream',
-				'slug'     => 'airstream',
-				'template' => 'page-accommodation.php',
-				'match'    => 'slug', // template is shared with Hotel
-				// Page-identity text only (set on CREATE, never on update). Images,
-				// gallery, overview body, fact pills + price stay editorial (admin).
-				'acf'      => array(
-					'field_ibv_page_accom_hero_title'       => 'Airstreams',
-					'field_ibv_page_accom_hero_subtitle'    => 'Iconic Trailers on the beach at Camping La Playa, Cala Martina',
-					'field_ibv_page_accom_overview_heading' => 'About Airstream',
-					'field_ibv_page_accom_enquiry_heading'  => 'Enquire about the airstreams',
-					'field_ibv_page_accom_from_price_note'  => 'Price varies by season',
-				),
-			),
-			array(
-				'title'    => 'Hotel',
+				'title'    => 'Apartments',
 				'slug'     => 'hotel',
 				'template' => 'page-accommodation.php',
 				'match'    => 'slug',
 				'acf'      => array(
-					'field_ibv_page_accom_hero_title'       => 'Hotel',
-					'field_ibv_page_accom_hero_subtitle'    => 'Our wonderful apartments at Aparthotel Marian Ibiza',
-					'field_ibv_page_accom_overview_heading' => 'Ibiza begins in hotel Marian apartments',
-					'field_ibv_page_accom_enquiry_heading'  => 'Enquire about the hotel',
+					'field_ibv_page_accom_hero_title'       => 'Apartments',
+					'field_ibv_page_accom_hero_subtitle'    => 'Our apartments at Aparthotel Marian Ibiza',
+					'field_ibv_page_accom_overview_heading' => 'Aparthotel Marian, San Antonio',
+					'field_ibv_page_accom_enquiry_heading'  => 'Enquire about the apartments',
 					'field_ibv_page_accom_from_price_note'  => 'Price varies by season',
 				),
 			),

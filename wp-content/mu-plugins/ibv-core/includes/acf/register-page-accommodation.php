@@ -2,7 +2,7 @@
 /**
  * Accommodation page — shared page template ACF field group.
  *
- * Bound to the `page-accommodation.php` template (Hotel + Airstream). These are
+ * Bound to the `page-accommodation.php` template (Apartments). These are
  * fixed editorial pages — not villas. Hero / overview / gallery render
  * presentationally from these fields; the enquiry sidebar embeds a Gravity Form.
  *
@@ -61,7 +61,7 @@ function ibv_register_page_accommodation_fields() {
 					'label'         => __( 'Hero title', 'ibv' ),
 					'name'          => 'hero_title',
 					'type'          => 'text',
-					'default_value' => __( 'Airstreams', 'ibv' ),
+					'default_value' => __( 'Apartments', 'ibv' ),
 				),
 				array(
 					'key'           => 'field_ibv_page_accom_hero_subtitle',
@@ -69,7 +69,7 @@ function ibv_register_page_accommodation_fields() {
 					'name'          => 'hero_subtitle',
 					'type'          => 'textarea',
 					'rows'          => 2,
-					'default_value' => __( 'Iconic Trailers on the beach at Camping La Playa, Cala Martina', 'ibv' ),
+					'default_value' => __( 'Our apartments at Aparthotel Marian Ibiza', 'ibv' ),
 				),
 
 				// ─── Tab: Overview ──────────────────────────────────────
@@ -84,7 +84,7 @@ function ibv_register_page_accommodation_fields() {
 					'label'         => __( 'Overview heading', 'ibv' ),
 					'name'          => 'overview_heading',
 					'type'          => 'text',
-					'default_value' => __( 'About the Airstreams', 'ibv' ),
+					'default_value' => __( 'About the apartments', 'ibv' ),
 				),
 				array(
 					'key'          => 'field_ibv_page_accom_overview_body',
@@ -161,7 +161,7 @@ function ibv_register_page_accommodation_fields() {
 					'label'         => __( 'Enquiry heading', 'ibv' ),
 					'name'          => 'enquiry_heading',
 					'type'          => 'text',
-					'default_value' => __( 'Enquire about the airstreams', 'ibv' ),
+					'default_value' => __( 'Enquire about the apartments', 'ibv' ),
 				),
 				array(
 					'key'           => 'field_ibv_page_accom_enquiry_form_id',

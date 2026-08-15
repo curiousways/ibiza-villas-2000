@@ -81,7 +81,7 @@ function ibv_register_site_options_content_fields() {
 					'label'        => __( 'Response-time note', 'ibv' ),
 					'name'         => 'global_response_time_note',
 					'type'         => 'text',
-					'instructions' => __( 'The reassurance line shown beside enquiry forms (villa enquiry panel, hotel/airstream enquiry). One sentence, no tick — the templates add it. The exact wording is still an open client decision.', 'ibv' ),
+					'instructions' => __( 'The reassurance line shown beside enquiry forms (villa enquiry panel, apartments enquiry). One sentence, no tick — the templates add it. The exact wording is still an open client decision.', 'ibv' ),
 				),
 				array(
 					'key'   => 'field_ibv_global_contact_page',
@@ -228,49 +228,33 @@ function ibv_register_site_options_content_fields() {
 					'type'      => 'tab',
 					'placement' => 'left',
 				),
-				array(
-					'key'           => 'field_ibv_home_fancy_airstream_image',
-					'label'         => __( 'Airstreams image', 'ibv' ),
-					'name'          => 'fancy_airstream_image',
-					'type'          => 'image',
-					'return_format' => 'array',
-				),
-				array(
-					'key'   => 'field_ibv_home_fancy_airstream_text',
-					'label' => __( 'Airstreams text', 'ibv' ),
-					'name'  => 'fancy_airstream_text',
-					'type'  => 'textarea',
-					'rows'  => 3,
-				),
-				array(
-					'key'   => 'field_ibv_home_fancy_airstream_url',
-					'label' => __( 'Airstreams page', 'ibv' ),
-					'name'  => 'fancy_airstream_url',
-					'type'  => 'page_link',
-				),
+				// fancy_airstream_* retired. fancy_apartments_* is the
+				// homepage teaser; fancy_hotel_* is the listing cross-sell.
+				// Both describe Aparthotel Marian — keys kept so stored
+				// option values are not orphaned.
 				array(
 					'key'           => 'field_ibv_home_fancy_hotel_image',
-					'label'         => __( 'Hotel image', 'ibv' ),
+					'label'         => __( 'Apartments image (listing cross-sell)', 'ibv' ),
 					'name'          => 'fancy_hotel_image',
 					'type'          => 'image',
 					'return_format' => 'array',
 				),
 				array(
 					'key'   => 'field_ibv_home_fancy_hotel_text',
-					'label' => __( 'Hotel text', 'ibv' ),
+					'label' => __( 'Apartments text (listing cross-sell)', 'ibv' ),
 					'name'  => 'fancy_hotel_text',
 					'type'  => 'textarea',
 					'rows'  => 3,
 				),
 				array(
 					'key'   => 'field_ibv_home_fancy_hotel_url',
-					'label' => __( 'Hotel page', 'ibv' ),
+					'label' => __( 'Apartments page (listing cross-sell)', 'ibv' ),
 					'name'  => 'fancy_hotel_url',
 					'type'  => 'page_link',
 				),
 				array(
 					'key'           => 'field_ibv_home_fancy_apartments_image',
-					'label'         => __( 'Apartments image', 'ibv' ),
+					'label'         => __( 'Apartments image (homepage teaser)', 'ibv' ),
 					'name'          => 'fancy_apartments_image',
 					'type'          => 'image',
 					'return_format' => 'array',
@@ -278,7 +262,7 @@ function ibv_register_site_options_content_fields() {
 				),
 				array(
 					'key'   => 'field_ibv_home_fancy_apartments_url',
-					'label' => __( 'Apartments page', 'ibv' ),
+					'label' => __( 'Apartments page (homepage teaser)', 'ibv' ),
 					'name'  => 'fancy_apartments_url',
 					'type'  => 'page_link',
 				),

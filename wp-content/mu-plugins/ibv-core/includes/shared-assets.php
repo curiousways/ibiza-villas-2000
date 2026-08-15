@@ -439,7 +439,7 @@ function ibv_enqueue_template_styles() {
 		wp_enqueue_style( 'ibv-booking-confirmation' );
 	}
 
-	// Accommodation pages (Hotel / Airstream) reuse the villa-detail two-column
+	// Accommodation pages (Apartments) reuse the villa-detail two-column
 	// shell grid for their main + sidebar layout.
 	if ( is_page_template( 'page-accommodation.php' ) && wp_style_is( 'ibv-villa-detail', 'registered' ) ) {
 		wp_enqueue_style( 'ibv-villa-detail' );

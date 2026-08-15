@@ -4,8 +4,9 @@
  *
  * Thin wrapper around `ibv_core_image_text_section()` — 50/50 split, image
  * right, standard bg surface. Image and destination page come from dedicated
- * Site Options fields; the description is fixed copy. (The hotel/airstream
- * option fields are untouched — they feed the villa-listing cross-sell.)
+ * Site Options fields; the description is fixed copy. fancy_apartments_*
+ * is this homepage teaser; fancy_hotel_* is the listing cross-sell. Both
+ * describe Aparthotel Marian. Airstreams are retired.
  *
  * @package Ibiza_Villas_2000
  */

@@ -447,7 +447,7 @@ function ibv_register_page_builder_fields() {
 					'label'     => '',
 					'name'      => 'note',
 					'type'      => 'message',
-					'message'   => __( 'No settings. Renders the hotel teaser (image, text and page from Site Options); the heading falls back to "Fancy something a bit different?" outside the Home page.', 'ibv' ),
+					'message'   => __( 'No settings. Renders the apartments teaser (image, text and page from Site Options); the heading falls back to "Fancy something a bit different?" outside the Home page.', 'ibv' ),
 					'new_lines' => 'wpautop',
 					'esc_html'  => 0,
 				),

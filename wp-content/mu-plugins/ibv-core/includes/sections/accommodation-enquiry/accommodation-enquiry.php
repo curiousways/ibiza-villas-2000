@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Accommodation enquiry sidebar (Hotel / Airstream pages).
+ * Section: Accommodation enquiry sidebar (Apartments page).
  *
  * Right-rail enquiry: an embedded Gravity Form (via ibv_core_gravity_form())
  * with our single-field "When" date-range picker grafted on, plus the
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Populate the embedded form's hidden "Accommodation" field (inputName
  * `ibv_accommodation`) with the current page title, so the office sees which
- * page (Hotel / Airstream) an enquiry came from. Only the accommodation form
+ * page (Apartments) an enquiry came from. Only the accommodation form
  * carries that input name.
  */
 add_filter(

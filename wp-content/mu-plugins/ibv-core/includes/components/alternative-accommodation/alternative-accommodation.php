@@ -10,15 +10,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Listing-page block using same Site Options as fancy-different.
+ * Listing-page block using the same Site Options as the homepage apartments
+ * teaser and the listing cross-sell tile. Both describe Aparthotel Marian.
  */
 function ibv_core_alternative_accommodation() {
-	$ai_img = get_field( 'fancy_airstream_image', 'option' );
-	$ai_txt = get_field( 'fancy_airstream_text', 'option' );
+	$ap_img = get_field( 'fancy_apartments_image', 'option' );
 	$ho_img = get_field( 'fancy_hotel_image', 'option' );
 	$ho_txt = get_field( 'fancy_hotel_text', 'option' );
 
-	if ( ! $ai_txt && ! $ho_txt && empty( $ai_img['ID'] ) && empty( $ho_img['ID'] ) ) {
+	if ( empty( $ap_img['ID'] ) && ! $ho_txt && empty( $ho_img['ID'] ) ) {
 		return;
 	}
 
@@ -27,10 +27,10 @@ function ibv_core_alternative_accommodation() {
 	<section class="ibv-alternative-accommodation ibv-section">
 		<div class="ibv-container">
 			<h2 class="ibv-alternative-accommodation__title ibv-font-display">
-				<?php esc_html_e( 'Traveling as couple or small group?', 'ibv' ); ?>
+				<?php esc_html_e( 'Travelling as a couple or small group?', 'ibv' ); ?>
 			</h2>
 			<p class="ibv-alternative-accommodation__subtitle">
-				<?php esc_html_e( 'We also have licensed apartments and beachside Airstreams.', 'ibv' ); ?>
+				<?php esc_html_e( 'A whole villa isn’t always the answer. We also have self-catering apartments in San Antonio.', 'ibv' ); ?>
 			</p>
 			<?php ibv_core_accommodation_tile_pair(); ?>
 		</div>

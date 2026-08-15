@@ -1,6 +1,6 @@
 <?php
 /**
- * Section: Accommodation overview (Hotel / Airstream pages).
+ * Section: Accommodation overview (Apartments page).
  *
  * Presentational main-column block: heading + body prose + free-text fact pills
  * + static "from" price. Reads the Accommodation page ACF (no villa data).

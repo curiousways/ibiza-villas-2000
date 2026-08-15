@@ -2,7 +2,7 @@
 /**
  * Template Name: Accommodation
  *
- * Shared template for the Hotel + Airstream editorial pages. Looks like a villa
+ * Shared template for the Apartments editorial page. Looks like a villa
  * detail page (full-width hero → two-column main + right rail) but is NOT a
  * villa: no availability/pricing/RTB, not in the villas CPT. Composition:
  *   1. Hero        — reuses ibv_core_section_hero() (reads hero_* page ACF)

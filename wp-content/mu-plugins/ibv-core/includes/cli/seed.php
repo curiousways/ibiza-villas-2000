@@ -3,7 +3,7 @@
  * Seeding orchestrator (permanent).
  *
  * The site scaffolding that must exist for the enquiry flow — the fixed pages
- * (Booking confirmation, Airstream, Hotel) and the Gravity Forms (Villa Enquiry,
+ * (Booking confirmation, Apartments) and the Gravity Forms (Villa Enquiry,
  * Accommodation Enquiry) — is defined in code. This file exposes the run surface:
  *
  *   - Locally (WP-CLI):   wp ibv seed

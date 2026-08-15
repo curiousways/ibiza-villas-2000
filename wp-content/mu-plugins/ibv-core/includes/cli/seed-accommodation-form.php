@@ -1,6 +1,6 @@
 <?php
 /**
- * Seeder — "Accommodation Enquiry" Gravity Form (Hotel + Airstream).
+ * Seeder — "Accommodation Enquiry" Gravity Form (Hotel).
  *
  * This form IS rendered (embedded via `ibv_core_gravity_form()`), so GF owns
  * submit / validation / notification / confirmation redirect. The
