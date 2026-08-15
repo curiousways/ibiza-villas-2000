@@ -184,9 +184,41 @@ test.describe( 'booking confirmation — page chrome', () => {
 		const strip = page.locator( '.ibv-booking-confirmation__contact-line' );
 		await expect( strip ).toBeVisible();
 		await expect( strip.locator( 'a[href^="https://wa.me/"]' ) ).toBeVisible();
-		await expect( strip.locator( 'a[href^="tel:"]' ) ).toHaveAttribute(
+		await expect( strip.locator( 'a[href^="tel:"]' ).first() ).toHaveAttribute(
 			'href',
 			/tel:\+\d+/
 		);
+	} );
+} );
+
+test.describe( 'booking confirmation — variants', () => {
+	test( 'type=villa shows villa heading and three steps', async ( { page } ) => {
+		await page.goto( confirmationUrl( { type: 'villa' } ) );
+		await expect( page.locator( 'h1' ) ).toHaveText( /We've got your request/ );
+		await expect( page.locator( '.ibv-step-card' ) ).toHaveCount( 3 );
+		await expect( page.locator( '.ibv-step-card__title' ).first() ).toHaveText(
+			'We check the villa'
+		);
+	} );
+
+	test( 'type=accommodation shows two steps and no deposit card', async ( { page } ) => {
+		await page.goto( confirmationUrl( { type: 'accommodation' } ) );
+		await expect( page.locator( 'h1' ) ).toHaveText( /We've got your enquiry/ );
+		await expect( page.locator( '.ibv-step-card' ) ).toHaveCount( 2 );
+		await expect( page.locator( 'body' ) ).not.toContainText( '30% deposit' );
+	} );
+
+	test( 'missing or junk type falls back to general with no steps', async ( { page } ) => {
+		await page.goto( confirmationUrl( { type: 'nonsense' } ) );
+		await expect( page.locator( 'h1' ) ).toHaveText( /Thanks — that's with us/ );
+		await expect( page.locator( '.ibv-section-three-step' ) ).toHaveCount( 0 );
+
+		await page.goto( confirmationUrl( { type: '<script>alert(1)</script>' } ) );
+		await expect( page.locator( 'h1' ) ).toHaveText( /Thanks — that's with us/ );
+		expect( await page.locator( 'h1' ).innerHTML() ).not.toContain( '<script>' );
+
+		await page.goto( CONFIRMATION_PATH );
+		await expect( page.locator( 'h1' ) ).toHaveText( /Thanks — that's with us/ );
+		await expect( page.locator( '.ibv-section-three-step' ) ).toHaveCount( 0 );
 	} );
 } );

@@ -96,7 +96,7 @@ if ( ! function_exists( 'ibv_seed_accommodation_form' ) ) {
 			'confirmations'  => array(
 				'ibv_accommodation_redirect' => ibv_build_gf_booking_confirmation(
 					'ibv_accommodation_redirect',
-					'arrival={Arrival:4}&departure={Departure:5}&guests={Number of guests:6}&ref={entry_id}'
+					'arrival={Arrival:4}&departure={Departure:5}&guests={Number of guests:6}&ref={entry_id}&type=accommodation'
 				),
 			),
 			'notifications'  => array(

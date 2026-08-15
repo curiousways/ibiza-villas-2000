@@ -172,7 +172,7 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 			'confirmations'  => array(
 				'ibv_villa_redirect' => ibv_build_gf_booking_confirmation(
 					'ibv_villa_redirect',
-					'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}&ref={entry_id}'
+					'villa={Villa ID:12}&arrival={Arrival:5}&departure={Departure:6}&guests={Guests:7}&offer={Active Offers:9}&ref={entry_id}&type=villa'
 				),
 			),
 			'notifications'  => array(

@@ -2,26 +2,196 @@
 /**
  * Template Name: Booking Confirmation
  *
- * The page Bob's enquiry form redirects to on a successful submission.
- * Composition:
- *   1. Confirmation panel (ACF heading + optional subheading + response-time note)
- *   2. Booking details panel (URL-driven, optional — see helper below)
- *   3. Three-step (page-scoped content via the variant-prep args path)
- *   4. Contact strip (ACF intro + Site Options phone / WhatsApp)
- *   5. Concierge image-text section
+ * Shared thank-you page for enquiry forms. Copy is selected by ?type=
+ * (villa | accommodation | concierge | general). Unknown or missing
+ * values fall back to general — never to villa.
  *
- * Bob's URL contract for step 2:
- *   ?villa={id}&arrival=YYYY-MM-DD&departure=YYYY-MM-DD&guests={n}&offer={string}&ref={entry_id}
- * All params optional; the panel renders only the rows whose params
- * survive validation. See `ibv_render_booking_details_panel` below.
- * `ref` is the Gravity Forms entry ID, passed via the confirmation
- * query string merge tag `{entry_id}`. Displayed as IV-{n}.
+ * Composition:
+ *   1. Confirmation panel (variant heading + composed subheading)
+ *   2. Booking details panel (URL-driven, optional)
+ *   3. Steps (variant-scoped, 0–3; omitted when empty)
+ *   4. Contact strip (variant intro + Site Options phone / WhatsApp)
+ *   5. Concierge image-text section (held; suppressed on type=concierge)
+ *
+ * URL contract for the details panel:
+ *   ?villa={id}&arrival=YYYY-MM-DD&departure=YYYY-MM-DD&guests={n}&offer={string}&ref={entry_id}&type={key}
+ * All params optional and untrusted. `ref` is the Gravity Forms entry ID
+ * ({entry_id} merge tag), displayed as IV-{n}.
  *
  * @package Ibiza_Villas_2000
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+/**
+ * Allowed confirmation variants. general is the safe fallback.
+ *
+ * @return string[]
+ */
+function ibv_booking_confirmation_allowed_types() {
+	return [ 'villa', 'accommodation', 'concierge', 'general' ];
+}
+
+/**
+ * Resolve ?type= from the query string. Never echoes the raw value.
+ *
+ * @return string One of ibv_booking_confirmation_allowed_types().
+ */
+function ibv_booking_confirmation_type() {
+	$allowed = ibv_booking_confirmation_allowed_types();
+	$type    = isset( $_GET['type'] ) ? sanitize_key( wp_unslash( $_GET['type'] ) ) : '';
+	return in_array( $type, $allowed, true ) ? $type : 'general';
+}
+
+/**
+ * Hardcoded fallbacks matching the copy log, used only when a variant
+ * row has not been saved yet. Timing is not included — the template
+ * composes that from Site Options.
+ *
+ * @return array<string, array<string, mixed>>
+ */
+function ibv_booking_confirmation_variant_defaults() {
+	return [
+		'villa'         => [
+			'heading'      => __( "We've got your request", 'ibv' ),
+			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally', 'ibv' ),
+			'contact'      => __( 'Need to change something, or add a night?', 'ibv' ),
+			'append_note'  => true,
+			'steps'        => [
+				[
+					'title' => __( 'We check the villa', 'ibv' ),
+					'text'  => __( 'Someone in the Ibiza office confirms the dates are free and the price is right for your party.', 'ibv' ),
+				],
+				[
+					'title' => __( 'You get it in writing', 'ibv' ),
+					'text'  => __( 'Full price, and exactly what it covers — cleaning and damage waiver included. Nothing is committed until you say yes.', 'ibv' ),
+				],
+				[
+					'title' => __( 'The deposit secures it', 'ibv' ),
+					'text'  => __( "We don't hold dates until the deposit is paid, which is why we come back quickly. The balance is due before you travel.", 'ibv' ),
+				],
+			],
+		],
+		'accommodation' => [
+			'heading'      => __( "We've got your enquiry", 'ibv' ),
+			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally with availability and a price', 'ibv' ),
+			'contact'      => __( 'Need to change something, or add a night?', 'ibv' ),
+			'append_note'  => true,
+			'steps'        => [
+				[
+					'title' => __( 'We check availability', 'ibv' ),
+					'text'  => __( 'Someone in the Ibiza office looks at your dates and comes straight back to you.', 'ibv' ),
+				],
+				[
+					'title' => __( 'You get a price in writing', 'ibv' ),
+					'text'  => __( 'The full cost, exactly what it covers, and the booking terms. Nothing gets added later.', 'ibv' ),
+				],
+			],
+		],
+		'concierge'     => [
+			'heading'      => __( "We've got your request", 'ibv' ),
+			'subheading'   => __( "A copy is on its way to your inbox. We'll come back with options and prices for what you've asked for.", 'ibv' ),
+			'contact'      => __( 'Need to change something?', 'ibv' ),
+			'append_note'  => false,
+			'steps'        => [
+				[
+					'title' => __( 'We go to the right people', 'ibv' ),
+					'text'  => __( "We'll ask the suppliers we've used for years, not whoever comes up first.", 'ibv' ),
+				],
+				[
+					'title' => __( 'You get options and prices', 'ibv' ),
+					'text'  => __( 'Nothing is booked until you choose.', 'ibv' ),
+				],
+			],
+		],
+		'general'       => [
+			'heading'      => __( "Thanks — that's with us", 'ibv' ),
+			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally', 'ibv' ),
+			'contact'      => __( 'Need to change something?', 'ibv' ),
+			'append_note'  => true,
+			'steps'        => [],
+		],
+	];
+}
+
+/**
+ * Resolve the variant row for a type. ACF wins; defaults fill gaps.
+ *
+ * @param string $type Variant key.
+ * @return array{heading:string,subheading:string,contact:string,append_note:bool,steps:array}
+ */
+function ibv_booking_confirmation_variant( $type ) {
+	$defaults = ibv_booking_confirmation_variant_defaults();
+	$fallback = $defaults['general'];
+	$base     = isset( $defaults[ $type ] ) ? $defaults[ $type ] : $fallback;
+
+	$rows = get_field( 'confirmation_variants' );
+	if ( ! is_array( $rows ) ) {
+		return $base;
+	}
+
+	foreach ( $rows as $row ) {
+		$key = isset( $row['variant_key'] ) ? sanitize_key( (string) $row['variant_key'] ) : '';
+		if ( $key !== $type ) {
+			continue;
+		}
+
+		$steps = [];
+		if ( ! empty( $row['variant_steps'] ) && is_array( $row['variant_steps'] ) ) {
+			foreach ( $row['variant_steps'] as $step ) {
+				$title = isset( $step['step_title'] ) ? trim( (string) $step['step_title'] ) : '';
+				$text  = isset( $step['step_body'] ) ? trim( (string) $step['step_body'] ) : '';
+				if ( '' === $title && '' === $text ) {
+					continue;
+				}
+				$steps[] = [
+					'title' => $title,
+					'text'  => $text,
+				];
+			}
+		}
+
+		$heading    = isset( $row['variant_heading'] ) ? trim( (string) $row['variant_heading'] ) : '';
+		$subheading = isset( $row['variant_subheading'] ) ? trim( (string) $row['variant_subheading'] ) : '';
+		$contact    = isset( $row['variant_contact_intro'] ) ? trim( (string) $row['variant_contact_intro'] ) : '';
+
+		return [
+			'heading'     => $heading ? $heading : $base['heading'],
+			'subheading'  => $subheading ? $subheading : $base['subheading'],
+			'contact'     => $contact ? $contact : $base['contact'],
+			'append_note' => $base['append_note'],
+			'steps'       => $steps,
+		];
+	}
+
+	return $base;
+}
+
+/**
+ * Join the editorial lead to the Site Options timing note with an em dash
+ * so the promise is one sentence, not two stapled claims.
+ *
+ * @param string $lead        Variant subheading (no timing phrase).
+ * @param bool   $append_note Whether this variant uses the global note.
+ * @return string
+ */
+function ibv_booking_confirmation_compose_subheading( $lead, $append_note ) {
+	$lead = trim( (string) $lead );
+	if ( ! $append_note ) {
+		return $lead;
+	}
+
+	$note = trim( ibv_get_response_time_note() );
+	if ( '' === $note ) {
+		return $lead ? rtrim( $lead, " \t." ) . '.' : '';
+	}
+	if ( '' === $lead ) {
+		return rtrim( $note, " \t." ) . '.';
+	}
+
+	return rtrim( $lead, " \t." ) . ' — ' . lcfirst( rtrim( $note, " \t." ) ) . '.';
 }
 
 /**
@@ -59,7 +229,6 @@ function ibv_render_booking_details_panel() {
 
 	$dates_label = '';
 	if ( $arrival && $departure ) {
-		// Reuse the villa-offers component's range formatter (Ymd input).
 		$dates_label = ibv_core_villa_offers_format_range(
 			str_replace( '-', '', $arrival ),
 			str_replace( '-', '', $departure )
@@ -114,22 +283,52 @@ function ibv_render_booking_details_panel() {
 }
 
 /**
- * Quiet contact line under the three cards.
+ * Build a tel: link from a Site Options phone value.
  *
- * Intro is editorial (ACF). Phone and WhatsApp come from Site Options
- * so they stay in lockstep with the footer and Contact page.
+ * @param string $phone Display number.
+ * @param string $label Visible suffix, e.g. "UK".
+ * @return string Escaped HTML or empty.
  */
-function ibv_render_booking_confirmation_contact_strip() {
-	$intro = trim( (string) get_field( 'confirmation_contact_intro' ) );
-	if ( '' === $intro ) {
-		$intro = __( 'Need to change something, or add a night?', 'ibv' );
+function ibv_booking_confirmation_phone_link( $phone, $label ) {
+	$phone = trim( (string) $phone );
+	$tel   = $phone ? preg_replace( '/[^\d+]/', '', $phone ) : '';
+	if ( ! $tel || ! $phone ) {
+		return '';
 	}
 
-	$phone    = trim( (string) get_field( 'phone_ibiza', 'option' ) );
-	$whatsapp = trim( (string) get_field( 'whatsapp_number', 'option' ) );
-	$wa_digits = $whatsapp ? preg_replace( '/[^0-9]/', '', $whatsapp ) : '';
-	$wa_url    = $wa_digits ? 'https://wa.me/' . $wa_digits : '';
-	$tel       = $phone ? preg_replace( '/[^\d+]/', '', $phone ) : '';
+	$visible = $label
+		? sprintf(
+			/* translators: 1: phone number, 2: region label */
+			__( '%1$s (%2$s)', 'ibv' ),
+			$phone,
+			$label
+		)
+		: $phone;
+
+	return sprintf(
+		'<a href="%s" aria-label="%s">%s</a>',
+		esc_url( 'tel:' . $tel ),
+		esc_attr( sprintf( /* translators: %s: international phone number */ __( 'Call %s', 'ibv' ), $phone ) ),
+		esc_html( $visible )
+	);
+}
+
+/**
+ * Quiet contact line. Intro is per-variant; numbers come from Site Options.
+ *
+ * @param string $intro Opening sentence.
+ */
+function ibv_render_booking_confirmation_contact_strip( $intro ) {
+	$intro = trim( (string) $intro );
+	if ( '' === $intro ) {
+		$intro = __( 'Need to change something?', 'ibv' );
+	}
+
+	$phone_uk    = trim( (string) get_field( 'phone_uk', 'option' ) );
+	$phone_ibiza = trim( (string) get_field( 'phone_ibiza', 'option' ) );
+	$whatsapp    = trim( (string) get_field( 'whatsapp_number', 'option' ) );
+	$wa_digits   = $whatsapp ? preg_replace( '/[^0-9]/', '', $whatsapp ) : '';
+	$wa_url      = $wa_digits ? 'https://wa.me/' . $wa_digits : '';
 
 	$whatsapp_link = '';
 	if ( $wa_url ) {
@@ -141,22 +340,33 @@ function ibv_render_booking_confirmation_contact_strip() {
 		);
 	}
 
-	$phone_link = '';
-	if ( $tel && $phone ) {
-		$phone_link = sprintf(
-			'<a href="%s" aria-label="%s">%s</a>',
-			esc_url( 'tel:' . $tel ),
-			esc_attr( sprintf( /* translators: %s: international phone number */ __( 'Call %s', 'ibv' ), $phone ) ),
-			esc_html( $phone )
+	$uk_link    = ibv_booking_confirmation_phone_link( $phone_uk, __( 'UK', 'ibv' ) );
+	$ibiza_link = ibv_booking_confirmation_phone_link( $phone_ibiza, __( 'Ibiza', 'ibv' ) );
+
+	$phones = array_values( array_filter( [ $uk_link, $ibiza_link ] ) );
+	if ( 2 === count( $phones ) ) {
+		$phone_clause = sprintf(
+			/* translators: 1: UK tel link, 2: Ibiza tel link */
+			__( 'call %1$s or %2$s', 'ibv' ),
+			$phones[0],
+			$phones[1]
 		);
+	} elseif ( 1 === count( $phones ) ) {
+		$phone_clause = sprintf(
+			/* translators: %s: tel link */
+			__( 'call %s', 'ibv' ),
+			$phones[0]
+		);
+	} else {
+		$phone_clause = '';
 	}
 
-	if ( $whatsapp_link && $phone_link ) {
+	if ( $whatsapp_link && $phone_clause ) {
 		$clause = sprintf(
-			/* translators: 1: WhatsApp link, 2: tel: link */
-			__( 'Reply to that email, message us on %1$s, or call %2$s.', 'ibv' ),
+			/* translators: 1: WhatsApp link, 2: phone clause */
+			__( 'Reply to that email, message us on %1$s, or %2$s.', 'ibv' ),
 			$whatsapp_link,
-			$phone_link
+			$phone_clause
 		);
 	} elseif ( $whatsapp_link ) {
 		$clause = sprintf(
@@ -164,11 +374,11 @@ function ibv_render_booking_confirmation_contact_strip() {
 			__( 'Reply to that email, or message us on %s.', 'ibv' ),
 			$whatsapp_link
 		);
-	} elseif ( $phone_link ) {
+	} elseif ( $phone_clause ) {
 		$clause = sprintf(
-			/* translators: %s: tel: link */
-			__( 'Reply to that email, or call %s.', 'ibv' ),
-			$phone_link
+			/* translators: %s: phone clause */
+			__( 'Reply to that email, or %s.', 'ibv' ),
+			$phone_clause
 		);
 	} else {
 		$clause = __( 'Reply to that email.', 'ibv' );
@@ -190,21 +400,12 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	$confirmation_heading    = (string) get_field( 'confirmation_heading' );
-	$confirmation_subheading = trim( (string) get_field( 'confirmation_subheading' ) );
-	$response_time_note      = trim( ibv_get_response_time_note() );
-
-	if ( ! $confirmation_heading ) {
-		$confirmation_heading = __( "We've got your request", 'ibv' );
-	}
-
-	$subtitle_parts = array_filter(
-		[ $confirmation_subheading, $response_time_note ],
-		static function ( $part ) {
-			return '' !== $part;
-		}
+	$type    = ibv_booking_confirmation_type();
+	$variant = ibv_booking_confirmation_variant( $type );
+	$subtitle = ibv_booking_confirmation_compose_subheading(
+		$variant['subheading'],
+		$variant['append_note']
 	);
-	$confirmation_subtitle = implode( ' ', $subtitle_parts );
 	?>
 
 	<section class="ibv-booking-confirmation__panel ibv-section ibv-section--surface-bg">
@@ -213,11 +414,11 @@ while ( have_posts() ) :
 				<?php echo ibv_core_icon( 'check', [ 'size' => 32 ] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- vendored SVG. ?>
 			</span>
 			<h1 class="ibv-booking-confirmation__title ibv-font-display">
-				<?php echo esc_html( $confirmation_heading ); ?>
+				<?php echo esc_html( $variant['heading'] ); ?>
 			</h1>
-			<?php if ( $confirmation_subtitle ) : ?>
+			<?php if ( $subtitle ) : ?>
 				<p class="ibv-booking-confirmation__subtitle">
-					<?php echo esc_html( $confirmation_subtitle ); ?>
+					<?php echo esc_html( $subtitle ); ?>
 				</p>
 			<?php endif; ?>
 		</div>
@@ -226,33 +427,36 @@ while ( have_posts() ) :
 	<?php
 	ibv_render_booking_details_panel();
 
-	ibv_core_section_three_step(
-		[
-			// No eyebrow / title on this page — the confirmation H1 above
-			// already establishes the section's purpose. Empty string opts
-			// out of the global fallback that null would trigger.
-			'eyebrow' => '',
-			'title'   => '',
-			'steps'   => get_field( 'three_step_steps' ),
-			'surface' => 'bg',
-		]
-	);
-
-	ibv_render_booking_confirmation_contact_strip();
-
-	$concierge_image = get_field( 'concierge_image' );
-	if ( $concierge_image ) {
-		ibv_core_image_text_section(
+	if ( ! empty( $variant['steps'] ) ) {
+		ibv_core_section_three_step(
 			[
-				'title'       => (string) get_field( 'concierge_title' ),
-				'description' => (string) get_field( 'concierge_body' ),
-				'cta_label'   => (string) get_field( 'concierge_cta_label' ),
-				'cta_url'     => (string) get_field( 'concierge_cta_url' ),
-				'image'       => $concierge_image,
-				'image_side'  => 'right',
-				'surface'     => 'white',
+				'eyebrow' => '',
+				'title'   => '',
+				'steps'   => $variant['steps'],
+				'surface' => 'bg',
 			]
 		);
+	}
+
+	ibv_render_booking_confirmation_contact_strip( $variant['contact'] );
+
+	// Held default copy — leave in place, but do not pitch concierge
+	// back at someone who has just enquired about concierge.
+	if ( 'concierge' !== $type ) {
+		$concierge_image = get_field( 'concierge_image' );
+		if ( $concierge_image ) {
+			ibv_core_image_text_section(
+				[
+					'title'       => (string) get_field( 'concierge_title' ),
+					'description' => (string) get_field( 'concierge_body' ),
+					'cta_label'   => (string) get_field( 'concierge_cta_label' ),
+					'cta_url'     => (string) get_field( 'concierge_cta_url' ),
+					'image'       => $concierge_image,
+					'image_side'  => 'right',
+					'surface'     => 'white',
+				]
+			);
+		}
 	}
 
 endwhile;
