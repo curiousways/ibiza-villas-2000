@@ -28,9 +28,13 @@ ibv_core_section_hero(
 		'title'    => $error404_title ? $error404_title : __( 'It appears this page has gone off-season', 'ibv' ),
 		'subtitle' => $error404_subtitle ? $error404_subtitle : __( 'We\'re afraid something has gone wrong with this link.', 'ibv' ),
 		'cta'      => [
-			'url'     => home_url( '/' ),
-			'label'   => __( 'Go back', 'ibv' ),
+			'url'     => ibv_get_search_villas_url(),
+			'label'   => __( 'Browse the villas', 'ibv' ),
 			'variant' => 'primary',
+		],
+		'cta_aside' => [
+			'label' => __( 'Get in touch', 'ibv' ),
+			'url'   => ibv_get_contact_page_url(),
 		],
 	]
 );

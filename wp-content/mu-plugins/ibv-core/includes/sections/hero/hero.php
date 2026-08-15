@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *     @type string|null   $title      Optional. Overrides the `hero_title` ACF lookup.
  *     @type string|null   $subtitle   Optional. Overrides the `hero_subtitle` ACF lookup.
  *     @type array|null    $cta        Optional. Args array passed to ibv_core_button(); rendered inside the copy block, after the subtitle.
+ *     @type array|null    $cta_aside  Optional. Args array passed to ibv_core_button(); second button rendered beside the main CTA (defaults: primary-inverse, no arrow — the solid-white companion to a solid primary).
  * }
  */
 function ibv_core_section_hero( $args = [] ) {
@@ -33,6 +34,7 @@ function ibv_core_section_hero( $args = [] ) {
 		'title'      => null,
 		'subtitle'   => null,
 		'cta'        => null,
+		'cta_aside'  => null,
 	];
 	$args = wp_parse_args( $args, $defaults );
 
@@ -74,7 +76,25 @@ function ibv_core_section_hero( $args = [] ) {
 					<p class="ibv-section-hero__subtitle"><?php echo esc_html( $subtitle ); ?></p>
 				<?php endif; ?>
 				<?php if ( ! empty( $args['cta'] ) && is_array( $args['cta'] ) ) : ?>
-					<?php ibv_core_button( $args['cta'] ); ?>
+					<?php $has_aside = ! empty( $args['cta_aside']['label'] ) && ! empty( $args['cta_aside']['url'] ); ?>
+					<?php if ( $has_aside ) : ?>
+						<p class="ibv-section-hero__cta-row">
+							<?php
+							ibv_core_button( $args['cta'] );
+							ibv_core_button(
+								wp_parse_args(
+									$args['cta_aside'],
+									[
+										'variant' => 'primary-inverse',
+										'arrow'   => false,
+									]
+								)
+							);
+							?>
+						</p>
+					<?php else : ?>
+						<?php ibv_core_button( $args['cta'] ); ?>
+					<?php endif; ?>
 				<?php endif; ?>
 			</div>
 			<?php if ( is_callable( $args['after_copy'] ) ) : ?>

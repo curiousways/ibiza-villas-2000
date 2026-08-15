@@ -62,6 +62,16 @@
 	max-width: 38rem;
 }
 
+/* CTA button + quiet aside link ("[ Browse the villas ] · or get in touch"). */
+.ibv-section-hero__cta-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-sm);
+	margin: 0;
+}
+
 .ibv-section-hero__after-copy {
 	width: 100%;
 	max-width: 44rem;
