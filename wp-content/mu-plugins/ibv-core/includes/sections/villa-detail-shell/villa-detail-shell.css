@@ -13,6 +13,14 @@
 		grid-template-columns: minmax(0, 1fr) min(20.625rem, 34%);
 		align-items: start;
 	}
+
+	/* The sidebar must span the full row height: the sticky enquiry panel's
+	   containing block is this aside, so without the stretch (overridden by
+	   the grid's align-items: start) the aside collapses to the panel's own
+	   height and the panel has no room to travel. */
+	.ibv-villa-detail__sidebar {
+		align-self: stretch;
+	}
 }
 
 .ibv-villa-detail__main {
