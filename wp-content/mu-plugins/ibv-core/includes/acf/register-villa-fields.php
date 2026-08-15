@@ -28,7 +28,7 @@ function ibv_register_villa_acf_fields() {
 
 	acf_add_local_field_group( array(
 		'key'                   => 'group_ibv_villa',
-		'title'                 => __( 'Villa', 'ibv' ),
+		'title'                 => __( 'Villa details', 'ibv' ),
 		'fields'                => array(
 
 			// ─── Tab: Identity ──────────────────────────────────────────
@@ -51,7 +51,7 @@ function ibv_register_villa_acf_fields() {
 				'name'                 => 'property_id',
 				'aria-label'           => '',
 				'type'                 => 'text',
-				'instructions'         => 'Do not modify this area unless you know what you are doing - this matches up with the availability system.',
+				'instructions'         => 'The villa\'s ID in Steve\'s availability/booking system — live pricing, availability and the booking form all key off it. Must match the ID Steve holds for this villa exactly; only change it if the villa\'s ID in Steve\'s system has changed.',
 				'required'             => 0,
 				'conditional_logic'    => 0,
 				'wrapper'              => array(
@@ -94,33 +94,11 @@ function ibv_register_villa_acf_fields() {
 				'append'               => '',
 				'maxlength'            => '',
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => 0,
-				'allow_quickedit'      => 0,
-				'show_column'          => 0,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => 0,
-				'key'                  => 'field_58c80b31fb5ea',
-				'label'                => 'additional_title_keyword for H1',
-				'name'                 => 'additional_title_keyword',
-				'aria-label'           => '',
-				'type'                 => 'text',
-				'instructions'         => 'this text is appended after villa pretty name title in the villa page.',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => '',
-				'placeholder'          => '',
-				'prepend'              => '',
-				'append'               => '',
-				'maxlength'            => '',
-			),
+			// additional_title_keyword is retired: only the legacy theme's H1
+			// ever appended it; the ibv theme builds the H1 from
+			// villa_pretty_name alone. Postmeta deleted (values were legacy
+			// SEO strings on draft/for-sale posts; backup in
+			// docs/briefs/done/admin-tidy-backups/).
 			array(
 				'key'          => 'field_ibv_villa_summary',
 				'label'        => __( 'Summary', 'ibv' ),
@@ -229,33 +207,10 @@ function ibv_register_villa_acf_fields() {
 				'readonly'             => 0,
 				'disabled'             => 0,
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_558012ac8b4ef',
-				'label'                => 'Property Featured',
-				'name'                 => 'property_featured',
-				'aria-label'           => '',
-				'type'                 => 'true_false',
-				'instructions'         => 'Is this a featured property?',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'message'              => '',
-				'default_value'        => 0,
-				'ui'                   => 0,
-				'ui_on_text'           => '',
-				'ui_off_text'          => '',
-			),
+			// property_featured is retired: only the legacy theme's featured-
+			// properties widget/template ever queried it; nothing on the ibv
+			// site does. Postmeta deleted (flag backup in
+			// docs/briefs/done/admin-tidy-backups/).
 			array(
 				'key'          => 'field_ibv_villa_rating_score',
 				'label'        => __( 'Rating score', 'ibv' ),
@@ -280,33 +235,9 @@ function ibv_register_villa_acf_fields() {
 				'name'  => 'villa_review_source_url',
 				'type'  => 'url',
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_5d2c7c2a4337d',
-				'label'                => 'Notice UK',
-				'name'                 => 'notice_uk',
-				'aria-label'           => '',
-				'type'                 => 'text',
-				'instructions'         => '',
-				'required'             => 1,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => 'If you are a large group of 12 or more people please email us at bookings@ibizavillas2000.com',
-				'placeholder'          => '',
-				'prepend'              => '',
-				'append'               => '',
-				'maxlength'            => '',
-			),
+			// notice_uk is retired: a required field ("groups of 12 or more…"
+			// default) nothing on either theme ever rendered. Postmeta
+			// deleted (backup in docs/briefs/done/admin-tidy-backups/).
 
 			// ─── Tab: Content ───────────────────────────────────────────
 			array(
@@ -315,21 +246,16 @@ function ibv_register_villa_acf_fields() {
 				'type'      => 'tab',
 				'placement' => 'left',
 			),
-			// Slot the native post editor (the_content) renders into.
-			// includes/admin/villa-editor-slot.php moves #postdivrich in
-			// here before TinyMCE initialises, so the description is
-			// edited under this tab instead of dangling below the box.
+			// Wayfinding only: the description is the native post editor,
+			// which sits below this box. It stays post_content (not an ACF
+			// WYSIWYG) deliberately — Yoast analysis, native search,
+			// revisions and the_content rendering all read it, and TinyMCE
+			// misbehaves when initialised inside a hidden ACF tab panel.
 			array(
-				'key'     => 'field_ibv_villa_editor_slot',
+				'key'     => 'field_ibv_villa_editor_note',
 				'label'   => __( 'Description', 'ibv' ),
 				'type'    => 'message',
-				'message' => '',
-				'instructions' => __( 'The full villa description, shown under "Villa Overview" behind the Read more toggle. The always-visible one-paragraph summary lives on the Identity tab (Villa summary).', 'ibv' ),
-				'wrapper' => array(
-					'width' => '',
-					'class' => '',
-					'id'    => 'ibv-villa-editor-slot',
-				),
+				'message' => __( 'The full villa description is edited in the main editor directly below this box. It shows under "Villa Overview" behind the Read more toggle; the always-visible one-paragraph summary is the Summary field on the Identity tab.', 'ibv' ),
 			),
 
 			// ─── Tab: Property facts ────────────────────────────────────
@@ -517,68 +443,11 @@ function ibv_register_villa_acf_fields() {
 				'type'      => 'tab',
 				'placement' => 'left',
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_56586f094a324',
-				'label'                => 'Property Price From (Euros)',
-				'name'                 => 'property_price_from_euros',
-				'aria-label'           => '',
-				'type'                 => 'number',
-				'instructions'         => '',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => '',
-				'placeholder'          => '',
-				'prepend'              => '',
-				'append'               => '',
-				'min'                  => '',
-				'max'                  => '',
-				'step'                 => '',
-				'readonly'             => 0,
-				'disabled'             => 0,
-			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_56586f1a4a325',
-				'label'                => 'Property Price To (Euros)',
-				'name'                 => 'property_price_to_euros',
-				'aria-label'           => '',
-				'type'                 => 'number',
-				'instructions'         => '',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => '',
-				'placeholder'          => '',
-				'prepend'              => '',
-				'append'               => '',
-				'min'                  => '',
-				'max'                  => '',
-				'step'                 => '',
-				'readonly'             => 0,
-				'disabled'             => 0,
-			),
+			// property_price_from_euros / property_price_to_euros are
+			// retired: only the legacy theme's from/to price templates
+			// ever rendered them. The new site uses villa_indicative_from_price
+			// as the static fallback before live API prices. Postmeta
+			// deleted (backup in docs/briefs/done/admin-tidy-backups/).
 			array(
 				'key'          => 'field_ibv_villa_indicative_from_price',
 				'label'        => __( 'Indicative from price (EUR / wk)', 'ibv' ),
@@ -664,60 +533,11 @@ function ibv_register_villa_acf_fields() {
 					),
 				),
 			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_565864063b06c',
-				'label'                => 'Property Special Offers Text',
-				'name'                 => 'property_special_offers_text',
-				'aria-label'           => '',
-				'type'                 => 'wysiwyg',
-				'instructions'         => 'Legacy free-text offer copy used by the Special Offers page carousel. Use the structured "Special Offers" repeater above for new offers; this section will be retired once the SO page is migrated.',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'default_value'        => '',
-				'tabs'                 => 'all',
-				'toolbar'              => 'basic',
-				'media_upload'         => 0,
-				'delay'                => 0,
-			),
-			array(
-				'allow_backendsearch'  => false,
-				'show_column_filter'   => false,
-				'allow_bulkedit'       => false,
-				'allow_quickedit'      => false,
-				'show_column'          => false,
-				'show_column_weight'   => 1000,
-				'show_column_sortable' => false,
-				'key'                  => 'field_565867238ea4b',
-				'label'                => 'Property Special Offer',
-				'name'                 => 'property_special_offer_display',
-				'aria-label'           => '',
-				'type'                 => 'true_false',
-				'instructions'         => 'Would you like to show this properties special offer around the site in the special offer carousel? If you don\'t tick this box the offer will be shown on this page only!',
-				'required'             => 0,
-				'conditional_logic'    => 0,
-				'wrapper'              => array(
-					'width' => '',
-					'class' => '',
-					'id'    => '',
-				),
-				'message'              => '',
-				'default_value'        => 0,
-				'ui'                   => 0,
-				'ui_on_text'           => '',
-				'ui_off_text'          => '',
-			),
+			// property_special_offers_text / property_special_offer_display
+			// are retired: only the legacy Special Offers carousel used
+			// them. The new site reads the structured villa_offers
+			// repeater above. Postmeta deleted (backup in
+			// docs/briefs/done/admin-tidy-backups/).
 
 			// ─── Tab: Related ───────────────────────────────────────────
 			array(

@@ -84,7 +84,8 @@
 }
 
 .ibv-villa-offers--static .ibv-villa-offers__item {
-	padding-block: 0;
+	padding-block-start: var(--ibv-space-md);
+	padding-block-end: 0;
 }
 
 .ibv-villa-offers__item {

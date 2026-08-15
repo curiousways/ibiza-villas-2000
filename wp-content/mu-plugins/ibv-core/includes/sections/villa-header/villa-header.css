@@ -89,6 +89,18 @@
 	color: var(--ibv-color-text);
 }
 
+/* Linked variant (review source URL set): quiet underline for affordance,
+   same colour so the rating row stays calm. */
+.ibv-villa-header__rating-text--link {
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+.ibv-villa-header__rating-text--link:hover,
+.ibv-villa-header__rating-text--link:focus-visible {
+	text-decoration: none;
+}
+
 /* Tags --------------------------------------------------------------- */
 .ibv-villa-header__tags {
 	display: flex;

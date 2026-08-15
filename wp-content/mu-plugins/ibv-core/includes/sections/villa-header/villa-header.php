@@ -36,6 +36,7 @@ function ibv_core_section_villa_header( $villa_id ) {
 
 	$rating = get_field( 'villa_rating_score', $villa_id );
 	$rv_ct  = get_field( 'villa_review_count', $villa_id );
+	$rv_url = trim( (string) get_field( 'villa_review_source_url', $villa_id ) );
 	$loc    = ibv_villa_location_label( $villa_id );
 
 	$distance = '';
@@ -85,22 +86,32 @@ function ibv_core_section_villa_header( $villa_id ) {
 						</span>
 					<?php endif; ?>
 
-					<span class="ibv-villa-header__rating-text">
-						<?php
-						$parts = [];
-						if ( $rating ) {
-							$parts[] = number_format_i18n( (float) $rating, 1 );
-						}
-						if ( $rv_ct ) {
-							$parts[] = sprintf(
-								/* translators: %d: review count */
-								_n( '(%d review)', '(%d reviews)', (int) $rv_ct, 'ibv' ),
-								(int) $rv_ct
-							);
-						}
-						echo esc_html( implode( ' ', $parts ) );
+					<?php
+					$parts = [];
+					if ( $rating ) {
+						$parts[] = number_format_i18n( (float) $rating, 1 );
+					}
+					if ( $rv_ct ) {
+						$parts[] = sprintf(
+							/* translators: %d: review count */
+							_n( '(%d review)', '(%d reviews)', (int) $rv_ct, 'ibv' ),
+							(int) $rv_ct
+						);
+					}
+					$rating_text = implode( ' ', $parts );
+
+					// With a source URL the rating text links out to the
+					// reviews (new tab) — a verifiable rating is worth more
+					// than a claimed one. Without it, plain text as before.
+					if ( $rv_url ) :
 						?>
-					</span>
+						<a class="ibv-villa-header__rating-text ibv-villa-header__rating-text--link" href="<?php echo esc_url( $rv_url ); ?>" target="_blank" rel="noopener">
+							<?php echo esc_html( $rating_text ); ?>
+							<span class="ibv-u-visually-hidden"><?php esc_html_e( '(opens review source in a new tab)', 'ibv' ); ?></span>
+						</a>
+					<?php else : ?>
+						<span class="ibv-villa-header__rating-text"><?php echo esc_html( $rating_text ); ?></span>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>
