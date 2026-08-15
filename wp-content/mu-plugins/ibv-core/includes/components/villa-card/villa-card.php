@@ -25,11 +25,10 @@ function ibv_resolve_villa_id( $villa ) {
 /**
  * Plain-text card description for a villa.
  *
- * villa_summary is the editorial one-paragraph summary. It is shown in
- * full on the card and again under "Villa Overview" on the single — the
- * field contract is a short para, so the card must not ellipsis-clip it.
- * The long post_content fallback is still trimmed; that body is not
- * written for the card.
+ * villa_summary is the editorial one-paragraph summary on the villa
+ * page. The card now uses villa_preview_text; this helper remains for
+ * offer-panel and any other non-card consumer. The long post_content
+ * fallback is still trimmed.
  *
  * @param int $villa_id Post ID.
  * @return string
@@ -92,6 +91,10 @@ function ibv_core_villa_card( $args = [] ) {
 		'variant'           => 'default',
 		'cta_label'         => __( 'View Villa', 'ibv' ),
 		'cta_url'           => '',
+		// Listing + homepage featured show the short preview line.
+		// Similar-villas and Special Offers pass false — those cards
+		// are tighter, and offers already carry a headline + description.
+		'show_preview'      => true,
 		// Offer fields — populated by the Special Offers grid only.
 		// `offer_dates` is a pre-formatted string (date-range formatter
 		// lives with the villa-offers component to keep one source of
@@ -147,7 +150,9 @@ function ibv_core_villa_card( $args = [] ) {
 	$bedrooms  = get_field( 'property_bedrooms', $villa_id );
 	$baths     = get_field( 'property_bathrooms', $villa_id );
 	$sleeps    = get_field( 'property_sleeps', $villa_id );
-	$excerpt   = ibv_villa_excerpt_plain( $villa_id );
+	$preview   = $args['show_preview']
+		? trim( (string) get_field( 'villa_preview_text', $villa_id ) )
+		: '';
 	$location  = ibv_villa_location_label( $villa_id );
 
 	$thumb_id = get_post_thumbnail_id( $villa_id );
@@ -202,6 +207,10 @@ function ibv_core_villa_card( $args = [] ) {
 				<a href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a>
 			</h3>
 
+			<?php if ( $preview ) : ?>
+				<p class="ibv-villa-card__preview"><?php echo esc_html( $preview ); ?></p>
+			<?php endif; ?>
+
 			<?php if ( $bedrooms || $baths || $sleeps ) : ?>
 				<ul class="ibv-villa-card__facts">
 					<?php if ( '' !== $bedrooms && null !== $bedrooms ) : ?>
@@ -251,10 +260,6 @@ function ibv_core_villa_card( $args = [] ) {
 
 			<?php if ( 'default' === $variant ) : ?>
 				<hr class="ibv-villa-card__rule" aria-hidden="true" />
-			<?php endif; ?>
-
-			<?php if ( $excerpt ) : ?>
-				<p class="ibv-villa-card__excerpt"><?php echo esc_html( $excerpt ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( $show_offer_row ) : ?>

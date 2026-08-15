@@ -104,9 +104,18 @@ function ibv_register_villa_acf_fields() {
 				'label'        => __( 'Summary', 'ibv' ),
 				'name'         => 'villa_summary',
 				'type'         => 'textarea',
-				'instructions' => __( 'One-paragraph summary, plain text. Shown in full under "Villa Overview" on the villa page (above the collapsible description) and as the villa card description in listings.', 'ibv' ),
+				'instructions' => __( 'One-paragraph summary, plain text. Shown in full under "Villa Overview" on the villa page (above the collapsible description).', 'ibv' ),
 				'rows'         => 4,
 				'new_lines'    => '',
+			),
+			array(
+				'key'          => 'field_villa_preview_text',
+				'label'        => __( 'Villa preview text', 'ibv' ),
+				'name'         => 'villa_preview_text',
+				'type'         => 'text',
+				'instructions' => __( 'One short line shown on the villa card in search results and listings. Maximum 150 characters. Say what makes this villa different — not the area, bedroom count or price, which the card already shows.', 'ibv' ),
+				'maxlength'    => 150,
+				'required'     => 0,
 			),
 
 			// ─── Tab: Key facts ─────────────────────────────────────────

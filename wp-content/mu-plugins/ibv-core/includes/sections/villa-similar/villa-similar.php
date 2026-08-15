@@ -86,7 +86,12 @@ function ibv_core_section_villa_similar( $villa_id ) {
 				<?php
 				while ( $query->have_posts() ) :
 					$query->the_post();
-					ibv_core_villa_card( [ 'villa' => get_the_ID() ] );
+					ibv_core_villa_card(
+						[
+							'villa'        => get_the_ID(),
+							'show_preview' => false,
+						]
+					);
 				endwhile;
 				wp_reset_postdata();
 				?>

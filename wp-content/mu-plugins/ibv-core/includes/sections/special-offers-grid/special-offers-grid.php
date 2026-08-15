@@ -71,6 +71,7 @@ function ibv_core_section_special_offers_grid() {
 						[
 							'villa'             => $card['villa_id'],
 							'variant'           => 'default',
+							'show_preview'      => false,
 							'offer_dates'       => ibv_core_villa_offers_format_range(
 								(string) ( $offer['offer_date_from'] ?? '' ),
 								(string) ( $offer['offer_date_to'] ?? '' )
