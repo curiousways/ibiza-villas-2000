@@ -37,6 +37,7 @@ require_once IBV_CORE_PATH . 'includes/admin/admin-columns-villa.php';
 require_once IBV_CORE_PATH . 'includes/admin/editor-capabilities.php';
 require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
 require_once IBV_CORE_PATH . 'includes/admin/villa-editor-slot.php';
+require_once IBV_CORE_PATH . 'includes/admin/hide-template-editor.php';
 require_once IBV_CORE_PATH . 'includes/admin/yoast-metabox.php';
 
 // WP-CLI commands (no-op when WP-CLI is not running).
@@ -140,6 +141,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-page-legal.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-contact.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ibiza-guide.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-booking-confirmation.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-my-booking.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-accommodation.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-builder.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-post-fields.php';

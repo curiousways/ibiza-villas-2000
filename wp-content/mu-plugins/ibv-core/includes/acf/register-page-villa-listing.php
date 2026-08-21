@@ -74,6 +74,15 @@ function ibv_register_page_villa_listing_fields() {
 			'style'                 => 'default',
 			'label_placement'       => 'top',
 			'instruction_placement' => 'label',
+			// page-villa-listing.php never calls the_content(); the editor
+			// body is leftover and must not look live in admin.
+			'hide_on_screen'        => array(
+				'the_content',
+				'excerpt',
+				'discussion',
+				'comments',
+				'send-trackbacks',
+			),
 			'active'                => true,
 			'show_in_rest'          => false,
 		)
