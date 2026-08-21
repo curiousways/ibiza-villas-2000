@@ -34,6 +34,7 @@ require_once IBV_CORE_PATH . 'includes/editor.php';
 
 // 3b. Admin UX (list columns, comments off).
 require_once IBV_CORE_PATH . 'includes/admin/admin-columns-villa.php';
+require_once IBV_CORE_PATH . 'includes/admin/editor-capabilities.php';
 require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
 require_once IBV_CORE_PATH . 'includes/admin/villa-editor-slot.php';
 require_once IBV_CORE_PATH . 'includes/admin/yoast-metabox.php';

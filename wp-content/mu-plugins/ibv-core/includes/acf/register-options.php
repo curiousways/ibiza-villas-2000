@@ -8,6 +8,10 @@
  *
  * All sub-pages share the default 'options' post_id, so moving a field
  * group between pages never touches stored values.
+ *
+ * Capability is `edit_pages` so Editors can update featured offer and
+ * other global copy. Do not use `manage_options` (Administrators only)
+ * or `edit_theme_options` (that cap unlocks Appearance → Menus).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,12 +24,14 @@ function ibv_register_site_options_page() {
 		return;
 	}
 
+	$capability = 'edit_pages';
+
 	acf_add_options_page(
 		[
 			'page_title' => __( 'Site Options', 'ibv' ),
 			'menu_title' => __( 'Site Options', 'ibv' ),
 			'menu_slug'  => 'ibv-site-options',
-			'capability' => 'manage_options',
+			'capability' => $capability,
 			'redirect'   => true,
 			'icon_url'   => 'dashicons-admin-customizer',
 			'position'   => 80,
@@ -49,7 +55,7 @@ function ibv_register_site_options_page() {
 				'menu_title'  => $subpage[1],
 				'menu_slug'   => $subpage[2],
 				'parent_slug' => 'ibv-site-options',
-				'capability'  => 'manage_options',
+				'capability'  => $capability,
 			]
 		);
 	}
