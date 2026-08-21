@@ -1,6 +1,7 @@
 # Availability and pricing — our code vs Steve's API
 
 **Date:** 21 August 2026, ~13:30–14:10 UK (before the 15:00 staging CMS session).  
+**A1 re-run:** 21 August 2026, ~13:38 UK, after `property_id` was changed to `savinas`.  
 **Endpoint:** `https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl`  
 **No Gravity Forms were submitted. No code was changed.**
 
@@ -28,12 +29,12 @@ Twelve deliberate GETs, spaced ~3s. No sweeps.
 
 | ID | Symptom | Verdict | One-line reason |
 |---|---|---|---|
-| A1 | Savines shows unavailable when it is available | **DATA-ENTRY** | CMS `property_id` is `savines`. The API's villa key is `savinas`. `?villa=savines` returns `villas: []`; `?villa=savinas` returns the villa as available. |
+| A1 | Savines shows unavailable when it is available | **DATA-ENTRY — fixed** | CMS `property_id` is now `savinas`. Enquiry panel and listing card emit that key. `?villa=savinas` 20–22 Sep returns the villa; the old `savines` key still returns `[]`. The 7-night probe week is still empty — that week is genuinely unavailable. |
 | A2 | Nieves returns a £56k price | **UNREPRODUCIBLE** (see A9) | No captured Nieves row is in that range. The 56k-class figure is what our weekly renormalisation produces on a 1-night search if `eur_base_rental` is already a weekly rate. |
 | A3 | A price is returned for a 1-night stay against a 3-night minimum | **API-GAP** | No minimum-stay field exists in the payload. The API will return a priced, `available: 1` row for a 2-night search. |
 | A4 | Short-breaks search returns Nieves on a 2-night search | **API-GAP** (Nieves itself not in this window) | Same missing min-stay field. This 2-night window returned 9 villas including Savines (`savinas`), not Nieves. |
 | A5 | Out-of-season villa still priced as ADW + cleaning, no rental | **OURS** (API sends `available: 1`) | Winter Nieves: `available: 1`, `eur_base_rental: 0`, fees + total €368. `paint()` treats a non-null total as a real price. |
-| A6 | Special Offers shows out-of-season villas; click-through price is wrong | **OURS** | That page never calls the API. Cards are ACF offers. Click-through uses `villa=savines` (A1) and an empty indicative from-price. |
+| A6 | Special Offers shows out-of-season villas; click-through price is wrong | **OURS** | That page never calls the API. Cards are ACF offers. Click-through is a bare permalink; A1's wrong key is no longer the reason the villa page disagrees. |
 | A7 | Nieves shows two different prices | **BY-DESIGN** / not reproduced as a dated clash | Static "From" and live stay total are different numbers on purpose. We do **not** keep both dated prices — we overwrite. Nieves has no static from-price locally. |
 | C6 | Enquiry panel traps scroll | **OURS** | Sticky rail + `overflow-y: auto; overscroll-behavior: contain` on the form body. No API. |
 | A8 | Villa Tegui never hydrates / never matches a search | **DATA-ENTRY** | Listing card `data-bob-property-id=""`. Same family as A1. |
@@ -47,7 +48,7 @@ Twelve deliberate GETs, spaced ~3s. No sweeps.
 
 | Villa | WP ID (local) | `property_id` | Indicative from-price | Active ACF offers |
 |---|---|---|---|---|
-| Villa Savines | 6998 | `savines` | empty | 0 (featured offer is Site Options, not a villa offer) |
+| Villa Savines | 6998 | `savinas` (was `savines`; updated 21 Aug) | empty | 0 (featured offer is Site Options, not a villa offer) |
 | Villa Nieves | 2818 | `nieves` | empty | 0 |
 | Villa Tegui | (listing card) | **empty string** | — | — |
 
@@ -104,10 +105,35 @@ is not available 20–27 Sep. The 2-night slice is.
 matches `data-bob-property-id="savines"` to `row.villa` (`savinas`) and
 **hides the card** even when the API named Villa Savines as available.
 
-**Verdict: DATA-ENTRY.** The query we send is well-formed. The key we send
-is not the key Steve's system uses. Changing the ACF field to `savinas`
-(after Steve confirms) fixes enquiry and listing together. There is no
-alias layer in our JS.
+**Verdict: DATA-ENTRY — fixed locally 21 Aug ~13:38.** The query we send is
+well-formed. The key we sent was not the key Steve's system uses. The ACF
+field is now `savinas`. There is no alias layer in our JS.
+
+#### A1 re-run (after the field change)
+
+Local CMS `get_field('property_id', 6998)` → `savinas`. Villa page
+`data-bob-enquiry-panel` / `data-bob-property-id="savinas"`. Listing card
+the same. The page will now send the URL that previously only worked when
+we forged the spelling.
+
+`?villa=savinas&date_from=2026-09-20&date_to=2026-09-22&pax=2` — replay
+identical to the first pass:
+
+```json
+{"success":1,"count":1,"query":{"to":"2026-09-22","nights":2,"from":"2026-09-20","pax":"2"},"villas":[{"eur_extra_cleaning":310,"euro_rate":"1.17","gbp_adw_amount":50,"gbp_total_price":10689,"eur_total_price":12506,"gbp_base_rental":10374,"villa":"savinas","eur_adw_amount":58,"nice_name":"Villa Savines","eur_base_rental":12137,"gbp_extra_cleaning":265,"available":1}]}
+```
+
+`paint()` would now succeed (`available: 1`, `eur_total_price: 12506`) and
+the listing card would match `row.villa`. Control: `?villa=savines` for
+the same two nights is still `count: 0`.
+
+`?villa=savinas&date_from=2026-09-20&date_to=2026-09-27&pax=2` is still
+`villas: []`. That week is unavailable in Steve's system, not a key bug.
+A dated search for 20–27 Sep will still hide / notice-unavailable Savines,
+and that is now the correct answer.
+
+Not re-checked: staging HTML (still password-gated). If staging does not
+yet have `savinas`, the client environment will keep sending `savines`.
 
 ---
 
@@ -273,15 +299,16 @@ WordPress post ID, not `savines` / `savinas`). Valid 30 May 2026 – 31 Dec
 **Click-through.** `View Villa` → `/villas/villa-savines/` with **no**
 `date_from` / `date_to` / `pax`. Overview indicative from-price is empty.
 Enquiry panel will not fetch until the guest picks dates; when they do, it
-sends `villa=savines` (A1) and gets `villas: []` for any window I tried
-except the API spelling.
+now sends `villa=savinas`. The 7-night probe week is still `villas: []`
+(genuine unavailability). A 2-night pick would paint €12,506 (A1 re-run).
 
 Side by side for the listing probe week:
 
 | Surface | Request | Result |
 |---|---|---|
 | Special Offers | none | Editorial €1,111 |
-| Villa page (after dates) | `?villa=savines&date_from=2026-09-20&date_to=2026-09-27&pax=2` | empty → unavailable |
+| Villa page (after dates, first pass) | `?villa=savines&…` | empty → unavailable |
+| Villa page (after dates, re-run) | `?villa=savinas&date_from=2026-09-20&date_to=2026-09-27&pax=2` | still empty — week unavailable |
 | Listing search | `?date_from=2026-09-20&date_to=2026-09-27&pax=2` | only `martha` |
 
 **Verdict: OURS.** Offers are editorial; the page is not an availability
@@ -375,11 +402,10 @@ unit of `eur_base_rental` on non-7-night queries before we change it.
 
 Phrased so they can be answered without the rest of this doc.
 
-1. **Villa Savines — what is the villa key in your system?** Our CMS
-   sends `savines`. Your search payload returns `"villa":"savinas"` with
-   `"nice_name":"Villa Savines"`. `?villa=savines` is always an empty
-   list. `?villa=savinas` returns the villa. Which spelling should we
-   store?
+1. **Villa Savines — what is the villa key in your system?** *(Answered
+   by the payload; CMS now stores `savinas`.)* Your search payload returns
+   `"villa":"savinas"` with `"nice_name":"Villa Savines"`. Confirm that
+   spelling is stable so we do not flip it back.
 
 2. **Is there a minimum-stay value we should be reading?** Every villa
    object we saw has only: `available`, `villa`, `nice_name`,
@@ -413,7 +439,7 @@ Not fixes — where a later brief would start.
 
 | ID | Start here |
 |---|---|
-| A1 / A8 | CMS Identity tab `property_id` on Savines (6998) and Tegui. No code required if Steve confirms the keys. Optional later: an alias map in `enquiry-panel.js` / `parseResults` if keys will keep drifting. |
+| A1 / A8 | Savines (6998) is now `savinas` locally — propagate to staging if not already. Tegui still empty. Optional later: an alias map in `enquiry-panel.js` / `parseResults` if keys will keep drifting. |
 | A5 | `enquiry-panel.js` `paint()` lines 510–530 — `rent === 0` still paints. Listing `applyResults` ~325–369 still includes a 0-rate villa in `availablePids`. |
 | A6 | `page-special-offers.php` + `special-offers-grid.php` — no API by design. Click-through is a bare permalink (`villa-card.php:186`). Offer panel hook uses the WP post ID (`offer-panel.php:188`). |
 | A7 | `showDatedOverviewPrice` in `enquiry-panel.js:360` (overwrites static From). `applyResults` in `villa-listing-grid.js:343` (same overwrite on cards). |
