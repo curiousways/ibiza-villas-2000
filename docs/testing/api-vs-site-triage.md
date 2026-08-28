@@ -2,8 +2,10 @@
 
 **Date:** 21 August 2026, ~13:30–14:10 UK (before the 15:00 staging CMS session).  
 **A1 re-run:** 21 August 2026, ~13:38 UK, after `property_id` was changed to `savinas`.  
+**A5 / A7 update:** 28 August 2026. Steve's November dates replayed; zero-rate
+gate shipped in `docs/briefs/active/04-zero-rate-unavailable.md`.  
 **Endpoint:** `https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl`  
-**No Gravity Forms were submitted. No code was changed.**
+**No Gravity Forms were submitted.**
 
 ## How this was tested
 
@@ -33,9 +35,9 @@ Twelve deliberate GETs, spaced ~3s. No sweeps.
 | A2 | Nieves returns a £56k price | **UNREPRODUCIBLE** (see A9) | No captured Nieves row is in that range. The 56k-class figure is what our weekly renormalisation produces on a 1-night search if `eur_base_rental` is already a weekly rate. |
 | A3 | A price is returned for a 1-night stay against a 3-night minimum | **API-GAP** | No minimum-stay field exists in the payload. The API will return a priced, `available: 1` row for a 2-night search. |
 | A4 | Short-breaks search returns Nieves on a 2-night search | **API-GAP** (Nieves itself not in this window) | Same missing min-stay field. This 2-night window returned 9 villas including Savines (`savinas`), not Nieves. |
-| A5 | Out-of-season villa still priced as ADW + cleaning, no rental | **OURS** (API sends `available: 1`) | Winter Nieves: `available: 1`, `eur_base_rental: 0`, fees + total €368. `paint()` treats a non-null total as a real price. |
+| A5 | Out-of-season villa still priced as ADW + cleaning, no rental | **OURS — fixed** (`04-zero-rate-unavailable`) | Winter Nieves 13–20 Nov: `available: 1`, `eur_base_rental: 0`, fees + total €368. `paint()` now returns false when `rent <= 0`; listing `parseResults` drops the row so the card is not in `availablePids`. |
 | A6 | Special Offers shows out-of-season villas; click-through price is wrong | **OURS** | That page never calls the API. Cards are ACF offers. Click-through is a bare permalink; A1's wrong key is no longer the reason the villa page disagrees. |
-| A7 | Nieves shows two different prices | **BY-DESIGN** / not reproduced as a dated clash | Static "From" and live stay total are different numbers on purpose. We do **not** keep both dated prices — we overwrite. Nieves has no static from-price locally. |
+| A7 | Nieves shows two different prices | **PARTLY OURS** (see 28 Aug note) | Dated weekly vs stay total is still two presentations of one payload. The 21 Aug "by design" call missed the real clash: a villa *with* an indicative from-price (Pep Luis €4,321) plus a fee-only winter paint (€368). That path is A5 and is now gated. |
 | C6 | Enquiry panel traps scroll | **OURS** | Sticky rail + `overflow-y: auto; overscroll-behavior: contain` on the form body. No API. |
 | A8 | Villa Tegui never hydrates / never matches a search | **DATA-ENTRY** | Listing card `data-bob-property-id=""`. Same family as A1. |
 | A9 | Short-stay search paints enormous "/ wk" prices | **OURS** (needs Steve to confirm the unit) | For a 2-night Savines hit, `eur_base_rental` is €12,137. We do `(rate * 7) / nights` → **€42,480 / wk**. A 1-night search of an ~€8k weekly rate would display **€56,000 / wk**. |
@@ -243,9 +245,18 @@ https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl?villa=nieves&date_
 {"success":1,"count":1,"query":{"to":"2027-01-23","nights":7,"from":"2027-01-16","pax":"2"},"villas":[{"eur_extra_cleaning":310,"euro_rate":"1.17","gbp_adw_amount":50,"gbp_total_price":315,"eur_total_price":368,"gbp_base_rental":0,"villa":"nieves","eur_adw_amount":58,"nice_name":"Villa Nieves","eur_base_rental":0,"gbp_extra_cleaning":265,"available":1}]}
 ```
 
-**Does this trigger our unavailable path?** No.
+**Does this trigger our unavailable path?** Yes, as of 28 August
+(`04-zero-rate-unavailable`).
 
-`paint()` (enquiry-panel.js:506–530):
+`paint()` now returns false when `total === null || rent === null || rent <= 0`,
+before any `setText()`. The caller shows the existing unavailable notice,
+hides the price block, and reveals contact fields. Listing `parseResults`
+drops the row, so it never reaches `availablePids`.
+
+The 21 August write-up below is the pre-fix behaviour, kept so the
+recommendation is not lost.
+
+`paint()` (enquiry-panel.js, before the gate):
 
 1. `available === 1` → do not return false.
 2. `eur_total_price === 368` → not null → paint.
@@ -254,28 +265,17 @@ https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl?villa=nieves&date_
 4. `rent > 0` fails, so the overview dated price is reset — but the panel
    still shows the fee-only total and treats the villa as priced.
 
-Listing `parseResults` keeps the row (`available: 1`). `applyResults`
-skips writing "From €0 / wk" (`rate > 0` at villa-listing-grid.js:341)
-but **still puts Nieves in `availablePids`**, so a dated search would
-*show* the card with the empty/static price.
+Listing `parseResults` kept the row (`available: 1`). `applyResults`
+skipped writing "From €0 / wk" (`rate > 0`) but **still put Nieves in
+`availablePids`**, so a dated search showed the card with the empty/static
+price.
 
 There is no unavailable marker to ignore. The API says available, with a
 total that is only fees.
 
-The 9 June "No availability" empty state is still unbuilt. Even if it
-existed, this payload would not feed it.
-
-**Verdict: OURS** for painting a fee-only total as a bookable price.
-Ask Steve whether `available: 1` + `eur_base_rental: 0` is an intentional
-"open but no rate card" or should have been `available: 0`.
-
-Recommended gate (do not implement here):
-
-```js
-if ( total === null || rent === null || rent <= 0 ) {
-    return false;
-}
-```
+**Verdict: OURS — fixed.** Ask Steve whether `available: 1` +
+`eur_base_rental: 0` is an intentional "open but no rate card" or should
+have been `available: 0`. The front-end gate is correct either way.
 
 ---
 
@@ -330,16 +330,20 @@ price stays visible, plus a dated figure.
   "From" and overwrites the amount with the dated weekly rate. One number.
 - Enquiry panel: stay **total** (`eur_total_price`), not a weekly rate.
 
-Nieves has no static from-price locally, so a dated overwrite has nothing
-to sit next to.
+Nieves has no static from-price, so a dated overwrite has nothing to sit
+next to. That is why the 21 August pass called this by-design and missed
+the real clash: **Pep Luis** (`villa_indicative_from_price` 4321) plus a
+fee-only winter payload. `paint()` showed the static "From €4,321 / wk"
+and "Price varies by season" above a live €368. That is A5, not two
+presentations of one rate, and is gated as of 28 August.
 
-I did not see two *dated* prices disagreeing. A guest can still see two
-different numbers on one villa page if they pick dates that return a
-price: overview weekly vs panel stay total. That is two presentations of
-one payload, not two API answers.
+A guest can still see two different numbers on one villa page if they pick
+dates that return a *real* rental: overview weekly vs panel stay total.
+That remains two presentations of one payload, not two API answers.
 
-**Verdict: BY-DESIGN** for "From" vs stay total. The "keep the static From
-after search" behaviour is **not implemented** — we overwrite. Not a
+**Verdict: PARTLY OURS.** The fee-only + static-From clash is fixed with
+A5. Dated weekly vs stay total is still by-design. The "keep the static
+From after search" behaviour is **not implemented** — we overwrite. Not a
 Steve item.
 
 ---
@@ -440,7 +444,7 @@ Not fixes — where a later brief would start.
 | ID | Start here |
 |---|---|
 | A1 / A8 | Savines (6998) is now `savinas` locally — propagate to staging if not already. Tegui still empty. Optional later: an alias map in `enquiry-panel.js` / `parseResults` if keys will keep drifting. |
-| A5 | `enquiry-panel.js` `paint()` lines 510–530 — `rent === 0` still paints. Listing `applyResults` ~325–369 still includes a 0-rate villa in `availablePids`. |
+| A5 | **Fixed** in `04-zero-rate-unavailable`. `paint()` returns false when `rent <= 0`. Listing `parseResults` drops the row before `availablePids`. `applyResults` `rate > 0` guard left as belt-and-braces. |
 | A6 | `page-special-offers.php` + `special-offers-grid.php` — no API by design. Click-through is a bare permalink (`villa-card.php:186`). Offer panel hook uses the WP post ID (`offer-panel.php:188`). |
 | A7 | `showDatedOverviewPrice` in `enquiry-panel.js:360` (overwrites static From). `applyResults` in `villa-listing-grid.js:343` (same overwrite on cards). |
 | A9 | `villa-listing-grid.js:106-136` and `enquiry-panel.js:525-526`. Do not change the formula until question 3 is answered. |

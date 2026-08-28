@@ -496,7 +496,12 @@
 			var adw   = pickNumber( node, [ 'eur_adw_amount' ] );
 			var clean = pickNumber( node, [ 'eur_extra_cleaning' ] );
 
-			if ( total === null ) {
+			// Out of season the PMS returns available:1 with no rate card loaded —
+			// eur_base_rental 0 and a total that is only ADW + cleaning. That is not a
+			// price. Painting it also restores the static ACF "From" price above it via
+			// resetOverviewPrice(), so the guest sees a high-season figure over a
+			// fee-only total. Treat as unpriced and let the caller show the notice.
+			if ( total === null || rent === null || rent <= 0 ) {
 				return false;
 			}
 

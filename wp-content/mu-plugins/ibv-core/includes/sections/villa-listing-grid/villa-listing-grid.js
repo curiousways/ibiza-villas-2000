@@ -131,7 +131,15 @@
 					return null;
 				}
 				var weekly = ( rate !== undefined && rate !== null ) ? Number( rate ) : null;
-				if ( weekly !== null && nights > 0 ) {
+
+				// No rate card for these dates: available, but eur_base_rental 0. Not a
+				// sellable result — drop it, rather than leaving the card visible with its
+				// static price or a stale figure from an earlier search.
+				if ( weekly === null || isNaN( weekly ) || weekly <= 0 ) {
+					return null;
+				}
+
+				if ( nights > 0 ) {
 					weekly = ( weekly * 7 ) / nights;
 				}
 				return {
@@ -334,9 +342,10 @@
 			if ( ! pid || ! Object.prototype.hasOwnProperty.call( rateByPropertyId, pid ) ) {
 				return;
 			}
-			// rate > 0 guard: out-of-season the API returns available villas
-			// with eur_base_rental 0 (no rate card loaded) — hydrating those
-			// would show "From €0 / wk" and sort them first.
+			// rate > 0 guard (belt-and-braces: parseResults already drops <= 0):
+			// out-of-season the API returns available villas with eur_base_rental 0
+			// (no rate card loaded) — hydrating those would show "From €0 / wk"
+			// and sort them first.
 			var rate = rateByPropertyId[ pid ];
 			if ( rate !== null && ! isNaN( rate ) && rate > 0 ) {
 				card.setAttribute( 'data-price', String( rate ) );
