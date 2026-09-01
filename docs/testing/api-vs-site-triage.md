@@ -3,7 +3,11 @@
 **Date:** 21 August 2026, ~13:30–14:10 UK (before the 15:00 staging CMS session).  
 **A1 re-run:** 21 August 2026, ~13:38 UK, after `property_id` was changed to `savinas`.  
 **A5 / A7 update:** 28 August 2026. Steve's November dates replayed; zero-rate
-gate shipped in `docs/briefs/active/04-zero-rate-unavailable.md`.  
+gate shipped in `docs/briefs/done/04-zero-rate-unavailable.md` (`ef9d7eb`).
+**A2 / A9 update:** 1 September 2026. Steve confirmed on 28 August that
+`eur_base_rental` is the stay total for the exact search and that no weekly
+equivalent can be derived from it. The `(rate * 7) / nights` conversion is
+removed in `docs/briefs/active/05-stay-total-not-weekly.md`.
 **Endpoint:** `https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl`  
 **No Gravity Forms were submitted.**
 
@@ -32,15 +36,15 @@ Twelve deliberate GETs, spaced ~3s. No sweeps.
 | ID | Symptom | Verdict | One-line reason |
 |---|---|---|---|
 | A1 | Savines shows unavailable when it is available | **DATA-ENTRY — fixed** | CMS `property_id` is now `savinas`. Enquiry panel and listing card emit that key. `?villa=savinas` 20–22 Sep returns the villa; the old `savines` key still returns `[]`. The 7-night probe week is still empty — that week is genuinely unavailable. |
-| A2 | Nieves returns a £56k price | **UNREPRODUCIBLE** (see A9) | No captured Nieves row is in that range. The 56k-class figure is what our weekly renormalisation produces on a 1-night search if `eur_base_rental` is already a weekly rate. |
+| A2 | Nieves returns a £56k price | **OURS — same cause as A9, fixed** | 1-night Nieves 11–12 Jul 2026, pax 2: payload `eur_base_rental: 9534`. We painted `9534 × 7 / 1` = **€66,738 / wk**. The client's €56k-class screenshots are this conversion on short stays. |
 | A3 | A price is returned for a 1-night stay against a 3-night minimum | **API-GAP** | No minimum-stay field exists in the payload. The API will return a priced, `available: 1` row for a 2-night search. |
 | A4 | Short-breaks search returns Nieves on a 2-night search | **API-GAP** (Nieves itself not in this window) | Same missing min-stay field. This 2-night window returned 9 villas including Savines (`savinas`), not Nieves. |
 | A5 | Out-of-season villa still priced as ADW + cleaning, no rental | **OURS — fixed** (`04-zero-rate-unavailable`) | Winter Nieves 13–20 Nov: `available: 1`, `eur_base_rental: 0`, fees + total €368. `paint()` now returns false when `rent <= 0`; listing `parseResults` drops the row so the card is not in `availablePids`. |
 | A6 | Special Offers shows out-of-season villas; click-through price is wrong | **OURS** | That page never calls the API. Cards are ACF offers. Click-through is a bare permalink; A1's wrong key is no longer the reason the villa page disagrees. |
-| A7 | Nieves shows two different prices | **PARTLY OURS** (see 28 Aug note) | Dated weekly vs stay total is still two presentations of one payload. The 21 Aug "by design" call missed the real clash: a villa *with* an indicative from-price (Pep Luis €4,321) plus a fee-only winter paint (€368). That path is A5 and is now gated. |
+| A7 | Nieves shows two different prices | **PARTLY OURS** (see 1 Sep note) | After A9, overview and panel both use stay figures from the same row: overview shows `eur_base_rental` labelled for the nights searched; the panel still itemises rental / waiver / cleaning / `eur_total_price`. The remaining two-number view is fees, not a weekly conversion. The 21 Aug "by design" call also missed Pep Luis static From + fee-only winter paint — that path is A5 and is gated. |
 | C6 | Enquiry panel traps scroll | **OURS** | Sticky rail + `overflow-y: auto; overscroll-behavior: contain` on the form body. No API. |
 | A8 | Villa Tegui never hydrates / never matches a search | **DATA-ENTRY** | Listing card `data-bob-property-id=""`. Same family as A1. |
-| A9 | Short-stay search paints enormous "/ wk" prices | **OURS** (needs Steve to confirm the unit) | For a 2-night Savines hit, `eur_base_rental` is €12,137. We do `(rate * 7) / nights` → **€42,480 / wk**. A 1-night search of an ~€8k weekly rate would display **€56,000 / wk**. |
+| A9 | Short-stay search paints enormous "/ wk" prices | **OURS — fixed** (`05-stay-total-not-weekly`) | Steve, 28 August: the API price is the stay total for the exact search; no daily/weekly equivalent is derivable. We were doing `(eur_base_rental * 7) / nights` and labelling `/ wk`. Removed. Dated surfaces now show the stay total labelled for the nights searched. |
 
 ---
 
@@ -163,11 +167,15 @@ yet have `savinas`, the client environment will keep sending `savines`.
 price. Winter row → €368 total (A5), not €56k. We never paint GBP; the
 `gbp_*` fields are ignored.
 
-**Verdict: UNREPRODUCIBLE** for a Nieves-specific £56k. Closest mechanism
-is A9: if the API returns a weekly-looking `eur_base_rental` of ~€8,000 on
-a 1-night search, `parseResults` / `showDatedOverviewPrice` do
-`(rate * 7) / nights` → **€56,000 / wk**. I did not fire a 1-night Nieves
-query (no priced Nieves row in the windows already used).
+**1 September 2026 replay.** `?villa=nieves&date_from=2026-07-11&date_to=2026-07-12&pax=2`:
+
+```json
+{"success":1,"count":1,"query":{"to":"2026-07-12","nights":1,"from":"2026-07-11","pax":"2"},"villas":[{"eur_extra_cleaning":310,"euro_rate":"1.17","gbp_adw_amount":50,"gbp_total_price":8464,"eur_total_price":9902,"gbp_base_rental":8149,"villa":"nieves","eur_adw_amount":58,"nice_name":"Villa Nieves","eur_base_rental":9534,"gbp_extra_cleaning":265,"available":1}]}
+```
+
+`eur_base_rental: 9534`. The old conversion painted `9534 × 7 / 1` = **€66,738 / wk**. That is A9, and it is the family of figures in the client's screenshots (listing €56k-class, Alexa ~€12k on three nights, one-night price). Steve's alternate theory — that €56k was the API summing every available villa on a search without `villa=` — is not what the payloads show: each row carries its own rental.
+
+**Verdict: OURS — same cause as A9, fixed** in `05-stay-total-not-weekly`. Dated surfaces now pass `9534` through unconverted.
 
 ---
 
@@ -338,11 +346,15 @@ and "Price varies by season" above a live €368. That is A5, not two
 presentations of one rate, and is gated as of 28 August.
 
 A guest can still see two different numbers on one villa page if they pick
-dates that return a *real* rental: overview weekly vs panel stay total.
-That remains two presentations of one payload, not two API answers.
+dates that return a *real* rental: overview `eur_base_rental` (labelled for
+the nights searched, plus "Plus cleaning and damage waiver") vs panel
+`eur_total_price` (rental + waiver + cleaning). That is two presentations
+of one payload, not two API answers, and it is no longer a weekly-vs-stay
+mismatch.
 
 **Verdict: PARTLY OURS.** The fee-only + static-From clash is fixed with
-A5. Dated weekly vs stay total is still by-design. The "keep the static
+A5. The weekly-vs-stay mismatch is fixed with A9. The remaining two
+figures are the rental and the stay total with fees. The "keep the static
 From after search" behaviour is **not implemented** — we overwrite. Not a
 Steve item.
 
@@ -387,18 +399,23 @@ From the 2-night search row for Savines (`savinas`):
 - `eur_base_rental`: 12137
 - `eur_total_price`: 12506 (rental + 58 + 310)
 
-If 12137 is already a **weekly** rate, the API is not pro-rating short
-stays (A3). Our listing then does `(12137 * 7) / 2` = **€42,480 / wk**.
-A 1-night search of an ~€8,000 weekly rate would display **€56,000 / wk**
-(A2's shape).
+Steve answered on 28 August 2026:
 
-If 12137 is a **2-night stay total**, €6k/night is itself implausible for
-this villa, and the weekly conversion is still the number we would paint
-on the card.
+> "The price the booking system gives you in the API is just 'the price'
+> … for the exact search you put in — there is no daily / weekly equivalent
+> derivable from it. It is a complex calculation of daily prices,
+> weight-adjusted for short stays (so maybe a 4 day stay in August is same
+> cost as a week)."
 
-**Verdict: OURS** for the display math (`villa-listing-grid.js:106-136`,
-same formula at `enquiry-panel.js:525-526`). Steve needs to confirm the
-unit of `eur_base_rental` on non-7-night queries before we change it.
+So 12137 is the 2-night stay total. The conversion was invalid at any
+coefficient: short-break weighting is already inside the figure. We were
+painting `(12137 * 7) / 2` = **€42,480 / wk**. Same formula on Nieves
+1-night (`eur_base_rental: 9534`) produced **€66,738 / wk** (A2).
+
+**Verdict: OURS — fixed** in `05-stay-total-not-weekly`. The conversion is
+deleted. Dated overview and listing cards show the stay total and label
+the nights searched. The static ACF `villa_indicative_from_price` "From …
+/ wk" treatment on the undated state is unchanged.
 
 ---
 
@@ -420,10 +437,9 @@ Phrased so they can be answered without the rest of this doc.
    in WordPress; or we hide prices when stay length cannot be checked.
 
 3. **On a 2-night search, is `eur_base_rental` the stay total or a weekly
-   rate?** Savines 20–22 Sep: `eur_base_rental` 12137, `eur_total_price`
-   12506. We currently treat it as a stay total and convert to a weekly
-   average. If it is already weekly, our cards will show ~€42k / wk for
-   that search (and ~€56k / wk on a 1-night search of an €8k villa).
+   rate?** *(Answered 28 August 2026.)* Stay total for the exact search.
+   No daily or weekly equivalent is derivable — short-break weighting is
+   already inside the figure. Conversion removed in `05-stay-total-not-weekly`.
 
 4. **Out of season: Nieves 16–23 Jan 2027 came back `available: 1`,
    `eur_base_rental: 0`, ADW 58, cleaning 310, total 368.** Is that
@@ -447,7 +463,7 @@ Not fixes — where a later brief would start.
 | A5 | **Fixed** in `04-zero-rate-unavailable`. `paint()` returns false when `rent <= 0`. Listing `parseResults` drops the row before `availablePids`. `applyResults` `rate > 0` guard left as belt-and-braces. |
 | A6 | `page-special-offers.php` + `special-offers-grid.php` — no API by design. Click-through is a bare permalink (`villa-card.php:186`). Offer panel hook uses the WP post ID (`offer-panel.php:188`). |
 | A7 | `showDatedOverviewPrice` in `enquiry-panel.js:360` (overwrites static From). `applyResults` in `villa-listing-grid.js:343` (same overwrite on cards). |
-| A9 | `villa-listing-grid.js:106-136` and `enquiry-panel.js:525-526`. Do not change the formula until question 3 is answered. |
+| A9 | **Fixed** in `05-stay-total-not-weekly`. Conversion deleted; dated surfaces show `eur_base_rental` labelled for the nights searched. A2 resolves to this same cause. |
 | C6 | `enquiry-panel.css:14-55` (`overflow-y` / `overscroll-behavior` on `.gform_body`). |
 | Unbuilt | 9 June "No availability" listing empty-state — still not built; would not have fired on the A5 payload anyway. |
 

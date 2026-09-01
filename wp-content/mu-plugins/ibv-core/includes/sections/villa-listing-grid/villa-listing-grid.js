@@ -89,7 +89,7 @@
 	}
 
 	/**
-	 * Normalise the API response into [{ propertyId, weeklyRate }, …].
+	 * Normalise the API response into [{ propertyId, stayTotal, nights }, …].
 	 * Field names are based on the v1 contract; keep this funnel small so
 	 * we have one place to tweak when Steve confirms the schema.
 	 */
@@ -103,9 +103,11 @@
 			list = data.results;
 		}
 
-		// eur_base_rental covers the whole searched stay, not one week —
-		// normalise to an average per-week rate so non-7-night searches
-		// don't show stay totals labelled "/ wk".
+		// eur_base_rental is the rental total for the exact dates searched.
+		// Steve confirmed on 28 August that no weekly equivalent can be
+		// derived from it — short-break pricing is already weighted inside
+		// the figure. Keep the stay total and label the stay; do not
+		// convert.
 		var nights = ( data && data.query ) ? Number( data.query.nights ) : NaN;
 
 		return list
@@ -130,24 +132,31 @@
 				if ( ! pid ) {
 					return null;
 				}
-				var weekly = ( rate !== undefined && rate !== null ) ? Number( rate ) : null;
+				var stayTotal = ( rate !== undefined && rate !== null ) ? Number( rate ) : null;
 
 				// No rate card for these dates: available, but eur_base_rental 0. Not a
 				// sellable result — drop it, rather than leaving the card visible with its
 				// static price or a stale figure from an earlier search.
-				if ( weekly === null || isNaN( weekly ) || weekly <= 0 ) {
+				if ( stayTotal === null || isNaN( stayTotal ) || stayTotal <= 0 ) {
 					return null;
 				}
 
-				if ( nights > 0 ) {
-					weekly = ( weekly * 7 ) / nights;
-				}
 				return {
 					propertyId: String( pid ),
-					weeklyRate: weekly,
+					stayTotal: stayTotal,
+					nights: nights > 0 ? nights : null,
 				};
 			} )
 			.filter( Boolean );
+	}
+
+	function formatNightsLabel( nights ) {
+		var i18n = config.i18n || {};
+		var template = nights === 1 ? i18n.nights_one : i18n.nights_many;
+		if ( ! template ) {
+			return '';
+		}
+		return template.replace( '%d', String( nights ) );
 	}
 
 	function formatEuro( amount ) {
@@ -264,7 +273,7 @@
 	// the availability fetch, so it works even when the API is down.
 	var offersOnly = false;
 
-	// propertyId → weekly rate from the last successful search. null =
+	// propertyId → stay total from the last successful search. null =
 	// no availability filter applied (probe mode, missing params, or
 	// failed fetch): every card passes the availability check.
 	var availablePids = null;
@@ -330,23 +339,26 @@
 			return;
 		}
 
-		var rateByPropertyId = {};
+		var totalByPropertyId = {};
+		var nightsByPropertyId = {};
 		results.forEach( function ( r ) {
-			rateByPropertyId[ String( r.propertyId ).toLowerCase() ] = r.weeklyRate;
+			var key = String( r.propertyId ).toLowerCase();
+			totalByPropertyId[ key ] = r.stayTotal;
+			nightsByPropertyId[ key ] = r.nights;
 		} );
 
 		// Hydrate prices on matching cards. Visibility is exclusively
 		// applyFilters()'s job.
 		$$( 'article[data-bob-property-id]', grid ).forEach( function ( card ) {
 			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();
-			if ( ! pid || ! Object.prototype.hasOwnProperty.call( rateByPropertyId, pid ) ) {
+			if ( ! pid || ! Object.prototype.hasOwnProperty.call( totalByPropertyId, pid ) ) {
 				return;
 			}
 			// rate > 0 guard (belt-and-braces: parseResults already drops <= 0):
 			// out-of-season the API returns available villas with eur_base_rental 0
 			// (no rate card loaded) — hydrating those would show "From €0 / wk"
 			// and sort them first.
-			var rate = rateByPropertyId[ pid ];
+			var rate = totalByPropertyId[ pid ];
 			if ( rate !== null && ! isNaN( rate ) && rate > 0 ) {
 				card.setAttribute( 'data-price', String( rate ) );
 				var priceEl = card.querySelector( '[data-bob-from-price]' );
@@ -354,11 +366,29 @@
 					priceEl.textContent = formatEuro( rate );
 					var pricePrefix = card.querySelector( '.ibv-villa-card__price-prefix' );
 					var priceSuffix = card.querySelector( '.ibv-villa-card__price-suffix' );
-					if ( pricePrefix ) {
-						pricePrefix.hidden = false;
-					}
-					if ( priceSuffix ) {
-						priceSuffix.hidden = false;
+					// Probe is an undated browse: keep the static "From … / wk"
+					// treatment. A dated search is an exact stay total, not a
+					// "from" weekly figure.
+					if ( isProbe ) {
+						if ( pricePrefix ) {
+							pricePrefix.hidden = false;
+						}
+						if ( priceSuffix ) {
+							priceSuffix.hidden = false;
+						}
+					} else {
+						if ( pricePrefix ) {
+							pricePrefix.hidden = true;
+						}
+						if ( priceSuffix ) {
+							var nights = nightsByPropertyId[ pid ];
+							if ( nights > 0 ) {
+								priceSuffix.textContent = formatNightsLabel( nights );
+								priceSuffix.hidden = false;
+							} else {
+								priceSuffix.hidden = true;
+							}
+						}
 					}
 				}
 			}
@@ -375,7 +405,7 @@
 		// server-rendered — its label is pure URL state, and revealing it
 		// here after the fetch used to grow the sticky toolbar mid-view.
 
-		availablePids = rateByPropertyId;
+		availablePids = totalByPropertyId;
 		applyFilters();
 		// Reveal only after filtering/sorting — the unfiltered catalog is
 		// never painted.

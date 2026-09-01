@@ -36,7 +36,11 @@ function ibv_core_section_villa_listing_grid() {
 			],
 			'probe'    => ibv_villa_listing_probe_params(),
 			'i18n'     => [
-				'showing' => __( 'Showing %d villas', 'ibv' ),
+				'showing'     => __( 'Showing %d villas', 'ibv' ),
+				/* translators: %d: number of nights in the searched stay. */
+				'nights_one'  => __( 'for %d night', 'ibv' ),
+				/* translators: %d: number of nights in the searched stay. */
+				'nights_many' => __( 'for %d nights', 'ibv' ),
 			],
 		]
 	);

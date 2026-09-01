@@ -326,8 +326,9 @@
 		var EUR = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 } );
 
 		// Villa-overview indicative price ("From €X / wk") — swapped to the
-		// average weekly rate for the selected dates while a priced search is
-		// active; restored when dates clear / unavailable / fetch fails.
+		// stay total for the selected dates while a priced search is active;
+		// restored (including the "/ wk" unit text) when dates clear /
+		// unavailable / fetch fails.
 		var ovPrice  = document.querySelector( '.ibv-villa-overview__price' );
 		var ovAmount = ovPrice ? ovPrice.querySelector( '[data-bob-from-price]' ) : null;
 		var ovFrom   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-from' ) : null;
@@ -337,22 +338,38 @@
 		var ovStatic = {
 			text:       ovAmount ? ovAmount.textContent : '',
 			onRequest:  ovAmount ? ovAmount.classList.contains( 'ibv-villa-overview__price-amount--on-request' ) : false,
+			unitText:   ovUnit ? ovUnit.textContent : '',
 			unitHidden: ovUnit ? ovUnit.hidden : false,
 			forAttr:    ovAmount ? ovAmount.getAttribute( 'for' ) : null,
 		};
 
-		function showDatedOverviewPrice( weekly ) {
-			if ( ! ovAmount || ! ( weekly > 0 ) ) {
+		function formatNightsLabel( nights ) {
+			var one  = ovPrice ? ovPrice.getAttribute( 'data-bob-nights-one' ) : '';
+			var many = ovPrice ? ovPrice.getAttribute( 'data-bob-nights-many' ) : '';
+			var template = nights === 1 ? one : many;
+			if ( ! template ) {
+				return '';
+			}
+			return template.replace( '%d', String( nights ) );
+		}
+
+		function showDatedOverviewPrice( stayTotal, nights ) {
+			if ( ! ovAmount || ! ( stayTotal > 0 ) ) {
 				return;
 			}
-			ovAmount.textContent = EUR.format( Math.round( weekly ) );
+			ovAmount.textContent = EUR.format( Math.round( stayTotal ) );
 			ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
 			ovAmount.removeAttribute( 'for' );
 			if ( ovFrom ) {
 				ovFrom.hidden = true;
 			}
 			if ( ovUnit ) {
-				ovUnit.hidden = false;
+				if ( nights > 0 ) {
+					ovUnit.textContent = formatNightsLabel( nights );
+					ovUnit.hidden = false;
+				} else {
+					ovUnit.hidden = true;
+				}
 			}
 			if ( ovSeason ) {
 				ovSeason.hidden = true;
@@ -377,6 +394,7 @@
 				ovFrom.hidden = false;
 			}
 			if ( ovUnit ) {
+				ovUnit.textContent = ovStatic.unitText;
 				ovUnit.hidden = ovStatic.unitHidden;
 			}
 			if ( ovSeason ) {
@@ -511,11 +529,12 @@
 			setText( cleaningEl, clean !== null ? EUR.format( clean ) : '—' );
 
 			var nights = data && data.query ? pickNumber( data.query, [ 'nights' ] ) : null;
-			if ( rent !== null && rent > 0 ) {
-				showDatedOverviewPrice( nights > 0 ? ( rent * 7 ) / nights : rent );
-			} else {
-				resetOverviewPrice();
-			}
+			// eur_base_rental is the rental total for the exact dates searched. Steve
+			// confirmed on 28 August that no weekly equivalent can be derived from it —
+			// short-break pricing is already weighted inside the figure, so dividing by
+			// nights and multiplying by seven inflates it. Show the stay total and say
+			// which stay it is for.
+			showDatedOverviewPrice( rent, nights );
 			return true;
 		}
 

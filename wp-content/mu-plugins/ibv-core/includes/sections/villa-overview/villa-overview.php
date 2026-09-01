@@ -77,13 +77,24 @@ function ibv_core_section_villa_overview( $villa_id ) {
 
 		<?php ibv_core_amenity_ticks( $villa_id ); ?>
 
-		<div class="ibv-villa-overview__price">
+		<?php
+		/* translators: %d: number of nights in the searched stay. */
+		$nights_one = __( 'for %d night', 'ibv' );
+		/* translators: %d: number of nights in the searched stay. */
+		$nights_many = __( 'for %d nights', 'ibv' );
+		?>
+		<div
+			class="ibv-villa-overview__price"
+			data-bob-nights-one="<?php echo esc_attr( $nights_one ); ?>"
+			data-bob-nights-many="<?php echo esc_attr( $nights_many ); ?>"
+		>
 			<?php
 			/* Bob shell: ACF villa_indicative_from_price is the static fallback; empty
 			   field shows a date prompt (mirrors villa-card). The enquiry-panel JS swaps
-			   in the dated average weekly rate while a priced search is active — it
-			   toggles the from/unit spans and the two note lines, and restores the
-			   static state when dates clear or the villa is unavailable. */
+			   in the stay total while a priced search is active — it toggles the
+			   from/unit spans and the two note lines, and restores the static state
+			   (including the "/ wk" unit text) when dates clear or the villa is
+			   unavailable. */
 			?>
 			<?php if ( $indicative ) : ?>
 				<p class="ibv-villa-overview__price-row">
@@ -96,7 +107,7 @@ function ibv_core_section_villa_overview( $villa_id ) {
 				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--season"><?php esc_html_e( 'Price varies by season', 'ibv' ); ?></p>
 				<p class="ibv-villa-overview__price-note ibv-villa-overview__price-note--dated" hidden><?php esc_html_e( 'Plus cleaning and damage waiver', 'ibv' ); ?></p>
 			<?php else : ?>
-				<?php /* No indicative price: show nothing rather than a date prompt (mirrors villa-card). The empty amount and hidden unit stay in the DOM so the enquiry-panel JS can still swap in a dated weekly rate while a priced search is active. No "From" prefix here — a dated rate is exact, and the JS reset would otherwise un-hide it next to an empty amount. */ ?>
+				<?php /* No indicative price: show nothing rather than a date prompt (mirrors villa-card). The empty amount and hidden unit stay in the DOM so the enquiry-panel JS can still swap in a dated stay total while a priced search is active. No "From" prefix here — a dated rate is exact, and the JS reset would otherwise un-hide it next to an empty amount. */ ?>
 				<p class="ibv-villa-overview__price-row">
 					<span class="ibv-villa-overview__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $villa_id ); ?>"></span>
 					<span class="ibv-villa-overview__price-unit" hidden><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
