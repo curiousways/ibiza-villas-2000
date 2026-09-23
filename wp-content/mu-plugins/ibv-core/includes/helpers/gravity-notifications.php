@@ -192,12 +192,34 @@ function ibv_gf_sanitize_submission_type( $form ) {
 add_filter( 'gform_pre_submission_filter', 'ibv_gf_sanitize_submission_type' );
 
 /**
- * Resolve the label-only tags Luke used in the guest confirmation.
+ * Format a villa-enquiry date field for a GF `:format:` merge tag.
+ *
+ * @param string $raw    Stored value, expected Y-m-d.
+ * @param string $format PHP date format from the tag, e.g. j M Y.
+ * @return string
+ */
+function ibv_gf_format_enquiry_date( $raw, $format ) {
+	$raw    = trim( (string) $raw );
+	$format = trim( (string) $format );
+	if ( '' === $raw || '' === $format || ! preg_match( '/^\d{4}-\d{2}-\d{2}/', $raw ) ) {
+		return $raw;
+	}
+
+	$timestamp = strtotime( substr( $raw, 0, 10 ) . ' 12:00:00' );
+	if ( ! $timestamp ) {
+		return $raw;
+	}
+
+	return date_i18n( $format, $timestamp );
+}
+
+/**
+ * Resolve the label-only tags used in villa enquiry notifications.
  *
  * Gravity Forms needs `{Label:id}`. `{Villa}` and `{First Name}` do not
  * match any field (`Property Name`, `Name`). `{Guests}` does not match
- * `Number of guests`. `{Arrival}` / `{Departure}` match by label, but
- * GF 3 has been leaving those literal as well — pin them to field ids.
+ * `Number of guests`. `{Reference}` is not `{entry_id}`. `{Arrival}` /
+ * `{Departure}` and `{Arrival:format:j M Y}` are pinned to fields 5 / 6.
  *
  * @param string $text      Text still containing merge tags.
  * @param array  $form      Form.
@@ -219,6 +241,21 @@ function ibv_gf_alias_enquiry_merge_tags( $text, $form, $entry, $url_encode, $es
 		return $text;
 	}
 
+	$dates = [
+		'Arrival'   => rgar( $entry, '5' ),
+		'Departure' => rgar( $entry, '6' ),
+	];
+
+	foreach ( $dates as $label => $value ) {
+		$text = preg_replace_callback(
+			'/\{' . preg_quote( $label, '/' ) . ':format:([^}]+)\}/',
+			static function ( $match ) use ( $value ) {
+				return ibv_gf_format_enquiry_date( $value, $match[1] );
+			},
+			$text
+		);
+	}
+
 	$aliases = [
 		'{Villa}'             => rgar( $entry, '1' ),
 		'{First Name}'        => rgar( $entry, '2' ),
@@ -226,6 +263,7 @@ function ibv_gf_alias_enquiry_merge_tags( $text, $form, $entry, $url_encode, $es
 		'{Guests}'            => rgar( $entry, '7' ),
 		'{Arrival}'           => rgar( $entry, '5' ),
 		'{Departure}'         => rgar( $entry, '6' ),
+		'{Reference}'         => rgar( $entry, 'id' ),
 		'{Submission type}'   => rgar( $entry, (string) IBV_GF_SUBMISSION_TYPE_FIELD_ID ),
 		'{Property Name}'     => rgar( $entry, '1' ),
 		'{Number of guests}'  => rgar( $entry, '7' ),
