@@ -121,10 +121,11 @@ function ibv_booking_confirmation_variant_defaults() {
 			],
 		],
 		'general'       => [
-			'heading'      => __( "Thanks — that's with us", 'ibv' ),
-			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally', 'ibv' ),
-			'contact'      => __( 'Need to change something?', 'ibv' ),
-			'append_note'  => true,
+			'heading'      => __( "Thanks, that's with us", 'ibv' ),
+			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally, usually within 20 minutes in office hours.', 'ibv' ),
+			'contact'      => __( 'Need to change something? Reply to that email, message us on WhatsApp on +34 628 70 73 16, or call +34 666 93 40 60.', 'ibv' ),
+			'append_note'  => false,
+			'contact_full' => true,
 			'steps'        => [],
 		],
 	];
