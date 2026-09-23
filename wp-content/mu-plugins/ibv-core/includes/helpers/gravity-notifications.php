@@ -10,31 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Address that should receive every GF notification on non-live hosts.
+ * Optional override address for GF notifications.
  *
- * Option `ibv_gf_notification_override` wins:
- *   - a valid email → use it everywhere
- *   - "off" / "0"   → do not reroute, even on staging
- *   - empty         → david@curiousways.com on .test / staging, else none
+ * Off unless option `ibv_gf_notification_override` is a valid email.
+ * Host is not used — staging and local send to the form To field.
  *
  * @return string Email or empty.
  */
 function ibv_gf_notification_override_address() {
-	$option = strtolower( trim( (string) get_option( 'ibv_gf_notification_override', '' ) ) );
-	if ( in_array( $option, [ 'off', '0', 'false', 'no' ], true ) ) {
-		return '';
-	}
+	$option = trim( (string) get_option( 'ibv_gf_notification_override', '' ) );
 	if ( $option && is_email( $option ) ) {
 		return $option;
-	}
-
-	$host = wp_parse_url( home_url(), PHP_URL_HOST );
-	$host = is_string( $host ) ? strtolower( $host ) : '';
-	if ( ! $host ) {
-		return '';
-	}
-	if ( preg_match( '/(^staging\.|\.test$|\.local$|^localhost$)/', $host ) ) {
-		return 'david@curiousways.com';
 	}
 
 	return '';
@@ -82,11 +68,7 @@ function ibv_gf_reroute_notification( $notification, $form, $entry ) {
 add_filter( 'gform_notification', 'ibv_gf_reroute_notification', 10, 3 );
 
 /**
- * Hold Zoho / Campaign Monitor / other add-on feeds on non-live hosts.
- *
- * Staging and local share live add-on credentials. A test submit must
- * not create a client CRM record. Empty the feed list after GF has
- * already selected them.
+ * Hold Zoho / Campaign Monitor / other add-on feeds while an override is set.
  *
  * @param array  $feeds Feeds about to run.
  * @param array  $entry Entry.
@@ -118,7 +100,7 @@ function ibv_gf_notification_override_notice() {
 	echo esc_html(
 		sprintf(
 			/* translators: %s: override email address */
-			__( 'Form emails are being redirected to %s and CRM/newsletter feeds are held. This stays on until email testing is signed off. Set the option ibv_gf_notification_override to off to restore live routing.', 'ibv' ),
+			__( 'Form emails are being redirected to %s and CRM/newsletter feeds are held. Clear the option ibv_gf_notification_override to restore the form To addresses.', 'ibv' ),
 			$to
 		)
 	);
