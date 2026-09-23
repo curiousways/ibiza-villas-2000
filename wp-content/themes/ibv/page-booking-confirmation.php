@@ -55,10 +55,11 @@ function ibv_booking_confirmation_type() {
 function ibv_booking_confirmation_variant_defaults() {
 	return [
 		'villa'         => [
-			'heading'      => __( "We've got your request", 'ibv' ),
-			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally', 'ibv' ),
-			'contact'      => __( 'Need to change something, or add a night?', 'ibv' ),
-			'append_note'  => true,
+			'heading'      => __( "Thanks, that's with us", 'ibv' ),
+			'subheading'   => __( 'A copy is on its way to your inbox. Someone from the team in Ibiza will come back to you personally, usually within 20 minutes in office hours.', 'ibv' ),
+			'contact'      => __( 'Need to change something? Reply to that email, message us on WhatsApp on +34 628 70 73 16, or call +34 666 93 40 60.', 'ibv' ),
+			'append_note'  => false,
+			'contact_full' => true,
 			'steps'        => [
 				[
 					'title' => __( 'We check the villa', 'ibv' ),
@@ -120,7 +121,7 @@ function ibv_booking_confirmation_variant_defaults() {
  * Resolve the variant row for a type. ACF wins; defaults fill gaps.
  *
  * @param string $type Variant key.
- * @return array{heading:string,subheading:string,contact:string,append_note:bool,steps:array}
+ * @return array{heading:string,subheading:string,contact:string,append_note:bool,contact_full:bool,steps:array}
  */
 function ibv_booking_confirmation_variant( $type ) {
 	$defaults = ibv_booking_confirmation_variant_defaults();
@@ -158,11 +159,12 @@ function ibv_booking_confirmation_variant( $type ) {
 		$contact    = isset( $row['variant_contact_intro'] ) ? trim( (string) $row['variant_contact_intro'] ) : '';
 
 		return [
-			'heading'     => $heading ? $heading : $base['heading'],
-			'subheading'  => $subheading ? $subheading : $base['subheading'],
-			'contact'     => $contact ? $contact : $base['contact'],
-			'append_note' => $base['append_note'],
-			'steps'       => $steps,
+			'heading'       => $heading ? $heading : $base['heading'],
+			'subheading'    => $subheading ? $subheading : $base['subheading'],
+			'contact'       => $contact ? $contact : $base['contact'],
+			'append_note'   => $base['append_note'],
+			'contact_full'  => ! empty( $base['contact_full'] ),
+			'steps'         => $steps,
 		];
 	}
 
@@ -235,6 +237,8 @@ function ibv_render_booking_details_panel() {
 		);
 	}
 
+	$is_villa = 'villa' === ibv_booking_confirmation_type();
+
 	if ( ! $villa_name && ! $dates_label && ! $guests && ! $offer && ! $ref ) {
 		return;
 	}
@@ -277,6 +281,11 @@ function ibv_render_booking_details_panel() {
 					</li>
 				<?php endif; ?>
 			</ul>
+			<?php if ( $is_villa ) : ?>
+				<p class="ibv-booking-confirmation__eco-tax">
+					<?php esc_html_e( 'The government Eco Tax of €2.20 per person, per night is paid in resort and is not included in the price shown.', 'ibv' ); ?>
+				</p>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php
@@ -314,12 +323,75 @@ function ibv_booking_confirmation_phone_link( $phone, $label ) {
 }
 
 /**
- * Quiet contact line. Intro is per-variant; numbers come from Site Options.
+ * Link WhatsApp and call numbers inside a complete contact sentence.
  *
- * @param string $intro Opening sentence.
+ * @param string $text Plain-text footer.
+ * @return string Safe HTML.
  */
-function ibv_render_booking_confirmation_contact_strip( $intro ) {
+function ibv_booking_confirmation_linkify_contact( $text ) {
+	$escaped = esc_html( $text );
+
+	$escaped = preg_replace_callback(
+		'/WhatsApp on (\+[0-9][0-9\s]*[0-9])/',
+		static function ( $match ) {
+			$display = $match[1];
+			$digits  = preg_replace( '/\D/', '', $display );
+			if ( ! $digits ) {
+				return $match[0];
+			}
+			return sprintf(
+				'WhatsApp on <a href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s">%s</a>',
+				esc_url( 'https://wa.me/' . $digits ),
+				esc_attr__( 'Message us on WhatsApp', 'ibv' ),
+				$display
+			);
+		},
+		$escaped
+	);
+
+	$escaped = preg_replace_callback(
+		'/call (\+[0-9][0-9\s]*[0-9])/',
+		static function ( $match ) {
+			$display = $match[1];
+			$tel     = preg_replace( '/[^\d+]/', '', $display );
+			if ( ! $tel ) {
+				return $match[0];
+			}
+			return sprintf(
+				'call <a href="%s" aria-label="%s">%s</a>',
+				esc_url( 'tel:' . $tel ),
+				esc_attr( sprintf( /* translators: %s: international phone number */ __( 'Call %s', 'ibv' ), $display ) ),
+				$display
+			);
+		},
+		$escaped
+	);
+
+	return is_string( $escaped ) ? $escaped : esc_html( $text );
+}
+
+/**
+ * Quiet contact line. Intro is per-variant; numbers come from Site Options
+ * unless the variant supplies a complete sentence.
+ *
+ * @param string $intro    Opening sentence, or the full line.
+ * @param bool   $is_full  Whether $intro is the complete footer.
+ */
+function ibv_render_booking_confirmation_contact_strip( $intro, $is_full = false ) {
 	$intro = trim( (string) $intro );
+	if ( $is_full && $intro ) {
+		?>
+	<section class="ibv-booking-confirmation__contact ibv-section ibv-section--surface-bg ibv-section--rhythm-sm">
+		<div class="ibv-container">
+			<p class="ibv-booking-confirmation__contact-line">
+				<?php echo ibv_booking_confirmation_linkify_contact( $intro ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped and linkified. ?>
+			</p>
+		</div>
+	</section>
+		<?php
+		return;
+	}
+
 	if ( '' === $intro ) {
 		$intro = __( 'Need to change something?', 'ibv' );
 	}
@@ -438,7 +510,10 @@ while ( have_posts() ) :
 		);
 	}
 
-	ibv_render_booking_confirmation_contact_strip( $variant['contact'] );
+	ibv_render_booking_confirmation_contact_strip(
+		$variant['contact'],
+		! empty( $variant['contact_full'] )
+	);
 
 	// Held default copy — leave in place, but do not pitch concierge
 	// back at someone who has just enquired about concierge.

@@ -69,6 +69,15 @@
 	font-weight: var(--ibv-font-weight-bold);
 }
 
+.ibv-booking-confirmation__eco-tax {
+	margin: var(--ibv-space-md) auto 0;
+	max-width: 32rem;
+	text-align: center;
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
+	color: var(--ibv-color-text-muted);
+}
+
 /* Quiet contact line under the three cards — reassurance, not a CTA band. */
 .ibv-booking-confirmation__contact-line {
 	margin: 0 auto;
@@ -77,4 +86,8 @@
 	font-size: var(--ibv-fs-small);
 	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text-muted);
+}
+
+.ibv-booking-confirmation__contact-line a {
+	white-space: nowrap;
 }
