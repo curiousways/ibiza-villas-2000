@@ -4,7 +4,8 @@
  *
  * Shared thank-you page for enquiry forms. Copy is selected by ?type=
  * (villa | accommodation | concierge | general). Unknown or missing
- * values fall back to general — never to villa.
+ * values fall back to villa when ?villa= is a published villa, else
+ * general.
  *
  * Composition:
  *   1. Confirmation panel (variant heading + composed subheading)
@@ -42,7 +43,19 @@ function ibv_booking_confirmation_allowed_types() {
 function ibv_booking_confirmation_type() {
 	$allowed = ibv_booking_confirmation_allowed_types();
 	$type    = isset( $_GET['type'] ) ? sanitize_key( wp_unslash( $_GET['type'] ) ) : '';
-	return in_array( $type, $allowed, true ) ? $type : 'general';
+	if ( in_array( $type, $allowed, true ) ) {
+		return $type;
+	}
+
+	$villa_id = isset( $_GET['villa'] ) ? absint( wp_unslash( $_GET['villa'] ) ) : 0;
+	if ( $villa_id ) {
+		$villa = get_post( $villa_id );
+		if ( $villa && 'villas' === $villa->post_type && 'publish' === $villa->post_status ) {
+			return 'villa';
+		}
+	}
+
+	return 'general';
 }
 
 /**
