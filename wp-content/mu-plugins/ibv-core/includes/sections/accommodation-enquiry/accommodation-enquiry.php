@@ -6,8 +6,8 @@
  * with our single-field "When" date-range picker grafted on, plus the
  * "Prefer to chat" chrome (WhatsApp / phone / email from Site Options).
  *
- * The picker graft is pure front-end: the embedded GF (seeded by
- * seed-accommodation-form.php) carries an HTML "When" field + two CSS-classed
+ * The picker graft is pure front-end: the embedded GF carries an HTML
+ * "When" field + two CSS-classed
  * date fields (ibv-drp-from / ibv-drp-to, hidden via CSS); accommodation-
  * enquiry.js wires VanillaCalendarPro to them and re-binds on
  * gform_post_render so it survives GF's AJAX re-render. The phone field gets

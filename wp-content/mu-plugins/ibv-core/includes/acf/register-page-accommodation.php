@@ -170,7 +170,7 @@ function ibv_register_page_accommodation_fields() {
 					'type'          => 'number',
 					'min'           => 0,
 					'instructions'  => __(
-						'Gravity Form embedded in the enquiry sidebar. Default is the shared "Accommodation Enquiry" form created by the seeder. Leave empty to hide the form.',
+						'Gravity Form embedded in the enquiry sidebar. Leave empty to hide the form.',
 						'ibv'
 					),
 				),

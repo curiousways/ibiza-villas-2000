@@ -167,9 +167,8 @@ function ibv_get_booking_confirmation_url() {
 
 /**
  * Build the Gravity Forms confirmation that sends an enquiry to the booking
- * confirmation page. Shared by the Villa Enquiry and Accommodation Enquiry
- * seeders (the single source of truth for those forms) so both stay in step —
- * only the merge-tag query string differs.
+ * confirmation page. Villa and accommodation confirmations share this
+ * helper so only the merge-tag query string differs.
  *
  * Produces a "Page" confirmation: GF redirects by page id, resolving the
  * permalink at submit time, so it survives slug + domain changes (no stored

@@ -2,12 +2,12 @@
 /**
  * Component: Villa enquiry / RTB panel — embedded Gravity Form.
  *
- * The villa enquiry form is an EMBEDDED Gravity Form (#33, seeded by
- * seed-villa-enquiry-form.php), exactly like the accommodation enquiry form — GF
- * is the single source of truth (fields, validation, notification, entry, and the
- * booking-confirmation redirect). The villa-specific live pricing / availability
- * gate is grafted on top by enquiry-panel.js, the same way the date-range picker
- * and phone widget are grafted onto the accommodation form.
+ * The villa enquiry form is an EMBEDDED Gravity Form (id in
+ * `ibv_villa_enquiry_form_id`). GF is the single source of truth (fields,
+ * validation, notification, entry, and the booking-confirmation redirect).
+ * The villa-specific live pricing / availability gate is grafted on top by
+ * enquiry-panel.js, the same way the date-range picker and phone widget are
+ * grafted onto the accommodation form.
  *
  * This file wires the server side of that graft:
  *   - gform_field_value_* prepopulation (render time): the villa post id, plus the

@@ -147,7 +147,7 @@ function ibv_gf_submission_type_values() {
  * Add the hidden Submission type field if the villa form does not have it.
  *
  * Updates the stored form once. Notifications and other fields are left
- * as they are — do not re-run the seeder to get this field.
+ * as they are.
  */
 function ibv_gf_ensure_submission_type_field() {
 	if ( get_option( 'ibv_gf_submission_type_field' ) === (string) IBV_GF_SUBMISSION_TYPE_FIELD_ID ) {

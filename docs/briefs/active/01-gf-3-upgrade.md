@@ -55,7 +55,7 @@ Inspected `/villas/villa-savines/`, `/hotel/`, `/contact/`, `/concierge/`.
 | `gform_pre_submission` | enquiry-panel (Property Name, Active Offers) | Low–medium. Confirm hidden fields still write. |
 | `gform_pre_render` / `pre_validation` / `admin_pre_render` / `pre_submission_filter` | `concierge-service-dropdown.php` | Low. Choice injection. |
 | `gform_display_add_form_button` | `editor.php` | Low. Admin-only. |
-| `GFAPI::add_form` / `update_form` / `get_form` | seeders | Medium. Do **not** re-run seeders unless form JSON no longer loads. |
+| `GFAPI::get_form` | live forms 32–36 | Low. Forms are edited in admin; seeders have been removed. |
 | `ibv_build_gf_booking_confirmation()` | `helpers.php` | Medium. Page confirmation + merge-tag QS. |
 
 ### JavaScript
@@ -103,7 +103,7 @@ Inspected `/villas/villa-savines/`, `/hotel/`, `/contact/`, `/concierge/`.
 3. ~~Update Gravity Forms to 3.0.2.~~ Done locally. Staging already 3.0.2.
    Do **not** update add-ons or Yoast in the same window.
 4. Hard-refresh every live form. Markup/JS/CSS patched in 0.1.95.
-5. Do **not** re-run `wp ibv seed` unless a form JSON no longer loads.
+5. Do **not** recreate or overwrite forms 32–36. They are live content.
 6. Run Playwright: `enquiry-panel.spec.ts`, booking-confirmation,
    plus a manual pass of 32 / 33 / 35 / 36.
 7. Ship **code only** to staging via git. Do not migrate the local
