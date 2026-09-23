@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once IBV_CORE_PATH . 'includes/helpers.php';
 require_once IBV_CORE_PATH . 'includes/helpers/icon.php';
 require_once IBV_CORE_PATH . 'includes/helpers/gravity-form.php';
+require_once IBV_CORE_PATH . 'includes/helpers/gravity-notifications.php';
 require_once IBV_CORE_PATH . 'includes/shared-assets.php';
 require_once IBV_CORE_PATH . 'includes/integrations/facetwp.php';
 require_once IBV_CORE_PATH . 'includes/integrations/cookie-consent.php';

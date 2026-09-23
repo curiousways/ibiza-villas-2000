@@ -22,6 +22,8 @@
  *     keys the redirect + the server-side Property Name / Active Offers lookup.
  *   - Hidden Property Name #1 + Active Offers #9 — SERVER-SET in enquiry-panel.php
  *     via gform_pre_submission (not user input), so they're authoritative.
+ *   - Hidden Submission type #15 — JS writes "Request to Book" or "Enquiry"
+ *     (C1 subject-line tag). `{Submission type:15}` in notifications.
  *
  * "Page" confirmation → the booking-confirmation page, built by
  * ibv_build_gf_booking_confirmation() (resolves the page by the
@@ -168,6 +170,7 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 				array( 'id' => 12, 'type' => 'hidden', 'label' => 'Villa ID', 'allowsPrepopulate' => true, 'inputName' => 'ibv_villa_id' ),
 				array( 'id' => 1,  'type' => 'hidden', 'label' => 'Property Name' ), // server-set (gform_pre_submission)
 				array( 'id' => 9,  'type' => 'hidden', 'label' => 'Active Offers' ), // server-set (gform_pre_submission)
+				array( 'id' => 15, 'type' => 'hidden', 'label' => 'Submission type' ), // JS-set: Request to Book | Enquiry
 			),
 			'confirmations'  => array(
 				'ibv_villa_redirect' => ibv_build_gf_booking_confirmation(
@@ -184,7 +187,7 @@ if ( ! function_exists( 'ibv_seed_villa_enquiry_form' ) ) {
 					'toType'   => 'email',
 					'to'       => 'bookings@ibizavillas2000.com',
 					'replyTo'  => '{Email:3}',
-					'subject'  => 'Ibiza Villas 2000 Enquiry - {Name:2} - {Property Name:1}',
+					'subject'  => 'Ibiza Villas 2000 {Submission type:15} - {Name:2} - {Property Name:1}',
 					'message'  => '{all_fields}',
 				),
 				'ibv_villa_guest' => array(

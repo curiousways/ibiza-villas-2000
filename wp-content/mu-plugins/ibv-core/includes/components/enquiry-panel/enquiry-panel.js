@@ -490,6 +490,13 @@
 			}
 		}
 
+		function setSubmissionType( value ) {
+			var input = form.querySelector( '[name="input_15"]' );
+			if ( input ) {
+				input.value = value;
+			}
+		}
+
 		function resetPrices() {
 			setText( totalEl, '—' );
 			setText( rentalEl, '—' );
@@ -565,6 +572,7 @@
 				clearNotice();
 				hidePriceBlock();
 				hideContactFields();
+				setSubmissionType( 'Enquiry' );
 				updateGate();
 				return;
 			}
@@ -596,11 +604,13 @@
 						clearNotice();
 						revealPriceBlock();
 						revealContactFields();
+						setSubmissionType( 'Request to Book' );
 					} else {
 						resetPrices();
 						hidePriceBlock();
 						revealContactFields();
 						showNotice( msgUnavailable );
+						setSubmissionType( 'Enquiry' );
 					}
 					updateGate();
 				} )
@@ -613,6 +623,7 @@
 					hidePriceBlock();
 					revealContactFields();
 					showNotice( msgPriceError );
+					setSubmissionType( 'Enquiry' );
 					updateGate();
 				} );
 		}
@@ -662,6 +673,7 @@
 			} catch ( e3 ) {}
 		}, true );
 
+		setSubmissionType( 'Enquiry' );
 		updateGate();
 		if ( gateReady( readState() ) ) {
 			fetchPricing();
