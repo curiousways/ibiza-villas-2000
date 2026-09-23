@@ -81,7 +81,23 @@
 
 	/* ── Date-range picker (one per form) ───────────────────────────── */
 
+	function disarmHiddenGfDatepickers( form ) {
+		var wraps = form.querySelectorAll( '.ibv-drp-hidden' );
+		for ( var i = 0; i < wraps.length; i++ ) {
+			var input = wraps[ i ].querySelector( 'input' );
+			if ( input ) {
+				input.classList.remove( 'gform-datepicker', 'datepicker', 'datepicker_with_icon', 'gdatepicker_with_icon' );
+				input.setAttribute( 'data-initialized', 'true' );
+			}
+			var toggle = wraps[ i ].querySelector( '.gform-datepicker-toggle' );
+			if ( toggle && toggle.parentNode ) {
+				toggle.parentNode.removeChild( toggle );
+			}
+		}
+	}
+
 	function bindPicker( section, form ) {
+		disarmHiddenGfDatepickers( form );
 		if ( form.__ibvAccomDrpBound ) {
 			return;
 		}
@@ -308,10 +324,9 @@
 	}
 
 	// GF re-renders the form on AJAX (validation errors). Re-bind on the fresh
-	// DOM. This GF build fires `gform_post_render` via the jQuery event, NOT the
-	// gform JS-API action, so bind the jQuery event (the one that actually fires)
-	// and ALSO the JS API for builds where only it fires. boot() is idempotent
-	// (per-form __ibvAccom* / __ibvItiBound guards), so a double-fire is harmless.
+	// DOM. 3.0 still fires the jQuery `gform_post_render` event; keep the
+	// gform.addAction twin so a future build that drops the jQuery event
+	// cannot skip us. boot() is idempotent (__ibvAccom* / __ibvItiBound).
 	if ( window.jQuery ) {
 		window.jQuery( document ).on( 'gform_post_render', boot );
 	}

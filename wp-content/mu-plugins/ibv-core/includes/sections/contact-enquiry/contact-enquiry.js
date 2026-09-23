@@ -81,7 +81,12 @@
 
 	// GF re-renders the form on AJAX submit (e.g. after a validation
 	// error). Re-run our init each time to re-bind on the fresh DOM.
+	// Dual-bind: 2.10 fires the jQuery event; 3.0 may fire only the
+	// gform JS-API action. initPhone() is idempotent (__ibvItiBound).
 	if ( window.jQuery ) {
 		window.jQuery( document ).on( 'gform_post_render', init );
+	}
+	if ( window.gform && typeof window.gform.addAction === 'function' ) {
+		window.gform.addAction( 'gform_post_render', init );
 	}
 }() );

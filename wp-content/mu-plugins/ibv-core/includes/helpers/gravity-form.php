@@ -44,10 +44,10 @@ function ibv_core_gravity_form( $form_id, $args = [] ) {
 
 	wp_enqueue_style( 'ibv-gravity-forms' );
 
-	// No GF datepicker stylesheet: the legacy one keys every rule on
-	// `.gform-legacy-datepicker` (never present on modern-markup forms), so
-	// it was dead weight. The jQuery UI calendar is skinned with theme
-	// tokens in gravity-forms.css instead.
+	// No GF datepicker stylesheet. 3.0 swapped jQuery UI for WhatSock and
+	// we do not load GF's theme CSS, so visible date fields (Concierge)
+	// are skinned in gravity-forms.css. Hidden villa/accommodation range
+	// inputs are disarmed below so VanillaCalendarPro owns them.
 
 	$classes = [ 'ibv-gform' ];
 	if ( ! empty( $args['variant'] ) ) {
@@ -172,3 +172,65 @@ function ibv_gf_pax_placeholder_not_selectable( $content, $field ) {
 	) ?? $content;
 }
 add_filter( 'gform_field_content', 'ibv_gf_pax_placeholder_not_selectable', 10, 2 );
+
+/**
+ * Stop Gravity Forms 3.0's WhatSock datepicker on hidden range inputs.
+ *
+ * Villa + accommodation keep `type=date` / `dateType=datepicker` so GF
+ * stores one YYYY-MM-DD value. 3.0 still emits `.gform-datepicker` and a
+ * toggle button on that type, and its JS will init a second calendar even
+ * when the <li> is `display:none`. Strip the hook classes and the toggle
+ * so only the grafted VanillaCalendarPro picker writes those inputs.
+ *
+ * @param string   $content Rendered field HTML.
+ * @param GF_Field $field   Field object.
+ * @return string Field HTML.
+ */
+function ibv_gf_disarm_hidden_range_datepicker( $content, $field ) {
+	if ( ! is_object( $field ) || 'date' !== (string) $field->type ) {
+		return $content;
+	}
+	$classes = preg_split( '/\s+/', (string) $field->cssClass, -1, PREG_SPLIT_NO_EMPTY );
+	if ( ! in_array( 'ibv-drp-hidden', (array) $classes, true ) ) {
+		return $content;
+	}
+
+	// Remove the toggle first, while its class name is still intact.
+	// A global class-token strip would also match inside
+	// `gform-datepicker-toggle` (`\b` treats `-` as a boundary).
+	$out = preg_replace(
+		'/<button\b[^>]*\bgform-datepicker-toggle\b[^>]*>.*?<\/button>/is',
+		'',
+		$content
+	);
+	$out = preg_replace(
+		'/<kbd\b[^>]*\bid=(["\'])keyboardHint_[^"\']+\1[^>]*>.*?<\/kbd>/is',
+		'',
+		$out ?? $content
+	);
+
+	$work = $out ?? $content;
+
+	// Only strip datepicker hook classes from the date <input>.
+	$work = preg_replace_callback(
+		'/<input\b[^>]*>/is',
+		static function ( $m ) {
+			$tag = preg_replace(
+				'/\s*\b(?:gform-datepicker|datepicker_with_icon|gdatepicker_with_icon|datepicker)\b/',
+				'',
+				$m[0]
+			);
+			if ( ! is_string( $tag ) ) {
+				return $m[0];
+			}
+			if ( ! preg_match( '/\sdata-initialized=/', $tag ) ) {
+				$tag = preg_replace( '/^(<input\b)/i', '$1 data-initialized="true"', $tag, 1 ) ?? $tag;
+			}
+			return $tag;
+		},
+		$work
+	);
+
+	return $work ?? $content;
+}
+add_filter( 'gform_field_content', 'ibv_gf_disarm_hidden_range_datepicker', 10, 2 );
