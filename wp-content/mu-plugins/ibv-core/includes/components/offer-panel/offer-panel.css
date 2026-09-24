@@ -122,12 +122,20 @@
 	margin: 0;
 }
 
-/* Real offer copy — typography from villa-offers.css; stack only. */
+/* Real offer copy — villa-offers typography, boxed so it sits apart
+   from the villa excerpt on the teal featured band. */
 .ibv-offer-panel__offer {
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-sm);
 	width: 100%;
+	padding: var(--ibv-space-md);
+	background: var(--ibv-color-tint-gold);
+	border-radius: var(--ibv-radius-md);
+}
+
+.ibv-offer-panel__offer .ibv-villa-offers__desc {
+	font-size: var(--ibv-fs-small);
 }
 
 .ibv-offer-panel__offer .ibv-villa-offers__desc > :last-child {
