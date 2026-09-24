@@ -21,38 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render the Special Offers grid.
  */
 function ibv_core_section_special_offers_grid() {
-	$villas = get_posts(
-		[
-			'post_type'      => 'villas',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-			'no_found_rows'  => true,
-		]
-	);
-
-	$cards = [];
-
-	foreach ( $villas as $villa_id ) {
-		foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
-			$cards[] = [
-				'villa_id' => (int) $villa_id,
-				'offer'    => $offer,
-			];
-		}
-	}
-
-	usort(
-		$cards,
-		static function ( $a, $b ) {
-			return strcmp(
-				(string) ( $a['offer']['offer_date_from'] ?? '' ),
-				(string) ( $b['offer']['offer_date_from'] ?? '' )
-			);
-		}
-	);
+	$cards = ibv_villa_get_all_active_offers();
 
 	if ( empty( $cards ) ) {
 		ibv_core_section_special_offers_empty_state();
@@ -66,12 +35,11 @@ function ibv_core_section_special_offers_grid() {
 			<div class="ibv-section-special-offers-grid__cards">
 				<?php
 				foreach ( $cards as $card ) {
-					$offer      = $card['offer'];
-					$offer_name = trim( (string) ( $offer['offer_name'] ?? '' ) );
-					$cta_url    = get_permalink( $card['villa_id'] );
-					if ( $offer_name && $cta_url ) {
-						$cta_url = add_query_arg( 'offer', $offer_name, $cta_url ) . '#ibv-enquiry';
-					}
+					$offer   = $card['offer'];
+					$cta_url = ibv_villa_offer_enquire_url(
+						$card['villa_id'],
+						(string) ( $offer['offer_name'] ?? '' )
+					);
 					ibv_core_villa_card(
 						[
 							'villa'             => $card['villa_id'],

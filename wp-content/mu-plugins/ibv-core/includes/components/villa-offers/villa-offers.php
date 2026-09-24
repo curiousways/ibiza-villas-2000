@@ -67,6 +67,69 @@ function ibv_villa_get_active_offers( $villa_id ) {
 }
 
 /**
+ * Every active offer on every published villa, soonest start date first.
+ *
+ * Shared by the Special Offers grid and the featured-offer section so
+ * the two never disagree about what is current.
+ *
+ * @return array[] Each item is [ 'villa_id' => int, 'offer' => array ].
+ */
+function ibv_villa_get_all_active_offers() {
+	$villa_ids = get_posts(
+		[
+			'post_type'      => 'villas',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+			'no_found_rows'  => true,
+		]
+	);
+
+	$pairs = [];
+	foreach ( $villa_ids as $villa_id ) {
+		foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
+			$pairs[] = [
+				'villa_id' => (int) $villa_id,
+				'offer'    => $offer,
+			];
+		}
+	}
+
+	usort(
+		$pairs,
+		static function ( $a, $b ) {
+			return strcmp(
+				(string) ( $a['offer']['offer_date_from'] ?? '' ),
+				(string) ( $b['offer']['offer_date_from'] ?? '' )
+			);
+		}
+	);
+
+	return $pairs;
+}
+
+/**
+ * Villa permalink with `?offer={key}#ibv-enquiry` for offer-mode.
+ *
+ * @param int    $villa_id   Villa post ID.
+ * @param string $offer_name Exact offer_name key.
+ * @return string
+ */
+function ibv_villa_offer_enquire_url( $villa_id, $offer_name ) {
+	$url = get_permalink( (int) $villa_id );
+	if ( ! $url ) {
+		return '';
+	}
+	$name = trim( (string) $offer_name );
+	if ( '' === $name ) {
+		return $url;
+	}
+	return add_query_arg( 'offer', $name, $url ) . '#ibv-enquiry';
+}
+
+/**
  * Convert a stored offer date (ACF `Ymd`) to `Y-m-d` for query strings
  * and the enquiry form. Returns '' if the value is unparseable.
  *

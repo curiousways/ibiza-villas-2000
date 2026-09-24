@@ -2,8 +2,9 @@
 /**
  * Component: Offer panel.
  *
- * Reusable side-by-side panel rendering a villa with Was/Now pricing.
- * Used by the featured-offer section and the special-offers page.
+ * Reusable side-by-side panel rendering a villa with either a real
+ * offer (headline / dates / description) or Was/Now pricing.
+ * Used by the featured-offer section.
  *
  * @package Ibiza_Villas_2000
  */
@@ -21,8 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  *     @type float|null  $now_price         Optional. Now price (per week).
  *     @type string|null $valid_from        Optional. ACF date (Ymd) or parseable.
  *     @type string|null $valid_to          Optional. ACF date (Ymd) or parseable.
+ *     @type string      $offer_headline    Optional. Real-offer headline.
+ *     @type string      $offer_dates       Optional. Pre-formatted date range.
+ *     @type string      $offer_description Optional. Real-offer description (HTML).
  *     @type string      $cta_label         CTA button label. Default 'View Villa'.
  *     @type string      $cta_url           CTA URL. Default villa permalink.
+ *     @type string      $cta_variant       Button variant. Default 'secondary'.
  *     @type bool        $show_now_asterisk Whether to render '*' after Now amount.
  *     @type string      $footnote          Footnote text rendered below the panel.
  *     @type string      $section_title     Optional in-panel header title (e.g. "This Week's Special Offer").
@@ -36,8 +41,12 @@ function ibv_core_offer_panel( $args = [] ) {
 		'now_price'         => null,
 		'valid_from'        => null,
 		'valid_to'          => null,
+		'offer_headline'    => '',
+		'offer_dates'       => '',
+		'offer_description' => '',
 		'cta_label'         => __( 'View Villa', 'ibv' ),
 		'cta_url'           => '',
+		'cta_variant'       => 'secondary',
 		'show_now_asterisk' => false,
 		'footnote'          => '',
 		'section_title'     => '',
@@ -62,7 +71,19 @@ function ibv_core_offer_panel( $args = [] ) {
 	$excerpt   = ibv_villa_excerpt_plain( $vid );
 	$location  = ibv_villa_location_label( $vid );
 	$thumb_id  = get_post_thumbnail_id( $vid );
-	$permalink = $args['cta_url'] ? $args['cta_url'] : get_permalink( $vid );
+	$permalink = get_permalink( $vid );
+	$cta_url   = $args['cta_url'] ? $args['cta_url'] : $permalink;
+	$cta_var   = in_array( $args['cta_variant'], [ 'primary', 'secondary', 'ghost', 'primary-inverse', 'secondary-inverse' ], true )
+		? $args['cta_variant']
+		: 'secondary';
+
+	$has_offer_copy = ( '' !== trim( (string) $args['offer_headline'] ) )
+		|| ( '' !== trim( (string) $args['offer_dates'] ) )
+		|| ( '' !== trim( (string) $args['offer_description'] ) );
+
+	if ( $has_offer_copy ) {
+		wp_enqueue_style( 'ibv-villa-offers' );
+	}
 
 	$has_section_header = $args['section_title'] || ! empty( $args['section_cta'] );
 	?>
@@ -168,54 +189,71 @@ function ibv_core_offer_panel( $args = [] ) {
 					<p class="ibv-offer-panel__excerpt"><?php echo esc_html( $excerpt ); ?></p>
 				<?php endif; ?>
 
-				<?php if ( $args['was_price'] || $args['now_price'] ) : ?>
-					<div class="ibv-offer-panel__pricing">
-						<?php if ( $args['was_price'] ) : ?>
-							<div class="ibv-offer-panel__price ibv-offer-panel__price--was">
-								<span class="ibv-offer-panel__price-eyebrow"><?php esc_html_e( 'Was', 'ibv' ); ?></span>
-								<div class="ibv-offer-panel__price-line">
-									<span class="ibv-offer-panel__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
-									<span class="ibv-offer-panel__price-amount">€<?php echo esc_html( number_format_i18n( (float) $args['was_price'] ) ); ?></span>
-									<span class="ibv-offer-panel__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
-								</div>
-							</div>
+				<?php if ( $has_offer_copy ) : ?>
+					<div class="ibv-offer-panel__offer">
+						<?php if ( $args['offer_headline'] ) : ?>
+							<p class="ibv-villa-offers__headline"><?php echo esc_html( $args['offer_headline'] ); ?></p>
 						<?php endif; ?>
-						<?php if ( $args['now_price'] ) : ?>
-							<div class="ibv-offer-panel__price ibv-offer-panel__price--now">
-								<span class="ibv-offer-panel__price-eyebrow"><?php esc_html_e( 'Now', 'ibv' ); ?></span>
-								<div class="ibv-offer-panel__price-line">
-									<span class="ibv-offer-panel__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
-									<span class="ibv-offer-panel__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $vid ); ?>">€<?php echo esc_html( number_format_i18n( (float) $args['now_price'] ) ); ?><?php if ( $args['show_now_asterisk'] ) : ?><span class="ibv-offer-panel__price-mark" aria-hidden="true">*</span><?php endif; ?></span>
-									<span class="ibv-offer-panel__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
-								</div>
-							</div>
+						<?php if ( $args['offer_dates'] ) : ?>
+							<p class="ibv-villa-offers__dates"><?php echo esc_html( $args['offer_dates'] ); ?></p>
+						<?php endif; ?>
+						<?php
+						$offer_desc = trim( (string) $args['offer_description'] );
+						if ( $offer_desc ) :
+							?>
+							<div class="ibv-villa-offers__desc"><?php echo wp_kses_post( wpautop( $offer_desc ) ); ?></div>
 						<?php endif; ?>
 					</div>
-				<?php endif; ?>
+				<?php else : ?>
+					<?php if ( $args['was_price'] || $args['now_price'] ) : ?>
+						<div class="ibv-offer-panel__pricing">
+							<?php if ( $args['was_price'] ) : ?>
+								<div class="ibv-offer-panel__price ibv-offer-panel__price--was">
+									<span class="ibv-offer-panel__price-eyebrow"><?php esc_html_e( 'Was', 'ibv' ); ?></span>
+									<div class="ibv-offer-panel__price-line">
+										<span class="ibv-offer-panel__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
+										<span class="ibv-offer-panel__price-amount">€<?php echo esc_html( number_format_i18n( (float) $args['was_price'] ) ); ?></span>
+										<span class="ibv-offer-panel__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+									</div>
+								</div>
+							<?php endif; ?>
+							<?php if ( $args['now_price'] ) : ?>
+								<div class="ibv-offer-panel__price ibv-offer-panel__price--now">
+									<span class="ibv-offer-panel__price-eyebrow"><?php esc_html_e( 'Now', 'ibv' ); ?></span>
+									<div class="ibv-offer-panel__price-line">
+										<span class="ibv-offer-panel__price-prefix"><?php esc_html_e( 'From', 'ibv' ); ?></span>
+										<span class="ibv-offer-panel__price-amount" data-bob-from-price="<?php echo esc_attr( (string) $vid ); ?>">€<?php echo esc_html( number_format_i18n( (float) $args['now_price'] ) ); ?><?php if ( $args['show_now_asterisk'] ) : ?><span class="ibv-offer-panel__price-mark" aria-hidden="true">*</span><?php endif; ?></span>
+										<span class="ibv-offer-panel__price-suffix"><?php esc_html_e( '/ wk', 'ibv' ); ?></span>
+									</div>
+								</div>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
 
-				<?php
-				$from_d = ibv_format_acf_date_display( (string) $args['valid_from'] );
-				$to_d   = ibv_format_acf_date_display( (string) $args['valid_to'] );
-				if ( $from_d && $to_d ) :
-					?>
-					<p class="ibv-offer-panel__valid">
-						<?php
-						printf(
-							/* translators: 1: from date, 2: to date */
-							esc_html__( 'Valid: %1$s – %2$s', 'ibv' ),
-							esc_html( $from_d ),
-							esc_html( $to_d )
-						);
+					<?php
+					$from_d = ibv_format_acf_date_display( (string) $args['valid_from'] );
+					$to_d   = ibv_format_acf_date_display( (string) $args['valid_to'] );
+					if ( $from_d && $to_d ) :
 						?>
-					</p>
+						<p class="ibv-offer-panel__valid">
+							<?php
+							printf(
+								/* translators: 1: from date, 2: to date */
+								esc_html__( 'Valid: %1$s – %2$s', 'ibv' ),
+								esc_html( $from_d ),
+								esc_html( $to_d )
+							);
+							?>
+						</p>
+					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php
 				ibv_core_button(
 					[
-						'url'     => $permalink,
+						'url'     => $cta_url,
 						'label'   => $args['cta_label'],
-						'variant' => 'secondary',
+						'variant' => $cta_var,
 						'size'    => 'small',
 					]
 				);
