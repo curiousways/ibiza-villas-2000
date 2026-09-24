@@ -41,6 +41,32 @@ function ibv_enquiry_panel_get_date_param( $key ) {
 	return preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ? $raw : '';
 }
 
+/**
+ * Resolve `?offer=` against the queried villa's active offers.
+ *
+ * Exact `offer_name` match only. Cached per request so the date
+ * prefills and the panel data attributes stay in lockstep.
+ *
+ * @return array|null Active repeater row or null.
+ */
+function ibv_enquiry_panel_get_resolved_offer() {
+	static $done  = false;
+	static $offer = null;
+	if ( $done ) {
+		return $offer;
+	}
+	$done = true;
+	if ( ! is_singular( 'villas' ) || ! isset( $_GET['offer'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only prefill.
+		return null;
+	}
+	$key = sanitize_text_field( wp_unslash( $_GET['offer'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( '' === $key || ! function_exists( 'ibv_villa_find_active_offer' ) ) {
+		return null;
+	}
+	$offer = ibv_villa_find_active_offer( get_queried_object_id(), $key );
+	return $offer;
+}
+
 // ── Prepopulation (render time, single villa pages only) ────────────────────
 
 add_filter(
@@ -60,6 +86,13 @@ add_filter(
 		if ( ! is_singular( 'villas' ) ) {
 			return $value;
 		}
+		$offer = ibv_enquiry_panel_get_resolved_offer();
+		if ( $offer && function_exists( 'ibv_villa_offer_iso_date' ) ) {
+			$d = ibv_villa_offer_iso_date( (string) ( $offer['offer_date_from'] ?? '' ) );
+			if ( '' !== $d ) {
+				return $d;
+			}
+		}
 		$d = ibv_enquiry_panel_get_date_param( 'date_from' );
 		return '' !== $d ? $d : $value;
 	}
@@ -70,6 +103,13 @@ add_filter(
 	static function ( $value ) {
 		if ( ! is_singular( 'villas' ) ) {
 			return $value;
+		}
+		$offer = ibv_enquiry_panel_get_resolved_offer();
+		if ( $offer && function_exists( 'ibv_villa_offer_iso_date' ) ) {
+			$d = ibv_villa_offer_iso_date( (string) ( $offer['offer_date_to'] ?? '' ) );
+			if ( '' !== $d ) {
+				return $d;
+			}
 		}
 		$d = ibv_enquiry_panel_get_date_param( 'date_to' );
 		return '' !== $d ? $d : $value;
@@ -117,20 +157,26 @@ add_action(
 				$villa_name = sanitize_text_field( $pretty ? $pretty : get_the_title( $villa_id ) );
 
 				if ( function_exists( 'ibv_villa_get_active_offers' ) ) {
-					$names = array();
+					$posted = isset( $_POST['input_9'] ) ? sanitize_text_field( wp_unslash( $_POST['input_9'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- GF owns nonce/honeypot for this form.
+					$names  = array();
+					$match  = '';
 					foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
 						$name = sanitize_text_field( (string) ( $offer['offer_name'] ?? '' ) );
-						if ( '' !== $name ) {
-							$names[] = $name;
+						if ( '' === $name ) {
+							continue;
+						}
+						$names[] = $name;
+						if ( '' !== $posted && $posted === $name ) {
+							$match = $name;
 						}
 					}
-					$offer_names = implode( ', ', $names );
+					$offer_names = '' !== $match ? $match : implode( ', ', $names );
 				}
 			}
 		}
 
 		$_POST['input_1'] = $villa_name;  // Property Name.
-		$_POST['input_9'] = $offer_names; // Active Offers.
+		$_POST['input_9'] = $offer_names; // Active Offers: one real offer, or all.
 	}
 );
 
@@ -199,6 +245,17 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	$whatsapp = get_field( 'whatsapp_number', 'option' );
 	$digits   = $whatsapp ? preg_replace( '/[^0-9]/', '', (string) $whatsapp ) : '';
 	$wa_url   = $digits ? 'https://wa.me/' . $digits : '';
+
+	$resolved_offer = ( $villa_id === get_queried_object_id() )
+		? ibv_enquiry_panel_get_resolved_offer()
+		: null;
+	$resolved_name  = $resolved_offer ? trim( (string) ( $resolved_offer['offer_name'] ?? '' ) ) : '';
+	$resolved_from  = ( $resolved_offer && function_exists( 'ibv_villa_offer_iso_date' ) )
+		? ibv_villa_offer_iso_date( (string) ( $resolved_offer['offer_date_from'] ?? '' ) )
+		: '';
+	$resolved_to    = ( $resolved_offer && function_exists( 'ibv_villa_offer_iso_date' ) )
+		? ibv_villa_offer_iso_date( (string) ( $resolved_offer['offer_date_to'] ?? '' ) )
+		: '';
 	?>
 	<?php /* ─────────────────────────────────────────────────────────────
 	       BOB API INTEGRATION SHELL — villa enquiry panel
@@ -222,7 +279,8 @@ function ibv_core_enquiry_panel( $villa_id ) {
 	       Spec: Notion → IBZ002 → API Integration Spec
 	       ──────────────────────────────────────────────────────────── */ ?>
 	<div
-		class="ibv-enquiry-panel is-pricing-pending is-contact-pending"
+		id="ibv-enquiry"
+		class="ibv-enquiry-panel is-pricing-pending is-contact-pending<?php echo $resolved_name ? ' is-offer-mode' : ''; ?>"
 		data-bob-enquiry-panel
 		data-bob-property-id="<?php echo esc_attr( $property_id ); ?>"
 		data-bob-endpoint="<?php echo esc_url( $endpoint_url ); ?>"
@@ -230,8 +288,31 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		data-bob-msg-unavailable="<?php echo esc_attr__( 'This villa isn’t available for your selected dates. Try different dates, or send us your enquiry and we’ll suggest great alternatives.', 'ibv' ); ?>"
 		data-bob-msg-price-error="<?php echo esc_attr__( 'We couldn’t fetch live pricing just now. You can still send your enquiry and we’ll confirm the price by email.', 'ibv' ); ?>"
 		data-bob-msg-invalid-phone="<?php echo esc_attr__( 'Please enter a valid phone number.', 'ibv' ); ?>"
+		data-bob-msg-offer-price="<?php echo esc_attr__( "We'll confirm the offer price by email.", 'ibv' ); ?>"
+		data-bob-offer-line-prefix="<?php echo esc_attr__( "You're asking about:", 'ibv' ); ?>"
+		data-bob-offer-clear-label="<?php echo esc_attr__( 'Clear', 'ibv' ); ?>"
+		<?php if ( $resolved_name ) : ?>
+			data-bob-offer-name="<?php echo esc_attr( $resolved_name ); ?>"
+			data-bob-offer-from="<?php echo esc_attr( $resolved_from ); ?>"
+			data-bob-offer-to="<?php echo esc_attr( $resolved_to ); ?>"
+		<?php endif; ?>
 	>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
+
+		<?php if ( $resolved_name ) : ?>
+			<p class="ibv-enquiry-panel__offer-line" data-ibv-offer-line>
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %s: offer name */
+						__( "You're asking about: %s", 'ibv' ),
+						$resolved_name
+					)
+				);
+				?>
+				<a href="#ibv-enquiry" data-ibv-offer-clear><?php esc_html_e( 'Clear', 'ibv' ); ?></a>
+			</p>
+		<?php endif; ?>
 
 		<?php if ( $form_id ) : ?>
 			<div class="ibv-enquiry-panel__form-embed">

@@ -131,3 +131,7 @@
 	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text);
 }
+
+.ibv-villa-offers__enquire {
+	align-self: flex-start;
+}

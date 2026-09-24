@@ -67,6 +67,42 @@ function ibv_villa_get_active_offers( $villa_id ) {
 }
 
 /**
+ * Convert a stored offer date (ACF `Ymd`) to `Y-m-d` for query strings
+ * and the enquiry form. Returns '' if the value is unparseable.
+ *
+ * @param string $stored Repeater date value.
+ * @return string
+ */
+function ibv_villa_offer_iso_date( $stored ) {
+	$stored = (string) $stored;
+	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $stored ) ) {
+		return $stored;
+	}
+	$dt = DateTimeImmutable::createFromFormat( 'Ymd', $stored );
+	return $dt ? $dt->format( 'Y-m-d' ) : '';
+}
+
+/**
+ * Find one active offer on a villa by exact `offer_name`.
+ *
+ * @param int    $villa_id Villa post ID.
+ * @param string $name     Offer key (exact name).
+ * @return array|null Repeater row or null.
+ */
+function ibv_villa_find_active_offer( $villa_id, $name ) {
+	$name = trim( (string) $name );
+	if ( '' === $name ) {
+		return null;
+	}
+	foreach ( ibv_villa_get_active_offers( $villa_id ) as $offer ) {
+		if ( trim( (string) ( $offer['offer_name'] ?? '' ) ) === $name ) {
+			return $offer;
+		}
+	}
+	return null;
+}
+
+/**
  * Count published villas with at least one currently-active offer.
  *
  * Drives the "Special offers only (N)" count on the listing filter toggle.
@@ -118,6 +154,7 @@ function ibv_core_villa_offers_list( array $offers ) {
 				$headline = trim( (string) ( $offer['offer_name'] ?? '' ) );
 			}
 			$description = trim( (string) ( $offer['offer_description'] ?? '' ) );
+			$offer_name  = trim( (string) ( $offer['offer_name'] ?? '' ) );
 			$dates       = ibv_core_villa_offers_format_range(
 				(string) $offer['offer_date_from'],
 				(string) $offer['offer_date_to']
@@ -136,6 +173,26 @@ function ibv_core_villa_offers_list( array $offers ) {
 				<?php if ( $description ) : ?>
 					<div class="ibv-villa-offers__desc"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
 				<?php endif; ?>
+
+				<?php
+				if ( $offer_name ) {
+					ibv_core_button(
+						[
+							'url'        => '#ibv-enquiry',
+							'label'      => __( 'Enquire about this offer', 'ibv' ),
+							'variant'    => 'secondary',
+							'size'       => 'small',
+							'class'      => 'ibv-villa-offers__enquire',
+							'attributes' => [
+								'data-ibv-offer-enquire' => '',
+								'data-offer-name'        => $offer_name,
+								'data-offer-from'        => ibv_villa_offer_iso_date( (string) $offer['offer_date_from'] ),
+								'data-offer-to'          => ibv_villa_offer_iso_date( (string) $offer['offer_date_to'] ),
+							],
+						]
+					);
+				}
+				?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

@@ -243,6 +243,18 @@
 		}
 
 		syncDisplay();
+
+		form.__ibvSetDateRange = function ( fromYMD, toYMD ) {
+			setInputValue( fromInput, fromYMD || '' );
+			setInputValue( toInput, toYMD || '' );
+			if ( calendar ) {
+				calendar.set(
+					{ selectedDates: ( isValidYMD( fromYMD ) && isValidYMD( toYMD ) ) ? [ fromYMD, toYMD ] : [] },
+					{ year: false, month: false, time: false }
+				);
+			}
+			syncDisplay();
+		};
 	}
 
 	/* ── Pricing / gate / phone graft ───────────────────────────────── */
@@ -333,6 +345,10 @@
 		var errorEl        = form.querySelector( '[data-bob-error]' );
 		var msgUnavailable = panel.getAttribute( 'data-bob-msg-unavailable' ) || '';
 		var msgPriceError  = panel.getAttribute( 'data-bob-msg-price-error' ) || '';
+		var msgOfferPrice  = panel.getAttribute( 'data-bob-msg-offer-price' ) || '';
+		var offerLinePrefix = panel.getAttribute( 'data-bob-offer-line-prefix' ) || "You're asking about:";
+		var offerClearLabel = panel.getAttribute( 'data-bob-offer-clear-label' ) || 'Clear';
+		var offerMode = false;
 
 		var totalEl    = form.querySelector( '[data-bob-total-eur]' );
 		var rentalEl   = form.querySelector( '[data-bob-base-rental]' );
@@ -497,6 +513,157 @@
 			}
 		}
 
+		function getOfferInput() {
+			return form.querySelector( '[name="input_9"]' );
+		}
+
+		function readOfferFromPanel() {
+			var name = panel.getAttribute( 'data-bob-offer-name' ) || '';
+			if ( ! name ) {
+				return null;
+			}
+			return {
+				name: name,
+				from: panel.getAttribute( 'data-bob-offer-from' ) || '',
+				to:   panel.getAttribute( 'data-bob-offer-to' ) || '',
+			};
+		}
+
+		function scrollPanelIntoView() {
+			var reduce = window.matchMedia && window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches;
+			if ( typeof panel.scrollIntoView === 'function' ) {
+				panel.scrollIntoView( { behavior: reduce ? 'auto' : 'smooth', block: 'start' } );
+			}
+		}
+
+		function renderOfferLine( name ) {
+			var line = panel.querySelector( '[data-ibv-offer-line]' );
+			if ( ! line ) {
+				line = document.createElement( 'p' );
+				line.className = 'ibv-enquiry-panel__offer-line';
+				line.setAttribute( 'data-ibv-offer-line', '' );
+				var title = panel.querySelector( '.ibv-enquiry-panel__title' );
+				if ( title ) {
+					title.insertAdjacentElement( 'afterend', line );
+				} else {
+					panel.insertBefore( line, panel.firstChild );
+				}
+			}
+			while ( line.firstChild ) {
+				line.removeChild( line.firstChild );
+			}
+			line.appendChild( document.createTextNode( offerLinePrefix + ' ' + name + ' ' ) );
+			var clear = document.createElement( 'a' );
+			clear.href = '#ibv-enquiry';
+			clear.setAttribute( 'data-ibv-offer-clear', '' );
+			clear.textContent = offerClearLabel;
+			line.appendChild( clear );
+		}
+
+		function removeOfferLine() {
+			var line = panel.querySelector( '[data-ibv-offer-line]' );
+			if ( line && line.parentNode ) {
+				line.parentNode.removeChild( line );
+			}
+		}
+
+		function applyOfferModeUi() {
+			setSubmissionType( 'Special offer' );
+			hidePriceBlock();
+			resetPrices();
+			showNotice( msgOfferPrice );
+			var s = readState();
+			if ( gateReady( s ) ) {
+				revealContactFields();
+			} else {
+				hideContactFields();
+			}
+			updateGate();
+		}
+
+		function enterOfferMode( offer, opts ) {
+			opts = opts || {};
+			if ( ! offer || ! offer.name ) {
+				return;
+			}
+			offerMode = true;
+			if ( inflight && typeof inflight.abort === 'function' ) {
+				try {
+					inflight.abort();
+				} catch ( e ) {}
+			}
+			panel.classList.add( 'is-offer-mode' );
+			panel.setAttribute( 'data-bob-offer-name', offer.name );
+			if ( offer.from ) {
+				panel.setAttribute( 'data-bob-offer-from', offer.from );
+			}
+			if ( offer.to ) {
+				panel.setAttribute( 'data-bob-offer-to', offer.to );
+			}
+			var input9 = getOfferInput();
+			if ( input9 ) {
+				input9.value = offer.name;
+			}
+			if ( ! opts.skipDateSet && isValidDate( offer.from ) && isValidDate( offer.to ) ) {
+				if ( typeof form.__ibvSetDateRange === 'function' ) {
+					form.__ibvSetDateRange( offer.from, offer.to );
+				} else {
+					setInputValue( fromEl, offer.from );
+					setInputValue( toEl, offer.to );
+				}
+			}
+			renderOfferLine( offer.name );
+			applyOfferModeUi();
+			if ( opts.scroll ) {
+				scrollPanelIntoView();
+			}
+		}
+
+		function leaveOfferMode() {
+			offerMode = false;
+			panel.classList.remove( 'is-offer-mode' );
+			panel.removeAttribute( 'data-bob-offer-name' );
+			panel.removeAttribute( 'data-bob-offer-from' );
+			panel.removeAttribute( 'data-bob-offer-to' );
+			var input9 = getOfferInput();
+			if ( input9 ) {
+				input9.value = '';
+			}
+			removeOfferLine();
+			setSubmissionType( 'Enquiry' );
+			fetchPricing();
+		}
+
+		panel.__ibvEnterOfferMode = enterOfferMode;
+		panel.__ibvLeaveOfferMode = leaveOfferMode;
+
+		if ( ! panel.__ibvOfferUiBound ) {
+			panel.__ibvOfferUiBound = true;
+			document.addEventListener( 'click', function ( ev ) {
+				var clear = ev.target.closest( '[data-ibv-offer-clear]' );
+				if ( clear && panel.contains( clear ) ) {
+					ev.preventDefault();
+					if ( typeof panel.__ibvLeaveOfferMode === 'function' ) {
+						panel.__ibvLeaveOfferMode();
+					}
+					return;
+				}
+				var btn = ev.target.closest( '[data-ibv-offer-enquire]' );
+				if ( ! btn ) {
+					return;
+				}
+				ev.preventDefault();
+				var offer = {
+					name: btn.getAttribute( 'data-offer-name' ) || '',
+					from: btn.getAttribute( 'data-offer-from' ) || '',
+					to:   btn.getAttribute( 'data-offer-to' ) || '',
+				};
+				if ( offer.name && typeof panel.__ibvEnterOfferMode === 'function' ) {
+					panel.__ibvEnterOfferMode( offer, { scroll: true } );
+				}
+			} );
+		}
+
 		function resetPrices() {
 			setText( totalEl, '—' );
 			setText( rentalEl, '—' );
@@ -563,6 +730,10 @@
 
 		var inflight = null;
 		function fetchPricing() {
+			if ( offerMode ) {
+				applyOfferModeUi();
+				return;
+			}
 			if ( ! endpoint || ! propertyId ) {
 				return;
 			}
@@ -600,6 +771,10 @@
 					return r.json();
 				} )
 				.then( function ( data ) {
+					if ( offerMode ) {
+						applyOfferModeUi();
+						return;
+					}
 					if ( paint( data ) ) {
 						clearNotice();
 						revealPriceBlock();
@@ -616,6 +791,10 @@
 				} )
 				.catch( function ( err ) {
 					if ( err && err.name === 'AbortError' ) {
+						return;
+					}
+					if ( offerMode ) {
+						applyOfferModeUi();
 						return;
 					}
 					console.warn( '[ibv-enquiry-panel] pricing fetch failed', err );
@@ -673,10 +852,15 @@
 			} catch ( e3 ) {}
 		}, true );
 
-		setSubmissionType( 'Enquiry' );
-		updateGate();
-		if ( gateReady( readState() ) ) {
-			fetchPricing();
+		var initialOffer = readOfferFromPanel();
+		if ( initialOffer ) {
+			enterOfferMode( initialOffer, { scroll: false, skipDateSet: true } );
+		} else {
+			setSubmissionType( 'Enquiry' );
+			updateGate();
+			if ( gateReady( readState() ) ) {
+				fetchPricing();
+			}
 		}
 	}
 

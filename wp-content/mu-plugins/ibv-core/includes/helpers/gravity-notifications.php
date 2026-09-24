@@ -122,6 +122,7 @@ function ibv_gf_submission_type_values() {
 	return [
 		'Request to Book',
 		'Enquiry',
+		'Special offer',
 	];
 }
 
@@ -171,7 +172,7 @@ function ibv_gf_ensure_submission_type_field() {
 add_action( 'init', 'ibv_gf_ensure_submission_type_field', 30 );
 
 /**
- * Keep the posted submission type to the two allowed labels.
+ * Keep the posted submission type to the allowed labels.
  *
  * @param array $form Form.
  * @return array
@@ -267,6 +268,7 @@ function ibv_gf_alias_enquiry_merge_tags( $text, $form, $entry, $url_encode, $es
 		'{Submission type}'   => rgar( $entry, (string) IBV_GF_SUBMISSION_TYPE_FIELD_ID ),
 		'{Property Name}'     => rgar( $entry, '1' ),
 		'{Number of guests}'  => rgar( $entry, '7' ),
+		'{Offer}'             => rgar( $entry, '9' ),
 	];
 
 	return str_replace( array_keys( $aliases ), array_values( $aliases ), $text );

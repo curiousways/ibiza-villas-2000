@@ -66,7 +66,12 @@ function ibv_core_section_special_offers_grid() {
 			<div class="ibv-section-special-offers-grid__cards">
 				<?php
 				foreach ( $cards as $card ) {
-					$offer = $card['offer'];
+					$offer      = $card['offer'];
+					$offer_name = trim( (string) ( $offer['offer_name'] ?? '' ) );
+					$cta_url    = get_permalink( $card['villa_id'] );
+					if ( $offer_name && $cta_url ) {
+						$cta_url = add_query_arg( 'offer', $offer_name, $cta_url ) . '#ibv-enquiry';
+					}
 					ibv_core_villa_card(
 						[
 							'villa'             => $card['villa_id'],
@@ -78,6 +83,8 @@ function ibv_core_section_special_offers_grid() {
 							),
 							'offer_headline'    => trim( (string) ( $offer['offer_headline'] ?? '' ) ),
 							'offer_description' => trim( (string) ( $offer['offer_description'] ?? '' ) ),
+							'cta_label'         => __( 'Enquire about this offer', 'ibv' ),
+							'cta_url'           => $cta_url,
 						]
 					);
 				}
