@@ -1,3 +1,8 @@
+.ibv-section-about-faq {
+	/* Anchor landing point for #faq, same offset as the listing #results. */
+	scroll-margin-top: 120px;
+}
+
 .ibv-section-about-faq__inner {
 	display: flex;
 	flex-direction: column;

@@ -23,7 +23,7 @@ function ibv_core_section_about_faq() {
 
 	wp_enqueue_style( 'ibv-section-about-faq' );
 	?>
-	<section class="ibv-section-about-faq ibv-section ibv-section--surface-white">
+	<section id="faq" class="ibv-section-about-faq ibv-section ibv-section--surface-white">
 		<div class="ibv-container ibv-section-about-faq__inner">
 			<header class="ibv-section-about-faq__header">
 				<?php if ( $eyebrow ) : ?>
