@@ -230,6 +230,23 @@
 	outline-offset: 2px;
 }
 
+/* Field errors sit below the pill. Leaving them in-flow stretches
+   .gform_body and vertically recenters the submit against the
+   taller stack. */
+.ibv-newsletter-form__embed .gfield_validation_message,
+.ibv-newsletter-form__embed .validation_error {
+	position: absolute;
+	inset-inline-start: 0.375rem;
+	top: 100%;
+	width: calc(100% - 0.75rem);
+	margin-block-start: var(--ibv-space-2xs);
+}
+
+.ibv-newsletter-form__embed form:has(.gfield_validation_message),
+.ibv-newsletter-form__embed form:has(.validation_error) {
+	margin-block-end: calc(var(--ibv-fs-small) * var(--ibv-lh-relaxed) + var(--ibv-space-xs));
+}
+
 
 /* Footer variant (global footer column). */
 .ibv-newsletter-form--footer {
