@@ -42,6 +42,8 @@ function ibv_register_globals_content_fields() {
 					'name'          => 'featured_offer_villa',
 					'type'          => 'post_object',
 					'post_type'     => array( 'villas' ),
+					'post_status'   => array( 'publish' ),
+					'allow_null'    => 1,
 					'return_format' => 'id',
 					'multiple'      => 0,
 					'instructions'  => __( 'Optional. The villa\'s own current offer (Villas → villa → Offers) is shown on the homepage and at the top of Special Offers. Leave empty to feature the offer that starts soonest across all villas. Nothing shows if the chosen villa has no current offer.', 'ibv' ),
