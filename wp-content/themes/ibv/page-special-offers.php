@@ -25,8 +25,7 @@ while ( have_posts() ) :
 		]
 	);
 
-	// The grid section owns its own data — aggregates active offers
-	// across all villas, falls back to the empty state internally.
+	// Grid omits the featured pair; silent if that leaves nothing.
 	ibv_core_section_special_offers_grid();
 
 	ibv_core_section_short_breaks(

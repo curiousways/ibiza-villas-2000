@@ -9,6 +9,9 @@
  * the empty-state section so the page still has something useful.
  *
  * Owns its own data — the page template just calls this without args.
+ * The featured (villa_id, offer_name) pair is omitted so it is not
+ * shown twice. If that leaves nothing, the section is silent (no
+ * empty-state): the featured band already has the offer.
  *
  * @package Ibiza_Villas_2000
  */
@@ -21,9 +24,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Render the Special Offers grid.
  */
 function ibv_core_section_special_offers_grid() {
-	$cards = ibv_villa_get_all_active_offers();
+	$cards    = ibv_villa_get_all_active_offers();
+	$featured = ibv_featured_offer_resolve();
+
+	if ( $featured ) {
+		$ex_vid  = (int) $featured['villa_id'];
+		$ex_name = trim( (string) ( $featured['offer']['offer_name'] ?? '' ) );
+		$cards   = array_values(
+			array_filter(
+				$cards,
+				static function ( $card ) use ( $ex_vid, $ex_name ) {
+					return (int) $card['villa_id'] !== $ex_vid
+						|| trim( (string) ( $card['offer']['offer_name'] ?? '' ) ) !== $ex_name;
+				}
+			)
+		);
+	}
 
 	if ( empty( $cards ) ) {
+		if ( $featured ) {
+			return;
+		}
 		ibv_core_section_special_offers_empty_state();
 		return;
 	}
