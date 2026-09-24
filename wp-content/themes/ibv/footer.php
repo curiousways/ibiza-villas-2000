@@ -172,6 +172,8 @@ $socials = get_field( 'socials', 'option' );
 	</div>
 </footer>
 
+<?php ibv_core_whatsapp_button(); ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

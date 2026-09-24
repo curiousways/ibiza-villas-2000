@@ -1,0 +1,100 @@
+/* Floating WhatsApp button — cookie-free wa.me link.
+   Brand green is not in the IV2000 palette; scoped here only. */
+
+.ibv-whatsapp-button {
+	--ibv-whatsapp-green: #25d366;
+	--ibv-whatsapp-size: 3.5rem; /* 56px — mobile circle */
+
+	position: fixed;
+	z-index: 1000; /* CookieConsent --cc-z-index is 2147483647 */
+	right: var(--ibv-space-md);
+	bottom: calc(var(--ibv-space-md) + env(safe-area-inset-bottom, 0px));
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--ibv-space-xs);
+	width: var(--ibv-whatsapp-size);
+	height: var(--ibv-whatsapp-size);
+	padding: 0;
+	border-radius: var(--ibv-radius-pill);
+	background: var(--ibv-whatsapp-green);
+	color: var(--ibv-color-text-inverse);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: 1;
+	letter-spacing: var(--ibv-tracking-normal);
+	text-decoration: none;
+	animation: ibv-whatsapp-in var(--ibv-duration-slow) var(--ibv-ease-out);
+}
+
+.ibv-whatsapp-button,
+.ibv-whatsapp-button:hover,
+.ibv-whatsapp-button:focus-visible {
+	color: var(--ibv-color-text-inverse);
+}
+
+.ibv-whatsapp-button:focus-visible {
+	outline: 2px solid var(--ibv-color-focus-ring);
+	outline-offset: 2px;
+}
+
+.ibv-whatsapp-button__icon {
+	flex-shrink: 0;
+	fill: currentColor;
+}
+
+.ibv-whatsapp-button__label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Sit above the full-width enquiry submit on villa mobiles. */
+@media (max-width: 47.999rem) {
+	body.single-villas .ibv-whatsapp-button {
+		bottom: calc(var(--ibv-space-md) + env(safe-area-inset-bottom, 0px) + 4.75rem);
+	}
+}
+
+@media (min-width: 48rem) {
+	.ibv-whatsapp-button {
+		right: var(--ibv-space-lg);
+		bottom: calc(var(--ibv-space-lg) + env(safe-area-inset-bottom, 0px));
+		width: auto;
+		height: auto;
+		padding: var(--ibv-space-sm) var(--ibv-space-lg);
+	}
+
+	.ibv-whatsapp-button__label {
+		position: static;
+		width: auto;
+		height: auto;
+		margin: 0;
+		overflow: visible;
+		clip: auto;
+		white-space: nowrap;
+	}
+}
+
+@keyframes ibv-whatsapp-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ibv-whatsapp-button {
+		animation: none;
+	}
+}
