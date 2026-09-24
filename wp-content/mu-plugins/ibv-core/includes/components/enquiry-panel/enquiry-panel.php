@@ -212,6 +212,43 @@ add_filter(
 );
 
 /**
+ * Note under the Guests select: groups of 12+ go to the Contact page.
+ *
+ * Same destination as the listing-hero note (`ibv_get_contact_page_url()`).
+ * Shown on every villa, regardless of sleeps capacity.
+ *
+ * @param string   $content Field HTML.
+ * @param GF_Field $field   Field object.
+ * @param mixed    $value   Posted / default value.
+ * @param int      $lead_id Entry id (0 on render).
+ * @param int      $form_id Form id.
+ * @return string
+ */
+function ibv_enquiry_panel_pax_group_note( $content, $field, $value, $lead_id, $form_id ) {
+	$villa_form_id = (int) get_option( 'ibv_villa_enquiry_form_id' );
+	if ( ! $villa_form_id || (int) $form_id !== $villa_form_id ) {
+		return $content;
+	}
+	if ( ! is_object( $field ) || 'select' !== (string) $field->type ) {
+		return $content;
+	}
+	$classes = preg_split( '/\s+/', (string) $field->cssClass, -1, PREG_SPLIT_NO_EMPTY );
+	if ( ! in_array( 'ibv-pax', (array) $classes, true ) ) {
+		return $content;
+	}
+
+	$note = sprintf(
+		'<p class="ibv-enquiry-panel__group-note"><strong>%s</strong> <a href="%s">%s</a></p>',
+		esc_html__( 'Looking for 12 or more guests?', 'ibv' ),
+		ibv_get_contact_page_url(),
+		esc_html__( 'Contact us', 'ibv' )
+	);
+
+	return $content . $note;
+}
+add_filter( 'gform_field_content', 'ibv_enquiry_panel_pax_group_note', 20, 5 );
+
+/**
  * Render the villa enquiry panel (embedded GF + grafted pricing/gate + chrome).
  *
  * @param int $villa_id Villa post ID.
