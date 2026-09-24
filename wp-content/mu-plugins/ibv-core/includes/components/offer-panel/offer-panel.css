@@ -130,12 +130,14 @@
 	gap: var(--ibv-space-sm);
 	width: 100%;
 	padding: var(--ibv-space-md);
-	background: var(--ibv-color-tint-gold);
+	background: var(--ibv-color-off-white);
 	border-radius: var(--ibv-radius-md);
 }
 
-.ibv-offer-panel__offer .ibv-villa-offers__desc {
+.ibv-offer-panel__offer .ibv-villa-offers__desc,
+.ibv-offer-panel__offer .ibv-villa-offers__desc p {
 	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-relaxed);
 }
 
 .ibv-offer-panel__offer .ibv-villa-offers__desc > :last-child {
