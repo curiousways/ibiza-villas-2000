@@ -160,10 +160,16 @@
 	filter: brightness(0.92);
 }
 
-.ibv-newsletter-form--default .ibv-newsletter-form__embed .gform_confirmation_message {
-	color: var(--ibv-color-sage-100);
-	font-size: var(--ibv-fs-small);
-	margin-block-start: var(--ibv-space-sm);
+.ibv-newsletter-form__embed .gform_confirmation_message {
+	margin: 0;
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	background: var(--ibv-color-positive-100);
+	color: var(--ibv-color-positive-300);
+	border-radius: var(--ibv-radius-field);
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-body);
+	font-weight: var(--ibv-font-weight-medium);
+	line-height: var(--ibv-lh-cozy);
 }
 
 .ibv-newsletter-form--default .ibv-newsletter-form__embed .gfield_validation_message,
@@ -204,6 +210,24 @@
 
 .ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_submission_error {
 	color: var(--ibv-color-forest-green-deep);
+}
+
+/* Same gold ring as :focus when GF marks the email field invalid.
+   The variant rules set outline: 0 on the input, so this selector
+   has to beat them. The pill is the visible field, so ring that too. */
+.ibv-newsletter-form:is(.ibv-newsletter-form--default, .ibv-newsletter-form--footer, .ibv-newsletter-form--empty-state)
+	.ibv-newsletter-form__embed
+	:is(.gfield_error, .gfield--error)
+	input:is([type="email"], [type="text"]) {
+	outline: 2px solid var(--ibv-color-gold-500);
+	outline-offset: -2px;
+	border-radius: var(--ibv-radius-field);
+}
+
+.ibv-newsletter-form__embed form:has(.gfield_error),
+.ibv-newsletter-form__embed form:has(.gfield--error) {
+	outline: 2px solid var(--ibv-color-gold-500);
+	outline-offset: 2px;
 }
 
 
@@ -354,13 +378,6 @@
 	filter: brightness(0.92);
 }
 
-/* Validation / confirmation messages (light styling) */
-.ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_confirmation_message {
-	color: var(--ibv-color-sage-100);
-	font-size: var(--ibv-fs-small);
-	margin-block-start: var(--ibv-space-sm);
-}
-
 .ibv-newsletter-form--footer .ibv-newsletter-form__embed .gfield_validation_message,
 .ibv-newsletter-form--footer .ibv-newsletter-form__embed .validation_error {
 	color: var(--ibv-color-gold-500);
@@ -479,12 +496,6 @@
 .ibv-newsletter-form--empty-state .ibv-newsletter-form__embed input[type="submit"]:focus-visible,
 .ibv-newsletter-form--empty-state .ibv-newsletter-form__embed button[type="submit"]:focus-visible {
 	filter: brightness(0.92);
-}
-
-.ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gform_confirmation_message {
-	color: var(--ibv-color-text-muted);
-	font-size: var(--ibv-fs-small);
-	margin-block-start: var(--ibv-space-sm);
 }
 
 .ibv-newsletter-form--empty-state .ibv-newsletter-form__embed .gfield_validation_message,
