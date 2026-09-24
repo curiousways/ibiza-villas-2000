@@ -71,17 +71,11 @@
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	/* Closing hairline: bounds the block without boxing it. */
-	border-block-end: 1px solid var(--ibv-color-border);
 }
 
-/* Single offer (static variant): the header rule alone bounds it — a
-   closing line under one lone offer reads as clutter, and the row's own
-   vertical padding is dead space (the header row and the detail shell's
-   section gap already provide the rhythm). */
-.ibv-villa-offers--static .ibv-villa-offers__list {
-	border-block-end: 0;
-}
+/* Single offer (static variant): the header rule alone bounds it. The
+   row's own vertical padding is dead space (the header row and the
+   detail shell's section gap already provide the rhythm). */
 
 .ibv-villa-offers--static .ibv-villa-offers__item {
 	padding-block-start: var(--ibv-space-md);

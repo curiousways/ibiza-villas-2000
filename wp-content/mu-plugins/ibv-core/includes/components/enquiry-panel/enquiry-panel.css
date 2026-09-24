@@ -70,21 +70,54 @@
 }
 
 .ibv-enquiry-panel__offer-line {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--ibv-space-xs);
 	margin: calc(-1 * var(--ibv-space-sm)) 0 var(--ibv-space-lg);
+}
+
+.ibv-enquiry-panel__offer-about {
+	margin: 0;
+	width: 100%;
+	padding: var(--ibv-space-sm) var(--ibv-space-md);
+	background: var(--ibv-color-tint-gold);
+	border-radius: var(--ibv-radius-sm);
 	font-size: var(--ibv-fs-small);
+	font-weight: var(--ibv-font-weight-regular);
 	line-height: var(--ibv-lh-normal);
 	color: var(--ibv-color-text);
 }
 
-.ibv-enquiry-panel__offer-line a {
-	margin-inline-start: var(--ibv-space-xs);
+.ibv-enquiry-panel__offer-kicker {
+	display: block;
+}
+
+.ibv-enquiry-panel__offer-name {
+	display: block;
+	margin-block-start: var(--ibv-space-2xs);
+	font-family: var(--ibv-font-display);
+	font-size: var(--ibv-fs-body);
+	line-height: var(--ibv-lh-snug);
+}
+
+.ibv-enquiry-panel__offer-clear {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ibv-space-2xs);
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-normal);
 	color: var(--ibv-color-text);
 	text-decoration: underline;
 }
 
-.ibv-enquiry-panel__offer-line a:hover,
-.ibv-enquiry-panel__offer-line a:focus-visible {
+.ibv-enquiry-panel__offer-clear:hover,
+.ibv-enquiry-panel__offer-clear:focus-visible {
 	color: var(--ibv-color-link);
+}
+
+.ibv-enquiry-panel__offer-clear-icon {
+	flex-shrink: 0;
 }
 
 /* Tighten the embedded GF field stack to match the old hand-built spacing. */

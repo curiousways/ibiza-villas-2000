@@ -297,21 +297,38 @@ function ibv_core_enquiry_panel( $villa_id ) {
 			data-bob-offer-to="<?php echo esc_attr( $resolved_to ); ?>"
 		<?php endif; ?>
 	>
+		<template data-ibv-offer-clear-icon-tpl>
+			<?php
+			echo ibv_core_icon( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- vendored Lucide SVG.
+				'x',
+				[
+					'size'  => 16,
+					'class' => 'ibv-enquiry-panel__offer-clear-icon',
+				]
+			);
+			?>
+		</template>
 		<h2 class="ibv-enquiry-panel__title"><?php esc_html_e( 'Enquire about this villa', 'ibv' ); ?></h2>
 
 		<?php if ( $resolved_name ) : ?>
-			<p class="ibv-enquiry-panel__offer-line" data-ibv-offer-line>
-				<?php
-				echo esc_html(
-					sprintf(
-						/* translators: %s: offer name */
-						__( "You're asking about: %s", 'ibv' ),
-						$resolved_name
-					)
-				);
-				?>
-				<a href="#ibv-enquiry" data-ibv-offer-clear><?php esc_html_e( 'Clear', 'ibv' ); ?></a>
-			</p>
+			<div class="ibv-enquiry-panel__offer-line" data-ibv-offer-line>
+				<p class="ibv-enquiry-panel__offer-about">
+					<span class="ibv-enquiry-panel__offer-kicker"><?php esc_html_e( "You're asking about:", 'ibv' ); ?></span>
+					<span class="ibv-enquiry-panel__offer-name"><?php echo esc_html( $resolved_name ); ?></span>
+				</p>
+				<a class="ibv-enquiry-panel__offer-clear" href="#ibv-enquiry" data-ibv-offer-clear>
+					<?php
+					echo ibv_core_icon( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- vendored Lucide SVG.
+						'x',
+						[
+							'size'  => 16,
+							'class' => 'ibv-enquiry-panel__offer-clear-icon',
+						]
+					);
+					?>
+					<?php esc_html_e( 'Clear', 'ibv' ); ?>
+				</a>
+			</div>
 		<?php endif; ?>
 
 		<?php if ( $form_id ) : ?>

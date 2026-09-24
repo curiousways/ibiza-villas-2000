@@ -536,10 +536,18 @@
 			}
 		}
 
+		function offerClearIcon() {
+			var tpl = panel.querySelector( '[data-ibv-offer-clear-icon-tpl]' );
+			if ( tpl && tpl.content ) {
+				return tpl.content.cloneNode( true );
+			}
+			return document.createDocumentFragment();
+		}
+
 		function renderOfferLine( name ) {
 			var line = panel.querySelector( '[data-ibv-offer-line]' );
 			if ( ! line ) {
-				line = document.createElement( 'p' );
+				line = document.createElement( 'div' );
 				line.className = 'ibv-enquiry-panel__offer-line';
 				line.setAttribute( 'data-ibv-offer-line', '' );
 				var title = panel.querySelector( '.ibv-enquiry-panel__title' );
@@ -552,11 +560,26 @@
 			while ( line.firstChild ) {
 				line.removeChild( line.firstChild );
 			}
-			line.appendChild( document.createTextNode( offerLinePrefix + ' ' + name + ' ' ) );
+
+			var about = document.createElement( 'p' );
+			about.className = 'ibv-enquiry-panel__offer-about';
+			var kicker = document.createElement( 'span' );
+			kicker.className = 'ibv-enquiry-panel__offer-kicker';
+			kicker.textContent = offerLinePrefix;
+			var offerName = document.createElement( 'span' );
+			offerName.className = 'ibv-enquiry-panel__offer-name';
+			offerName.textContent = name;
+			about.appendChild( kicker );
+			about.appendChild( offerName );
+
 			var clear = document.createElement( 'a' );
+			clear.className = 'ibv-enquiry-panel__offer-clear';
 			clear.href = '#ibv-enquiry';
 			clear.setAttribute( 'data-ibv-offer-clear', '' );
-			clear.textContent = offerClearLabel;
+			clear.appendChild( offerClearIcon() );
+			clear.appendChild( document.createTextNode( offerClearLabel ) );
+
+			line.appendChild( about );
 			line.appendChild( clear );
 		}
 
