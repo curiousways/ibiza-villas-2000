@@ -66,6 +66,15 @@ function ibv_register_page_ibiza_guide_fields() {
 					'instructions'  => __( 'Pick a post to feature in the two-column block above the grid. The picked post is excluded from the grid below.', 'ibv' ),
 				),
 				array(
+					'key'           => 'field_ibv_page_ibiza_guide_guide_pdf',
+					'label'         => __( 'Guide PDF', 'ibv' ),
+					'name'          => 'ig_guide_pdf',
+					'type'          => 'file',
+					'return_format' => 'url',
+					'mime_types'    => 'pdf',
+					'instructions'  => __( 'The downloadable PDF of the Ibiza villa rentals guide. Shown as a button on every post in the guide category.', 'ibv' ),
+				),
+				array(
 					'key'          => 'field_ibv_page_ibiza_guide_newsletter_title',
 					'label'        => __( 'Newsletter title', 'ibv' ),
 					'name'         => 'newsletter_title',

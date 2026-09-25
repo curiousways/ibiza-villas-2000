@@ -12,6 +12,12 @@
 	margin-block-end: var(--ibv-space-2xl);
 }
 
+.ibv-section-related-articles__cta {
+	display: flex;
+	justify-content: center;
+	margin-block-end: var(--ibv-space-2xl);
+}
+
 .ibv-section-related-articles__title {
 	margin: 0;
 	font-family: var(--ibv-font-display);
