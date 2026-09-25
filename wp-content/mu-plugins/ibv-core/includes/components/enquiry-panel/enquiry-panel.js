@@ -355,7 +355,7 @@
 		var adwEl      = form.querySelector( '[data-bob-adw]' );
 		var cleaningEl = form.querySelector( '[data-bob-cleaning]' );
 
-		var EUR = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 } );
+		var EUR = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 } );
 
 		// Villa-overview indicative price ("From €X / wk") — swapped to the
 		// stay total for the selected dates while a priced search is active;
@@ -389,7 +389,7 @@
 			if ( ! ovAmount || ! ( stayTotal > 0 ) ) {
 				return;
 			}
-			ovAmount.textContent = EUR.format( Math.round( stayTotal ) );
+			ovAmount.textContent = EUR.format( stayTotal );
 			ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
 			ovAmount.removeAttribute( 'for' );
 			if ( ovFrom ) {

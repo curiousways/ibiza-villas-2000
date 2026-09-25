@@ -164,9 +164,9 @@
 			return '';
 		}
 		try {
-			return '€' + new Intl.NumberFormat( 'en-GB', { maximumFractionDigits: 0 } ).format( amount );
+			return '€' + new Intl.NumberFormat( 'en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 } ).format( amount );
 		} catch ( e ) {
-			return '€' + Math.round( amount );
+			return '€' + Number( amount ).toLocaleString( 'en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 } );
 		}
 	}
 
