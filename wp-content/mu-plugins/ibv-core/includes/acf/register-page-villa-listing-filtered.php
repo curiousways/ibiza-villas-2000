@@ -59,6 +59,15 @@ function ibv_register_page_villa_listing_filtered_fields() {
 					'step'         => 1,
 					'instructions' => __( 'Optional. Show only villas that sleep this many or more. Leave empty for all.', 'ibv' ),
 				),
+				array(
+					'key'          => 'field_ibv_listing_max_sleeps',
+					'label'        => __( 'Maximum sleeps', 'ibv' ),
+					'name'         => 'listing_max_sleeps',
+					'type'         => 'number',
+					'min'          => 1,
+					'step'         => 1,
+					'instructions' => __( 'Optional. Show only villas that sleep this many or fewer. Leave empty for all.', 'ibv' ),
+				),
 			),
 			'location'              => array(
 				array(

@@ -176,9 +176,10 @@ function ibv_villa_find_active_offer( $villa_id, $name ) {
  *
  * @param WP_Term|null $location   Optional property_location term to scope the count.
  * @param int          $min_sleeps Optional minimum sleeps, matching the listing grid.
+ * @param int          $max_sleeps Optional maximum sleeps, matching the listing grid.
  * @return int
  */
-function ibv_count_villas_with_active_offers( $location = null, $min_sleeps = 0 ) {
+function ibv_count_villas_with_active_offers( $location = null, $min_sleeps = 0, $max_sleeps = 0 ) {
 	$args = [
 		'post_type'      => 'villas',
 		'post_status'    => 'publish',
@@ -196,16 +197,27 @@ function ibv_count_villas_with_active_offers( $location = null, $min_sleeps = 0 
 		];
 	}
 
-	$min_sleeps = (int) $min_sleeps;
+	$sleeps_query = [];
+	$min_sleeps   = (int) $min_sleeps;
+	$max_sleeps   = (int) $max_sleeps;
 	if ( $min_sleeps > 0 ) {
-		$args['meta_query'] = [
-			[
-				'key'     => 'property_sleeps',
-				'value'   => $min_sleeps,
-				'compare' => '>=',
-				'type'    => 'NUMERIC',
-			],
+		$sleeps_query[] = [
+			'key'     => 'property_sleeps',
+			'value'   => $min_sleeps,
+			'compare' => '>=',
+			'type'    => 'NUMERIC',
 		];
+	}
+	if ( $max_sleeps > 0 ) {
+		$sleeps_query[] = [
+			'key'     => 'property_sleeps',
+			'value'   => $max_sleeps,
+			'compare' => '<=',
+			'type'    => 'NUMERIC',
+		];
+	}
+	if ( $sleeps_query ) {
+		$args['meta_query'] = $sleeps_query;
 	}
 
 	$villa_ids = get_posts( $args );

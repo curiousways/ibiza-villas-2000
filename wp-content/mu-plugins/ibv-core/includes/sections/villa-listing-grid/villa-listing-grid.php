@@ -21,6 +21,7 @@ function ibv_core_section_villa_listing_grid() {
 	$qs         = ibv_get_villa_listing_search_params();
 	$location   = ibv_get_villa_listing_location();
 	$min_sleeps = ibv_get_villa_listing_min_sleeps();
+	$max_sleeps = ibv_get_villa_listing_max_sleeps();
 
 	// Same three-param test as isProbe in villa-listing-grid.js: when a dated
 	// search is active, first paint shows skeletons instead of the unfiltered
@@ -62,7 +63,7 @@ function ibv_core_section_villa_listing_grid() {
 	}
 
 	$listing_root  = get_permalink() ? get_permalink() : ibv_get_search_villas_url();
-	$offers_count  = ibv_count_villas_with_active_offers( $location, $min_sleeps );
+	$offers_count  = ibv_count_villas_with_active_offers( $location, $min_sleeps, $max_sleeps );
 	$show_toolbar  = $is_searching || $offers_count > 0;
 	?>
 	<section id="results" class="ibv-listing-grid-section ibv-section">
@@ -147,6 +148,9 @@ function ibv_core_section_villa_listing_grid() {
 				if ( $min_sleeps > 0 ) {
 					echo ' data-bob-min-sleeps="' . esc_attr( (string) $min_sleeps ) . '"';
 				}
+				if ( $max_sleeps > 0 ) {
+					echo ' data-bob-max-sleeps="' . esc_attr( (string) $max_sleeps ) . '"';
+				}
 				echo $is_searching ? ' aria-busy="true"' : '';
 				?>
 			>
@@ -171,15 +175,25 @@ function ibv_core_section_villa_listing_grid() {
 						],
 					];
 				}
+				$sleeps_query = [];
 				if ( $min_sleeps > 0 ) {
-					$fallback_args['meta_query'] = [
-						[
-							'key'     => 'property_sleeps',
-							'value'   => $min_sleeps,
-							'compare' => '>=',
-							'type'    => 'NUMERIC',
-						],
+					$sleeps_query[] = [
+						'key'     => 'property_sleeps',
+						'value'   => $min_sleeps,
+						'compare' => '>=',
+						'type'    => 'NUMERIC',
 					];
+				}
+				if ( $max_sleeps > 0 ) {
+					$sleeps_query[] = [
+						'key'     => 'property_sleeps',
+						'value'   => $max_sleeps,
+						'compare' => '<=',
+						'type'    => 'NUMERIC',
+					];
+				}
+				if ( $sleeps_query ) {
+					$fallback_args['meta_query'] = $sleeps_query;
 				}
 				$fallback = new WP_Query( $fallback_args );
 				while ( $fallback->have_posts() ) :

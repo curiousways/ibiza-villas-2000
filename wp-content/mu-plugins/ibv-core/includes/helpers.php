@@ -122,6 +122,28 @@ function ibv_get_villa_listing_min_sleeps( $page_id = 0 ) {
 }
 
 /**
+ * Maximum sleeps for a Villa Listing page, or 0 for no sleeps filter.
+ *
+ * @param int $page_id Page ID. Current post if omitted.
+ * @return int
+ */
+function ibv_get_villa_listing_max_sleeps( $page_id = 0 ) {
+	$page_id = $page_id ? (int) $page_id : (int) get_the_ID();
+	if ( ! $page_id || ! function_exists( 'get_field' ) || ! ibv_is_villa_listing_filtered_page( $page_id ) ) {
+		return 0;
+	}
+
+	$raw = get_field( 'listing_max_sleeps', $page_id );
+	if ( '' === $raw || null === $raw || false === $raw ) {
+		return 0;
+	}
+
+	$n = (int) $raw;
+
+	return $n >= 1 ? $n : 0;
+}
+
+/**
  * Whether this page uses Villa Listing Filtered.
  *
  * @param int $page_id Page ID. Current post if omitted.
