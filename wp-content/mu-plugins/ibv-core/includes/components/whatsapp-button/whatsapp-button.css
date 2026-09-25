@@ -28,6 +28,10 @@
 	animation: ibv-whatsapp-in var(--ibv-duration-slow) var(--ibv-ease-out);
 }
 
+.ibv-whatsapp-button--web {
+	display: none;
+}
+
 .ibv-whatsapp-button,
 .ibv-whatsapp-button:hover,
 .ibv-whatsapp-button:focus-visible {
@@ -64,6 +68,14 @@
 }
 
 @media (min-width: 48rem) {
+	.ibv-whatsapp-button--app {
+		display: none;
+	}
+
+	.ibv-whatsapp-button--web {
+		display: inline-flex;
+	}
+
 	.ibv-whatsapp-button {
 		right: var(--ibv-space-lg);
 		bottom: calc(var(--ibv-space-lg) + env(safe-area-inset-bottom, 0px));

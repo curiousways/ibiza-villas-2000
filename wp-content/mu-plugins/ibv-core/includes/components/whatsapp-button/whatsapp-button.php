@@ -2,7 +2,9 @@
 /**
  * Component: Floating WhatsApp button.
  *
- * Site-wide wa.me link. No script, no cookie. Number from Site Options.
+ * Site-wide click-to-chat link. No script, no cookie. Number from Site Options.
+ * Desktop uses web.whatsapp.com/send (same as the old plugin); smaller viewports
+ * use api.whatsapp.com/send so the app can open in-place.
  *
  * @package Ibiza_Villas_2000
  */
@@ -24,7 +26,7 @@ function ibv_core_whatsapp_button() {
 
 	$label = __( 'Chat with us on WhatsApp', 'ibv' );
 	$text  = __( "Hi, I'm looking at villas on ibizavillas2000.com and have a question.", 'ibv' );
-	$url   = 'https://wa.me/' . $digits . '?text=' . rawurlencode( $text );
+	$query = 'phone=' . rawurlencode( $digits ) . '&text=' . rawurlencode( $text );
 
 	wp_enqueue_style( 'ibv-whatsapp-button' );
 
@@ -36,12 +38,39 @@ function ibv_core_whatsapp_button() {
 			'class' => 'ibv-whatsapp-button__icon',
 		]
 	);
+
+	ibv_core_whatsapp_button_link(
+		'https://api.whatsapp.com/send?' . $query,
+		$label,
+		$icon,
+		'app',
+		false
+	);
+	ibv_core_whatsapp_button_link(
+		'https://web.whatsapp.com/send?' . $query,
+		$label,
+		$icon,
+		'web',
+		true
+	);
+}
+
+/**
+ * @param string $url      Destination.
+ * @param string $label    Visible text and aria-label.
+ * @param string $icon     Inline SVG.
+ * @param string $modifier 'app' | 'web'.
+ * @param bool   $new_tab  Whether to open in a new tab.
+ */
+function ibv_core_whatsapp_button_link( $url, $label, $icon, $modifier, $new_tab ) {
 	?>
 	<a
-		class="ibv-whatsapp-button"
+		class="ibv-whatsapp-button ibv-whatsapp-button--<?php echo esc_attr( $modifier ); ?>"
 		href="<?php echo esc_url( $url ); ?>"
-		target="_blank"
-		rel="noopener noreferrer"
+		<?php if ( $new_tab ) : ?>
+			target="_blank"
+			rel="noopener noreferrer"
+		<?php endif; ?>
 		aria-label="<?php echo esc_attr( $label ); ?>"
 	>
 		<?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- vendored brand SVG. ?>
