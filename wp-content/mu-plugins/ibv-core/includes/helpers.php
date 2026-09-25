@@ -79,10 +79,11 @@ function ibv_get_search_villas_page_id() {
 		]
 	);
 
-	// Prefer a page with no Location set so an area listing cannot become
-	// the site-wide search target when Site Options is empty.
+	// Prefer a page with no Location or Minimum sleeps so a filtered
+	// listing cannot become the site-wide search target when Site Options
+	// is empty.
 	foreach ( $pages as $page_id ) {
-		if ( ! ibv_get_villa_listing_location( (int) $page_id ) ) {
+		if ( ! ibv_is_filtered_villa_listing( (int) $page_id ) ) {
 			return (int) $page_id;
 		}
 	}
@@ -105,6 +106,39 @@ function ibv_get_villa_listing_location( $page_id = 0 ) {
 	$term = get_field( 'listing_location', $page_id );
 
 	return ( $term instanceof WP_Term ) ? $term : null;
+}
+
+/**
+ * Minimum sleeps for a Villa Listing page, or 0 for no sleeps filter.
+ *
+ * @param int $page_id Page ID. Current post if omitted.
+ * @return int
+ */
+function ibv_get_villa_listing_min_sleeps( $page_id = 0 ) {
+	$page_id = $page_id ? (int) $page_id : (int) get_the_ID();
+	if ( ! $page_id || ! function_exists( 'get_field' ) ) {
+		return 0;
+	}
+
+	$raw = get_field( 'listing_min_sleeps', $page_id );
+	if ( '' === $raw || null === $raw || false === $raw ) {
+		return 0;
+	}
+
+	$n = (int) $raw;
+
+	return $n >= 1 ? $n : 0;
+}
+
+/**
+ * Whether a Villa Listing page is filtered (Location and/or Minimum sleeps).
+ *
+ * @param int $page_id Page ID. Current post if omitted.
+ * @return bool
+ */
+function ibv_is_filtered_villa_listing( $page_id = 0 ) {
+	return (bool) ibv_get_villa_listing_location( $page_id )
+		|| ibv_get_villa_listing_min_sleeps( $page_id ) > 0;
 }
 
 /**

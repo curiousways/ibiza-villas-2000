@@ -18,8 +18,9 @@ function ibv_core_section_villa_listing_grid() {
 	wp_enqueue_style( 'ibv-button' );
 
 	wp_enqueue_script( 'ibv-villa-listing-search' );
-	$qs       = ibv_get_villa_listing_search_params();
-	$location = ibv_get_villa_listing_location();
+	$qs         = ibv_get_villa_listing_search_params();
+	$location   = ibv_get_villa_listing_location();
+	$min_sleeps = ibv_get_villa_listing_min_sleeps();
 
 	// Same three-param test as isProbe in villa-listing-grid.js: when a dated
 	// search is active, first paint shows skeletons instead of the unfiltered
@@ -143,6 +144,9 @@ function ibv_core_section_villa_listing_grid() {
 				if ( $location ) {
 					echo ' data-bob-location="' . esc_attr( $location->slug ) . '"';
 				}
+				if ( $min_sleeps > 0 ) {
+					echo ' data-bob-min-sleeps="' . esc_attr( (string) $min_sleeps ) . '"';
+				}
 				echo $is_searching ? ' aria-busy="true"' : '';
 				?>
 			>
@@ -164,6 +168,16 @@ function ibv_core_section_villa_listing_grid() {
 							'taxonomy' => 'property_location',
 							'field'    => 'term_id',
 							'terms'    => (int) $location->term_id,
+						],
+					];
+				}
+				if ( $min_sleeps > 0 ) {
+					$fallback_args['meta_query'] = [
+						[
+							'key'     => 'property_sleeps',
+							'value'   => $min_sleeps,
+							'compare' => '>=',
+							'type'    => 'NUMERIC',
 						],
 					];
 				}

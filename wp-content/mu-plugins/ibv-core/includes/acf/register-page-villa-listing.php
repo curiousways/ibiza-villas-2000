@@ -45,6 +45,15 @@ function ibv_register_page_villa_listing_fields() {
 					'return_format' => 'object',
 					'instructions'  => __( 'Optional. Show only villas in this location. Leave empty for the full collection.', 'ibv' ),
 				),
+				array(
+					'key'          => 'field_ibv_listing_min_sleeps',
+					'label'        => __( 'Minimum sleeps', 'ibv' ),
+					'name'         => 'listing_min_sleeps',
+					'type'         => 'number',
+					'min'          => 1,
+					'step'         => 1,
+					'instructions' => __( 'Optional. Show only villas that sleep this many or more. Leave empty for all.', 'ibv' ),
+				),
 			),
 			'location'              => array(
 				array(

@@ -3,7 +3,7 @@
  * Section: Villa Listing Hero.
  *
  * Title and description. The main collection also gets the search form
- * and short-breaks line. Area pages (Location set) do not.
+ * and short-breaks line. Filtered pages (Location or Minimum sleeps) do not.
  *
  * @package Ibiza_Villas_2000
  */
@@ -22,7 +22,7 @@ function ibv_core_section_villa_listing_hero() {
 
 	$title       = get_the_title( $page_id );
 	$description = (string) get_field( 'listing_description', $page_id );
-	$is_area     = (bool) ibv_get_villa_listing_location( $page_id );
+	$is_area     = ibv_is_filtered_villa_listing( $page_id );
 	?>
 	<section class="ibv-section-villa-listing-hero ibv-section ibv-section--surface-bg">
 		<div class="ibv-container ibv-section-villa-listing-hero__inner">
