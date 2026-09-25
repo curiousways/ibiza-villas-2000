@@ -60,7 +60,9 @@ function ibv_core_section_villa_listing_grid() {
 		}
 	}
 
-	$listing_root = get_permalink() ? get_permalink() : ibv_get_search_villas_url();
+	$listing_root  = get_permalink() ? get_permalink() : ibv_get_search_villas_url();
+	$offers_count  = ibv_count_villas_with_active_offers( $location );
+	$show_toolbar  = $is_searching || $offers_count > 0;
 	?>
 	<section id="results" class="ibv-listing-grid-section ibv-section">
 		<div class="ibv-container">
@@ -73,6 +75,7 @@ function ibv_core_section_villa_listing_grid() {
 			       Query params on this page: date_from, date_to, pax (GET).
 			       Spec: Notion → IBZ002 → API Integration Spec
 			       ──────────────────────────────────────────────────────────── */ ?>
+			<?php if ( $show_toolbar ) : ?>
 			<div class="ibv-listing-grid-section__toolbar" data-bob-listing-toolbar>
 				<ul class="ibv-listing-grid-section__filters">
 					<li class="ibv-listing-grid-section__filter" data-bob-selected-dates<?php echo '' === $selected_label ? ' hidden' : ''; ?>>
@@ -89,7 +92,6 @@ function ibv_core_section_villa_listing_grid() {
 					// Zero active offers → no toggle at all: a filter that can
 					// only empty the grid looks broken and teaches visitors to
 					// distrust the other filters.
-					$offers_count = ibv_count_villas_with_active_offers( $location );
 					if ( $offers_count > 0 ) :
 						?>
 					<li class="ibv-listing-grid-section__filter">
@@ -120,6 +122,7 @@ function ibv_core_section_villa_listing_grid() {
 				</ul>
 				<p class="ibv-listing-grid-section__count" data-bob-results-count hidden></p>
 			</div>
+			<?php endif; ?>
 			<?php
 			// Without a dated search the probe fetch will overwrite the static
 			// ACF "from" prices with live rates — --price-pending masks the
