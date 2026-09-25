@@ -62,7 +62,7 @@ function ibv_core_section_villa_listing_grid() {
 	}
 
 	$listing_root  = get_permalink() ? get_permalink() : ibv_get_search_villas_url();
-	$offers_count  = ibv_count_villas_with_active_offers( $location );
+	$offers_count  = ibv_count_villas_with_active_offers( $location, $min_sleeps );
 	$show_toolbar  = $is_searching || $offers_count > 0;
 	?>
 	<section id="results" class="ibv-listing-grid-section ibv-section">

@@ -174,10 +174,11 @@ function ibv_villa_find_active_offer( $villa_id, $name ) {
  * can never disagree. A dozen villas behind full-page caching — a direct
  * loop per render beats managing a date-keyed transient.
  *
- * @param WP_Term|null $location Optional property_location term to scope the count.
+ * @param WP_Term|null $location   Optional property_location term to scope the count.
+ * @param int          $min_sleeps Optional minimum sleeps, matching the listing grid.
  * @return int
  */
-function ibv_count_villas_with_active_offers( $location = null ) {
+function ibv_count_villas_with_active_offers( $location = null, $min_sleeps = 0 ) {
 	$args = [
 		'post_type'      => 'villas',
 		'post_status'    => 'publish',
@@ -191,6 +192,18 @@ function ibv_count_villas_with_active_offers( $location = null ) {
 				'taxonomy' => 'property_location',
 				'field'    => 'term_id',
 				'terms'    => (int) $location->term_id,
+			],
+		];
+	}
+
+	$min_sleeps = (int) $min_sleeps;
+	if ( $min_sleeps > 0 ) {
+		$args['meta_query'] = [
+			[
+				'key'     => 'property_sleeps',
+				'value'   => $min_sleeps,
+				'compare' => '>=',
+				'type'    => 'NUMERIC',
 			],
 		];
 	}
