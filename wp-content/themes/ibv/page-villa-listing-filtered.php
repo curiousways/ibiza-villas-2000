@@ -3,7 +3,8 @@
  * Template Name: Villa Listing Filtered
  *
  * Area and large-group pages: title, description, optional intro and
- * image, then a grid filtered by Location and/or Minimum sleeps.
+ * image, a grid filtered by Location and/or Minimum sleeps, then the
+ * apartments CTA.
  *
  * @package Ibiza_Villas_2000
  */
@@ -20,6 +21,7 @@ while ( have_posts() ) :
 	ibv_core_section_villa_listing_filtered_hero();
 	ibv_core_section_villa_listing_grid();
 	ibv_core_section_listing_empty_state();
+	ibv_core_alternative_accommodation();
 
 endwhile;
 
