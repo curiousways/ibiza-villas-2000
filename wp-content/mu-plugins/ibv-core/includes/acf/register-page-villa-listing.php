@@ -31,6 +31,16 @@ function ibv_register_page_villa_listing_fields() {
 					'instructions' => __( 'Short intro paragraph shown below the page title.', 'ibv' ),
 				),
 				array(
+					'key'          => 'field_ibv_listing_intro',
+					'label'        => __( 'Intro', 'ibv' ),
+					'name'         => 'listing_intro',
+					'type'         => 'wysiwyg',
+					'tabs'         => 'visual',
+					'toolbar'      => 'basic',
+					'media_upload' => 0,
+					'instructions' => __( 'Optional. Longer intro with links, shown below the description on area and large-group pages.', 'ibv' ),
+				),
+				array(
 					'key'           => 'field_ibv_listing_location',
 					'label'         => __( 'Location', 'ibv' ),
 					'name'          => 'listing_location',

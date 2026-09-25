@@ -22,6 +22,7 @@ function ibv_core_section_villa_listing_hero() {
 
 	$title       = get_the_title( $page_id );
 	$description = (string) get_field( 'listing_description', $page_id );
+	$intro       = (string) get_field( 'listing_intro', $page_id );
 	$is_area     = ibv_is_filtered_villa_listing( $page_id );
 	?>
 	<section class="ibv-section-villa-listing-hero ibv-section ibv-section--surface-bg">
@@ -37,6 +38,12 @@ function ibv_core_section_villa_listing_hero() {
 
 				<?php if ( $description ) : ?>
 					<p class="ibv-section-villa-listing-hero__intro"><?php echo esc_html( $description ); ?></p>
+				<?php endif; ?>
+
+				<?php if ( $intro ) : ?>
+					<div class="ibv-section-villa-listing-hero__prose ibv-prose">
+						<?php echo wp_kses_post( $intro ); ?>
+					</div>
 				<?php endif; ?>
 
 				<?php if ( ! $is_area ) : ?>
