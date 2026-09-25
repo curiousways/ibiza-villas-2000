@@ -158,7 +158,7 @@ function ibv_gf_pax_placeholder_not_selectable( $content, $field ) {
 	}
 
 	// Inject `selected disabled hidden` into the placeholder <option> — the only
-	// empty-value option, since guest counts are 1–12. The lookahead matches the
+	// empty-value option, since guest counts are 1–16. The lookahead matches the
 	// empty `value` attribute wherever GF places it in the tag, so a future GF
 	// markup change that emits other attributes before `value=` won't silently
 	// no-op (the old anchored pattern assumed `value` came first). `?? $content`

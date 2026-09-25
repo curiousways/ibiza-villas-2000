@@ -126,7 +126,7 @@ add_filter(
 			return $value;
 		}
 		$pax = absint( wp_unslash( $_GET['pax'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		return ( $pax >= 1 && $pax <= 12 ) ? (string) $pax : $value;
+		return ( $pax >= 1 && $pax <= 16 ) ? (string) $pax : $value;
 	}
 );
 
@@ -212,7 +212,7 @@ add_filter(
 );
 
 /**
- * Note under the Guests select: groups of 12+ go to the Contact page.
+ * Note under the Guests select: groups of more than 16 go to the Contact page.
  *
  * Same destination as the listing-hero note (`ibv_get_contact_page_url()`).
  * Shown on every villa, regardless of sleeps capacity.
@@ -239,7 +239,7 @@ function ibv_enquiry_panel_pax_group_note( $content, $field, $value, $lead_id, $
 
 	$note = sprintf(
 		'<p class="ibv-enquiry-panel__group-note"><strong>%s</strong> <a href="%s">%s</a></p>',
-		esc_html__( 'Looking for 12 or more guests?', 'ibv' ),
+		esc_html__( 'Looking for more than 16 guests?', 'ibv' ),
 		ibv_get_contact_page_url(),
 		esc_html__( 'Contact us', 'ibv' )
 	);

@@ -47,7 +47,7 @@ function ibv_core_header_search() {
 			<span class="ibv-header-search__select-wrap">
 				<select class="ibv-header-search__input ibv-header-search__input--select" id="ibv-hs-pax" name="pax" required>
 					<option value="" disabled hidden<?php selected( $qs['pax'], '' ); ?>><?php esc_html_e( 'Select group size', 'ibv' ); ?></option>
-					<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
+					<?php for ( $i = 1; $i <= 16; $i++ ) : ?>
 						<option value="<?php echo esc_attr( $i ); ?>"<?php selected( $qs['pax'], (string) $i ); ?>><?php echo esc_html( $i ); ?></option>
 					<?php endfor; ?>
 				</select>

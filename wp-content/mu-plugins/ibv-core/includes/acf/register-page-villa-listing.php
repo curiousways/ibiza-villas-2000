@@ -86,7 +86,7 @@ function ibv_register_page_villa_listing_fields() {
 					'label'        => __( 'Note text', 'ibv' ),
 					'name'         => 'listing_note_text',
 					'type'         => 'text',
-					'instructions' => __( "Optional supporting note shown below the description (e.g. 'Looking for 12 or more guests?'). Leave blank to hide the note.", 'ibv' ),
+					'instructions' => __( "Optional supporting note shown below the description (e.g. 'Looking for more than 16 guests?'). Leave blank to hide the note.", 'ibv' ),
 				),
 				array(
 					'key'          => 'field_ibv_listing_note_link_url',
