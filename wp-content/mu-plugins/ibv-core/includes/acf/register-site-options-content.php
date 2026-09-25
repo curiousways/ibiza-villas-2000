@@ -100,7 +100,7 @@ function ibv_register_site_options_content_fields() {
 					'label'         => __( 'Search / villas listing page', 'ibv' ),
 					'name'          => 'search_villas_page',
 					'type'          => 'post_object',
-					'instructions'  => __( 'Optional override. Leave empty to use whichever published page has the Villa Listing template; URLs fall back to /villas/ if none is found.', 'ibv' ),
+					'instructions'  => __( 'Optional override. Leave empty to use /all-villas/, then any Villa Listing page with no Location set.', 'ibv' ),
 					'post_type'     => array( 'page' ),
 					'taxonomy'      => array(),
 					'allow_null'    => 1,

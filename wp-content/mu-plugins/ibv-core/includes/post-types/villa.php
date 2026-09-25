@@ -55,7 +55,7 @@ if ( ! function_exists( 'ibv_register_villa_post_type' ) ) {
 			'show_in_admin_bar'   => true,
 			'show_in_nav_menus'   => true,
 			'can_export'          => true,
-			// No CPT archive — listing is a Page (template: Villa Listing), e.g. /villas/.
+			// No CPT archive — listing is a Page (template: Villa Listing), e.g. /all-villas/.
 			'has_archive'         => false,
 			'exclude_from_search' => false,
 			'publicly_queryable'  => true,

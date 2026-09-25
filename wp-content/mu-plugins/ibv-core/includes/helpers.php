@@ -26,8 +26,9 @@ function ibv_url( $path = '' ) {
  *
  * Resolution order:
  * 1. Site Options → Search / villas listing page (ACF), when set — override.
- * 2. First published page using the Villa Listing template (`page-villa-listing.php`).
- * 3. Path fallback `/villas/`.
+ * 2. Published page at `/all-villas/`.
+ * 3. First published Villa Listing page with no Location set.
+ * 4. Path fallback `/all-villas/`.
  *
  * All villa listing links should use this helper (forms, CTAs, buttons).
  *
@@ -40,16 +41,16 @@ function ibv_get_search_villas_url() {
 		return esc_url( get_permalink( $page_id ) );
 	}
 
-	return esc_url( home_url( '/villas/' ) );
+	return esc_url( home_url( '/all-villas/' ) );
 }
 
 /**
  * ID of the villa listing / search page.
  *
  * Same resolution as ibv_get_search_villas_url() (ACF option override, then
- * template lookup) but returns the page ID — used where the page itself must
- * be identified, e.g. matching the menu item for nav on-state. Returns 0 when
- * no page resolves.
+ * /all-villas/, then a Location-empty Villa Listing page) but returns the
+ * page ID — used where the page itself must be identified, e.g. matching
+ * the menu item for nav on-state. Returns 0 when no page resolves.
  *
  * @return int Page ID, or 0.
  */
@@ -58,6 +59,11 @@ function ibv_get_search_villas_page_id() {
 
 	if ( $page instanceof WP_Post ) {
 		return (int) $page->ID;
+	}
+
+	$canonical = get_page_by_path( 'all-villas' );
+	if ( $canonical instanceof WP_Post && 'publish' === $canonical->post_status ) {
+		return (int) $canonical->ID;
 	}
 
 	$pages = get_posts(
