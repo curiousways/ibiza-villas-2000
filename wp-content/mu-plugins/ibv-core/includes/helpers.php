@@ -64,7 +64,7 @@ function ibv_get_search_villas_page_id() {
 		[
 			'post_type'      => 'page',
 			'post_status'    => 'publish',
-			'posts_per_page' => 1,
+			'posts_per_page' => -1,
 			'fields'         => 'ids',
 			'no_found_rows'  => true,
 			'meta_key'       => '_wp_page_template',
@@ -73,7 +73,32 @@ function ibv_get_search_villas_page_id() {
 		]
 	);
 
+	// Prefer a page with no Location set so an area listing cannot become
+	// the site-wide search target when Site Options is empty.
+	foreach ( $pages as $page_id ) {
+		if ( ! ibv_get_villa_listing_location( (int) $page_id ) ) {
+			return (int) $page_id;
+		}
+	}
+
 	return ! empty( $pages ) ? (int) $pages[0] : 0;
+}
+
+/**
+ * Location term for a Villa Listing page, or null for the full collection.
+ *
+ * @param int $page_id Page ID. Current post if omitted.
+ * @return WP_Term|null
+ */
+function ibv_get_villa_listing_location( $page_id = 0 ) {
+	$page_id = $page_id ? (int) $page_id : (int) get_the_ID();
+	if ( ! $page_id || ! function_exists( 'get_field' ) ) {
+		return null;
+	}
+
+	$term = get_field( 'listing_location', $page_id );
+
+	return ( $term instanceof WP_Term ) ? $term : null;
 }
 
 /**

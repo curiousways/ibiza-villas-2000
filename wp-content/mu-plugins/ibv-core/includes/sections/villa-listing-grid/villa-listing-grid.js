@@ -347,7 +347,9 @@
 			nightsByPropertyId[ key ] = r.nights;
 		} );
 
-		// Hydrate prices on matching cards. Visibility is exclusively
+		// Hydrate prices on matching cards only. Never insert a card for an
+		// API row that has no server-rendered article (area listings rely
+		// on this: the CGI returns every villa). Visibility is exclusively
 		// applyFilters()'s job.
 		$$( 'article[data-bob-property-id]', grid ).forEach( function ( card ) {
 			var pid = ( card.getAttribute( 'data-bob-property-id' ) || '' ).toLowerCase();

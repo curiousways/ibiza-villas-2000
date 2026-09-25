@@ -59,6 +59,21 @@ function ibv_register_page_villa_listing_fields() {
 					'default_value' => __( 'Contact us', 'ibv' ),
 					'instructions'  => __( 'The clickable text. Required if note text is set.', 'ibv' ),
 				),
+				array(
+					'key'           => 'field_ibv_listing_location',
+					'label'         => __( 'Location', 'ibv' ),
+					'name'          => 'listing_location',
+					'type'          => 'taxonomy',
+					'taxonomy'      => 'property_location',
+					'field_type'    => 'select',
+					'allow_null'    => 1,
+					'add_term'      => 0,
+					'save_terms'    => 0,
+					'load_terms'    => 0,
+					'multiple'      => 0,
+					'return_format' => 'object',
+					'instructions'  => __( 'Optional. Show only villas in this location. Leave empty for the full collection.', 'ibv' ),
+				),
 			),
 			'location'              => array(
 				array(

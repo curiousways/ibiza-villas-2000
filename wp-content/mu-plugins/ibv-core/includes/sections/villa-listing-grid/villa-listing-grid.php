@@ -18,7 +18,8 @@ function ibv_core_section_villa_listing_grid() {
 	wp_enqueue_style( 'ibv-button' );
 
 	wp_enqueue_script( 'ibv-villa-listing-search' );
-	$qs = ibv_get_villa_listing_search_params();
+	$qs       = ibv_get_villa_listing_search_params();
+	$location = ibv_get_villa_listing_location();
 
 	// Same three-param test as isProbe in villa-listing-grid.js: when a dated
 	// search is active, first paint shows skeletons instead of the unfiltered
@@ -59,7 +60,7 @@ function ibv_core_section_villa_listing_grid() {
 		}
 	}
 
-	$listing_root = ibv_get_search_villas_url();
+	$listing_root = get_permalink() ? get_permalink() : ibv_get_search_villas_url();
 	?>
 	<section id="results" class="ibv-listing-grid-section ibv-section">
 		<div class="ibv-container">
@@ -88,7 +89,7 @@ function ibv_core_section_villa_listing_grid() {
 					// Zero active offers → no toggle at all: a filter that can
 					// only empty the grid looks broken and teaches visitors to
 					// distrust the other filters.
-					$offers_count = ibv_count_villas_with_active_offers();
+					$offers_count = ibv_count_villas_with_active_offers( $location );
 					if ( $offers_count > 0 ) :
 						?>
 					<li class="ibv-listing-grid-section__filter">
@@ -135,22 +136,35 @@ function ibv_core_section_villa_listing_grid() {
 			<div
 				class="ibv-listing-grid ibv-grid ibv-grid--4<?php echo $is_searching ? ' ibv-listing-grid--searching' : ' ibv-listing-grid--price-pending'; ?>"
 				data-bob-listing-grid
-				<?php echo $is_searching ? 'aria-busy="true"' : ''; ?>
+				<?php
+				if ( $location ) {
+					echo ' data-bob-location="' . esc_attr( $location->slug ) . '"';
+				}
+				echo $is_searching ? ' aria-busy="true"' : '';
+				?>
 			>
 				<?php
-				$fallback = new WP_Query(
-					[
-						'post_type'           => 'villas',
-						// Explicit: without it WP_Query adds private posts
-						// for logged-in users who can read them.
-						'post_status'         => 'publish',
-						'posts_per_page'      => -1,
-						'orderby'             => 'menu_order',
-						'order'               => 'ASC',
-						'no_found_rows'       => true,
-						'ignore_sticky_posts' => true,
-					]
-				);
+				$fallback_args = [
+					'post_type'           => 'villas',
+					// Explicit: without it WP_Query adds private posts
+					// for logged-in users who can read them.
+					'post_status'         => 'publish',
+					'posts_per_page'      => -1,
+					'orderby'             => 'menu_order',
+					'order'               => 'ASC',
+					'no_found_rows'       => true,
+					'ignore_sticky_posts' => true,
+				];
+				if ( $location ) {
+					$fallback_args['tax_query'] = [
+						[
+							'taxonomy' => 'property_location',
+							'field'    => 'term_id',
+							'terms'    => (int) $location->term_id,
+						],
+					];
+				}
+				$fallback = new WP_Query( $fallback_args );
 				while ( $fallback->have_posts() ) :
 					$fallback->the_post();
 					ibv_core_villa_card( [ 'villa' => get_the_ID() ] );
