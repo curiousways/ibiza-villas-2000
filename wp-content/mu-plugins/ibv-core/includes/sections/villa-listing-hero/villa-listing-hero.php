@@ -28,6 +28,7 @@ function ibv_core_section_villa_listing_hero() {
 	$note_link_label = (string) get_field( 'listing_note_link_label', $page_id );
 
 	$show_note = $note_text && $note_link_url && $note_link_label;
+	$is_area   = (bool) ibv_get_villa_listing_location( $page_id );
 	?>
 	<section class="ibv-section-villa-listing-hero ibv-section ibv-section--surface-bg">
 		<div class="ibv-container ibv-section-villa-listing-hero__inner">
@@ -44,7 +45,7 @@ function ibv_core_section_villa_listing_hero() {
 					<p class="ibv-section-villa-listing-hero__intro"><?php echo esc_html( $description ); ?></p>
 				<?php endif; ?>
 
-				<?php if ( $show_note ) : ?>
+				<?php if ( ! $is_area && $show_note ) : ?>
 					<p class="ibv-section-villa-listing-hero__note">
 						<?php echo esc_html( $note_text ); ?>
 						<a class="ibv-section-villa-listing-hero__note-link" href="<?php echo esc_url( $note_link_url ); ?>">
@@ -53,15 +54,17 @@ function ibv_core_section_villa_listing_hero() {
 					</p>
 				<?php endif; ?>
 
-				<div class="ibv-section-villa-listing-hero__search">
-					<?php ibv_core_hero_search(); ?>
-				</div>
+				<?php if ( ! $is_area ) : ?>
+					<div class="ibv-section-villa-listing-hero__search">
+						<?php ibv_core_hero_search(); ?>
+					</div>
 
-				<?php
-				// Directly under the date picker it references — the moment
-				// someone hesitates over "Add dates" for a short stay.
-				ibv_the_short_breaks_statement( 'ibv-section-villa-listing-hero__short-breaks' );
-				?>
+					<?php
+					// Directly under the date picker it references — the moment
+					// someone hesitates over "Add dates" for a short stay.
+					ibv_the_short_breaks_statement( 'ibv-section-villa-listing-hero__short-breaks' );
+					?>
+				<?php endif; ?>
 			</div>
 
 			<?php if ( ! empty( $hero_image['ID'] ) ) : ?>
