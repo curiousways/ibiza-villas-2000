@@ -2,8 +2,9 @@
 /**
  * Section: Villa Listing Hero.
  *
- * Title and description. The main collection also gets the search form
- * and short-breaks line. Filtered pages (Location or Minimum sleeps) do not.
+ * Main collection: copy left (title, description, optional note, search,
+ * short-breaks), image right. Filtered pages (Location or Minimum sleeps)
+ * drop search, note, image, and short-breaks; they may show a longer intro.
  *
  * @package Ibiza_Villas_2000
  */
@@ -20,12 +21,23 @@ function ibv_core_section_villa_listing_hero() {
 		return;
 	}
 
-	$title       = get_the_title( $page_id );
-	$description = (string) get_field( 'listing_description', $page_id );
-	$intro       = (string) get_field( 'listing_intro', $page_id );
-	$is_area     = ibv_is_filtered_villa_listing( $page_id );
+	$title           = get_the_title( $page_id );
+	$hero_image      = get_field( 'listing_hero_image', $page_id );
+	$description     = (string) get_field( 'listing_description', $page_id );
+	$intro           = (string) get_field( 'listing_intro', $page_id );
+	$note_text       = (string) get_field( 'listing_note_text', $page_id );
+	$note_link_url   = (string) get_field( 'listing_note_link_url', $page_id );
+	$note_link_label = (string) get_field( 'listing_note_link_label', $page_id );
+	$is_area         = ibv_is_filtered_villa_listing( $page_id );
+	$show_note       = ! $is_area && $note_text && $note_link_url && $note_link_label;
+	$show_media      = ! $is_area && is_array( $hero_image ) && ! empty( $hero_image['ID'] );
+
+	$section_class = 'ibv-section-villa-listing-hero ibv-section ibv-section--surface-bg';
+	if ( $show_media ) {
+		$section_class .= ' ibv-section-villa-listing-hero--with-media';
+	}
 	?>
-	<section class="ibv-section-villa-listing-hero ibv-section ibv-section--surface-bg">
+	<section class="<?php echo esc_attr( $section_class ); ?>">
 		<div class="ibv-container ibv-section-villa-listing-hero__inner">
 			<div class="ibv-section-villa-listing-hero__copy">
 				<?php if ( $title ) : ?>
@@ -40,10 +52,19 @@ function ibv_core_section_villa_listing_hero() {
 					<p class="ibv-section-villa-listing-hero__intro"><?php echo esc_html( $description ); ?></p>
 				<?php endif; ?>
 
-				<?php if ( $intro ) : ?>
+				<?php if ( $is_area && $intro ) : ?>
 					<div class="ibv-section-villa-listing-hero__prose ibv-prose">
 						<?php echo wp_kses_post( $intro ); ?>
 					</div>
+				<?php endif; ?>
+
+				<?php if ( $show_note ) : ?>
+					<p class="ibv-section-villa-listing-hero__note">
+						<?php echo esc_html( $note_text ); ?>
+						<a class="ibv-section-villa-listing-hero__note-link" href="<?php echo esc_url( $note_link_url ); ?>">
+							<?php echo esc_html( $note_link_label ); ?>
+						</a>
+					</p>
 				<?php endif; ?>
 
 				<?php if ( ! $is_area ) : ?>
@@ -58,6 +79,18 @@ function ibv_core_section_villa_listing_hero() {
 					?>
 				<?php endif; ?>
 			</div>
+
+			<?php if ( $show_media ) : ?>
+				<div class="ibv-section-villa-listing-hero__media">
+					<?php
+					ibv_core_image(
+						$hero_image,
+						'ibv-card',
+						[ 'class' => 'ibv-section-villa-listing-hero__image' ]
+					);
+					?>
+				</div>
+			<?php endif; ?>
 		</div>
 	</section>
 	<?php
