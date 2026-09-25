@@ -27,7 +27,7 @@ function ibv_url( $path = '' ) {
  * Resolution order:
  * 1. Site Options → Search / villas listing page (ACF), when set — override.
  * 2. Published page at `/all-villas/`.
- * 3. First published Villa Listing page with no Location set.
+ * 3. First published Villa Listing Main page.
  * 4. Path fallback `/all-villas/`.
  *
  * All villa listing links should use this helper (forms, CTAs, buttons).
@@ -48,7 +48,7 @@ function ibv_get_search_villas_url() {
  * ID of the villa listing / search page.
  *
  * Same resolution as ibv_get_search_villas_url() (ACF option override, then
- * /all-villas/, then a Location-empty Villa Listing page) but returns the
+ * /all-villas/, then a Villa Listing Main page) but returns the
  * page ID — used where the page itself must be identified, e.g. matching
  * the menu item for nav on-state. Returns 0 when no page resolves.
  *
@@ -70,7 +70,7 @@ function ibv_get_search_villas_page_id() {
 		[
 			'post_type'      => 'page',
 			'post_status'    => 'publish',
-			'posts_per_page' => -1,
+			'posts_per_page' => 1,
 			'fields'         => 'ids',
 			'no_found_rows'  => true,
 			'meta_key'       => '_wp_page_template',
@@ -78,15 +78,6 @@ function ibv_get_search_villas_page_id() {
 			'orderby'        => [ 'menu_order' => 'ASC', 'post_title' => 'ASC' ],
 		]
 	);
-
-	// Prefer a page with no Location or Minimum sleeps so a filtered
-	// listing cannot become the site-wide search target when Site Options
-	// is empty.
-	foreach ( $pages as $page_id ) {
-		if ( ! ibv_is_filtered_villa_listing( (int) $page_id ) ) {
-			return (int) $page_id;
-		}
-	}
 
 	return ! empty( $pages ) ? (int) $pages[0] : 0;
 }
@@ -99,7 +90,7 @@ function ibv_get_search_villas_page_id() {
  */
 function ibv_get_villa_listing_location( $page_id = 0 ) {
 	$page_id = $page_id ? (int) $page_id : (int) get_the_ID();
-	if ( ! $page_id || ! function_exists( 'get_field' ) ) {
+	if ( ! $page_id || ! function_exists( 'get_field' ) || ! ibv_is_villa_listing_filtered_page( $page_id ) ) {
 		return null;
 	}
 
@@ -116,7 +107,7 @@ function ibv_get_villa_listing_location( $page_id = 0 ) {
  */
 function ibv_get_villa_listing_min_sleeps( $page_id = 0 ) {
 	$page_id = $page_id ? (int) $page_id : (int) get_the_ID();
-	if ( ! $page_id || ! function_exists( 'get_field' ) ) {
+	if ( ! $page_id || ! function_exists( 'get_field' ) || ! ibv_is_villa_listing_filtered_page( $page_id ) ) {
 		return 0;
 	}
 
@@ -131,14 +122,27 @@ function ibv_get_villa_listing_min_sleeps( $page_id = 0 ) {
 }
 
 /**
- * Whether a Villa Listing page is filtered (Location and/or Minimum sleeps).
+ * Whether this page uses Villa Listing Filtered.
+ *
+ * @param int $page_id Page ID. Current post if omitted.
+ * @return bool
+ */
+function ibv_is_villa_listing_filtered_page( $page_id = 0 ) {
+	$slug = $page_id
+		? get_page_template_slug( $page_id )
+		: get_page_template_slug();
+
+	return 'page-villa-listing-filtered.php' === $slug;
+}
+
+/**
+ * Whether a listing page is the filtered (area / large-group) template.
  *
  * @param int $page_id Page ID. Current post if omitted.
  * @return bool
  */
 function ibv_is_filtered_villa_listing( $page_id = 0 ) {
-	return (bool) ibv_get_villa_listing_location( $page_id )
-		|| ibv_get_villa_listing_min_sleeps( $page_id ) > 0;
+	return ibv_is_villa_listing_filtered_page( $page_id );
 }
 
 /**

@@ -33,6 +33,7 @@ function ibv_page_templates_without_content() {
 		'page-my-booking.php',
 		'page-special-offers.php',
 		'page-villa-listing.php',
+		'page-villa-listing-filtered.php',
 	);
 }
 

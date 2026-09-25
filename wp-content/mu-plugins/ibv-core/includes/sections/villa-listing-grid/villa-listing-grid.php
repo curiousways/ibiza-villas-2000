@@ -280,7 +280,7 @@ function ibv_villa_listing_probe_params() {
  * and credentials must keep matching this hint or the browser fetches twice.
  */
 function ibv_villa_listing_preload_availability() {
-	if ( ! is_page_template( 'page-villa-listing.php' ) ) {
+	if ( ! is_page_template( array( 'page-villa-listing.php', 'page-villa-listing-filtered.php' ) ) ) {
 		return;
 	}
 

@@ -1,6 +1,9 @@
 <?php
 /**
- * Villa Listing page — page template ACF field groups.
+ * Villa Listing Main — page template ACF field groups.
+ *
+ * Image + description are shared with Villa Listing Filtered so a template
+ * swap keeps the same meta. Notes stay on the main collection only.
  *
  * @package Ibiza_Villas_2000
  */
@@ -10,17 +13,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register fields for the Villa Listing page template.
+ * Register fields for the Villa Listing Main page template.
  */
 function ibv_register_page_villa_listing_fields() {
 	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
 		return;
 	}
 
+	$both_listing_templates = array(
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'page-villa-listing.php',
+			),
+		),
+		array(
+			array(
+				'param'    => 'page_template',
+				'operator' => '==',
+				'value'    => 'page-villa-listing-filtered.php',
+			),
+		),
+	);
+
 	acf_add_local_field_group(
 		array(
-			'key'                   => 'group_ibv_page_villa_listing',
-			'title'                 => __( 'Villa listing page', 'ibv' ),
+			'key'                   => 'group_ibv_page_villa_listing_shared',
+			'title'                 => __( 'Villa listing', 'ibv' ),
 			'fields'                => array(
 				array(
 					'key'           => 'field_ibv_listing_hero_image',
@@ -28,7 +48,6 @@ function ibv_register_page_villa_listing_fields() {
 					'name'          => 'listing_hero_image',
 					'type'          => 'image',
 					'return_format' => 'array',
-					'instructions'  => __( 'Shown on the main collection only, beside the search.', 'ibv' ),
 				),
 				array(
 					'key'          => 'field_ibv_listing_description',
@@ -38,22 +57,36 @@ function ibv_register_page_villa_listing_fields() {
 					'rows'         => 3,
 					'instructions' => __( 'Short intro paragraph shown below the page title.', 'ibv' ),
 				),
-				array(
-					'key'          => 'field_ibv_listing_intro',
-					'label'        => __( 'Intro', 'ibv' ),
-					'name'         => 'listing_intro',
-					'type'         => 'wysiwyg',
-					'tabs'         => 'all',
-					'toolbar'      => 'basic',
-					'media_upload' => 0,
-					'instructions' => __( 'Optional. Longer intro with links, shown below the description on area and large-group pages. Use the Text tab to paste HTML.', 'ibv' ),
-				),
+			),
+			'location'              => $both_listing_templates,
+			'menu_order'            => 0,
+			'position'              => 'acf_after_title',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'hide_on_screen'        => array(
+				'the_content',
+				'excerpt',
+				'discussion',
+				'comments',
+				'send-trackbacks',
+			),
+			'active'                => true,
+			'show_in_rest'          => false,
+		)
+	);
+
+	acf_add_local_field_group(
+		array(
+			'key'                   => 'group_ibv_page_villa_listing',
+			'title'                 => __( 'Villa listing main', 'ibv' ),
+			'fields'                => array(
 				array(
 					'key'          => 'field_ibv_listing_note_text',
 					'label'        => __( 'Note text', 'ibv' ),
 					'name'         => 'listing_note_text',
 					'type'         => 'text',
-					'instructions' => __( "Optional supporting note shown below the description on the main collection (e.g. 'Looking for 12 or more guests?'). Leave blank to hide the note.", 'ibv' ),
+					'instructions' => __( "Optional supporting note shown below the description (e.g. 'Looking for 12 or more guests?'). Leave blank to hide the note.", 'ibv' ),
 				),
 				array(
 					'key'          => 'field_ibv_listing_note_link_url',
@@ -70,30 +103,6 @@ function ibv_register_page_villa_listing_fields() {
 					'default_value' => __( 'Contact us', 'ibv' ),
 					'instructions'  => __( 'The clickable text. Required if note text is set.', 'ibv' ),
 				),
-				array(
-					'key'           => 'field_ibv_listing_location',
-					'label'         => __( 'Location', 'ibv' ),
-					'name'          => 'listing_location',
-					'type'          => 'taxonomy',
-					'taxonomy'      => 'property_location',
-					'field_type'    => 'select',
-					'allow_null'    => 1,
-					'add_term'      => 0,
-					'save_terms'    => 0,
-					'load_terms'    => 0,
-					'multiple'      => 0,
-					'return_format' => 'object',
-					'instructions'  => __( 'Optional. Show only villas in this location. Leave empty for the full collection.', 'ibv' ),
-				),
-				array(
-					'key'          => 'field_ibv_listing_min_sleeps',
-					'label'        => __( 'Minimum sleeps', 'ibv' ),
-					'name'         => 'listing_min_sleeps',
-					'type'         => 'number',
-					'min'          => 1,
-					'step'         => 1,
-					'instructions' => __( 'Optional. Show only villas that sleep this many or more. Leave empty for all.', 'ibv' ),
-				),
 			),
 			'location'              => array(
 				array(
@@ -104,20 +113,11 @@ function ibv_register_page_villa_listing_fields() {
 					),
 				),
 			),
-			'menu_order'            => 0,
+			'menu_order'            => 1,
 			'position'              => 'acf_after_title',
 			'style'                 => 'default',
 			'label_placement'       => 'top',
 			'instruction_placement' => 'label',
-			// page-villa-listing.php never calls the_content(); the editor
-			// body is leftover and must not look live in admin.
-			'hide_on_screen'        => array(
-				'the_content',
-				'excerpt',
-				'discussion',
-				'comments',
-				'send-trackbacks',
-			),
 			'active'                => true,
 			'show_in_rest'          => false,
 		)

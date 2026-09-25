@@ -30,9 +30,13 @@
 .ibv-section-villa-listing-hero__intro {
 	font-family: var(--ibv-font-display);
 	font-size: var(--ibv-fs-h3);
-	line-height: var(--ibv-lh-snug);
+	line-height: var(--ibv-lh-relaxed);
 	color: var(--ibv-color-text);
 	margin: 0;
+}
+
+.ibv-section-villa-listing-hero--filtered .ibv-section-villa-listing-hero__intro {
+	line-height: var(--ibv-lh-snug);
 }
 
 .ibv-section-villa-listing-hero__note {

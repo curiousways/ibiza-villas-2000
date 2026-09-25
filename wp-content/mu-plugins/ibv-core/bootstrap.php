@@ -117,6 +117,7 @@ require_once IBV_CORE_PATH . 'includes/acf/register-globals-content.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-home.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-special-offers.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing.php';
+require_once IBV_CORE_PATH . 'includes/acf/register-page-villa-listing-filtered.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-about.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-concierge.php';
 require_once IBV_CORE_PATH . 'includes/acf/register-page-ips.php';
