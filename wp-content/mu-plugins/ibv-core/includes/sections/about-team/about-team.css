@@ -47,7 +47,7 @@
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
 	column-gap: var(--ibv-space-xl);
-	row-gap: var(--ibv-space-2xl);
+	row-gap: var(--ibv-space-md);
 }
 
 @media (min-width: 48rem) {
@@ -63,12 +63,27 @@
 }
 
 .ibv-section-about-team__member {
-	display: flex;
-	flex-direction: column;
-	gap: var(--ibv-space-md);
+	display: grid;
+	grid-template-rows: subgrid;
+	grid-row: span 3;
+}
+
+.ibv-section-about-team__member:not(:last-child) {
+	margin-block-end: calc(var(--ibv-space-2xl) - var(--ibv-space-md));
+}
+
+@media (min-width: 48rem) {
+	.ibv-section-about-team__member:not(:last-child) {
+		margin-block-end: 0;
+	}
+
+	.ibv-section-about-team__member:not(:nth-last-child(-n + 2)) {
+		margin-block-end: calc(var(--ibv-space-2xl) - var(--ibv-space-md));
+	}
 }
 
 .ibv-section-about-team__media {
+	grid-row: 1;
 	aspect-ratio: 4 / 5;
 	overflow: hidden;
 	border-radius: var(--ibv-radius-lg);
@@ -82,6 +97,7 @@
 }
 
 .ibv-section-about-team__name-role {
+	grid-row: 2;
 	margin: 0;
 }
 
@@ -96,6 +112,7 @@
 }
 
 .ibv-section-about-team__bio {
+	grid-row: 3;
 	margin: 0;
 	color: var(--ibv-color-text-muted);
 }
