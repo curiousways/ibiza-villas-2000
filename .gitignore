@@ -54,3 +54,11 @@ Thumbs.db
 .idea/
 .vscode/
 .gitnexus
+.cursor/settings.json
+
+# Local Playwright / agent scratch
+.pw-tmp/
+
+# Local content dumps and the script that writes them
+/docs/content-audit/
+/tools/ibv-content-dump.php
