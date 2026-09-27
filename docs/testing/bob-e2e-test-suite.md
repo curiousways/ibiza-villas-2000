@@ -15,18 +15,20 @@ enquiry forms, GF plumbing — and the current component code
 
 ---
 
+
+
 ## 0. Environment setup (do first, every run)
 
-- [ ] Test on **staging** (the environment the client will click), with
+- [x] Test on **staging** (the environment the client will click), with
   the remedial Maps key in place. A local pass first is fine but staging
   is the sign-off environment.
-- [ ] Fresh private window per journey; DevTools open with **Console**
+- [x] Fresh private window per journey; DevTools open with **Console**
   and **Network** tabs visible throughout. **Zero console errors is a
   pass criterion on every single test below** — note any that appear.
-- [ ] Clear WP Rocket page cache before starting, then run the full
+- [x] Clear WP Rocket page cache before starting, then run the full
   suite a second time **with cache warm** — API-driven content
   (prices, availability) must never be baked into cached pages.
-- [ ] **Forms safety check before anything else:** confirm where GF
+- [x] **Forms safety check before anything else:** confirm where GF
   submissions route on staging (notifications, Zoho, SendGrid,
   Campaign Monitor/Mailchimp feeds). Either point them at a test
   address or warn the recipients — the suite below submits real
@@ -42,9 +44,12 @@ enquiry forms, GF plumbing — and the current component code
 
 ---
 
+
+
 ## 1. Hero search (homepage)
 
 **Date-range picker**
+
 - [ ] Opens from the trigger; closes on outside click and on Esc;
   page **scroll is not blocked** while the popover is open (regression:
   `eb755a2`).
@@ -60,7 +65,8 @@ enquiry forms, GF plumbing — and the current component code
   and doesn't trap focus.
 
 **Guests + submit**
-- [ ] Guests dropdown offers plain **1–12** (no "guests" suffix
+
+- [ ] Guests dropdown offers plain **1–16** (no "guests" suffix
   weirdness); default state sensible.
 - [ ] Submit with dates + pax → lands on villa listing **with search
   context applied** (URL carries the search params — record the exact
@@ -72,9 +78,12 @@ enquiry forms, GF plumbing — and the current component code
   reloading to the top.
 - [ ] Keyboard-only: the whole search is operable by Tab/Enter/arrows.
 
+
+
 ## 2. Villa listing grid
 
 **Browse mode (no search)**
+
 - [ ] All published villas render; order matches the intended
   `menu_order`; grid columns stay at fixed size even when a filter
   leaves few cards (`9f2e411`).
@@ -84,6 +93,7 @@ enquiry forms, GF plumbing — and the current component code
   **no** "Select dates for price" prompt anywhere on cards (`6bcbe72`).
 
 **Search mode (arrive from hero search with dates + pax)**
+
 - [ ] **Skeleton loading state** appears, then soft-reveals results
   (`f94aea5`); the head-start fetch means results appear without a
   perceptible double-load.
@@ -103,9 +113,12 @@ enquiry forms, GF plumbing — and the current component code
 - [ ] URL is shareable: paste the search URL into a fresh private window
   — same results, chip, and pill render.
 
+
+
 ## 3. Villa detail — enquiry panel (the money component)
 
 **Arrival + prefill**
+
 - [ ] Clicking a card from an active search **hands the context over**:
   panel arrives with dates + pax prefilled (`1a8fb7a`); arriving with
   no search → panel is empty-but-inviting, no errors.
@@ -113,6 +126,7 @@ enquiry forms, GF plumbing — and the current component code
   throttle to Slow 3G and confirm no flash of empty/zero pricing.
 
 **Live pricing**
+
 - [ ] Selecting available dates + pax fetches pricing: base rental,
   cleaning, and total (`data-bob-base-rental`, `data-bob-cleaning`,
   `data-bob-total-eur`) render and **sum correctly**; the dated weekly
@@ -128,15 +142,16 @@ enquiry forms, GF plumbing — and the current component code
   correctly (thousands separators).
 
 **Availability gating (RTB)**
+
 - [ ] Known-unavailable range → **unavailable notice** shows
-  (`data-bob-msg-unavailable`), request-to-book is **gated off**
-  (`eb271a6`), and contact-detail capture behaves per design
-  (`0cdd0ff`).
-- [ ] Switching from unavailable → available dates re-enables the flow
-  cleanly (no lingering notice or disabled button).
+  (`data-bob-msg-unavailable`), contact fields stay visible, and
+  request-to-book stays enabled so the guest can still enquire.
+- [ ] Switching from unavailable → available dates clears the notice
+  and paints pricing (no lingering notice).
 
 **Contact details + phone field**
-- [ ] Pax selector in panel is plain 1–12, matching hero format
+
+- [ ] Pax selector in panel is plain 1–16, matching hero format
   (`9ada205`); guests field placeholder correct (`ibv-pax` filter —
   attribute order and null-safety were hardened in `5de7943`, so check
   it on **every** form in the suite, not just this one).
@@ -150,12 +165,15 @@ enquiry forms, GF plumbing — and the current component code
   artefacts visible anywhere (`c47c1ca`).
 
 **Failure modes**
+
 - [ ] DevTools → block the API endpoint (`data-bob-endpoint` URL) →
   panel degrades to the error/fallback state (`data-bob-error`,
   `data-bob-msg-price-error`) — **never** a spinner forever, never a
   bookable state with no price.
 - [ ] Offline mid-flow (set Network to Offline after dates chosen) →
   no unhandled promise errors in console.
+
+
 
 ## 4. Booking confirmation flow
 
@@ -180,6 +198,8 @@ enquiry forms, GF plumbing — and the current component code
   (`dd5ba89`, `f3a9d77`) — check as a logged-out visitor **and** as a
   non-deployer admin.
 
+
+
 ## 5. Accommodation enquiry pages
 
 - [ ] Both accommodation pages (`81535eb`) render; form layout matches
@@ -190,6 +210,8 @@ enquiry forms, GF plumbing — and the current component code
 - [ ] Successful submission → redirect/confirmation behaviour correct
   (`c96dbd9` code-seeded flow); the GF entry records every field.
 - [ ] Submission-error state (submit empty) renders tame and readable.
+
+
 
 ## 6. Forms plumbing (backstage)
 
@@ -202,6 +224,8 @@ enquiry forms, GF plumbing — and the current component code
   entries either route to test targets or the feeds are paused —
   document the launch-day state to restore.
 - [ ] Double-submit (double-click the arrow) creates **one** entry.
+
+
 
 ## 7. Cross-cutting sweeps
 
@@ -222,6 +246,8 @@ enquiry forms, GF plumbing — and the current component code
   confirming the remedial swap didn't interact with Bob's panel JS on
   the same page.
 
+
+
 ## 8. Sign-off
 
 - [ ] Both cache states passed; all five devices passed sections 1–5.
@@ -229,9 +255,11 @@ enquiry forms, GF plumbing — and the current component code
   fix-before-link / fix-during-testing-window / cosmetic.
 - [ ] GF/CRM feeds restored to the agreed staging state.
 
-| # | Where | What happened | Severity | Fix before link? |
-|---|---|---|---|---|
-| 1 | | | | |
+
+| #   | Where | What happened | Severity | Fix before link? |
+| --- | ----- | ------------- | -------- | ---------------- |
+| 1   |       |               |          |                  |
+
 
 ---
 
