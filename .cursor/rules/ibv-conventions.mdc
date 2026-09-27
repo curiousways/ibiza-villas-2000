@@ -62,6 +62,16 @@ rules apply to every change unless a brief explicitly overrides them.
 - If a future brief needs the block editor for a specific post type,
   narrow the filter in `editor.php` rather than dropping it altogether.
 
+## Deploy and content
+
+- **Staging is the content source of truth.** The client edits there.
+  Never `wp migratedb push` from local to staging — that overwrites
+  their work. Code reaches staging via git only.
+- Local is for code and isolated tests (including Gravity Forms 3.0).
+  If local needs a content refresh, `wp migratedb pull` from staging
+  per `docs/content-push-runbook.md`. Never include GF tables.
+- Gravity Forms definitions and entries stay per environment.
+
 ## Dependencies
 
 - ACF Pro is the only required plugin.

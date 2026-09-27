@@ -213,10 +213,10 @@ itself in the staging GF admin is optional follow-up hygiene.
 
 ## Follow-up: staging
 
-Cleaned content reaches staging with the next content push per
-`docs/content-push-runbook.md` (`wp migratedb push … --include-tables=
-wp_posts,…`). Nothing extra to do — posts ride along with `wp_posts`.
-After the push, spot-check the same sample posts on staging.
+Staging is the content source of truth (from 16 Aug 2026). Do **not**
+push this sweep from local. Either re-run the sweep against a pull of
+staging, or apply the same edits on staging. See
+`docs/content-push-runbook.md`.
 
 ## Notes
 
