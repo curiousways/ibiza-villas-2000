@@ -16,7 +16,14 @@ CookieConsent.run( {
 			enabled: true,
 			readOnly: true
 		},
-		analytics: {}
+		analytics: {
+			autoClear: {
+				cookies: [
+					{ name: /^_ga/ }
+				],
+				reloadPage: true
+			}
+		}
 	},
 
 	guiOptions: {
@@ -83,22 +90,22 @@ CookieConsent.run( {
 								body: [
 									{
 										name: '_ga',
-										domain: 'google.com',
+										domain: 'This website',
 										expiration: '2 years',
-										description: 'Used to distinguish users for Google Analytics.'
+										description: 'Distinguishes one visitor from another for Google Analytics.'
 									},
 									{
 										name: '_ga_*',
-										domain: 'google.com',
+										domain: 'This website',
 										expiration: '2 years',
-										description: 'Used to persist session state for Google Analytics.'
+										description: 'Keeps the Google Analytics session state.'
 									}
 								]
 							}
 						},
 						{
 							title: 'More information',
-							description: 'See our <a href="/cookie-policy/">Cookie Policy</a> for full details, or <a href="/contact/">contact us</a> with any questions. Our <a href="/privacy-policy/">Privacy Policy</a> covers how we handle your data.'
+							description: 'See our <a href="/cookies-policy/">Cookie Policy</a> for full details, or <a href="/contact/">contact us</a> with any questions. Our <a href="/privacy-policy/">Privacy Policy</a> covers how we handle your data.'
 						}
 					]
 				}
