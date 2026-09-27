@@ -49,10 +49,13 @@ while ( have_posts() ) :
 					<?php
 					ibv_core_image(
 						get_post_thumbnail_id(),
-						'full',
+						'ibv-hero',
 						[
-							'class'   => 'ibv-article__featured-image',
-							'loading' => 'eager',
+							'class'         => 'ibv-article__featured-image',
+							'loading'       => 'eager',
+							'fetchpriority' => 'high',
+							'decoding'      => 'sync',
+							'sizes'         => '(max-width: 72rem) 100vw, 1152px',
 						]
 					);
 					?>

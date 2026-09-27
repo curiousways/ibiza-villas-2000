@@ -118,6 +118,12 @@ function ibv_core_gallery( $villa_id ) {
 	}
 
 	$hero = $images[0];
+	$teaser_attrs = [
+		'class'    => 'ibv-gallery__main-image',
+		'loading'  => 'eager',
+		'decoding' => 'async',
+		'sizes'    => '(min-width: 64rem) 66vw, 100vw',
+	];
 	?>
 	<div class="ibv-gallery" id="<?php echo esc_attr( $uid ); ?>"<?php echo $multiples ? ' data-images="' . $escaped_json . '"' : ''; ?>>
 		<div class="ibv-gallery__header">
@@ -157,11 +163,7 @@ function ibv_core_gallery( $villa_id ) {
 				ibv_core_image(
 					$hero['id'],
 					'large',
-					[
-						'class'    => 'ibv-gallery__main-image',
-						'loading'  => 'eager',
-						'decoding' => 'async',
-					]
+					$teaser_attrs
 				);
 				?>
 			</button>
@@ -171,11 +173,7 @@ function ibv_core_gallery( $villa_id ) {
 				ibv_core_image(
 					$hero['id'],
 					'large',
-					[
-						'class'    => 'ibv-gallery__main-image',
-						'loading'  => 'eager',
-						'decoding' => 'async',
-					]
+					$teaser_attrs
 				);
 				?>
 			</div>
