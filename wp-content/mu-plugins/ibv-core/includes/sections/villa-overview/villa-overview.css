@@ -6,6 +6,7 @@
 .ibv-villa-overview {
 	display: flex;
 	flex-direction: column;
+	min-width: 0;
 	border-block-start: 1px solid var(--ibv-color-border);
 	/* Match `.ibv-villa-detail__main--villa`'s gap: the flex gap sits above
 	   the divider line, this padding sits below it, so the two must be the

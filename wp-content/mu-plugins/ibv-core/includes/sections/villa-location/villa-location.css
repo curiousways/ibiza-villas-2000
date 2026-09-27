@@ -4,6 +4,10 @@
    the map renders, falls back to the API-key / Map-ID message, or is
    missing entirely. */
 
+.ibv-villa-location {
+	min-width: 0;
+}
+
 /* Section-heading defaults to a 2xl bottom margin; tighten to the same
    md gap the gallery header uses so the two titles read consistently. */
 .ibv-villa-location .ibv-section-heading {

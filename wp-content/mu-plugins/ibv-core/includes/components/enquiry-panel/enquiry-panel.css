@@ -9,6 +9,9 @@
 .ibv-enquiry-panel {
 	padding: var(--ibv-space-2xl) var(--ibv-space-lg) var(--ibv-space-lg);
 	background: var(--ibv-color-bg);
+	min-width: 0;
+	width: auto;
+	max-width: 100%;
 }
 
 .ibv-enquiry-panel__title {

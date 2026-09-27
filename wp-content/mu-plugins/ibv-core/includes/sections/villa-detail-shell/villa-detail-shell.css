@@ -6,6 +6,12 @@
 
 .ibv-villa-detail__grid {
 	display: grid;
+	/* Implicit tracks size to max-content and blow out the page on a
+	   390px phone (main + sidebar min-content ~478px). One flexible
+	   column below the desktop split; items can shrink. */
+	grid-template-columns: minmax(0, 1fr);
+	width: auto;
+	min-width: 0;
 }
 
 @media (min-width: 64rem) {
@@ -19,6 +25,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-lg);
+	min-width: 0;
+	width: auto;
 }
 
 /* Villa singles get a roomier gap between the main-column sections.
@@ -33,4 +41,5 @@
 
 .ibv-villa-detail__sidebar {
 	min-width: 0;
+	width: auto;
 }

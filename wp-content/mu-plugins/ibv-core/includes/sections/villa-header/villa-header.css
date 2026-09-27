@@ -4,6 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-md); /* Figma outer gap 14px; 16px is the closest token. */
+	min-width: 0;
 }
 
 /* Title + rating cluster — Figma groups these tighter (4px) than the
@@ -12,6 +13,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--ibv-space-2xs);
+	min-width: 0;
 }
 
 .ibv-villa-header__title {

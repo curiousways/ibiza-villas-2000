@@ -1,5 +1,6 @@
 .ibv-villa-map {
 	width: 100%;
+	min-width: 0;
 	min-height: min(24rem, 60vw);
 	border-radius: var(--ibv-radius-lg);
 	overflow: hidden;
