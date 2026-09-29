@@ -39,8 +39,8 @@ function ibv_core_section_short_breaks( $args = [] ) {
 	// mirroring the listing's own probe window) so the short-breaks promise
 	// is kept by the search itself — the specced Short Breaks filter was
 	// removed as a deliberate spec change (no villa carries a short-break
-	// flag; see the listing's short-breaks statement). Four nights is the
-	// safe default while the minimum-stay question is with Luke/Steve.
+	// flag; see the listing's short-breaks statement). Guest pickers enforce
+	// a 2-night minimum; this CTA stays at 4 nights.
 	// Computed per render: safe under page caching as long as cache
 	// lifetime stays well inside the 30-day lead-in.
 	$cta_url = add_query_arg(

@@ -43,6 +43,45 @@
 		return /^\d{4}-\d{2}-\d{2}$/.test( s || '' );
 	}
 
+	var MIN_STAY_NIGHTS = 2;
+
+	function addDaysYMD( ymd, n ) {
+		var d = new Date( ymd + 'T00:00:00' );
+		d.setDate( d.getDate() + n );
+		return formatYMD( d );
+	}
+
+	function nightsBetween( fromYMD, toYMD ) {
+		var from = new Date( fromYMD + 'T00:00:00' );
+		var to   = new Date( toYMD + 'T00:00:00' );
+		if ( isNaN( from.getTime() ) || isNaN( to.getTime() ) ) {
+			return 0;
+		}
+		return Math.round( ( to.getTime() - from.getTime() ) / 86400000 );
+	}
+
+	function isValidStayRange( fromYMD, toYMD ) {
+		return isValidYMD( fromYMD ) && isValidYMD( toYMD ) && nightsBetween( fromYMD, toYMD ) >= MIN_STAY_NIGHTS;
+	}
+
+	function adjacentToStayStart( ymd ) {
+		return [ addDaysYMD( ymd, -1 ), addDaysYMD( ymd, 1 ) ];
+	}
+
+	function setMinStayDisabled( calendar, selectedDates ) {
+		if ( ! calendar ) {
+			return;
+		}
+		var dates = selectedDates || [];
+		var disable = ( dates.length === 1 && isValidYMD( dates[ 0 ] ) )
+			? adjacentToStayStart( dates[ 0 ] )
+			: [];
+		calendar.set(
+			{ disableDates: disable },
+			{ dates: false, month: false, year: false, locale: false, time: false }
+		);
+	}
+
 	function setInputValue( input, value ) {
 		if ( ! input ) {
 			return;
@@ -160,7 +199,7 @@
 
 			var seedFrom = isValidYMD( fromInput.value ) ? fromInput.value : '';
 			var seedTo   = isValidYMD( toInput.value )   ? toInput.value   : '';
-			var initialSelected = ( seedFrom && seedTo ) ? [ seedFrom, seedTo ] : [];
+			var initialSelected = isValidStayRange( seedFrom, seedTo ) ? [ seedFrom, seedTo ] : [];
 			var today = todayYMD();
 
 			calendar = new Calendar( calendarHost, {
@@ -178,17 +217,30 @@
 				selectedDates: initialSelected,
 				firstWeekday: 1,
 				onClickDate: function ( self ) {
-					var dates = self.context.selectedDates || [];
+					var dates = ( self.context.selectedDates || [] ).slice().sort();
 					if ( dates.length === 2 ) {
-						var sorted = dates.slice().sort();
-						setInputValue( fromInput, sorted[ 0 ] );
-						setInputValue( toInput, sorted[ 1 ] );
+						if ( ! isValidStayRange( dates[ 0 ], dates[ 1 ] ) ) {
+							self.set(
+								{
+									selectedDates: [ dates[ 0 ] ],
+									disableDates: adjacentToStayStart( dates[ 0 ] ),
+								},
+								{ dates: true, month: false, year: false, locale: false, time: false }
+							);
+							return;
+						}
+						setInputValue( fromInput, dates[ 0 ] );
+						setInputValue( toInput, dates[ 1 ] );
+						setMinStayDisabled( self, dates );
 						// Stay open after the second click — user dismisses
 						// via outside-click or Escape.
-					} else if ( dates.length === 0 ) {
+						return;
+					}
+					if ( dates.length === 0 ) {
 						setInputValue( fromInput, '' );
 						setInputValue( toInput, '' );
 					}
+					setMinStayDisabled( self, dates );
 				},
 			} );
 			calendar.init();
@@ -250,7 +302,7 @@
 				setInputValue( toInput, '' );
 				if ( calendar ) {
 					calendar.set(
-						{ selectedDates: [] },
+						{ selectedDates: [], disableDates: [] },
 						{ year: false, month: false, time: false }
 					);
 				}

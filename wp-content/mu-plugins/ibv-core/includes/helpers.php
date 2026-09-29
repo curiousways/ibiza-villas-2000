@@ -332,6 +332,59 @@ function ibv_villa_distance_label( array $row ) {
 }
 
 /**
+ * Minimum stay length for guest-chosen date ranges (nights between arrival and departure).
+ *
+ * @return int
+ */
+function ibv_core_min_stay_nights() {
+	return 2;
+}
+
+/**
+ * Pair of YYYY-MM-DD dates, or empty strings if missing, malformed, reversed, or shorter than the minimum stay.
+ *
+ * Same outcome as a single date being given: the range is treated as not set.
+ *
+ * @param string $from Arrival date.
+ * @param string $to   Departure date.
+ * @return array{0: string, 1: string}
+ */
+function ibv_core_normalize_stay_dates( $from, $to ) {
+	$from = is_string( $from ) ? $from : '';
+	$to   = is_string( $to ) ? $to : '';
+	if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $from ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $to ) ) {
+		return [ '', '' ];
+	}
+
+	$from_dt = date_create_immutable( $from );
+	$to_dt   = date_create_immutable( $to );
+	if ( ! $from_dt || ! $to_dt || $from_dt->format( 'Y-m-d' ) !== $from || $to_dt->format( 'Y-m-d' ) !== $to ) {
+		return [ '', '' ];
+	}
+	if ( $to_dt < $from_dt ) {
+		return [ '', '' ];
+	}
+
+	$nights = (int) $from_dt->diff( $to_dt )->format( '%a' );
+	if ( $nights < ibv_core_min_stay_nights() ) {
+		return [ '', '' ];
+	}
+
+	return [ $from, $to ];
+}
+
+/**
+ * Stay dates from the current request query string.
+ *
+ * @return array{0: string, 1: string}
+ */
+function ibv_core_get_request_stay_dates() {
+	$from = isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only search params.
+	$to   = isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	return ibv_core_normalize_stay_dates( $from, $to );
+}
+
+/**
  * Current GET params when on the villa listing template (search form persistence).
  *
  * @return array{date_from: string, date_to: string, pax: string}
@@ -345,10 +398,12 @@ function ibv_get_villa_listing_search_params() {
 		];
 	}
 
+	[ $from, $to ] = ibv_core_get_request_stay_dates();
+
 	return [
-		'date_from' => isset( $_GET['date_from'] ) ? sanitize_text_field( wp_unslash( $_GET['date_from'] ) ) : '',
-		'date_to'   => isset( $_GET['date_to'] ) ? sanitize_text_field( wp_unslash( $_GET['date_to'] ) ) : '',
-		'pax'       => isset( $_GET['pax'] ) ? sanitize_text_field( wp_unslash( $_GET['pax'] ) ) : '',
+		'date_from' => $from,
+		'date_to'   => $to,
+		'pax'       => isset( $_GET['pax'] ) ? sanitize_text_field( wp_unslash( $_GET['pax'] ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only search params.
 	];
 }
 

@@ -34,11 +34,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function ibv_enquiry_panel_get_date_param( $key ) {
-	if ( ! isset( $_GET[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public read-only prefill.
-		return '';
+	[ $from, $to ] = ibv_core_get_request_stay_dates();
+	if ( 'date_from' === $key ) {
+		return $from;
 	}
-	$raw = sanitize_text_field( wp_unslash( $_GET[ $key ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	return preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ? $raw : '';
+	if ( 'date_to' === $key ) {
+		return $to;
+	}
+	return '';
 }
 
 /**

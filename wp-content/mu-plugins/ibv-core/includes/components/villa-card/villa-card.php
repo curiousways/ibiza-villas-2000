@@ -123,17 +123,10 @@ function ibv_core_villa_card( $args = [] ) {
 	// villa permalink. The button may use a different cta_url (e.g. an
 	// offer-mode hash on Special Offers).
 	$forward_params = [];
-	if ( isset( $_GET['date_from'] ) ) {
-		$raw = sanitize_text_field( wp_unslash( $_GET['date_from'] ) );
-		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
-			$forward_params['date_from'] = $raw;
-		}
-	}
-	if ( isset( $_GET['date_to'] ) ) {
-		$raw = sanitize_text_field( wp_unslash( $_GET['date_to'] ) );
-		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $raw ) ) {
-			$forward_params['date_to'] = $raw;
-		}
+	[ $from, $to ] = ibv_core_get_request_stay_dates();
+	if ( '' !== $from && '' !== $to ) {
+		$forward_params['date_from'] = $from;
+		$forward_params['date_to']   = $to;
 	}
 	if ( isset( $_GET['pax'] ) ) {
 		$pax = absint( wp_unslash( $_GET['pax'] ) );
