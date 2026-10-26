@@ -80,7 +80,7 @@ function ibv_register_villa_acf_fields() {
 				'name'                 => 'villa_pretty_name',
 				'aria-label'           => '',
 				'type'                 => 'text',
-				'instructions'         => 'such as "Villa Tom"',
+				'instructions'         => __( 'The villa name as guests see it, with its Can name in brackets if it has one, e.g. Villa Pep Luis (Can Pep Mortera). Nothing else.', 'ibv' ),
 				'required'             => 0,
 				'conditional_logic'    => 0,
 				'wrapper'              => array(
@@ -92,7 +92,7 @@ function ibv_register_villa_acf_fields() {
 				'placeholder'          => '',
 				'prepend'              => '',
 				'append'               => '',
-				'maxlength'            => '',
+				'maxlength'            => 40,
 			),
 			// additional_title_keyword is retired: only the legacy theme's H1
 			// ever appended it; the ibv theme builds the H1 from
@@ -104,9 +104,10 @@ function ibv_register_villa_acf_fields() {
 				'label'        => __( 'Summary', 'ibv' ),
 				'name'         => 'villa_summary',
 				'type'         => 'textarea',
-				'instructions' => __( 'One-paragraph summary, plain text. Shown in full under "Villa Overview" on the villa page (above the collapsible description).', 'ibv' ),
+				'instructions' => __( 'The opening under Villa Overview. 80 to 130 words (about 800 characters at most): where it is, who it suits, sleeps and bedrooms once, the licence point once. No bold, no search phrases.', 'ibv' ),
 				'rows'         => 4,
 				'new_lines'    => '',
+				'maxlength'    => 800,
 			),
 			array(
 				'key'          => 'field_villa_preview_text',
