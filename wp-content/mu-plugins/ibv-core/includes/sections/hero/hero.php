@@ -53,19 +53,28 @@ function ibv_core_section_hero( $args = [] ) {
 		$image_id = (int) $image;
 	}
 
-	$bg = $image_id ? wp_get_attachment_image_url( $image_id, 'ibv-hero' ) : '';
-
-	$style_attr = '';
-	if ( $bg ) {
-		$style_attr = sprintf( '--ibv-hero-image: url(%s)', esc_url_raw( $bg ) );
-	}
-
 	$classes = [ 'ibv-section-hero', 'ibv-section' ];
 	if ( ! empty( $args['compact'] ) ) {
 		$classes[] = 'ibv-section-hero--compact';
 	}
 	?>
-	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"<?php echo $style_attr ? ' style="' . esc_attr( $style_attr ) . '"' : ''; ?>>
+	<section class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+		<?php
+		if ( $image_id ) {
+			ibv_core_image(
+				$image_id,
+				'full',
+				[
+					'class'         => 'ibv-section-hero__image',
+					'alt'           => '',
+					'loading'       => 'eager',
+					'decoding'      => 'async',
+					'fetchpriority' => 'high',
+					'sizes'         => '100vw',
+				]
+			);
+		}
+		?>
 		<div class="ibv-container ibv-section-hero__inner">
 			<div class="ibv-section-hero__copy">
 				<?php if ( $title ) : ?>

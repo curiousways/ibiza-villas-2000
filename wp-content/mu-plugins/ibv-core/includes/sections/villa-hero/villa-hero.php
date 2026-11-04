@@ -32,13 +32,13 @@ function ibv_core_section_villa_hero( $villa_id ) {
 		<?php
 		ibv_core_image(
 			$thumb_id,
-			'ibv-hero',
+			'full',
 			[
 				'class'         => 'ibv-villa-hero__image',
 				'loading'       => 'eager',
 				'decoding'      => 'async',
 				'fetchpriority' => 'high',
-				'sizes'         => '(min-width: 64rem) 66vw, 100vw',
+				'sizes'         => '100vw',
 			]
 		);
 		if ( $has_gallery ) {

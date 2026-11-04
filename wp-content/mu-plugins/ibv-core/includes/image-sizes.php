@@ -30,3 +30,8 @@ function ibv_register_image_sizes() {
 	// hard-cropped sizes clip them. The fourth `false` argument disables crop.
 	add_image_size( 'ibv-trust-logo', 600, 200, false );
 }
+
+// Heroes request the full image; let srcset include it up to WP's big-image cap.
+add_filter( 'max_srcset_image_width', static function () {
+	return 2560;
+} );
