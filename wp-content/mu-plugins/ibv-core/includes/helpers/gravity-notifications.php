@@ -70,20 +70,23 @@ add_filter( 'gform_notification', 'ibv_gf_reroute_notification', 10, 3 );
 /**
  * Hold Zoho / Campaign Monitor / other add-on feeds while an override is set.
  *
- * @param array  $feeds Feeds about to run.
- * @param array  $entry Entry.
- * @param array  $form  Form.
- * @param object $addon Add-on instance.
+ * GF 3.0's `gform_addon_pre_process_feeds` passes only ($feeds, $entry, $form)
+ * — the add-on instance arg from older docs is gone. Declaring a required
+ * 4th param fatals every submission that runs feed add-ons.
+ *
+ * @param array $feeds Feeds about to run.
+ * @param array $entry Entry.
+ * @param array $form  Form.
  * @return array
  */
-function ibv_gf_hold_addon_feeds( $feeds, $entry, $form, $addon ) {
-	unset( $entry, $form, $addon );
+function ibv_gf_hold_addon_feeds( $feeds, $entry, $form ) {
+	unset( $entry, $form );
 	if ( ! ibv_gf_should_reroute_notifications() ) {
 		return $feeds;
 	}
 	return [];
 }
-add_filter( 'gform_addon_pre_process_feeds', 'ibv_gf_hold_addon_feeds', 10, 4 );
+add_filter( 'gform_addon_pre_process_feeds', 'ibv_gf_hold_addon_feeds', 10, 3 );
 
 /**
  * Admin banner while the override is on.
