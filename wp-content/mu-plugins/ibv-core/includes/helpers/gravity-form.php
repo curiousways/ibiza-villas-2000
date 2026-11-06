@@ -238,54 +238,21 @@ add_filter( 'gform_field_content', 'ibv_gf_disarm_hidden_range_datepicker', 10, 
 /**
  * Google-required reCAPTCHA attribution when the badge is hidden in GF settings.
  *
- * Appended after the submit control via gform_submit_button. Registered on the
- * per-form hook at priority 999 so it runs after submit-button rewrites
- * (enquiry panel / accommodation arrow) that use the same filter family —
- * gf_apply_filters runs the generic hook first, then gform_submit_button_{id}.
- *
- * @param string $button Submit button markup.
- * @param array  $form   Form object.
- * @return string
+ * Printed once in the site footer (visibly in the user flow) so it does not
+ * crowd small form footers. Call from the theme footer template.
  */
-function ibv_gf_recaptcha_notice( $button, $form ) {
-	if ( is_admin() ) {
-		return $button;
-	}
-	if ( ! is_string( $button ) || '' === $button ) {
-		return $button;
-	}
-	// Idempotent: AJAX re-render / double registration must not stack notices.
-	if ( false !== strpos( $button, 'ibv-recaptcha-notice' ) ) {
-		return $button;
-	}
-
+function ibv_core_recaptcha_notice() {
 	$privacy = esc_url( 'https://policies.google.com/privacy' );
 	$terms   = esc_url( 'https://policies.google.com/terms' );
 
-	$notice = sprintf(
-		'<p class="ibv-recaptcha-notice">This site is protected by reCAPTCHA and the Google <a href="%1$s" target="_blank" rel="noopener">Privacy Policy</a> and <a href="%2$s" target="_blank" rel="noopener">Terms of Service</a> apply.</p>',
+	printf(
+		'<p class="ibv-recaptcha-notice">%1$s <a href="%2$s" target="_blank" rel="noopener">%3$s</a> %4$s <a href="%5$s" target="_blank" rel="noopener">%6$s</a> %7$s</p>',
+		esc_html__( 'This site is protected by reCAPTCHA and the Google', 'ibv' ),
 		$privacy,
-		$terms
+		esc_html__( 'Privacy Policy', 'ibv' ),
+		esc_html__( 'and', 'ibv' ),
+		$terms,
+		esc_html__( 'Terms of Service', 'ibv' ),
+		esc_html__( 'apply.', 'ibv' )
 	);
-
-	return $button . $notice;
 }
-
-/**
- * Attach the reCAPTCHA notice to each form's submit-button filter.
- *
- * @param array $form Form object.
- * @return array
- */
-function ibv_gf_register_recaptcha_notice( $form ) {
-	if ( empty( $form['id'] ) ) {
-		return $form;
-	}
-	$hook = 'gform_submit_button_' . (int) $form['id'];
-	if ( ! has_filter( $hook, 'ibv_gf_recaptcha_notice' ) ) {
-		add_filter( $hook, 'ibv_gf_recaptcha_notice', 999, 2 );
-	}
-	return $form;
-}
-add_filter( 'gform_pre_render', 'ibv_gf_register_recaptcha_notice' );
-add_filter( 'gform_pre_validation', 'ibv_gf_register_recaptcha_notice' );

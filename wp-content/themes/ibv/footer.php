@@ -167,6 +167,13 @@ $socials = get_field( 'socials', 'option' );
 			<?php endif; ?>
 			<?php // Reopens the cookie consent modal — code, not content, so it lives here rather than in the legal WYSIWYG. ?>
 			<a href="#" class="ibv-site-footer__cc-link" data-ibv-cc-preferences><?php esc_html_e( 'Cookie preferences', 'ibv' ); ?></a>
+			<?php
+			// Google reCAPTCHA attribution (badge hidden in GF). Sitewide footer
+			// keeps small form footers clear; required when the badge is hidden.
+			if ( function_exists( 'ibv_core_recaptcha_notice' ) ) {
+				ibv_core_recaptcha_notice();
+			}
+			?>
 		</div>
 
 	</div>

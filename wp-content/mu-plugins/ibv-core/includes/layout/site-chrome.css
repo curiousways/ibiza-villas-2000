@@ -386,6 +386,19 @@
 	align-self: flex-start;
 }
 
+/* Google reCAPTCHA attribution (badge hidden in GF settings). Lives in the
+   footer legal stack so form submit rows stay clear. */
+.ibv-site-footer .ibv-recaptcha-notice {
+	margin: 0;
+	font-size: inherit;
+	line-height: inherit;
+	color: inherit;
+}
+
+.ibv-site-footer .ibv-recaptcha-notice a {
+	text-decoration: underline;
+}
+
 .ibv-site-main {
 	min-height: 50vh;
 }

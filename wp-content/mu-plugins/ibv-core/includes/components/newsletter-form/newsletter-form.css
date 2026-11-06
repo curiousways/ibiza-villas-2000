@@ -272,12 +272,16 @@
 	color: var(--ibv-color-text-muted-on-dark);
 }
 
-/* The form wrapper. Gravity Forms shortcode renders inside. */
-.ibv-newsletter-form--footer .ibv-newsletter-form__embed {
-	/* The pill outer becomes the form wrapper */
+/* Gravity Forms targeting — pill shape on form, embedded button.
+   Belt-and-braces: hide honeypot/validation even if `.ibv-gform` is missing. */
+.ibv-newsletter-form .gfield_visibility_hidden,
+.ibv-newsletter-form .gform_validation_container,
+.ibv-newsletter-form .gfield--type-honeypot,
+.ibv-newsletter-form .gfield--type-hidden,
+.ibv-newsletter-form .gform_hidden {
+	display: none !important;
 }
 
-/* Gravity Forms targeting — pill shape on form, embedded button */
 .ibv-newsletter-form--footer .ibv-newsletter-form__embed .gform_wrapper {
 	margin: 0;
 }
@@ -520,30 +524,4 @@
 	color: var(--ibv-color-forest-green-deep);
 	font-size: var(--ibv-fs-small);
 	margin-block-start: var(--ibv-space-2xs);
-}
-
-/* reCAPTCHA notice: sit under the pill, not inside it. Absolute so the
-   flex pill (body + submit) keeps its single-row chrome. */
-.ibv-newsletter-form .ibv-newsletter-form__embed {
-	position: relative;
-	margin-bottom: 4rem;
-}
-
-.ibv-newsletter-form .ibv-recaptcha-notice {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: calc(100% + var(--ibv-space-sm));
-	margin: 0;
-	width: auto;
-	flex: none;
-	color: var(--ibv-color-text-muted-on-dark);
-}
-
-.ibv-newsletter-form--default .ibv-recaptcha-notice {
-	text-align: center;
-}
-
-.ibv-newsletter-form--empty-state .ibv-recaptcha-notice {
-	color: var(--ibv-color-text-muted);
 }
