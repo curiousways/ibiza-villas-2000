@@ -1,0 +1,34 @@
+# Buddy snapshot — Deploy to staging (on push to staging).
+# Secrets stay in Buddy; do not commit real passwords.
+#
+# Full-repo sync into the staging document root.
+# See README.md in this folder.
+- pipeline: deploy-to-staging
+  name: Deploy to staging
+  refs:
+  - refs/heads/staging
+  fail_on_prepare_env_warning: true
+  events:
+  - type: PUSH
+  targets:
+  - target: ibizavillas2000-com
+    type: SSH
+    name: ibizavillas2000.com
+    host: ibizavillas2000.com
+    path: /staging.ibizavillas2000.com
+    auth:
+      username: ftpiv2000l
+      password: $STAGING_SSH_PASSWORD
+  actions:
+  - action: Transfer files
+    type: TRANSFER
+    deployment_excludes:
+    - /.cursor/
+    - /docs/
+    - /.gitignore
+    - /README.md
+    - .DS_Store
+    deletion_disabled: true
+    use_temporary_files: true
+    targets:
+    - ibizavillas2000-com

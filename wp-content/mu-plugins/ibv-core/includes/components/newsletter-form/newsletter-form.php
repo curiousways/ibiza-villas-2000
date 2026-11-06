@@ -22,6 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ibv_core_newsletter_form( $args = [] ) {
 	wp_enqueue_style( 'ibv-newsletter-form' );
+	// reCAPTCHA notice styles live on the shared GF sheet.
+	wp_enqueue_style( 'ibv-gravity-forms' );
 
 	$defaults = [
 		'title'       => '',

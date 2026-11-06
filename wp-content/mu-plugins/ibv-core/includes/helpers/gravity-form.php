@@ -234,3 +234,58 @@ function ibv_gf_disarm_hidden_range_datepicker( $content, $field ) {
 	return $work ?? $content;
 }
 add_filter( 'gform_field_content', 'ibv_gf_disarm_hidden_range_datepicker', 10, 2 );
+
+/**
+ * Google-required reCAPTCHA attribution when the badge is hidden in GF settings.
+ *
+ * Appended after the submit control via gform_submit_button. Registered on the
+ * per-form hook at priority 999 so it runs after submit-button rewrites
+ * (enquiry panel / accommodation arrow) that use the same filter family —
+ * gf_apply_filters runs the generic hook first, then gform_submit_button_{id}.
+ *
+ * @param string $button Submit button markup.
+ * @param array  $form   Form object.
+ * @return string
+ */
+function ibv_gf_recaptcha_notice( $button, $form ) {
+	if ( is_admin() ) {
+		return $button;
+	}
+	if ( ! is_string( $button ) || '' === $button ) {
+		return $button;
+	}
+	// Idempotent: AJAX re-render / double registration must not stack notices.
+	if ( false !== strpos( $button, 'ibv-recaptcha-notice' ) ) {
+		return $button;
+	}
+
+	$privacy = esc_url( 'https://policies.google.com/privacy' );
+	$terms   = esc_url( 'https://policies.google.com/terms' );
+
+	$notice = sprintf(
+		'<p class="ibv-recaptcha-notice">This site is protected by reCAPTCHA and the Google <a href="%1$s" target="_blank" rel="noopener">Privacy Policy</a> and <a href="%2$s" target="_blank" rel="noopener">Terms of Service</a> apply.</p>',
+		$privacy,
+		$terms
+	);
+
+	return $button . $notice;
+}
+
+/**
+ * Attach the reCAPTCHA notice to each form's submit-button filter.
+ *
+ * @param array $form Form object.
+ * @return array
+ */
+function ibv_gf_register_recaptcha_notice( $form ) {
+	if ( empty( $form['id'] ) ) {
+		return $form;
+	}
+	$hook = 'gform_submit_button_' . (int) $form['id'];
+	if ( ! has_filter( $hook, 'ibv_gf_recaptcha_notice' ) ) {
+		add_filter( $hook, 'ibv_gf_recaptcha_notice', 999, 2 );
+	}
+	return $form;
+}
+add_filter( 'gform_pre_render', 'ibv_gf_register_recaptcha_notice' );
+add_filter( 'gform_pre_validation', 'ibv_gf_register_recaptcha_notice' );

@@ -1,0 +1,56 @@
+# Buddy snapshot — Deploy to live (push/merge to main).
+# Secrets stay in Buddy; never commit real or !encrypted passwords.
+#
+# Two SSH targets (same host/user; different Path):
+#   ibizavillas2000.com              → /httpdocs/wp-content/themes/ibv
+#   ibizavillas2000.com (mu-plugins) → /httpdocs/wp-content/mu-plugins
+#
+# See README.md in this folder for the day-to-day flow.
+- pipeline: deploy-to-live
+  name: Deploy to live
+  refs:
+  - refs/heads/main
+  fail_on_prepare_env_warning: true
+  events:
+  - type: PUSH
+  targets:
+  - target: ibizavillas2000-com
+    type: SSH
+    name: ibizavillas2000.com
+    host: ibizavillas2000.com
+    path: /httpdocs/wp-content/themes/ibv
+    auth:
+      username: ftpiv2000l
+      password: $LIVE_SSH_PASSWORD
+  - target: ibizavillas2000_com
+    type: SSH
+    name: ibizavillas2000.com (mu-plugins)
+    host: ibizavillas2000.com
+    path: /httpdocs/wp-content/mu-plugins
+    auth:
+      username: ftpiv2000l
+      password: $LIVE_SSH_PASSWORD
+  actions:
+  - action: Transfer theme (ibv)
+    type: TRANSFER
+    local_path: wp-content/themes/ibv
+    deployment_excludes:
+    - /.cursor/
+    - /docs/
+    - /.gitignore
+    - /README.md
+    - .DS_Store
+    deletion_disabled: true
+    use_temporary_files: true
+    targets:
+    - ibizavillas2000-com
+  - action: Transfer mu-plugins (ibv-core)
+    type: TRANSFER
+    local_path: /wp-content/mu-plugins
+    deployment_excludes:
+    - .DS_Store
+    - /wp-migrate-db-pro-compatibility.php
+    deletion_disabled: true
+    use_temporary_files: true
+    targets:
+    - ibizavillas2000_com

@@ -13,6 +13,9 @@ those tables wholesale and would silently wipe client edits.
 Code only, via git push to `staging` (Buddy). Theme, mu-plugin, and
 any committed assets. No `wp migratedb push`.
 
+Live code deploy is a separate Buddy pipeline (push/merge to `main`,
+theme + mu-plugins only). See `docs/deploy/README.md`.
+
 ## If local needs a content refresh
 
 Pull **from** staging (never the other way). Exclude Gravity Forms
