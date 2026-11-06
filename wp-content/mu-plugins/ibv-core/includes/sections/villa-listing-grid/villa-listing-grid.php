@@ -313,3 +313,35 @@ function ibv_villa_listing_preload_availability() {
 	printf( '<link rel="preload" href="%s" as="fetch" crossorigin="anonymous">' . "\n", esc_url( $url ) );
 }
 add_action( 'wp_head', 'ibv_villa_listing_preload_availability', 2 );
+
+/**
+ * Head-start the undated "from" probe on villa singles. Same probe window as
+ * the listing; detail mode (`villa=`) so the URL matches enquiry-panel.js.
+ * Skip when property_id is empty — there is nothing to fetch.
+ */
+function ibv_villa_single_preload_probe() {
+	if ( ! is_singular( 'villas' ) ) {
+		return;
+	}
+
+	$villa_id    = (int) get_queried_object_id();
+	$property_id = $villa_id ? (string) get_field( 'property_id', $villa_id ) : '';
+	if ( '' === $property_id ) {
+		return;
+	}
+
+	$probe = ibv_villa_listing_probe_params();
+	if ( '' === $probe['date_from'] || '' === $probe['date_to'] || '' === $probe['pax'] ) {
+		return;
+	}
+
+	// Key order matches enquiry-panel.js undated probe / dated detail fetch.
+	$url = ibv_get_bob_endpoint_url()
+		. '?villa=' . rawurlencode( $property_id )
+		. '&date_from=' . rawurlencode( $probe['date_from'] )
+		. '&date_to=' . rawurlencode( $probe['date_to'] )
+		. '&pax=' . rawurlencode( $probe['pax'] );
+
+	printf( '<link rel="preload" href="%s" as="fetch" crossorigin="anonymous">' . "\n", esc_url( $url ) );
+}
+add_action( 'wp_head', 'ibv_villa_single_preload_probe', 2 );

@@ -264,7 +264,16 @@ function ibv_core_enquiry_panel( $villa_id ) {
 
 	$form_id      = (int) get_option( 'ibv_villa_enquiry_form_id' );
 	$property_id  = (string) get_field( 'property_id', $villa_id );
-	$endpoint_url = 'https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl';
+	$endpoint_url = function_exists( 'ibv_get_bob_endpoint_url' )
+		? ibv_get_bob_endpoint_url()
+		: 'https://ibizavillas2000.co.uk/cgi-bin/api/web_availability.pl';
+	$probe        = function_exists( 'ibv_villa_listing_probe_params' )
+		? ibv_villa_listing_probe_params()
+		: array();
+	$probe_from   = isset( $probe['date_from'] ) ? (string) $probe['date_from'] : '';
+	$probe_to     = isset( $probe['date_to'] ) ? (string) $probe['date_to'] : '';
+	$probe_pax    = isset( $probe['pax'] ) ? (string) $probe['pax'] : '';
+	$has_probe    = ( '' !== $probe_from && '' !== $probe_to && '' !== $probe_pax );
 
 	wp_enqueue_style( 'ibv-enquiry-panel' );
 
@@ -331,6 +340,11 @@ function ibv_core_enquiry_panel( $villa_id ) {
 		data-bob-msg-offer-price="<?php echo esc_attr__( "We'll confirm the offer price by email.", 'ibv' ); ?>"
 		data-bob-offer-line-prefix="<?php echo esc_attr__( "You're asking about:", 'ibv' ); ?>"
 		data-bob-offer-clear-label="<?php echo esc_attr__( 'Clear', 'ibv' ); ?>"
+		<?php if ( $has_probe ) : ?>
+			data-bob-probe-date-from="<?php echo esc_attr( $probe_from ); ?>"
+			data-bob-probe-date-to="<?php echo esc_attr( $probe_to ); ?>"
+			data-bob-probe-pax="<?php echo esc_attr( $probe_pax ); ?>"
+		<?php endif; ?>
 		<?php if ( $resolved_name ) : ?>
 			data-bob-offer-name="<?php echo esc_attr( $resolved_name ); ?>"
 			data-bob-offer-from="<?php echo esc_attr( $resolved_from ); ?>"

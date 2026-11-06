@@ -103,3 +103,16 @@
 	color: var(--ibv-color-forest-green-deep);
 }
 
+/* Probe price pending — server paints ACF "from", then enquiry-panel.js may
+   overwrite with the listing probe week. Mask the amount until JS clears
+   --pending so the two numbers never flash. Gated on (scripting: enabled)
+   so no-JS keeps the ACF figure visible. */
+@media (scripting: enabled) {
+	.ibv-villa-overview__price--pending .ibv-villa-overview__price-amount:not(:empty) {
+		min-width: 5ch;
+		border-radius: var(--ibv-radius-md);
+		background-color: var(--ibv-color-web-grey-100);
+		color: transparent;
+	}
+}
+
