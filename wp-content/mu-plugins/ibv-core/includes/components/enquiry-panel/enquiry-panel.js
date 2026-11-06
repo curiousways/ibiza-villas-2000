@@ -413,23 +413,43 @@
 		var EUR = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 } );
 		var EUR_WHOLE = new Intl.NumberFormat( 'en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 } );
 
-		// Villa-overview indicative price ("From €X / wk") — swapped to the
-		// stay total for the selected dates while a priced search is active;
-		// restored (including the "/ wk" unit text) when dates clear /
-		// unavailable / fetch fails.
+		// Villa-overview indicative price ("From €X / wk"):
+		//   undated — probe may replace ACF with the listing probe-week rate;
+		//   dated   — stay total labelled for the nights searched;
+		//   clear   — restore ovStatic (probe figure if one landed, else ACF).
 		var ovPrice  = document.querySelector( '.ibv-villa-overview__price' );
 		var ovAmount = ovPrice ? ovPrice.querySelector( '[data-bob-from-price]' ) : null;
 		var ovFrom   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-from' ) : null;
 		var ovUnit   = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-unit' ) : null;
 		var ovSeason = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-note--season' ) : null;
 		var ovDated  = ovPrice ? ovPrice.querySelector( '.ibv-villa-overview__price-note--dated' ) : null;
+		// PHP-rendered "/ wk" before any dated nights label overwrites it.
+		var weekUnitText = ovUnit ? ovUnit.textContent : '';
 		var ovStatic = {
-			text:       ovAmount ? ovAmount.textContent : '',
-			onRequest:  ovAmount ? ovAmount.classList.contains( 'ibv-villa-overview__price-amount--on-request' ) : false,
-			unitText:   ovUnit ? ovUnit.textContent : '',
-			unitHidden: ovUnit ? ovUnit.hidden : false,
-			forAttr:    ovAmount ? ovAmount.getAttribute( 'for' ) : null,
+			text:         ovAmount ? ovAmount.textContent : '',
+			onRequest:    ovAmount ? ovAmount.classList.contains( 'ibv-villa-overview__price-amount--on-request' ) : false,
+			unitText:     weekUnitText,
+			unitHidden:   ovUnit ? ovUnit.hidden : false,
+			fromHidden:   ovFrom ? ovFrom.hidden : false,
+			seasonHidden: ovSeason ? ovSeason.hidden : false,
+			forAttr:      ovAmount ? ovAmount.getAttribute( 'for' ) : null,
 		};
+		var probeInflight = null;
+
+		function clearOverviewPending() {
+			if ( ovPrice ) {
+				ovPrice.classList.remove( 'ibv-villa-overview__price--pending' );
+			}
+		}
+
+		function abortProbe() {
+			if ( probeInflight && typeof probeInflight.abort === 'function' ) {
+				try {
+					probeInflight.abort();
+				} catch ( e ) {}
+			}
+			probeInflight = null;
+		}
 
 		function formatNightsLabel( nights ) {
 			var one  = ovPrice ? ovPrice.getAttribute( 'data-bob-nights-one' ) : '';
@@ -445,6 +465,7 @@
 			if ( ! ovAmount || ! ( stayTotal > 0 ) ) {
 				return;
 			}
+			clearOverviewPending();
 			ovAmount.textContent = EUR_WHOLE.format( Math.round( stayTotal ) );
 			ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
 			ovAmount.removeAttribute( 'for' );
@@ -467,6 +488,40 @@
 			}
 		}
 
+		/**
+		 * Undated probe hydrate — same chrome as ACF "From … / wk", live rate
+		 * for the shared listing probe window. Does not touch the panel breakdown.
+		 */
+		function showProbeOverviewPrice( stayTotal ) {
+			if ( ! ovAmount || ! ( stayTotal > 0 ) ) {
+				return;
+			}
+			ovAmount.textContent = EUR_WHOLE.format( Math.round( stayTotal ) );
+			ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
+			ovAmount.removeAttribute( 'for' );
+			if ( ovFrom ) {
+				ovFrom.hidden = false;
+			}
+			if ( ovUnit ) {
+				ovUnit.textContent = weekUnitText;
+				ovUnit.hidden = false;
+			}
+			if ( ovSeason ) {
+				ovSeason.hidden = false;
+			}
+			if ( ovDated ) {
+				ovDated.hidden = true;
+			}
+			ovStatic.text         = ovAmount.textContent;
+			ovStatic.onRequest    = false;
+			ovStatic.forAttr      = null;
+			ovStatic.unitText     = weekUnitText;
+			ovStatic.unitHidden   = false;
+			ovStatic.fromHidden   = false;
+			ovStatic.seasonHidden = false;
+			clearOverviewPending();
+		}
+
 		function resetOverviewPrice() {
 			if ( ! ovAmount ) {
 				return;
@@ -474,19 +529,23 @@
 			ovAmount.textContent = ovStatic.text;
 			if ( ovStatic.onRequest ) {
 				ovAmount.classList.add( 'ibv-villa-overview__price-amount--on-request' );
+			} else {
+				ovAmount.classList.remove( 'ibv-villa-overview__price-amount--on-request' );
 			}
 			if ( ovStatic.forAttr ) {
 				ovAmount.setAttribute( 'for', ovStatic.forAttr );
+			} else {
+				ovAmount.removeAttribute( 'for' );
 			}
 			if ( ovFrom ) {
-				ovFrom.hidden = false;
+				ovFrom.hidden = !! ovStatic.fromHidden;
 			}
 			if ( ovUnit ) {
 				ovUnit.textContent = ovStatic.unitText;
 				ovUnit.hidden = ovStatic.unitHidden;
 			}
 			if ( ovSeason ) {
-				ovSeason.hidden = false;
+				ovSeason.hidden = !! ovStatic.seasonHidden;
 			}
 			if ( ovDated ) {
 				ovDated.hidden = true;
@@ -666,6 +725,8 @@
 				return;
 			}
 			offerMode = true;
+			abortProbe();
+			clearOverviewPending();
 			if ( inflight && typeof inflight.abort === 'function' ) {
 				try {
 					inflight.abort();
@@ -710,7 +771,11 @@
 			}
 			removeOfferLine();
 			setSubmissionType( 'Enquiry' );
-			fetchPricing();
+			if ( gateReady( readState() ) ) {
+				fetchPricing();
+			} else {
+				runUndatedProbe();
+			}
 		}
 
 		panel.__ibvEnterOfferMode = enterOfferMode;
@@ -808,6 +873,84 @@
 		}
 
 		var inflight = null;
+
+		/**
+		 * Same probe window as the listing grid (PHP data-bob-probe-*).
+		 * Overview only — never opens the panel price breakdown.
+		 */
+		function runUndatedProbe() {
+			if ( offerMode ) {
+				clearOverviewPending();
+				return;
+			}
+			if ( ! endpoint || ! propertyId ) {
+				clearOverviewPending();
+				return;
+			}
+			if ( gateReady( readState() ) ) {
+				clearOverviewPending();
+				return;
+			}
+			var probeFrom = panel.getAttribute( 'data-bob-probe-date-from' ) || '';
+			var probeTo   = panel.getAttribute( 'data-bob-probe-date-to' ) || '';
+			var probePax  = panel.getAttribute( 'data-bob-probe-pax' ) || '';
+			if ( ! probeFrom || ! probeTo || ! probePax ) {
+				clearOverviewPending();
+				return;
+			}
+
+			var url = endpoint
+				+ '?villa='     + encodeURIComponent( propertyId )
+				+ '&date_from=' + encodeURIComponent( probeFrom )
+				+ '&date_to='   + encodeURIComponent( probeTo )
+				+ '&pax='       + encodeURIComponent( probePax );
+
+			abortProbe();
+			var ctrl = ( typeof AbortController !== 'undefined' ) ? new AbortController() : null;
+			probeInflight = ctrl;
+
+			fetch( url, { method: 'GET', credentials: 'omit', signal: ctrl ? ctrl.signal : undefined } )
+				.then( function ( r ) {
+					if ( ! r.ok ) {
+						throw new Error( 'HTTP ' + r.status );
+					}
+					return r.json();
+				} )
+				.then( function ( data ) {
+					probeInflight = null;
+					if ( offerMode || gateReady( readState() ) ) {
+						clearOverviewPending();
+						return;
+					}
+					var node = null;
+					if ( data && Array.isArray( data.villas ) ) {
+						node = data.villas.length ? data.villas[ 0 ] : null;
+					} else if ( data && data.villa ) {
+						node = data.villa;
+					} else {
+						node = data;
+					}
+					if ( ! node || ( node.available !== undefined && Number( node.available ) !== 1 ) ) {
+						clearOverviewPending();
+						return;
+					}
+					var rent = pickNumber( node, [ 'eur_base_rental' ] );
+					if ( rent !== null && rent > 0 ) {
+						showProbeOverviewPrice( rent );
+					} else {
+						clearOverviewPending();
+					}
+				} )
+				.catch( function ( err ) {
+					if ( err && err.name === 'AbortError' ) {
+						return;
+					}
+					probeInflight = null;
+					console.warn( '[ibv-enquiry-panel] undated probe failed', err );
+					clearOverviewPending();
+				} );
+		}
+
 		function fetchPricing() {
 			if ( offerMode ) {
 				applyOfferModeUi();
@@ -818,6 +961,13 @@
 			}
 			var s = readState();
 			if ( ! gateReady( s ) ) {
+				// Abort an in-flight probe only once the guest has started a
+				// date selection — changing pax alone must not cancel the
+				// undated "From" hydrate.
+				if ( isValidDate( s.date_from ) || isValidDate( s.date_to ) ) {
+					abortProbe();
+					clearOverviewPending();
+				}
 				resetPrices();
 				clearNotice();
 				hidePriceBlock();
@@ -826,6 +976,8 @@
 				updateGate();
 				return;
 			}
+			abortProbe();
+			clearOverviewPending();
 			clearNotice();
 
 			var url = endpoint
@@ -939,6 +1091,8 @@
 			updateGate();
 			if ( gateReady( readState() ) ) {
 				fetchPricing();
+			} else {
+				runUndatedProbe();
 			}
 		}
 	}
