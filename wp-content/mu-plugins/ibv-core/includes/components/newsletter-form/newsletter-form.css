@@ -521,3 +521,29 @@
 	font-size: var(--ibv-fs-small);
 	margin-block-start: var(--ibv-space-2xs);
 }
+
+/* reCAPTCHA notice: sit under the pill, not inside it. Absolute so the
+   flex pill (body + submit) keeps its single-row chrome. */
+.ibv-newsletter-form .ibv-newsletter-form__embed {
+	position: relative;
+	margin-bottom: 4rem;
+}
+
+.ibv-newsletter-form .ibv-recaptcha-notice {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: calc(100% + var(--ibv-space-sm));
+	margin: 0;
+	width: auto;
+	flex: none;
+	color: var(--ibv-color-text-muted-on-dark);
+}
+
+.ibv-newsletter-form--default .ibv-recaptcha-notice {
+	text-align: center;
+}
+
+.ibv-newsletter-form--empty-state .ibv-recaptcha-notice {
+	color: var(--ibv-color-text-muted);
+}

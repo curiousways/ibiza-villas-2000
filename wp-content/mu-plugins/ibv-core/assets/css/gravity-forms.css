@@ -329,6 +329,30 @@
 	filter: brightness(0.92);
 }
 
+/* Google reCAPTCHA attribution (badge hidden in GF settings). */
+.ibv-recaptcha-notice {
+	display: block;
+	width: 100%;
+	flex: 0 0 100%;
+	margin: var(--ibv-space-sm) 0 0;
+	padding: 0;
+	font-family: var(--ibv-font-body);
+	font-size: var(--ibv-fs-small);
+	line-height: var(--ibv-lh-cozy);
+	color: var(--ibv-color-text-muted);
+	text-align: start;
+}
+
+.ibv-recaptcha-notice a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.ibv-recaptcha-notice a:hover,
+.ibv-recaptcha-notice a:focus-visible {
+	color: inherit;
+}
+
 /* ─── Date fields + GF 3.0 WhatSock datepicker ───────────────────── */
 
 /* Hidden villa/accommodation range inputs are disarmed in PHP/JS so this
