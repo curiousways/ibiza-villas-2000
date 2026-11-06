@@ -22,8 +22,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ibv_core_newsletter_form( $args = [] ) {
 	wp_enqueue_style( 'ibv-newsletter-form' );
-	// reCAPTCHA notice styles live on the shared GF sheet.
-	wp_enqueue_style( 'ibv-gravity-forms' );
 
 	$defaults = [
 		'title'       => '',
@@ -54,7 +52,9 @@ function ibv_core_newsletter_form( $args = [] ) {
 		<?php endif; ?>
 		<div class="ibv-newsletter-form__embed">
 			<?php
-			echo do_shortcode( sprintf( '[gravityform id="%d" title="false" description="false" ajax="true"]', absint( $form_id ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// Route through ibv_core_gravity_form so honeypot / hidden fields
+			// get `.ibv-gform` hide rules (raw shortcode skipped them).
+			ibv_core_gravity_form( $form_id );
 			?>
 		</div>
 	</div>
