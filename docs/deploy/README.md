@@ -3,6 +3,10 @@
 Code reaches servers via git + Buddy only. Staging holds content; never
 `wp migratedb push` local → staging (see `docs/content-push-runbook.md`).
 
+Monthly core/plugin update process (GF + WP Rocket gates): see
+`docs/maintenance/README.md` and the Cursor skill
+`~/.cursor/skills/ibv-wordpress-updates/`.
+
 ## Pipelines
 
 | Pipeline | Branch | Trigger | What gets uploaded |
