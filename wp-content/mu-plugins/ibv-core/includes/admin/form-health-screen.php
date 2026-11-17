@@ -59,6 +59,7 @@ function ibv_form_health_render_screen() {
 					<th><?php echo esc_html__( 'Lost', 'ibv' ); ?></th>
 					<th><?php echo esc_html__( 'Notify fail', 'ibv' ); ?></th>
 					<th><?php echo esc_html__( 'reCAPTCHA err', 'ibv' ); ?></th>
+					<th><?php echo esc_html__( 'Fatal', 'ibv' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -78,6 +79,7 @@ function ibv_form_health_render_screen() {
 						<td><?php echo esc_html( (string) $lost['lost'] ); ?></td>
 						<td><?php echo esc_html( (string) ibv_form_health_count_events( $form_id, 'notification_failed', $since14 ) ); ?></td>
 						<td><?php echo esc_html( (string) ibv_form_health_count_events( $form_id, 'recaptcha_error', $since14 ) ); ?></td>
+						<td><?php echo esc_html( (string) ibv_form_health_count_events( $form_id, 'fatal', $since14 ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

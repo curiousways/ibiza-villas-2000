@@ -88,6 +88,7 @@ function ibv_form_health_event_types() {
 		'notification_failed',
 		'js_error',
 		'ajax_error',
+		'fatal',
 	);
 }
 
@@ -260,15 +261,86 @@ function ibv_form_health_ip_hash() {
 /* ── Server hooks ─────────────────────────────────────────────────── */
 
 /**
+ * Form ID currently being processed (for fatal shutdown logging).
+ *
+ * @var int
+ */
+$GLOBALS['ibv_form_health_active_form_id'] = 0;
+
+/**
+ * Arm fatal capture when an in-scope form submission starts.
+ *
+ * Hooks early on POST submit and again at validation so AJAX and classic
+ * paths both register the shutdown handler before GF work can fatal.
+ *
+ * @param int $form_id Form ID.
+ */
+function ibv_form_health_arm_fatal_capture( $form_id ) {
+	$form_id = (int) $form_id;
+	if ( ! ibv_form_health_is_scoped( $form_id ) ) {
+		return;
+	}
+	$GLOBALS['ibv_form_health_active_form_id'] = $form_id;
+	static $registered = false;
+	if ( $registered ) {
+		return;
+	}
+	$registered = true;
+	register_shutdown_function( 'ibv_form_health_shutdown_fatal' );
+}
+
+/**
+ * On front-end init: if GF is submitting an in-scope form, arm capture.
+ */
+function ibv_form_health_maybe_arm_from_post() {
+	if ( empty( $_POST['gform_submit'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- presence check only; GF verifies.
+		return;
+	}
+	$form_id = absint( wp_unslash( $_POST['gform_submit'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	ibv_form_health_arm_fatal_capture( $form_id );
+}
+add_action( 'init', 'ibv_form_health_maybe_arm_from_post', 1 );
+
+/**
+ * Shutdown: log PHP fatals that occurred while an in-scope form was active.
+ *
+ * Detail is basename + line + error type only — no message (may contain
+ * request data).
+ */
+function ibv_form_health_shutdown_fatal() {
+	$form_id = isset( $GLOBALS['ibv_form_health_active_form_id'] )
+		? (int) $GLOBALS['ibv_form_health_active_form_id']
+		: 0;
+	if ( ! $form_id || ! ibv_form_health_is_scoped( $form_id ) ) {
+		return;
+	}
+	$err = error_get_last();
+	if ( ! is_array( $err ) || empty( $err['type'] ) ) {
+		return;
+	}
+	$fatal_types = array( E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR );
+	if ( ! in_array( (int) $err['type'], $fatal_types, true ) ) {
+		return;
+	}
+	$file = isset( $err['file'] ) ? (string) $err['file'] : '';
+	$line = isset( $err['line'] ) ? (int) $err['line'] : 0;
+	$base = $file ? wp_basename( $file ) : 'unknown';
+	$detail = sprintf( '%s:%d type=%d', $base, $line, (int) $err['type'] );
+	ibv_form_health_log( $form_id, 'fatal', $detail );
+}
+
+/**
  * Log validation failures (field IDs + labels only).
  *
  * @param array $validation_result GF validation result.
  * @return array
  */
 function ibv_form_health_on_validation( $validation_result ) {
+	$form    = isset( $validation_result['form'] ) ? $validation_result['form'] : array();
+	$form_id = isset( $form['id'] ) ? (int) $form['id'] : 0;
+	ibv_form_health_arm_fatal_capture( $form_id );
+
 	if ( empty( $validation_result['is_valid'] ) ) {
-		$form = isset( $validation_result['form'] ) ? $validation_result['form'] : array();
-		$form_id = isset( $form['id'] ) ? (int) $form['id'] : 0;
 		if ( ibv_form_health_is_scoped( $form_id ) ) {
 			$parts = array();
 			$fields = isset( $form['fields'] ) && is_array( $form['fields'] ) ? $form['fields'] : array();
@@ -750,6 +822,11 @@ function ibv_form_health_collect_daily_problems() {
 		$problems[] = sprintf( 'Emails failing: %d notification_failed event(s) in 24h.', $mail );
 	}
 
+	$fatals = ibv_form_health_count_events( null, 'fatal', $since24 );
+	if ( $fatals > 0 ) {
+		$problems[] = sprintf( 'PHP fatal during form submit: %d fatal event(s) in 24h.', $fatals );
+	}
+
 	foreach ( ibv_form_health_enquiry_form_ids() as $form_id ) {
 		$lost = ibv_form_health_lost_stats( $form_id, $since24 );
 		if ( $lost['lost'] >= IBV_FORM_HEALTH_LOST_MIN && $lost['ratio'] > IBV_FORM_HEALTH_LOST_RATIO ) {
@@ -868,7 +945,7 @@ function ibv_form_health_send_weekly_summary() {
 		$lost = ibv_form_health_lost_stats( $form_id, $since );
 		$rendered = ibv_form_health_count_events( $form_id, 'rendered', $since );
 		$lines[]  = sprintf(
-			'Form %d — rendered %d, clicks %d, validation %d, spam %d, submitted %d, lost %d, notify_fail %d, recaptcha_err %d',
+			'Form %d — rendered %d, clicks %d, validation %d, spam %d, submitted %d, lost %d, notify_fail %d, recaptcha_err %d, fatal %d',
 			$form_id,
 			$rendered,
 			$lost['clicks'],
@@ -877,7 +954,8 @@ function ibv_form_health_send_weekly_summary() {
 			$lost['submitted'],
 			$lost['lost'],
 			ibv_form_health_count_events( $form_id, 'notification_failed', $since ),
-			ibv_form_health_count_events( $form_id, 'recaptcha_error', $since )
+			ibv_form_health_count_events( $form_id, 'recaptcha_error', $since ),
+			ibv_form_health_count_events( $form_id, 'fatal', $since )
 		);
 	}
 	$lines[] = '';
