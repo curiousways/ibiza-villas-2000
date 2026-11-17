@@ -65,6 +65,8 @@ function ibv_core_wp_rocket_js_exclusions() {
 		'accommodation-enquiry',
 		'contact-enquiry',
 		'villa-listing',
+		'form-health',
+		'ibv-form-health',
 		'google',
 		'maps.googleapis',
 	];
