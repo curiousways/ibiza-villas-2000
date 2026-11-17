@@ -775,6 +775,7 @@ add_action( 'init', 'ibv_form_health_schedule_cron' );
  * Daily prune + alert checks.
  */
 function ibv_form_health_run_daily() {
+	update_option( 'ibv_form_health_last_daily', gmdate( 'Y-m-d H:i:s' ), false );
 	ibv_form_health_prune();
 	$problems = ibv_form_health_collect_daily_problems();
 	if ( $problems ) {
@@ -787,6 +788,7 @@ add_action( 'ibv_form_health_daily', 'ibv_form_health_run_daily' );
  * Weekly summary (Mondays).
  */
 function ibv_form_health_run_weekly() {
+	update_option( 'ibv_form_health_last_weekly', gmdate( 'Y-m-d H:i:s' ), false );
 	ibv_form_health_send_weekly_summary();
 }
 add_action( 'ibv_form_health_weekly', 'ibv_form_health_run_weekly' );
@@ -919,12 +921,14 @@ function ibv_form_health_top_validation_fields( $form_id, $since ) {
 /**
  * Email daily alert.
  *
- * @param string[] $problems Problem lines.
+ * @param string[] $problems       Problem lines.
+ * @param string   $subject_prefix Optional subject prefix (e.g. '[TEST] ').
+ * @return bool Whether wp_mail reported success.
  */
-function ibv_form_health_send_alert( $problems ) {
+function ibv_form_health_send_alert( $problems, $subject_prefix = '' ) {
 	$first   = isset( $problems[0] ) ? wp_strip_all_tags( $problems[0] ) : 'issue';
 	$first   = strlen( $first ) > 80 ? substr( $first, 0, 77 ) . '...' : $first;
-	$subject = '[Ibiza Villas 2000] Form health: ' . $first;
+	$subject = $subject_prefix . '[Ibiza Villas 2000] Form health: ' . $first;
 	$screen  = admin_url( 'tools.php?page=ibv-form-health' );
 	$body    = "Form health problems detected:\n\n";
 	foreach ( $problems as $line ) {
@@ -932,7 +936,40 @@ function ibv_form_health_send_alert( $problems ) {
 	}
 	$body .= "\nAdmin report: " . $screen . "\n";
 	$body .= 'Site: ' . home_url( '/' ) . "\n";
-	wp_mail( IBV_FORM_HEALTH_ALERT_EMAIL, $subject, $body );
+	return (bool) wp_mail( IBV_FORM_HEALTH_ALERT_EMAIL, $subject, $body );
+}
+
+/**
+ * Format a unix timestamp for admin display (site timezone).
+ *
+ * @param int|false $timestamp Timestamp or false.
+ * @return string
+ */
+function ibv_form_health_format_scheduled( $timestamp ) {
+	if ( ! $timestamp ) {
+		return __( 'Not scheduled', 'ibv' );
+	}
+	return wp_date( 'Y-m-d H:i:s T', (int) $timestamp );
+}
+
+/**
+ * Format a stored UTC datetime option for admin display.
+ *
+ * @param string $utc_mysql UTC MySQL datetime or empty.
+ * @return string
+ */
+function ibv_form_health_format_last_run( $utc_mysql ) {
+	$utc_mysql = (string) $utc_mysql;
+	if ( '' === $utc_mysql ) {
+		return __( 'Never', 'ibv' );
+	}
+	try {
+		$dt = new DateTimeImmutable( $utc_mysql, new DateTimeZone( 'UTC' ) );
+		$dt = $dt->setTimezone( wp_timezone() );
+		return $dt->format( 'Y-m-d H:i:s T' ) . ' (' . $utc_mysql . ' UTC)';
+	} catch ( Exception $e ) {
+		return $utc_mysql . ' UTC';
+	}
 }
 
 /**
