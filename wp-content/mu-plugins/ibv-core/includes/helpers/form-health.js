@@ -3,6 +3,9 @@
  *
  * Posts rendered / submit_clicked / js_error / ajax_error to ibv/v1/form-event.
  * No personal data. No cookies.
+ *
+ * submit_clicked uses document capture for both `submit` and submit-button
+ * clicks — GF 3 AJAX may intercept or replace the native submit event.
  */
 ( function () {
 	'use strict';
@@ -20,6 +23,9 @@
 
 	var renderedOnce = {};
 	var scopedPresent = false;
+	/** @type {Object.<string, number>} formId → last submit_clicked timestamp */
+	var submitClickAt = {};
+	var SUBMIT_DEDUP_MS = 1500;
 
 	function formIdFromEl( form ) {
 		if ( ! form || ! form.id ) {
@@ -50,6 +56,7 @@
 			event: event,
 			detail: truncate( detail || '', 255 ),
 		};
+		// Prefer sendBeacon so the hit leaves before GF navigates / replaces the DOM.
 		try {
 			if ( navigator.sendBeacon ) {
 				var params = new URLSearchParams();
@@ -76,6 +83,86 @@
 		} catch ( e2 ) {}
 	}
 
+	/**
+	 * One press → one submit_clicked (button click and form submit both fire).
+	 *
+	 * @param {number} formId Form ID.
+	 */
+	function noteSubmitClicked( formId ) {
+		formId = parseInt( formId, 10 ) || 0;
+		if ( ! isScoped( formId ) ) {
+			return;
+		}
+		var key = String( formId );
+		var now = Date.now();
+		if ( submitClickAt[ key ] && now - submitClickAt[ key ] < SUBMIT_DEDUP_MS ) {
+			return;
+		}
+		submitClickAt[ key ] = now;
+		send( formId, 'submit_clicked', '' );
+	}
+
+	function closestForm( el ) {
+		if ( ! el || ! el.closest ) {
+			return null;
+		}
+		return el.closest( 'form[id^="gform_"]' );
+	}
+
+	function isSubmitControl( el ) {
+		if ( ! el || el.nodeType !== 1 ) {
+			return false;
+		}
+		var tag = el.tagName ? el.tagName.toLowerCase() : '';
+		if ( tag === 'button' ) {
+			var type = ( el.getAttribute( 'type' ) || 'submit' ).toLowerCase();
+			return type === 'submit';
+		}
+		if ( tag === 'input' ) {
+			var itype = ( el.getAttribute( 'type' ) || '' ).toLowerCase();
+			return itype === 'submit' || itype === 'image';
+		}
+		return false;
+	}
+
+	// Capture on document so we see the press before GF 3 preventDefault / AJAX.
+	document.addEventListener(
+		'click',
+		function ( ev ) {
+			var t = ev.target;
+			if ( ! t ) {
+				return;
+			}
+			var control = t.closest
+				? t.closest( 'button, input[type="submit"], input[type="image"]' )
+				: t;
+			if ( ! isSubmitControl( control ) ) {
+				return;
+			}
+			var form = closestForm( control );
+			var formId = formIdFromEl( form );
+			if ( formId ) {
+				noteSubmitClicked( formId );
+			}
+		},
+		true
+	);
+
+	document.addEventListener(
+		'submit',
+		function ( ev ) {
+			var form = ev.target;
+			if ( ! form || form.tagName !== 'FORM' ) {
+				form = closestForm( form );
+			}
+			var formId = formIdFromEl( form );
+			if ( formId ) {
+				noteSubmitClicked( formId );
+			}
+		},
+		true
+	);
+
 	function onPostRender( formId ) {
 		formId = parseInt( formId, 10 ) || 0;
 		if ( ! isScoped( formId ) ) {
@@ -86,22 +173,6 @@
 			renderedOnce[ formId ] = true;
 			send( formId, 'rendered', '' );
 		}
-		bindSubmit( formId );
-	}
-
-	function bindSubmit( formId ) {
-		var form = document.getElementById( 'gform_' + formId );
-		if ( ! form || form.__ibvFormHealthBound ) {
-			return;
-		}
-		form.__ibvFormHealthBound = true;
-		form.addEventListener(
-			'submit',
-			function () {
-				send( formId, 'submit_clicked', '' );
-			},
-			true
-		);
 	}
 
 	function bootExisting() {
