@@ -21,6 +21,7 @@ require_once IBV_CORE_PATH . 'includes/helpers.php';
 require_once IBV_CORE_PATH . 'includes/helpers/icon.php';
 require_once IBV_CORE_PATH . 'includes/helpers/gravity-form.php';
 require_once IBV_CORE_PATH . 'includes/helpers/gravity-notifications.php';
+require_once IBV_CORE_PATH . 'includes/helpers/form-health.php';
 require_once IBV_CORE_PATH . 'includes/shared-assets.php';
 require_once IBV_CORE_PATH . 'includes/integrations/facetwp.php';
 require_once IBV_CORE_PATH . 'includes/integrations/cookie-consent.php';
@@ -41,6 +42,7 @@ require_once IBV_CORE_PATH . 'includes/admin/disable-comments.php';
 require_once IBV_CORE_PATH . 'includes/admin/villa-editor-slot.php';
 require_once IBV_CORE_PATH . 'includes/admin/hide-template-editor.php';
 require_once IBV_CORE_PATH . 'includes/admin/yoast-metabox.php';
+require_once IBV_CORE_PATH . 'includes/admin/form-health-screen.php';
 
 // 4. Components — each registers its own CSS handle and exposes a `ibv_core_*` helper.
 require_once IBV_CORE_PATH . 'includes/components/button/button.php';
