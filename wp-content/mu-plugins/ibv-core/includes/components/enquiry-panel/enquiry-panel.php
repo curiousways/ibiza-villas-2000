@@ -202,7 +202,7 @@ add_filter(
 		}
 		$label = isset( $form['button']['text'] ) && '' !== $form['button']['text']
 			? (string) $form['button']['text']
-			: __( 'Request to Book', 'ibv' );
+			: __( 'Enquire', 'ibv' );
 
 		return ibv_core_gform_submit_button_with_arrow(
 			$button,
